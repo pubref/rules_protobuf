@@ -38,7 +38,8 @@ def protobuf_java():
   native.maven_jar(
       name = "com_google_protobuf_protobuf_java",
       artifact = "com.google.protobuf:protobuf-java:jar:3.0.0",
-      sha1 = "cd049bdc1680b9419359a73be694bac35a12942c",
+      #sha1 = "cd049bdc1680b9419359a73be694bac35a12942c",
+      sha1 = "6d325aa7c921661d84577c0a93d82da4df9fa4c8",
   )
 
 def protoc_linux_x86_64():
