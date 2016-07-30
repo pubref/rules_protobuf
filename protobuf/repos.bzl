@@ -26,14 +26,6 @@ def protobuf_repos(
 #    rules will install without any requests failing 99.9% of the time.
 #
 
-# def protobuf_java():
-#   native.maven_jar(
-#       name = "protobuf_java",
-#       artifact = "com.google.protobuf:protobuf-java:3.0.0-beta-3",
-#       sha1 = "ed8c2f9a63cfa770292f8173fd0172bdaa014fe3",
-#       server = "closure_maven_server",
-#   )
-
 def protobuf_java():
   native.maven_jar(
       name = "com_google_protobuf_protobuf_java",

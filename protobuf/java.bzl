@@ -10,14 +10,13 @@ def collect_proto_sources(ctx):
 
 def _protobuf_java_library_impl(ctx):
   # You may use print for debugging.
-  print("Generating protobuf library...")
 
   proto_srcs = collect_proto_sources(ctx)
   inputs, outputs, arguments = list(proto_srcs), [], []
 
   jar_basename = ctx.outputs.java_src.basename[:-7]
 
-  print("protobuf jar basename: %s" % jar_basename)
+  #print("protobuf jar basename: %s" % jar_basename)
 
   # Create .jar file base on .srcjar file name
   protojar = ctx.new_file("%s.jar" % jar_basename)
@@ -25,8 +24,9 @@ def _protobuf_java_library_impl(ctx):
   outputs += [protojar]
   arguments += ["--java_out=" + protojar.path]
 
-  print("protobuf protojar: %s" % protojar)
-  print("protobuf srcjar: %s" % srcjar)
+  print("Generating protobuf library " + protojar.path)
+  #print("protobuf protojar: %s" % protojar)
+  #print("protobuf srcjar: %s" % srcjar)
 
   ctx.action(
     mnemonic = "GenProto",
