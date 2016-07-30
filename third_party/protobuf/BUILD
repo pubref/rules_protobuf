@@ -5,8 +5,8 @@ licenses(["notice"])  # BSD
 genrule(
     name = "protoc_bin",
     srcs = select({
-        ":darwin": ["@protoc_macosx//file"],
-        "//conditions:default": ["@protoc_linux_x86_64//file"],
+        ":darwin": ["@pubref_rules_protobuf_protoc_macosx//file"],
+        "//conditions:default": ["@pubref_rules_protobuf_protoc_linux_x86_64//file"],
     }),
     outs = ["protoc"],
     cmd = " && ".join([
@@ -26,3 +26,11 @@ config_setting(
     values = {"cpu": "darwin"},
     visibility = ["//visibility:private"],
 )
+
+# java_library(
+#     name = "protobuf-java",
+#     visibility = ["//visibility:public"],
+#     exports = [
+#         "@com_google_protobuf_protobuf_java//jar",
+#     ],
+# )

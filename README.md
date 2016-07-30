@@ -7,14 +7,18 @@ bazel itself.
 
 ## Installation
 
-Load the external dependency your WORKSPACE:
+Require this external dependency your WORKSPACE and trigger loading of
+external dependencies (including the protoc binary for linux or osx
+and the protobuf-java class library):
 
 ```python
 git_repository(
   name = "pubref_rules_protobuf",
   remote = "http://github.com/pubref/pubref_rules_protobuf",
   commit = "e7982e409deab9cb4390dd574441604e846caf7f", # or use latest commit-id
-)
+  )
+load("@pubref_rules_protobuf:defs.bzl", "protobuf_repos")
+protobuf_repos()
 ```
 
 ## Usage
@@ -40,13 +44,11 @@ protobuf_java_library(
 * The `src` argument takes a single `*.proto` file.  Therefore, you'll
   need a separate rule foreach `*.proto` file you want to compile.
 
-## Requirements
+## Options
 
-This repository assumes you have the `protoc` binary on your linux or
-osx workstation.  This is copied to the workspace and provided as
-`//third_party/protobuf:protoc_bin`.  If you have the `protoc` binary
-provided by some other mechanism, pass that label into the
-`protobuf_java_library` argument `protoc` to override.  For example:
+If you have the `protoc` binary provided via another method in your
+workspace, provide the appropriate label to the `protoc` argument: For
+example:
 
 ```python
 protobuf_java_library(
@@ -59,3 +61,14 @@ protobuf_java_library(
 ## Contributing
 
 Contributions welcome; please create Issues or Github pull requests.
+
+## Credits
+
+* [@mzhaom](mzhaom]: Primary source for the skylark rule (from
+  <https://github.com/mzhaom/trunk/blob/master/third_party/grpc/grpc_proto.bzl>).
+
+* [@jart][jart]: Overall repository structure and bazel code layout
+  (based on [rules_closure]).
+
+[jart]: http://github.com/jart "Justine Tunney"
+[rules_closure]: http://github.com/bazelbuild/rules_closure "Rules Closure"
