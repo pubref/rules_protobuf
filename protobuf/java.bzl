@@ -24,7 +24,7 @@ def _protobuf_java_library_impl(ctx):
   outputs += [protojar]
   arguments += ["--java_out=" + protojar.path]
 
-  print("Generating protobuf library " + protojar.path)
+  print("Generating protobuf library " + srcjar.path)
   #print("protobuf protojar: %s" % protojar)
   #print("protobuf srcjar: %s" % srcjar)
 
