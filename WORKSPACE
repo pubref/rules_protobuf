@@ -1,1 +1,1 @@
-workspace(name = "bazel-protobuf-java-library")
+workspace(name = "pubref_rules_protobuf")
