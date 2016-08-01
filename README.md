@@ -19,7 +19,7 @@ installed `bazel` on your workstation, follow the
 
 ```sh
 $ curl -O -J -L https://github.com/bazelbuild/bazel/releases/download/0.3.1/bazel-0.3.1-installer-darwin-x86_64.sh
-$ shasum -a265 bazel-0.3.1-installer-darwin-x86_64.sh
+$ shasum -a256 bazel-0.3.1-installer-darwin-x86_64.sh
 8d035de9c137bde4f709e3666271af01d1ef6bed6921e1a676d6a6dc0186395c  bazel-0.3.1-installer-darwin-x86_64.sh
 $ chmod +x bazel-0.3.1-installer-darwin-x86_64.sh
 $ ./bazel-0.3.1-installer-darwin-x86_64.sh
