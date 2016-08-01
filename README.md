@@ -39,8 +39,10 @@ well as related runtime dependencies such as `io.netty.*`):
 ```python
 git_repository(
   name = "rules_protobuf",
-  remote = "http://github.com/pubref/rules_protobuf",
-  commit = "e7982e409deab9cb4390dd574441604e846caf7f", # or use latest commit-id
+  remote = "https://github.com/pubref/rules_protobuf",
+  tag = "0.1.1",
+  # Or, use the latest commit
+  #commit = "bf8de4e05f77ad67bbdaaed4c88951ba5667ce34",
 )
 
 load("@rules_protobuf//protobuf:rules.bzl", "protobuf_dependencies")
