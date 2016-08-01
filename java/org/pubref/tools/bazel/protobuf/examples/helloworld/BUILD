@@ -1,24 +1,10 @@
-load("//protobuf:defs.bzl", "protobuf_java_library")
+package(default_visibility = ["//visibility:public"])
 
-java_binary(
-    name = "helloworld_bin",
-    main_class = "org.pubref.tools.bazel.protobuf.examples.helloworld.HelloWorld",
-    runtime_deps = [
-        ":helloworld",
-    ],
-)
-
-java_library(
-    name = "helloworld",
-    srcs = [
-        "HelloWorld.java",
-    ],
-    deps = [
-        ":protos",
-    ],
-)
+load("//protobuf:rules.bzl", "protobuf_java_library")
 
 protobuf_java_library(
-    name = "protos",
+    name = "protobufs",
     src = "helloworld.proto",
+    with_grpc_plugin = True,
+    verbose = True,
 )
