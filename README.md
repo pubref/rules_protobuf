@@ -13,9 +13,9 @@ bazel itself.
 
 # Requirements
 
-These are build rules for [bazel][bazel-io].  If you have not already
+These are build rules for [bazel][bazel-home].  If you have not already
 installed `bazel` on your workstation, follow the
-[bazel instructions][bazel-install] instructions.  Here's one way (osx):
+[bazel instructions][bazel-install].  Here's one way (osx):
 
 ```sh
 $ curl -O -J -L https://github.com/bazelbuild/bazel/releases/download/0.3.1/bazel-0.3.1-installer-darwin-x86_64.sh
@@ -30,7 +30,7 @@ Build label: 0.3.1
 
 # Installation
 
-Require these rules your WORKSPACE and trigger loading of external
+Require these rules your `WORKSPACE` and trigger loading of external
 dependencies (including the `protoc` prebuilt binaries for linux or
 osx, the `protoc-gen-grpc-plugin` prebuilt binary, and a number of
 compile dependencies such as `com.google.protobuf.*`, `io.grpc.*` as
@@ -59,7 +59,7 @@ protobuf_dependencies(
 )
 ```
 
-Please refer to the `protobuf/dependencies.bzl` file for a list of
+Please refer to the [protobuf/dependencies.bzl](https://github.com/pubref/rules_protobuf/blob/master/protobuf/dependencies.bzl) file for a list of
 external dependencies that will be hoisted into your project.
 
 # Usage
@@ -162,7 +162,7 @@ $ java -jar /tmp/my_app_bin_deploy.jar
 
 # Examples
 
-- [helloworld](https://github.com/pubref/rules_protobuf/tree/master/java/org/pubref/tools/bazel/protobuf/examlples/helloworld)
+- [helloworld](https://github.com/pubref/rules_protobuf/tree/master/java/org/pubref/tools/bazel/protobuf/examples/helloworld)
 
 Commands for running the helloworld client/server example (adapted
 from
@@ -180,22 +180,22 @@ $ make helloworld_client
 
 # Arguments to `protobuf_java_library`
 
-| Name | Default | Description |
+| Name | Description | Default |
 | ---- | ------- | ----------- |
-| `name` | (required) | The name of the rule. |
-| `src` | (required) | The name of the protocol buffer source file.  This is a single file, so each *.proto file will need its own rule |
-| `use_grpc_plugin` | `False` | If true, additional `protoc` arguments will be assembled to run the `protoc-gen-grpc-java plugin` |
-| `verbose` | `False` | If true, additional debugging output will be printed. |
-| `_protoc` | `//@rules_protobuf//third_party/protobuf:protoc_bin` | For substitution of a different `protoc` binary
-| `_protoc_gen_grpc_java` | `//@rules_protobuf//third_party/protobuf:protoc_gen_grpc_java` | For substitution of a different `plugin` binary
+| `name` | The name of the rule. |(required) |
+| `src` | The name of the protocol buffer source file.  This is a single file, so each *.proto file will need its own rule | (required) |
+| `use_grpc_plugin` | If true, additional `protoc` arguments will be assembled to run the `protoc-gen-grpc-java plugin` | `False` |
+| `verbose` | If true, additional debugging output will be printed. | `False` |
+| `_protoc` | For substitution of a different `protoc` binary | `//third_party/protobuf:protoc_bin` |
+| `_protoc_gen_grpc_java` | For substitution of a different `plugin` binary | `//third_party/protobuf:protoc_gen_grpc_java` |
 
 # Contributing
 
-Contributions welcome; please create Issues or Github pull requests.
+Contributions welcome; please create Issues or GitHub pull requests.
 
 # Credits
 
-* [@mzhaom](mzhaom]: Primary source for the skylark rule (from
+* [@mzhaom][mzhaom]: Primary source for the skylark rule (from
   <https://github.com/mzhaom/trunk/blob/master/third_party/grpc/grpc_proto.bzl>).
 
 * [@jart][jart]: Overall repository structure and bazel code layout
