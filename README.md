@@ -5,7 +5,7 @@ protocol buffer libraries (currently java only).  This repository will
 become obsolete when protobuf generation is supported natively by
 bazel itself.
 
-| ![bazel](https://github.com/pubref/rules_protobuf/tree/master/bazel.png) | ![rules_protobuf](https://github.com/pubref/rules_protobuf/tree/master/rules_protobuf.png) | ![gRPC](https://github.com/pubref/rules_protobuf/tree/master/bazel.png) |
+| ![bazel](https://github.com/pubref/rules_protobuf/blob/master/bazel.png) | ![rules_protobuf](https://github.com/pubref/rules_protobuf/blob/master/rules_protobuf.png) | ![gRPC](https://github.com/pubref/rules_protobuf/blob/master/gRPC.png) |
 | --- | --- | --- |
 | Bazel | rules_protobuf | gRPC |
 
