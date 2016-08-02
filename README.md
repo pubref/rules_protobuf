@@ -82,7 +82,7 @@ load(
 rules_protobuf()
 
 # Make the protoc-gen-grpc-java binary and all dependent jars available,
-# but don't try to load guava.  Guava is required, but this assumes you have a
+# but don't try to load guava.  Guava is still required, so this assumes you have a
 # another workspace rule that provides com_google_guava_guava via another mechanism,
 # possibly a local or alternate version.
 rules_protobuf_java(
@@ -193,9 +193,18 @@ $ cp bazel-bin/java/org/example/myapp/my_app_bin_deploy.jar /tmp
 $ java -jar /tmp/my_app_bin_deploy.jar
 ```
 
+# Go Usage
+
+ Usage of
+`protoc_go` is similar to `proto_java`.  There is an additional
+
+```python
+load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protoc_java")
+```
+
 # Examples
 
-- [helloworld](https://github.com/pubref/rules_protobuf/tree/master/examples/helloworld)
+- [helloworld](https://github.com/pubref/rules_protobuf/tree/go/examples/helloworld)
 
 Demonstrative commands for running the helloworld client/server example (adapted
 from
@@ -218,35 +227,41 @@ essentially convenience rules that call the `protoc` rule with the
 buffer generation in multiple languages, invoke the `protoc` rule
 directly.
 
-## Common Arguments
+## `protoc` Arguments (common to all generating rules)
 
 | Name | Type | Description | Default |
 | ---- | ---- | ----------- | ------- |
 | `name` | `string` | The name of the rule. |(required) |
 | `srcs` | `label_list` | List of protocol buffer source file(s) | (required) |
+| `imports` | `string_list` | List of `--import` that will be passed to `protoc` directly | `[]` |
 | `with_grpc` | `boolean` | If `True`, additional `protoc` arguments will be assembled for the language-specific protoc plugins. | `False`
 | `verbose` | If true, additional debugging output will be printed. | `False` |
 | `protoc` | `executable` | The `protoc` binary | `//third_party/protoc:protoc_bin` |
 
-## Java Arguments
+## `protoc_java` Arguments
 
 | Name | Type | Description | Default |
 | ---- | ---- | ----------- | ------- |
 | `gen_java` | `boolean` | Generate java sources (bundled in a `{name}.srcjar` file | `False` |
+| `gen_java_options` | `string_list` | Optional plugin arguments |  |
 | `protoc_gen_grpc_java` | `executable` | The java plugin `plugin` binary | `//third_party/protobuf:protoc_gen_grpc_java` |
 
-## Go Arguments
+## `protoc_go` Arguments
 
 | Name | Type | Description | Default |
 | ---- | ---- | ----------- | ------- |
-| `gen_java` | `boolean` | Generate java sources (bundled in a `{name}.srcjar` file | `False` |
+| `gen_go` | `boolean` | Generate go sources (each input file generates a corresponding `{basename}.pb.go` file | `False` |
+| `gen_go_options` | `string_list` | Optional plugin arguments |  |
 | `protoc_gen_grpc_java` | `executable` | The java plugin `plugin` binary | `//third_party/protobuf:protoc_gen_grpc_java` |
+| `protoc_gen_go` | `executable` | The go plugin `plugin` binary | `//third_party/protobuf:protoc_gen_go` |
 
 # Contributing
 
 Contributions welcome; please create Issues or GitHub pull requests.
 
 # Credits
+
+* [@yugui][yugui]: Primary source for the go support from [grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway/blob/e958c5db30f7b99e1870db42dd5624322f112d0c/examples/bzl/BUILD).
 
 * [@mzhaom][mzhaom]: Primary source for the skylark rule (from
   <https://github.com/mzhaom/trunk/blob/master/third_party/grpc/grpc_proto.bzl>).
@@ -256,8 +271,12 @@ Contributions welcome; please create Issues or GitHub pull requests.
 
 * Much thanks to all the members of the bazel, protobuf, and gRPC teams.
 
+---
+
+[yugui]: http://github.com/yugui "Yuki Yugui Sonoda"
 [jart]: http://github.com/jart "Justine Tunney"
 [mzhaom]: http://github.com/mzhaom "Ming Zhao"
 [bazel-home]: http://bazel.io "Bazel Homepage"
 [bazel-install]: http://bazel.io/docs/install.html "Bazel Installation"
 [rules_closure]: http://github.com/bazelbuild/rules_closure "Rules Closure"
+[rules_go]: http://github.com/bazelbuild/rules_go "Rules Go"
