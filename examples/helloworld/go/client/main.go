@@ -39,7 +39,7 @@ import (
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	pb "pubref.org/helloworld"
+	pb "pubref.org/helloworld/examples/helloworld"
 )
 
 const (

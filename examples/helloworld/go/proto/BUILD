@@ -6,7 +6,7 @@ protoc_go(
     name = "proto",
     srcs = ["helloworld.proto"],
     import_map = {
-        "examples/helloworld/go/proto/helloworld.proto": "bar",
+        "examples/helloworld/go/proto/helloworld.proto": "pubref.org/rules_pubref/examples/helloworld",
     },
     with_grpc = True,
     verbose = True,
