@@ -4,10 +4,10 @@ load("//bzl:rules.bzl", "protoc_go")
 
 protoc_go(
     name = "proto",
-    srcs = ["helloworld.proto"],
+    srcs = ["//examples/helloworld/proto:srcs"],
     import_map = {
         "examples/helloworld/go/proto/helloworld.proto": "pubref.org/rules_pubref/examples/helloworld",
     },
     with_grpc = True,
-    verbose = True,
+    verbose = 1,
 )

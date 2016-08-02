@@ -2,25 +2,30 @@
 
 ---
 
-This is a minimal repository that provides a skylark rule to build
-protocol buffer libraries for (java, golang, ~~python~~,
-~~javascript~~, ~~cpp~~) on (linux, macosx, ~~windows~~).  This
-repository may become obsolete when protobuf generation is supported
-natively by bazel itself.
+Bazel skylark rules for generating protocol buffers in (java, golang)
+ on (linux, macosx).
 
-| ![bazel](https://github.com/pubref/rules_protobuf/blob/master/bazel.png) | ![rules_protobuf](https://github.com/pubref/rules_protobuf/blob/master/rules_protobuf.png) | ![gRPC](https://github.com/pubref/rules_protobuf/blob/master/gRPC.png) |
-| --- | --- | --- |
-| Bazel | rules_protobuf | gRPC |
+| ![bazel](https://github.com/pubref/rules_protobuf/blob/master/bazel.png)
+| |
+| ![rules_protobuf](https://github.com/pubref/rules_protobuf/blob/master/rules_protobuf.png)
+| |
+| ![gRPC](https://github.com/pubref/rules_protobuf/blob/master/gRPC.png)
+| | --- | --- | --- | Bazel | rules_protobuf | gRPC |
 
 ---
 
-| Language | Support | Notes |
-| -------- | ------- | ----- |
-| java | yes | `protobuf-java 3.0.0` |
-| go | in-progress |  |
-| python | TODO |  |
-| cpp | TODO |  |
-| js | TODO |  |
+
+| Language | Proto? | gRPC? | Notes |
+|----------|--------|-------|
+| [Java](bzl/java/README.md) | 3.0.0 | yes | |
+| [Go](bzl/go/README.md) | wip | wip | |
+| [Python](bzl/python/README.md) | wip | no | |
+| [Javascript](bzl/js/README.md) |  |  | |
+| [C++](bzl/cpp/README.md) |  |  | |
+| [JavaNano](bzl/javanano/README.md) |  |  | |
+| [Objective-C](bzl/objc/README.md) |  |  | |
+| [C#](bzl/csharp/README.md) |  |  | |
+| [Ruby](bzl/ruby/README.md) |  |  | |
 
 ---
 
@@ -95,113 +100,6 @@ Please refer to the
 file for the set of external dependencies that will be hoisted into
 your project.
 
-# Java Usage
-
-Load the `protoc_java` rule In your `BUILD` file:
-
-```python
-load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protoc_java")
-```
-
-Generate protobuf `*.java` source files, bundled into a
-`my_proto.srcjar`:
-
-```python
-protoc_java(
-  name = "my_protobufs",
-  srcs = ["my.proto"],
-
-  # Default is false, so omit this if you are not using service
-  # definitions in your .proto files
-  with_grpc = True,
-
-)
-```
-
-```sh
-$ bazel build my_protobufs
-```
-
-And then depend on the protobuf rule in a java_library rule (for
-example).  Remember that the srcjar contains java source code and not
-compiled classfiles, so the protobuf rule label goes in the `srcs`
-attribute and not the `deps` attribute (easy to do, not so easy to
-recognize):
-
-```python
-java_library(
-  name = "my_app",
-  srcs = [
-    "MyApp.java",
-    ":my_protobufs",
-  ],
-  deps = [
-    # Compile-time dependency for your standard protobufs
-    "@com_google_protobuf_protobuf_java//jar",
-    # Additional compile-time dependencies if grpc is used.
-    "@com_google_guava_guava//jar",
-    "@io_grpc_grpc_core//jar",
-    "@io_grpc_grpc_protobuf//jar",
-    "@io_grpc_grpc_stub//jar",
-  ]
-)
-```
-
-```sh
-$ bazel build my_app
-```
-
-If your `MyApp.java` has a `main` method, you can run it with
-something like:
-
-```python
-java_binary(
-  name = "my_app_bin",
-  main_class = "com.example.MyApp",
-  runtime_deps = [
-    ":my_app"
-
-    # Additional runtime dependencies when using
-    # netty as the grpc http2 provider.  If you're not using grpc,
-    # these deps are not needed.
-    "@io_grpc_grpc_netty//jar",
-    "@io_grpc_grpc_protobuf_lite//jar",
-    "@io_netty_netty_buffer//jar",
-    "@io_netty_netty_codec//jar",
-    "@io_netty_netty_codec_http2//jar",
-    "@io_netty_netty_common//jar",
-    "@io_netty_netty_handler//jar",
-    "@io_netty_netty_resolver//jar",
-    "@io_netty_netty_transport//jar",
-
-  ]
-)
-```
-
-```sh
-$ bazel run my_app_bin
-```
-
-For the win, to create an executable jar with all runtime dependencies
-packaged together in a single executable jar that can be deployed
-anywhere, invoke the `{rule_name}_deploy.jar` *implicit build rule*:
-
-
-```sh
-$ bazel build my_app_bin_deploy.jar
-$ cp bazel-bin/java/org/example/myapp/my_app_bin_deploy.jar /tmp
-$ java -jar /tmp/my_app_bin_deploy.jar
-```
-
-# Go Usage
-
- Usage of
-`protoc_go` is similar to `proto_java`.  There is an additional
-
-```python
-load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protoc_java")
-```
-
 # Examples
 
 - [helloworld](https://github.com/pubref/rules_protobuf/tree/go/examples/helloworld)
@@ -218,42 +116,6 @@ $ (cd examples/helloworld && make netty_server)
 # In terminal 2:
 $ (cd examples/helloworld && make netty_client)
 ```
-
-# Arguments to the `protoc` rule
-
-The language specific rules such as `protoc_java` and `protoc_go` are
-essentially convenience rules that call the `protoc` rule with the
-`gen_{language}` attribute as `True`.  For full control over protocol
-buffer generation in multiple languages, invoke the `protoc` rule
-directly.
-
-## `protoc` Arguments (common to all generating rules)
-
-| Name | Type | Description | Default |
-| ---- | ---- | ----------- | ------- |
-| `name` | `string` | The name of the rule. |(required) |
-| `srcs` | `label_list` | List of protocol buffer source file(s) | (required) |
-| `imports` | `string_list` | List of `--import` that will be passed to `protoc` directly | `[]` |
-| `with_grpc` | `boolean` | If `True`, additional `protoc` arguments will be assembled for the language-specific protoc plugins. | `False`
-| `verbose` | If true, additional debugging output will be printed. | `False` |
-| `protoc` | `executable` | The `protoc` binary | `//third_party/protoc:protoc_bin` |
-
-## `protoc_java` Arguments
-
-| Name | Type | Description | Default |
-| ---- | ---- | ----------- | ------- |
-| `gen_java` | `boolean` | Generate java sources (bundled in a `{name}.srcjar` file | `False` |
-| `gen_java_options` | `string_list` | Optional plugin arguments |  |
-| `protoc_gen_grpc_java` | `executable` | The java plugin `plugin` binary | `//third_party/protobuf:protoc_gen_grpc_java` |
-
-## `protoc_go` Arguments
-
-| Name | Type | Description | Default |
-| ---- | ---- | ----------- | ------- |
-| `gen_go` | `boolean` | Generate go sources (each input file generates a corresponding `{basename}.pb.go` file | `False` |
-| `gen_go_options` | `string_list` | Optional plugin arguments |  |
-| `protoc_gen_grpc_java` | `executable` | The java plugin `plugin` binary | `//third_party/protobuf:protoc_gen_grpc_java` |
-| `protoc_gen_go` | `executable` | The go plugin `plugin` binary | `//third_party/protobuf:protoc_gen_go` |
 
 # Contributing
 

@@ -1,33 +1,20 @@
-load("//bzl:protoc.bzl", "protoc_attrs", "protoc_impl")
+# MAINTAINERS
+#
+# 1. Please sort everything in this file.
+#
+# 2. Every external rule must have a SHA checksum.
+#
+# 3. Use http:// URLs since we're relying on the checksum for security.
+#
+# To update http_file(s) from maven servers, point your browser to
+# https://repo1.maven.org/maven2, find the file, copy it down to your
+# workstation (with curl perhaps), and compute the sha256:
+#
+# $ curl -O -J -L https://repo1.maven.org/maven2/com/google/protobuf/protoc/3.0.0/protoc-3.0.0-linux-x86_64.exe
+# $ sha256sum protoc-3.0.0-linux-x86_64.exe #linux
+# $ shasum -a256 protoc-3.0.0-osx-x86_64.exe # macosx
 
-"""Utilities for building Java Protocol Buffers.
-"""
-
-# ****************************************************************
-# Build Rule Definitions
-# ****************************************************************
-
-def _protoc_java_attrs():
-  """Returns: a map of rule attributes
-  """
-  attrs = protoc_attrs()
-  attrs["gen_java"] = attr.bool(default = True)
-  return attrs
-
-protoc_java = rule(
-  implementation=protoc_impl,
-  outputs = {
-    "java_src": "%{name}.srcjar",
-  },
-  attrs = _protoc_java_attrs(),
-  output_to_genfiles=True,
-)
-
-# ****************************************************************
-# Workspace Dependency Management
-# ****************************************************************
-
-def rules_protobuf_java(
+def deps(
   omit_grpc=False,
 
   omit_com_google_auth_google_auth_library_credentials=False,
@@ -125,32 +112,6 @@ def rules_protobuf_java(
       io_netty_netty_resolver()
     if not omit_io_netty_netty_transport:
       io_netty_netty_transport()
-
-# MAINTAINERS
-#
-# 1. Please sort everything in this file.
-#
-# 2. Every external rule must have a SHA checksum.
-#
-# 3. Use http:// URLs since we're relying on the checksum for security.
-#
-# fyi: An *.exe suffix does not imply a Windows executable when
-# downloaded from maven repos.
-#
-# To update http_file(s) from maven servers, point your browser to
-# https://repo1.maven.org/maven2, find the file, copy it down to your
-# workstation (with curl perhaps), and compute the sha256:
-#
-# $ curl -O -J -L https://repo1.maven.org/maven2/com/google/protobuf/protoc/3.0.0/protoc-3.0.0-linux-x86_64.exe
-# $ sha256sum protoc-3.0.0-linux-x86_64.exe #linux
-# $ shasum -a256 protoc-3.0.0-osx-x86_64.exe # macosx
-
-# def protobuf_java():
-#   native.maven_jar(
-#       name = "com_google_protobuf_protobuf_java",
-#       artifact = "com.google.protobuf:protobuf-java:jar:3.0.0",
-#       sha1 = "6d325aa7c921661d84577c0a93d82da4df9fa4c8",
-#   )
 
 def com_google_auth_google_auth_library_credentials():
   native.maven_jar(
@@ -341,24 +302,3 @@ def protoc_gen_grpc_java_macosx():
       sha256 = "850fd0420cb896dfcd1f7d1edd6b3cb010890f8732f84821af5ef6b5f89e885d",
       executable = True,
   )
-
-# def protobuf_java():
-#   native.maven_jar(
-#       name = "com_google_protobuf_protobuf_java",
-#       artifact = "com.google.protobuf:protobuf-java:jar:3.0.0",
-#       sha1 = "6d325aa7c921661d84577c0a93d82da4df9fa4c8",
-#   )
-
-# def protoc_linux_x86_64():
-#   native.http_file(
-#       name = "protoc_linux_x86_64",
-#       url = "http://repo1.maven.org/maven2/com/google/protobuf/protoc/3.0.0/protoc-3.0.0-linux-x86_64.exe",
-#       sha256 = "98e235228b70e747ac850f1411d1d5de351c2dc3227a4086b1d940b5e099257f",
-#   )
-
-# def protoc_macosx():
-#   native.http_file(
-#       name = "protoc_macosx",
-#       url = "http://repo1.maven.org/maven2/com/google/protobuf/protoc/3.0.0/protoc-3.0.0-osx-x86_64.exe",
-#       sha256 = "d9a1dd45e3eee4a9abfbb4be26172d69bf82018a3ff5b1dff790c58edbfcaf4a",
-#   )

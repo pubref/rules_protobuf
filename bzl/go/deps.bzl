@@ -1,29 +1,4 @@
-load("//bzl:protoc.bzl", "protoc_attrs", "protoc_impl")
-
-"""Utilities for building Go Protocol Buffers.
-"""
-
-def _protoc_go_attrs():
-  attrs = protoc_attrs()
-  attrs["gen_go"] = attr.bool(default = True)
-  attrs["import_map"] = attr.string_dict()
-
-  return attrs
-
-protoc_go = rule(
-  implementation=protoc_impl,
-  attrs = _protoc_go_attrs(),
-  # outputs = {
-  #   "descriptor": "%{name}.descriptor.proto",
-  # },
-  output_to_genfiles=True,
-)
-
-# ****************************************************************
-# Workspace Dependency Management
-# ****************************************************************
-
-def rules_protobuf_go(
+def deps(
     omit_com_github_golang_glog=False,
     omit_com_github_golang_protobuf=False,
     omit_org_golang_google_grpc=False,
@@ -48,6 +23,7 @@ def com_github_golang_glog():
     build_file = "//third_party/com_github_golang_glog:BUILD",
   )
 
+
 def com_github_golang_protobuf():
   native.new_git_repository(
     name = "com_github_golang_protobuf",
@@ -55,6 +31,7 @@ def com_github_golang_protobuf():
     commit = "c3cefd437628a0b7d31b34fe44b3a7a540e98527", # Jul 27, 2016
     build_file = "//third_party/com_github_golang_protobuf:BUILD",
   )
+
 
 def com_github_golang_protobuf2():
   native.new_git_repository(
@@ -64,6 +41,7 @@ def com_github_golang_protobuf2():
     build_file = "//third_party/com_github_golang_protobuf:BUILD",
   )
 
+
 def org_golang_google_grpc():
   native.new_git_repository(
     name = "org_golang_google_grpc",
@@ -72,6 +50,7 @@ def org_golang_google_grpc():
     tag = "v1.0.0",
     build_file = "//third_party/org_golang_google_grpc:BUILD",
   )
+
 
 def org_golang_x_net():
   native.new_git_repository(
