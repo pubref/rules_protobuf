@@ -1,5 +1,4 @@
-# Go
-
+# `rules_protobuf` Go Support
 
 ## `protoc_go` Arguments
 

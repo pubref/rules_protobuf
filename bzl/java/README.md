@@ -1,4 +1,4 @@
-# Java Support
+# `rules_protobuf` Java Support
 
 ## Usage
 
