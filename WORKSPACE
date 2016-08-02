@@ -1,5 +1,26 @@
-workspace(name = "rules_protobuf")
+workspace(name = "org_pubref_rules_protobuf")
 
-load("//protobuf:rules.bzl", "protobuf_dependencies")
+# ================================================================
+# Load rules_go
+# ================================================================
 
-protobuf_dependencies()
+git_repository(
+    name = "io_bazel_rules_go",
+    remote = "https://github.com/bazelbuild/rules_go.git",
+    tag = "0.0.4",
+)
+
+load("@io_bazel_rules_go//go:def.bzl", "go_repositories")
+
+go_repositories()
+
+# ================================================================
+# Load self
+# ================================================================
+
+load("//bzl:rules.bzl", "rules_protobuf")
+
+rules_protobuf(
+    with_java = True,
+    with_go = True,
+)
