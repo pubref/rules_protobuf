@@ -1,13 +1,26 @@
 # `rules_protobuf`
 
+---
+
 This is a minimal repository that provides a skylark rule to build
-protocol buffer libraries (currently java only).  This repository will
-become obsolete when protobuf generation is supported natively by
-bazel itself.
+protocol buffer libraries for (java, golang, ~~python~~,
+~~javascript~~, ~~cpp~~) on (linux, macosx, ~~windows~~).  This
+repository may become obsolete when protobuf generation is supported
+natively by bazel itself.
 
 | ![bazel](https://github.com/pubref/rules_protobuf/blob/master/bazel.png) | ![rules_protobuf](https://github.com/pubref/rules_protobuf/blob/master/rules_protobuf.png) | ![gRPC](https://github.com/pubref/rules_protobuf/blob/master/gRPC.png) |
 | --- | --- | --- |
 | Bazel | rules_protobuf | gRPC |
+
+---
+
+| Language | Support | Notes |
+| -------- | ------- | ----- |
+| java | yes | `protobuf-java 3.0.0` |
+| go | in-progress |  |
+| python | TODO |  |
+| cpp | TODO |  |
+| js | TODO |  |
 
 ---
 
@@ -32,57 +45,75 @@ Build label: 0.3.1
 
 Require these rules your `WORKSPACE` and trigger loading of external
 dependencies (including the `protoc` prebuilt binaries for linux or
-osx, the `protoc-gen-grpc-plugin` prebuilt binary, and a number of
-compile dependencies such as `com.google.protobuf.*`, `io.grpc.*` as
-well as related runtime dependencies such as `io.netty.*`):
+osx) and other required dependencies specific for a particular
+language output.  You must specify which language(s) you'd like
+support for:
 
 ```python
 git_repository(
-  name = "rules_protobuf",
+  name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
-  tag = "0.1.1",
+  tag = "0.2.0",
   # Or, use the latest commit
   #commit = "bf8de4e05f77ad67bbdaaed4c88951ba5667ce34",
 )
 
-load("@rules_protobuf//protobuf:rules.bzl", "protobuf_dependencies")
+load("@org_pubref_rules_protobuf//bzl:rules.bzl", "rules_protobuf")
 
-protobuf_dependencies()
+# Specify language modules to load
+rules_protobuf(
+  with_java = True,
+  with_go = True,
+)
 ```
 
-If you have already declared an external dependency jar in your
-`WORKSPACE` that conflicts with one declared by `protobuf_repos()`,
-you may selectively omit them from the load:
+For fine-grained control over the dependencies that `rules_protobuf`
+loads, call the `rules_protobuf` macro and one of the language
+specific modules with `omit_{dependency}` arguments.  For example:
 
 ```python
-load("@rules_protobuf//protobuf:rules.bzl", "protobuf_dependencies")
-protobuf_dependencies(
+load(
+  "@org_pubref_rules_protobuf//bzl:rules.bzl",
+  "rules_protobuf",
+  "rules_protobuf_java",
+)
+
+# Make the protoc binary available
+rules_protobuf()
+
+# Make the protoc-gen-grpc-java binary and all dependent jars available,
+# but don't try to load guava.  Guava is required, but this assumes you have a
+# another workspace rule that provides com_google_guava_guava via another mechanism,
+# possibly a local or alternate version.
+rules_protobuf_java(
   omit_com_google_guava_guava = True,
 )
 ```
 
-Please refer to the [protobuf/dependencies.bzl](https://github.com/pubref/rules_protobuf/blob/master/protobuf/dependencies.bzl) file for a list of
-external dependencies that will be hoisted into your project.
+Please refer to the
+[bzl/{language}.bzl](https://github.com/pubref/rules_protobuf/tree/master/protobuf)
+file for the set of external dependencies that will be hoisted into
+your project.
 
-# Usage
+# Java Usage
 
-Load the `protobuf_java_library` rule In your `BUILD` file:
+Load the `protoc_java` rule In your `BUILD` file:
 
 ```python
-load("@rules_protobuf//protobuf:rules.bzl", "protobuf_java_library")
+load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protoc_java")
 ```
 
 Generate protobuf `*.java` source files, bundled into a
 `my_proto.srcjar`:
 
 ```python
-protobuf_java_library(
+protoc_java(
   name = "my_protobufs",
-  src = "my.proto",
+  srcs = ["my.proto"],
 
   # Default is false, so omit this if you are not using service
   # definitions in your .proto files
-  use_grpc_plugin = True,
+  with_grpc = True,
 
 )
 ```
@@ -120,7 +151,7 @@ java_library(
 $ bazel build my_app
 ```
 
-If your `MyClass.java` has a `main` method, you can run it with
+If your `MyApp.java` has a `main` method, you can run it with
 something like:
 
 ```python
@@ -164,32 +195,52 @@ $ java -jar /tmp/my_app_bin_deploy.jar
 
 # Examples
 
-- [helloworld](https://github.com/pubref/rules_protobuf/tree/master/java/org/pubref/tools/bazel/protobuf/examples/helloworld)
+- [helloworld](https://github.com/pubref/rules_protobuf/tree/master/examples/helloworld)
 
-Commands for running the helloworld client/server example (adapted
+Demonstrative commands for running the helloworld client/server example (adapted
 from
 `https://github.com/grpc/grpc-java/blob/master/examples/src/main/proto/helloworld.proto`)
-are found in the `Makefile`.  Note that `make` is not used by bazel or
-this project other than to demonstrate those commands:
+are found in the `examples/helloworld/Makefile`.
 
 ```sh
 # In terminal 1:
-$ make helloworld_server
+$ (cd examples/helloworld && make netty_server)
 
 # In terminal 2:
-$ make helloworld_client
+$ (cd examples/helloworld && make netty_client)
 ```
 
-# Arguments to `protobuf_java_library`
+# Arguments to the `protoc` rule
 
-| Name | Description | Default |
-| ---- | ------- | ----------- |
-| `name` | The name of the rule. |(required) |
-| `src` | The name of the protocol buffer source file.  This is a single file, so each *.proto file will need its own rule | (required) |
-| `use_grpc_plugin` | If true, additional `protoc` arguments will be assembled to run the `protoc-gen-grpc-java plugin` | `False` |
+The language specific rules such as `protoc_java` and `protoc_go` are
+essentially convenience rules that call the `protoc` rule with the
+`gen_{language}` attribute as `True`.  For full control over protocol
+buffer generation in multiple languages, invoke the `protoc` rule
+directly.
+
+## Common Arguments
+
+| Name | Type | Description | Default |
+| ---- | ---- | ----------- | ------- |
+| `name` | `string` | The name of the rule. |(required) |
+| `srcs` | `label_list` | List of protocol buffer source file(s) | (required) |
+| `with_grpc` | `boolean` | If `True`, additional `protoc` arguments will be assembled for the language-specific protoc plugins. | `False`
 | `verbose` | If true, additional debugging output will be printed. | `False` |
-| `_protoc` | For substitution of a different `protoc` binary | `//third_party/protobuf:protoc_bin` |
-| `_protoc_gen_grpc_java` | For substitution of a different `plugin` binary | `//third_party/protobuf:protoc_gen_grpc_java` |
+| `protoc` | `executable` | The `protoc` binary | `//third_party/protoc:protoc_bin` |
+
+## Java Arguments
+
+| Name | Type | Description | Default |
+| ---- | ---- | ----------- | ------- |
+| `gen_java` | `boolean` | Generate java sources (bundled in a `{name}.srcjar` file | `False` |
+| `protoc_gen_grpc_java` | `executable` | The java plugin `plugin` binary | `//third_party/protobuf:protoc_gen_grpc_java` |
+
+## Go Arguments
+
+| Name | Type | Description | Default |
+| ---- | ---- | ----------- | ------- |
+| `gen_java` | `boolean` | Generate java sources (bundled in a `{name}.srcjar` file | `False` |
+| `protoc_gen_grpc_java` | `executable` | The java plugin `plugin` binary | `//third_party/protobuf:protoc_gen_grpc_java` |
 
 # Contributing
 

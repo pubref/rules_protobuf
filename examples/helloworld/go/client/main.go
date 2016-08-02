@@ -31,7 +31,7 @@
  *
  */
 
-package main
+package helloworld
 
 import (
 	"log"
@@ -39,7 +39,7 @@ import (
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	pb "pubref.org/grpc/examples/helloworld/helloworld"
+	pb "pubref.org/helloworld"
 )
 
 const (

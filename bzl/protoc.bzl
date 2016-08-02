@@ -163,46 +163,27 @@ def _protoc_gen_java_post(ctx, requires, provides):
 def _protoc_gen_go_pre(ctx, gen_dir, args, requires, provides):
   """Configure arguments for go generation
   """
-  pkgname = ctx.label.package
-
-  genfiles_dir = ctx.host_configuration.genfiles_dir.path
-  print("genfiles_dir: <%s>" % ctx.host_configuration.genfiles_dir.path)
-
-  #go_dir = ctx.outputs.descriptor.dirname
   go_dir = ctx.var["GENDIR"] + "/" + gen_dir
-  #go_dir = ctx.new_file(go_dirname)
-  #go_dir = ctx.new_file(go_dirname)
 
   # **************** Args ****************
-  #print("ctx.label: <%s>" % dir(ctx.label))
-  #print("ctx.var keys: <%s>" % ctx.var.keys())
-  #print("ctx.var values: <%s>" % ctx.var.values())
-  #print("ctx.label.relative: <%s>" % ctx.label.name)
-  #print("workspace_root: <%s>" % ctx.label.workspace_root)
-  print("gen_dir: <%s>" % gen_dir)
-  pkgname = ctx.label.package
-  #outdir = ctx.var["GENDIR"] + "/" + gen_dir + "/" + pkgname
-  #outdir = ctx.var["GENDIR"] + "/" + pkgname
-  protoc_gen_go = ctx.executable.protoc_gen_go
 
-  if ctx.attr.gen_go_options:
-    args += ["--go_out=" + ",".join(ctx.attr.ctx.attr.gen_go_options) + ":" + go_dir]
-  else:
-    args += ["--go_out=" + go_dir]
+  protoc_gen_go = ctx.executable.protoc_gen_go
   args += ["--plugin=protoc-gen-go=" + protoc_gen_go.path]
 
+  go_out = go_dir
+  go_opts = [] + ctx.attr.gen_go_options
+  import_map = {} + ctx.attr.import_map
+  print("import_map: %s" % import_map)
+  for (srcfilename, import_prefix) in import_map.items():
+    go_opts += ["M" + srcfilename + "=" + import_prefix]
+  if (ctx.attr.with_grpc):
+    go_opts += ["grpc"]
+  if go_opts:
+    go_out = ",".join(go_opts) + ":" + go_out
+
+  args += ["--go_out=" + go_out]
+
   #args += ["--descriptor_set_out=" + ctx.outputs.descriptor.path]
-
-  #Must be a better way to do this than having to generate an output
-  #directory that works with genfiles.
-  # ctx.action(
-  #   mnemonic = "CreateGoDir",
-  #   inputs = [go_dirfile],
-  #   outputs = [go_dirfile],
-  #   arguments = [go_dirfile.path],
-  #   command = "mkdir2 $1")
-
-  #print("action out: %s" % dir(action_out))
 
   # **************** Requires ****************
 
@@ -210,55 +191,25 @@ def _protoc_gen_go_pre(ctx, gen_dir, args, requires, provides):
 
   # **************** Provides ****************
 
-  #provides += [ctx.outputs.descriptor, go_dir]
-  #provides += [go_dir]
-
   for srcfile in ctx.files.srcs:
     if not srcfile.path.endswith('.proto'):
       fail("non proto source file %s" % str(srcfile), "srcs")
-    #print("pkgname: %s" % pkgname)
 
-    #print("build_file_path: %s" % ctx.build_file_path)
-    #print("GENDIR: %s" % ctx.var["GENDIR"])
-    #print("BINDIR: %s" % ctx.var["BINDIR"])
-    #print("srcfile.path: %s" % srcfile.path)
-    #print("srcfile.short_path: %s" % srcfile.short_path)
-    print("srcfile.dirname: %s" % srcfile.dirname)
     basename = srcfile.basename
     filename = basename[:-len('.proto')] + ".pb.go"
-    dirname = srcfile.dirname
-    #relname = go_dir[len(pkgname):]
-    #filepath = dirname + "/" + filename
-    print("basename: %s" % basename)
-    print("dirname: %s" % dirname)
-    #print("relname: %s" % relname)
-    print("filename: %s" % filename)
-    #print("filepath: %s" % filepath)
-    #gofile = ctx.new_file(outdir + "/" + srcfile.dirname + "/" + filename)
-    #gofile = ctx.new_file(outdir + "/" + filename)
-    #gofile = ctx.new_file(srcfile.dirname + "/" + filename)
-    #gofile = ctx.new_file(outdir + "/" + pkgname + "/" + filename)
-    #gofile = ctx.new_faile(ctx.var["GENDIR"] + "/" + dirname + "/" + filename)
-    #gofile = ctx.new_file(outdir + filepath)
     protofile = ctx.new_file(basename)
     gofile = ctx.new_file(filename)
-    #gofile = ctx.new_file(filepath)
-    #gofile = ctx.new_file(relname + "/" + filename)
-    print("gofile.path: %s " % gofile.path)
-    #print("gofile: %s " % gofile)
 
-    # Rename protojar to srcjar so that rules like java_library can
-    # consume it.
+    # Copy the proto source to the context namespace (where the BUILD
+    # rule is called) to better support imports (necessary).
     ctx.action(
       mnemonic = "RebaseSrc",
-      progress_message = "ReBasing " + protofile.path,
       inputs = [srcfile],
       outputs = [protofile],
       arguments = [srcfile.path, protofile.path],
       command = "cp $1 $2")
 
     requires += [protofile]
-    #ctx.outputs.outs += [gofile]
     provides += [gofile]
 
   return (args, requires, provides)
@@ -303,9 +254,12 @@ def protoc_impl(ctx):
 
   if (ctx.attr.verbose):
     print("protoc binary: " + ctx.executable.protoc.path)
-    print("protoc arguments: %s" % arguments)
-    print("protoc inputs: %s" % inputs)
-    print("protoc outputs: %s" % outputs)
+    for i in range(len(arguments)):
+      print(" > arg%s: %s" % (i, arguments[i]))
+    for i in inputs:
+      print(" > input: %s" % i)
+    for o in outputs:
+      print(" > output: %s" % o)
 
   if args:
     ctx.action(
