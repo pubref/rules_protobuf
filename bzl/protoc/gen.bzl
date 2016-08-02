@@ -118,13 +118,12 @@ def gen(ctx):
   """General implementation for generating protos
   """
   args = []
+  srcs = []
   requires = []
   provides = []
   import_flags = []
   gen_dir = _GenDir(ctx)
 
-  srcs = ctx.files.srcs
-  requires += ctx.files.srcs
   if gen_dir:
     import_flags += ["-I" + gen_dir, "-I" + ctx.var["GENDIR"] + "/" + gen_dir]
   else:
@@ -140,12 +139,16 @@ def gen(ctx):
     flag = "gen_" + lang
     if getattr(ctx.attr, flag):
       pre = impl["pre"]
-      args, requires, provides = pre(ctx, gen_dir, args, requires, provides)
+      args, srcs, requires, provides = pre(ctx, gen_dir, args, srcs, requires, provides)
 
   # Run protoc
   #
-  arguments = args + import_flags + [src.path for src in srcs]
+  #arguments = args + import_flags + [src.path for src in srcs]
+  arguments = args + import_flags + [src for src in srcs]
+  #arguments = args + import_flags + [srcs] # srcs is a list of strings
+  #requires += [srcs]
   inputs = list(set(requires))
+  #inputs = requires
   outputs = ctx.outputs.outs + provides
 
   if ctx.attr.verbose:
