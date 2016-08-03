@@ -2,8 +2,7 @@
 
 ---
 
-Bazel skylark rules for generating protocol buffers in (java, golang)
- on (linux, macosx).
+Bazel skylark rules for building [protocol buffers][protobuf-home] on (macosx, linux).
 
 | ![Bazel][bazel_image] | ![Protobuf][wtfcat_image] | ![gRPC][grpc_image] |
 | --- | --- | --- |
@@ -137,6 +136,7 @@ Contributions welcome; please create Issues or GitHub pull requests.
 [jart]: http://github.com/jart "Justine Tunney"
 [mzhaom]: http://github.com/mzhaom "Ming Zhao"
 
+[protobuf-home]: https://developers.google.com/protocol-buffers/ "Protocol Buffers Developer Documentation"
 [bazel-home]: http://bazel.io "Bazel Homepage"
 [bazel-install]: http://bazel.io/docs/install.html "Bazel Installation"
 [rules_closure]: http://github.com/bazelbuild/rules_closure "Rules Closure"
