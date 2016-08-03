@@ -113,12 +113,13 @@ def attrs():
     executable = True,
   )
 
-  # attrs["protoc_gen_python_grpc"] = attr.label(
-  #   #default = Label("@com_github_grpc_grpc//:protoc_gen_python_grpc_bin"),
-  #   default = Label("@com_github_grpc_grpc//:"),
-  #   cfg = HOST_CFG,
-  #   executable = True,
-  # )
+  attrs["protoc_gen_grpc"] = attr.label(
+    # Note: the default value here is a cc_binary that expects to find
+    # //external:protobuf_compiler, so that must be bind'ed.
+    default = Label("@com_github_grpc_grpc//:grpc_cpp_plugin"),
+    cfg = HOST_CFG,
+    executable = True,
+  )
 
   return attrs
 

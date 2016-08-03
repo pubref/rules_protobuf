@@ -37,7 +37,7 @@
 
 #include <grpc++/grpc++.h>
 
-#include "src/helloworld.grpc.pb.h"
+#include "examples/helloworld/cpp/helloworld.grpc.pb.h"
 
 using grpc::Server;
 using grpc::ServerBuilder;

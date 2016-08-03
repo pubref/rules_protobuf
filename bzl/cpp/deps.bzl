@@ -1,14 +1,14 @@
-def deps(
-  omit_foo = True,
-):
-
-  if not omit_foo:
-    foo()
+load("//bzl:deps.bzl", "require")
 
 
-def foo():
-  native.git_repository(
-    name = "foo",
-    remote = "https://github.com/foo/foo.git",
-    tag = "0.0",
-  )
+def deps(opts = {}):
+  require("grpc", opts)
+  require("zlib", opts)
+  require("external_zlib", opts)
+  require("nanopb", opts)
+  require("external_nanopb", opts)
+  require("boringssl", opts)
+  require("libssl", opts)
+  require("protobuf", opts)
+  require("external_protobuf_clib", opts)
+  require("external_protobuf_compiler", opts)

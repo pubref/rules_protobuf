@@ -5,7 +5,7 @@
 Bazel skylark rules for generating protocol buffers in (java, golang)
  on (linux, macosx).
 
-| ![Bazel][bazel_image] | ![Protobuf][rules_protobuf_image] | ![gRPC][grpc_image] |
+| ![Bazel][bazel_image] | ![Protobuf][wtfcat_image] | ![gRPC][grpc_image] |
 | --- | --- | --- |
 Bazel | rules_protobuf | gRPC |
 
@@ -13,7 +13,7 @@ Bazel | rules_protobuf | gRPC |
 
 | Language                 | Generate (1) | Compile (2) | gRPC (3) |
 | ------------------------ | ------------ | ----------- | -------- |
-| [C++](bzl/cpp)           | yes          |             |          |
+| [C++](bzl/cpp)           | yes          | yes         | yes      |
 | [C#](bzl/csharp)         |              |             |          |
 | [Go](bzl/go)             | yes          |             |          |
 | [Java](bzl/java)         | yes          | yes         | yes      |
@@ -142,6 +142,6 @@ Contributions welcome; please create Issues or GitHub pull requests.
 [rules_closure]: http://github.com/bazelbuild/rules_closure "Rules Closure"
 [rules_go]: http://github.com/bazelbuild/rules_go "Rules Go"
 
-[bazel_image]: https://github.com/pubref/rules_protobuf/blob/master/bazel.png
-[rules_protobuf_image]: https://github.com/pubref/rules_protobuf/blob/master/rules_protobuf.png
-[grpc_image]: https://github.com/pubref/rules_protobuf/blob/master/gRPC.png
+[bazel_image]: https://github.com/pubref/rules_protobuf/blob/master/images/bazel.png
+[wtfcat_image]: https://github.com/pubref/rules_protobuf/blob/master/images/wtfcat.png
+[grpc_image]: https://github.com/pubref/rules_protobuf/blob/master/images/gRPC.png

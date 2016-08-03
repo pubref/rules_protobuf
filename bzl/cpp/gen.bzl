@@ -13,13 +13,32 @@ def pre(ctx, gen_dir, args, srcs, requires, provides):
 
   args += ["--cpp_out=" + cpp_out]
 
+  if ctx.attr.with_grpc:
+    protoc_gen_grpc = ctx.executable.protoc_gen_grpc
+    requires += [protoc_gen_grpc]
+    args += [
+      "--plugin=protoc-gen-grpc=" + protoc_gen_grpc.path,
+      "--grpc_out=" + cpp_out,
+    ]
+
+    for src in ctx.files.srcs:
+      args += ["--proto_path=" + src.dirname]
+      requires += [src]
+
   # **************** Provides ****************
 
   for srcfile in ctx.files.srcs:
     basename = srcfile.basename[:-len('.proto')]
     protofile = ctx.new_file(basename)
-    pbhfile = ctx.new_file(basename + ".pb.h")
-    pbccfile = ctx.new_file(basename + ".pb.cc")
+
+    pb_hfile = ctx.new_file(basename + ".pb.h")
+    pb_ccfile = ctx.new_file(basename + ".pb.cc")
+    provides += [pb_hfile, pb_ccfile]
+
+    if (ctx.attr.with_grpc):
+      grpc_hfile = ctx.new_file(basename + ".grpc.pb.h")
+      grpc_ccfile = ctx.new_file(basename + ".grpc.pb.cc")
+      provides += [grpc_hfile, grpc_ccfile]
 
     # Copy the proto source to the context namespace (where the BUILD
     # rule is called) to better support imports (necessary).
@@ -30,10 +49,10 @@ def pre(ctx, gen_dir, args, srcs, requires, provides):
       arguments = [srcfile.path, protofile.path],
       command = "cp $1 $2")
 
-    args += ["--proto_path=" + pbhfile.dirname]
+    args += ["--proto_path=" + pb_hfile.dirname]
     srcs += [protofile.path]
     requires += [protofile]
-    provides += [pbhfile, pbccfile]
+
 
   return (args, srcs, requires, provides)
 
