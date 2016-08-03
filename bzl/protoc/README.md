@@ -38,6 +38,8 @@ load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protoc")
 | `gen_java_options` | `string_list` | Options passed to the java protoc plugin  | `[]` |
 | `gen_javanano` | `boolean` | Flag to enable JavaNano outputs  | `False` |
 | `gen_javanano_options` | `string_list` | Options passed to the javanano protoc plugin  | `[]` |
+| `gen_js` | `boolean` | Flag to enable javascript outputs  | `False` |
+| `gen_js_options` | `string_list` | Options passed to the javascript protoc plugin  | `[]` |
 | `gen_py` | `boolean` | Flag to enable python outputs  | `False` |
 | `gen_py_options` | `string_list` | Options passed to the python protoc plugin  | `[]` |
 | `gen_objc` | `boolean` | Flag to enable Objective-C outputs  | `False` |
