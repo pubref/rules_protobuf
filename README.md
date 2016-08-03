@@ -13,14 +13,14 @@ Bazel | rules_protobuf | gRPC |
 
 | Language                 | Generate (1) | Compile (2) | gRPC (3) |
 | ------------------------ | ------------ | ----------- | -------- |
-| [Java](bzl/java)         | yes          | yes         | yes      |
-| [Go](bzl/go)             | yes          |             |          |
-| [Python](bzl/python)     | yes          |             |          |
-| [Javascript](bzl/js)     |              |             |          |
-| [C++](bzl/cpp)           |              |             |          |
-| [JavaNano](bzl/javanano) |              |             |          |
-| [Objective-C](bzl/objc)  |              |             |          |
+| [C++](bzl/cpp)           | yes          |             |          |
 | [C#](bzl/csharp)         |              |             |          |
+| [Go](bzl/go)             | yes          |             |          |
+| [Java](bzl/java)         | yes          | yes         | yes      |
+| [JavaNano](bzl/javanano) |              |             |          |
+| [Javascript](bzl/js)     |              |             |          |
+| [Objective-C](bzl/objc)  |              |             |          |
+| [Python](bzl/python)     | yes          |             |          |
 | [Ruby](bzl/ruby)         |              |             |          |
 
 1. Support for generation of protobuf classes.
