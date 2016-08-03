@@ -6,5 +6,5 @@ protoc_java(
     name = "proto",
     srcs = ["//examples/helloworld/proto:srcs"],
     with_grpc = True,
-    verbose = 1,
+    verbose = 0,
 )

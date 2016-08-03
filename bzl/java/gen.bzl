@@ -1,5 +1,4 @@
-
-def pre(ctx, gen_dir, args, requires, provides):
+def pre(ctx, gen_dir, args, srcs, requires, provides):
   """Configure arguments for java generation
   """
   # Example: protojar is 'echo.jar', srcjar is 'echo.srcjar'
@@ -17,13 +16,15 @@ def pre(ctx, gen_dir, args, requires, provides):
       "--grpc-java_out=" + protojar.path,
     ]
 
-    for e in ctx.files.srcs:
-      args += ["--proto_path=" + e.dirname]
+    for src in ctx.files.srcs:
+      args += ["--proto_path=" + src.dirname]
+      srcs += [src.path]
+      requires += [src]
 
   if (ctx.attr.verbose):
     print("Compiling protobuf java sources into " + protojar.path)
 
-  return (args, requires, provides)
+  return (args, srcs, requires, provides)
 
 def post(ctx, requires, provides):
   """Post processing for java

@@ -15,14 +15,16 @@ Bazel | rules_protobuf | gRPC |
 | Language                 | Status | gRPC | Notes
 | ------------------------ | ------ | ---- | -----
 | [Java](bzl/java)         | alpha  | yes  |
-| [Go](bzl/go)             |     *  |  no  |
-| [Python](bzl/python)     |     *  |  no  |
+| [Go](bzl/go)             |     1  |  no  |
+| [Python](bzl/python)     |     1  |  no  |
 | [Javascript](bzl/js)     |        |      |
 | [C++](bzl/cpp)           |        |      |
 | [JavaNano](bzl/javanano) |        |      |
 | [Objective-C](bzl/objc)  |        |      |
 | [C#](bzl/csharp)         |        |      |
 | [Ruby](bzl/ruby)         |        |      |
+
+1: Limited experimental support exists on separate branch.
 
 ---
 
@@ -56,8 +58,6 @@ git_repository(
   name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
   tag = "0.2.0",
-  # Or, use the latest commit
-  #commit = "bf8de4e05f77ad67bbdaaed4c88951ba5667ce34",
 )
 
 load("@org_pubref_rules_protobuf//bzl:rules.bzl", "rules_protobuf")
