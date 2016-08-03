@@ -21,7 +21,7 @@ load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protoc_java")
 ### 1. Generate protobuf classes into a `srcjar`
 
 Generate protobuf `*.java` source files, bundled into a
-`my_proto.srcjar`:
+`my_protobufs.srcjar`:
 
 ```python
 protoc_java(
