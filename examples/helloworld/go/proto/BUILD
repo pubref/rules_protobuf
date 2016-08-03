@@ -8,6 +8,6 @@ protoc_go(
     import_map = {
         "examples/helloworld/go/proto/helloworld.proto": "pubref.org/rules_pubref/examples/helloworld",
     },
-    with_grpc = True,
     verbose = 1,
+    with_grpc = True,
 )

@@ -1,9 +1,11 @@
 load("//bzl:protoc/deps.bzl", rules_protobuf_protoc = "deps")
+load("//bzl:cpp/deps.bzl", rules_protobuf_cpp = "deps")
 load("//bzl:go/deps.bzl", rules_protobuf_go = "deps")
 load("//bzl:java/deps.bzl", rules_protobuf_java = "deps")
 load("//bzl:python/deps.bzl", rules_protobuf_python = "deps")
 
 load("//bzl:protoc/rules.bzl", protoc = "gen")
+load("//bzl:cpp/rules.bzl", protoc_cpp = "gen")
 load("//bzl:go/rules.bzl", protoc_go = "gen")
 load("//bzl:java/rules.bzl", protoc_java = "gen")
 load("//bzl:python/rules.bzl", protoc_py = "gen")
@@ -20,6 +22,8 @@ def rules_protobuf(
   if with_protoc:
     rules_protobuf_protoc()
 
+  if with_cpp:
+    rules_protobuf_cpp()
   if with_go:
     rules_protobuf_go()
   if with_java:

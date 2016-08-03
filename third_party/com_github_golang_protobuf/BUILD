@@ -1,4 +1,5 @@
 package(default_visibility = ["//visibility:public"])
+
 licenses(["notice"])  # BSD
 
 load("@io_bazel_rules_go//go:def.bzl", "go_prefix", "go_library", "go_binary")
@@ -8,8 +9,8 @@ go_prefix("github.com/golang/protobuf")
 go_binary(
     name = "protoc_gen_go",
     srcs = [
-      "protoc-gen-go/main.go",
-      "protoc-gen-go/link_grpc.go",
+        "protoc-gen-go/link_grpc.go",
+        "protoc-gen-go/main.go",
     ],
     deps = [
         ":proto",
@@ -42,16 +43,16 @@ go_library(
     name = "protoc-gen-go/generator",
     srcs = ["protoc-gen-go/generator/generator.go"],
     deps = [
+        "proto",
         "protoc-gen-go/descriptor",
         "protoc-gen-go/plugin",
-        "proto",
     ],
 )
 
 go_library(
     name = "protoc-gen-go/descriptor",
     srcs = ["protoc-gen-go/descriptor/descriptor.pb.go"],
-    deps = [":proto"]
+    deps = [":proto"],
 )
 
 go_library(
@@ -60,7 +61,7 @@ go_library(
     deps = [
         ":proto",
         ":protoc-gen-go/descriptor",
-    ]
+    ],
 )
 
 go_library(

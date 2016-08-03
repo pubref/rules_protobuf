@@ -21,7 +21,8 @@ go_repositories()
 load("//bzl:rules.bzl", "rules_protobuf")
 
 rules_protobuf(
-    with_java = True,
     with_go = True,
+    with_java = True,
     with_python = True,
+    with_cpp = True,
 )

@@ -1,3 +1,8 @@
+load("//bzl:cpp/gen.bzl",
+     gen_cpp_pre = "pre",
+     gen_cpp_post = "post",
+)
+
 load("//bzl:java/gen.bzl",
      gen_java_pre = "pre",
      gen_java_post = "post",
@@ -15,6 +20,10 @@ load("//bzl:python/gen.bzl",
 
 
 LANGUAGES = {
+  "cpp": {
+    "pre": gen_cpp_pre,
+    "post": gen_cpp_post,
+  },
   "java": {
     "pre": gen_java_pre,
     "post": gen_java_post,
