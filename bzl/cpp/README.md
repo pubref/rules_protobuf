@@ -2,6 +2,13 @@
 
 ## Usage
 
+Require dependencies in your `WORKSPACE` file:
+
+```python
+load("@org_pubref_rules_protobuf//bzl:rules.bzl", "rules_protobuf_cpp")
+rules_protobuf_cpp()
+```
+
 Load the `protoc_cpp` rule in your `BUILD` file:
 
 ```python
@@ -12,26 +19,24 @@ load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protoc_cpp")
 
 ```python
 protoc_cpp(
-  name = "proto",
-  srcs = ["helloworld.proto"],
-
-  # Default is false, so omit this if you are not using service
-  # definitions in your .proto files
+  name = "protos",
+  srcs = ["//examples/helloworld/proto:srcs"],
   with_grpc = True,
 )
 ```
 
 ```sh
 $ cd examples/helloworld/cpp
-$ bazel build :proto
+$ bazel build :protos
 $ less $(bazel info bazel-genfiles)/examples/helloworld/cpp/helloworld.pb.h
 $ less $(bazel info bazel-genfiles)/examples/helloworld/cpp/helloworld.pb.cc
+$ less $(bazel info bazel-genfiles)/examples/helloworld/cpp/helloworld.grpc.pb.h
+$ less $(bazel info bazel-genfiles)/examples/helloworld/cpp/helloworld.grpc.pb.cc
 ```
 
 ### 2,3. Compile/run generated protobufs (+/- gRPC)
 
-The generated files are in the `bazel-genfiles/` directory.  Include
-the header file relative to the workspace root:
+Include the header file relative to the workspace root:
 
 ```c
 #include "examples/helloworld/cpp/helloworld.grpc.pb.h"
@@ -42,7 +47,7 @@ cc_binary(
     name = 'server',
     srcs = [
         'greeter_server.cc',
-        ':proto',
+        ':protos',
     ],
     deps = [
         '@com_github_grpc_grpc//:grpc++',
