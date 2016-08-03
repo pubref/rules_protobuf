@@ -11,20 +11,21 @@ Bazel | rules_protobuf | gRPC |
 
 ---
 
+| Language                 | Generate [^1] | Compile [^2] | gRPC [^2] |
+| ------------------------ | ------------- | ------------ | --------- |
+| [Java](bzl/java)         | yes           | yes          | yes       |
+| [Go](bzl/go)             | yes           |              |           |
+| [Python](bzl/python)     | yes           |              |           |
+| [Javascript](bzl/js)     |               |              |           |
+| [C++](bzl/cpp)           |               |              |           |
+| [JavaNano](bzl/javanano) |               |              |           |
+| [Objective-C](bzl/objc)  |               |              |           |
+| [C#](bzl/csharp)         |               |              |           |
+| [Ruby](bzl/ruby)         |               |              |           |
 
-| Language                 | Status | gRPC | Notes
-| ------------------------ | ------ | ---- | -----
-| [Java](bzl/java)         | alpha  | yes  |
-| [Go](bzl/go)             |     1  |  no  |
-| [Python](bzl/python)     |     1  |  no  |
-| [Javascript](bzl/js)     |        |      |
-| [C++](bzl/cpp)           |        |      |
-| [JavaNano](bzl/javanano) |        |      |
-| [Objective-C](bzl/objc)  |        |      |
-| [C#](bzl/csharp)         |        |      |
-| [Ruby](bzl/ruby)         |        |      |
-
-1: Limited experimental support exists on separate branch.
+[^1]: Support for generation of protobuf classes.
+[^2]: Support for generation + compile with protobuf dependencies
+[^3]: Support for compile with gRPC
 
 ---
 
