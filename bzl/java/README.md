@@ -1,4 +1,14 @@
-# `rules_protobuf` Java Support
+# `rules_protobuf_java`
+
+## Arguments
+
+Includes all [common attributes][../protoc]:
+
+| Name | Type | Description | Default |
+| ---- | ---- | ----------- | ------- |
+| `gen_java` | `boolean` | Generate java sources (bundled in a `{name}.srcjar` file | `True` |
+| `gen_java_options` | `string_list` | Optional plugin arguments |  |
+| `protoc_gen_grpc_java` | `executable` | The java plugin `plugin` binary | `//third_party/protobuf:protoc_gen_grpc_java` |
 
 ## Usage
 
@@ -7,6 +17,8 @@ Load the `protoc_java` rule In your `BUILD` file:
 ```python
 load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protoc_java")
 ```
+
+### 1. Generate protobuf classes into a `srcjar`
 
 Generate protobuf `*.java` source files, bundled into a
 `my_proto.srcjar`:
@@ -19,19 +31,20 @@ protoc_java(
   # Default is false, so omit this if you are not using service
   # definitions in your .proto files
   with_grpc = True,
-
 )
 ```
 
 ```sh
 $ bazel build my_protobufs
+$ jar -tvf bazel-genfiles/.../my_protobufs.srcjar
 ```
 
-And then depend on the protobuf rule in a java_library rule (for
-example).  Remember that the srcjar contains java source code and not
-compiled classfiles, so the protobuf rule label goes in the `srcs`
-attribute and not the `deps` attribute (easy to do, not so easy to
-recognize):
+### 2,3. Compile/run generated protobufs (+/- gRPC)
+
+Depend on the protobuf rule in a java_library rule (for example).
+Remember that the srcjar contains java source code and not compiled
+classfiles, so the protobuf rule label goes in the `srcs` attribute
+and not the `deps` attribute (easy to do, not so easy to recognize):
 
 ```python
 java_library(
@@ -87,9 +100,11 @@ java_binary(
 $ bazel run my_app_bin
 ```
 
-For the win, to create an executable jar with all runtime dependencies
-packaged together in a single executable jar that can be deployed
-anywhere, invoke the `{rule_name}_deploy.jar` *implicit build rule*:
+### 4. Deploy executable jar with all transitive runtime dependencies
+
+TO create an executable jar with all runtime dependencies packaged
+together in a single file that can be deployed anywhere, invoke the
+`{rule_name}_deploy.jar` implicit build rule:
 
 
 ```sh
@@ -97,12 +112,3 @@ $ bazel build my_app_bin_deploy.jar
 $ cp bazel-bin/java/org/example/myapp/my_app_bin_deploy.jar /tmp
 $ java -jar /tmp/my_app_bin_deploy.jar
 ```
-
-
-## `protoc_java` Arguments
-
-| Name | Type | Description | Default |
-| ---- | ---- | ----------- | ------- |
-| `gen_java` | `boolean` | Generate java sources (bundled in a `{name}.srcjar` file | `True` |
-| `gen_java_options` | `string_list` | Optional plugin arguments |  |
-| `protoc_gen_grpc_java` | `executable` | The java plugin `plugin` binary | `//third_party/protobuf:protoc_gen_grpc_java` |
