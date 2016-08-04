@@ -1,4 +1,4 @@
-# `rules_protobuf`
+# `rules_protobuf` (αlpha) [![Build Status](https://travis-ci.org/pubref/rules_protobuf.svg?branch=master)](https://travis-ci.org/pubref/rules_protobuf)
 
 ---
 

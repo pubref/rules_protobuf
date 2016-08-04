@@ -15,6 +15,10 @@ protoc_go(
 
 # To update this, copy the generated file from the :proto rule into
 # the source tree.
+#
+# $cp bazel-genfiles/examples/helloworld/go/helloworld examples/helloworld/go/helloworld
+#
+
 go_library(
     name = "helloworld",
     srcs = [

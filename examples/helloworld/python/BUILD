@@ -5,7 +5,7 @@ load("//bzl:rules.bzl", "protoc_py")
 protoc_py(
     name = "proto",
     srcs = ["//examples/helloworld/proto:srcs"],
-    verbose = 1,
+    verbose = 0,
     with_grpc = True,
 )
 
