@@ -1,4 +1,4 @@
-load("//bzl:deps.bzl", "require")
+load("//bzl:require.bzl", "require")
 
 def deps(opts = {}):
   require("grpc", opts)

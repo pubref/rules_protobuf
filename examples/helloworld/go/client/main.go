@@ -39,12 +39,7 @@ import (
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	//pb "pubref.examples/helloworld"
-	//pb "pubref.org/rules_protobuf/examples/helloworld/go/proto/helloworld"
-	//pb "pubref.org/rules_protobuf/helloworld"
-	//pb "pubref.org/rules_protobuf/bazel-out/local-fastbuild/genfiles/examples/helloworld/go/proto/helloworld"
-	//pb "helloworld"
-	//pb "./helloworld"
+	pb "github.com/pubref/rules_protobuf/examples/helloworld/go/helloworld/helloworld"
 )
 
 const (
@@ -59,14 +54,14 @@ func main() {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
-	c := NewGreeterClient(conn)
+	c := pb.NewGreeterClient(conn)
 
 	// Contact the server and print out its response.
 	name := defaultName
 	if len(os.Args) > 1 {
 		name = os.Args[1]
 	}
-	r, err := c.SayHello(context.Background(), &HelloRequest{Name: name})
+	r, err := c.SayHello(context.Background(), &pb.HelloRequest{Name: name})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}

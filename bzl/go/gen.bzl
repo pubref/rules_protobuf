@@ -60,21 +60,25 @@ def pre(ctx, gen_dir, args, srcs, requires, provides):
 def post(ctx, requires, provides):
   """Post processing for go
   """
-  for srcfile in ctx.files.srcs:
-    basename = srcfile.basename
-    dirname = srcfile.dirname
-    filename = basename[:-len('.proto')] + ".pb.go"
-    pbgo_path = dirname + "/" + filename
+  # Experimental hack to try to get generated files back into the
+  # source tree.  Probably futile (not to mention dangerous) given
+  # bazel sandbox model.
 
-    # Copy the generated protobuf file into the source tree!
-    ctx.action(
-      mnemonic = "CopyPbGoToSrcTree",
-      inputs = [srcfile],
-      outputs = [srcfile], #hack to fool bazel
-      arguments = [pbgo_path],
-      command = "cp $1 /Users/pcj/tmp")
+  # for srcfile in ctx.files.srcs:
+  #   basename = srcfile.basename
+  #   dirname = srcfile.dirname
+  #   filename = basename[:-len('.proto')] + ".pb.go"
+  #   pbgo_path = dirname + "/" + filename
+
+  #   # Copy the generated protobuf file into the source tree!
+  #   ctx.action(
+  #     mnemonic = "CopyPbGoToSrcTree",
+  #     inputs = [srcfile],
+  #     outputs = [srcfile], #hack to fool bazel
+  #     arguments = [pbgo_path],
+  #     command = "cp $1 /Users/pcj/tmp")
 
     #if (ctx.attr.verbose):
-    print("Copied %s into source tree" % pbgo_path)
+    #print("Copied %s into source tree" % pbgo_path)
 
   return (requires, provides)
