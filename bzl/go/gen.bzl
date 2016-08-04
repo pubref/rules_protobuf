@@ -18,7 +18,7 @@ def pre(ctx, gen_dir, args, srcs, requires, provides):
     go_opts += ["M" + srcfilename + "=" + import_prefix]
 
   if (ctx.attr.with_grpc):
-    go_opts += ["grpc"]
+    go_opts += ["plugins=grpc"]
 
   if go_opts:
     go_out = ",".join(go_opts) + ":" + go_out
@@ -36,21 +36,23 @@ def pre(ctx, gen_dir, args, srcs, requires, provides):
   for srcfile in ctx.files.srcs:
     basename = srcfile.basename
     filename = basename[:-len('.proto')] + ".pb.go"
-    protofile = ctx.new_file(basename)
+    #protofile = ctx.new_file(basename)
     gofile = ctx.new_file(filename)
 
     # Copy the proto source to the context namespace (where the BUILD
-    # rule is called) to better support imports (necessary).
-    ctx.action(
-      mnemonic = "RebaseSrc",
-      inputs = [srcfile],
-      outputs = [protofile],
-      arguments = [srcfile.path, protofile.path],
-      command = "cp $1 $2")
+    # rule is called) to better support imports (necessary?).
+    # ctx.action(
+    #   mnemonic = "RebaseSrc",
+    #   inputs = [srcfile],
+    #   outputs = [protofile],
+    #   arguments = [srcfile.path, protofile.path],
+    #   command = "cp $1 $2")
 
-    args += ["--proto_path=" + protofile.dirname]
-    srcs += [basename]
-    requires += [protofile]
+    #args += ["--proto_path=" + protofile.dirname]
+    args += ["--proto_path=" + srcfile.dirname]
+    #srcs += [protofile.path]
+    srcs += [srcfile.path]
+    requires += [srcfile]
     provides += [gofile]
 
   return (args, srcs, requires, provides)
@@ -58,4 +60,21 @@ def pre(ctx, gen_dir, args, srcs, requires, provides):
 def post(ctx, requires, provides):
   """Post processing for go
   """
+  for srcfile in ctx.files.srcs:
+    basename = srcfile.basename
+    dirname = srcfile.dirname
+    filename = basename[:-len('.proto')] + ".pb.go"
+    pbgo_path = dirname + "/" + filename
+
+    # Copy the generated protobuf file into the source tree!
+    ctx.action(
+      mnemonic = "CopyPbGoToSrcTree",
+      inputs = [srcfile],
+      outputs = [srcfile], #hack to fool bazel
+      arguments = [pbgo_path],
+      command = "cp $1 /Users/pcj/tmp")
+
+    #if (ctx.attr.verbose):
+    print("Copied %s into source tree" % pbgo_path)
+
   return (requires, provides)

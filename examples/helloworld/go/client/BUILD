@@ -4,7 +4,7 @@ go_binary(
     name = "client",
     srcs = [
         "main.go",
-        "//examples/helloworld/go/proto",
+        "//examples/helloworld/go/proto:helloworld",
     ],
     deps = [
         "@com_github_golang_glog//:go_default_library",

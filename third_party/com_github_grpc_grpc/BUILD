@@ -1,5 +1,7 @@
 package(default_visibility = ["//visibility:public"])
 
+licenses(["notice"])  # AS-IS
+
 cc_binary(
     name = "protoc_gen_python_grpc_bin",
     srcs = [

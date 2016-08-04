@@ -1,6 +1,5 @@
 load("//bzl:deps.bzl", "require")
 
-
 def deps(opts = {}):
   require("grpc", opts)
   require("zlib", opts)

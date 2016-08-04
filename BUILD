@@ -1,3 +1,3 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_prefix")
 
-go_prefix("pubref.org/rules_protobuf")
+go_prefix("github.com/pubref/rules_protobuf")
