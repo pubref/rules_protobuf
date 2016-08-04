@@ -1,7 +1,7 @@
 workspace(name = "org_pubref_rules_protobuf")
 
 # ================================================================
-# Load rules_go
+# Go language requires rules_go
 # ================================================================
 
 git_repository(
