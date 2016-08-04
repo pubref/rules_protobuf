@@ -4,15 +4,17 @@ load("//bzl:rules.bzl", "protoc_go")
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 protoc_go(
-    name = "proto",
+    name = "protos",
     srcs = ["//examples/helloworld/proto:srcs"],
-    #import_map = {"examples/helloworld/go/proto/helloworld.proto": "pubref.org/rules_pubref/examples/helloworld_foo",},
-    verbose = 1,
+    # import_map = {
+    #     "examples/helloworld/go/proto/helloworld.proto": "pubref.org/rules_pubref/examples/helloworld_foo",
+    # },
+    verbose = 0,
     with_grpc = True,
 )
 
 filegroup(
-    name = "helloworld",
+    name = "pbs",
     srcs = [
         "helloworld.pb.go",
     ],
@@ -20,8 +22,12 @@ filegroup(
 
 # To update this, copy the generated file from the :proto rule into
 # the source tree.
+#
+# $cp bazel-genfiles/examples/helloworld/go/helloworld examples/helloworld/go/helloworld
+#
+
 go_library(
-    name = "helloworld_lib",
+    name = "helloworld",
     srcs = [
         "helloworld.pb.go",
     ],
