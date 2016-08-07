@@ -1,15 +1,17 @@
-load("//bzl:deps.bzl", "DEPS")
-
-def require(target, opts={}):
+def require(target, context):
     """Load external dependency during WORKSPACE loading.
 
     Args:
-      target: the name of the target, as defined in deps.bzl
-      opts: a dict having the same overall structure of those found in deps.
-            One can override/skip loading of a target if "omit": True is set.
-            TODO: merge/extend the dict to allow loading of alternative versions.
+      context: The loading context
+
+    Returns:
+      the return value of the native repository rule.
+
     """
-    dep = DEPS.get(target)
+    repos = context.repos
+    opts = context.options
+
+    dep = repos.get(target)
     opt = opts.get(target) or {}
     verbose = opts.get("verbose")
     #verbose = True
@@ -83,4 +85,4 @@ def require(target, opts={}):
     if verbose:
         print("Invoke %s %s (@%s) with args %s" % (kind, target, name, args))
 
-    rule(**args)
+    return rule(**args)

@@ -17,11 +17,11 @@ go_repositories()
 # Load self
 # ================================================================
 
-load("//bzl:rules.bzl", "rules_protobuf")
+load("//bzl:protobuf.bzl", "protobuf_repositories")
 
-rules_protobuf(
-    with_go = True,
-    with_java = True,
-    with_python = True,
-    with_cpp = True,
+protobuf_repositories(
+    go = True,
+    java = True,
+    python = True,
+    cpp = True,
 )

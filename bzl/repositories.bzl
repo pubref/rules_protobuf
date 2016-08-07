@@ -1,5 +1,5 @@
 # ****************************************************************
-# Master list of dependencies
+# Master list of external dependencies
 # ****************************************************************
 
 # MAINTAINERS
@@ -19,7 +19,7 @@
 # $ sha256sum protoc-3.0.0-linux-x86_64.exe #linux
 # $ shasum -a256 protoc-3.0.0-osx-x86_64.exe # macosx
 
-DEPS = {
+REPOSITORIES = {
 
 ### intended to be compatible with loose json parser to generate documentation from this.
 ###:begin
@@ -102,6 +102,14 @@ DEPS = {
         "tag": "v3.0.0",
     },
 
+    # This binds the cc_binary "protoc" into //external:protoc.  This
+    # is required for all protoc related rules in this repo.
+    "external_protoc": {
+        "kind": "bind",
+        "name": "protoc",
+        "actual": "@com_github_google_protobuf//:protoc",
+    },
+
     # grpc++ expects "//external:protobuf_clib"
     "external_protobuf_clib": {
         "kind": "bind",
@@ -137,6 +145,14 @@ DEPS = {
     "external_protobuf_compiler": {
         "kind": "bind",
         "name": "protobuf_compiler",
+        "actual": "@com_github_google_protobuf//:protoc_lib",
+    },
+
+    # # Bind the protobuf proto_lib (protoc) into //external.  Required
+    # # for compiling the protoc_gen_grpc plugin
+    "third_party_protoc": {
+        "kind": "bind",
+        "name": "third_party",
         "actual": "@com_github_google_protobuf//:protoc_lib",
     },
 
@@ -181,14 +197,6 @@ DEPS = {
     # ****************************************************************
     # JAVA
     # ****************************************************************
-
-    # Bind the protobuf proto_lib (protoc) into //external.  Required
-    # for compiling the protoc_gen_grpc plugin
-    "bind_third_party_protoc": {
-        "kind": "bind",
-        "name": "third_party",
-        "actual": "@com_github_google_protobuf//:protoc_lib",
-    },
 
     "com_google_auth_google_auth_library_credentials": {
         "kind": "maven_jar",
@@ -382,4 +390,3 @@ DEPS = {
 ###:end
 
 }
-

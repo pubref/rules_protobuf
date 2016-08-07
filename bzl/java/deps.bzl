@@ -1,7 +1,7 @@
 load("//bzl:require.bzl", "require")
 
 def deps(opts = {}):
-  require("bind_third_party_protoc", opts)
+  require("third_party_protoc", opts)
 
   require("com_google_auth_google_auth_library_credentials", opts)
   require("com_google_code_gson_gson", opts)
