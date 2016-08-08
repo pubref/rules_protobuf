@@ -1,11 +1,10 @@
 load("//bzl:repositories.bzl", "REPOSITORIES")
 load("//bzl:languages.bzl", "LANGUAGES")
-load("//bzl:compile.bzl", "implement")
+load("//bzl:compile.bzl", "implement_compile", "implement_library")
 load("//bzl:require.bzl", "require")
-#load("//bzl:library.bzl", "implement")
 
-proto_compile = implement(LANGUAGES.keys())
-#proto_library = implement(LANGUAGES.keys())
+proto_compile = implement_compile(LANGUAGES.keys())
+proto_library = implement_library(LANGUAGES.keys())
 
 def protobuf_repositories(
     protoc = True,
@@ -29,8 +28,10 @@ def protobuf_repositories(
 
   load = []
 
+  if cpp: load += ["cpp"]
   if python: load += ["py"]
   if ruby: load += ["ruby"]
+  if go: load += ["go"]
 
   for name in load:
     lang = LANGUAGES[name]

@@ -22,6 +22,9 @@ proto_compile(
     srcs = ["//examples/helloworld/proto:srcs"],
     verbose = 1,
     gen_py = True,
+    gen_ruby = True,
+    gen_go = True,
+    gen_cpp = True,
     with_grpc = True,
 )
 

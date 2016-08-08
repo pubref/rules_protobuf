@@ -22,6 +22,7 @@ load("//bzl:protobuf.bzl", "protobuf_repositories")
 protobuf_repositories(
     go = True,
     java = True,
+    ruby = True,
     python = True,
     cpp = True,
 )

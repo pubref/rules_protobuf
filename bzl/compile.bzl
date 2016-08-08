@@ -1,13 +1,9 @@
 load("//bzl:languages.bzl", "LANGUAGES")
 
-def implement(spec):
-  """Create a protocol buffer compilation rule for the given set of languages.
-  """
+
+def build_compile_attributes(spec):
 
   attrs = {}
-  outputs = {
-      #"descriptor_set": "%{name}_descriptor.proto",
-  }
 
   attrs["verbose"] = attr.int(
       default = 0,
@@ -61,7 +57,7 @@ def implement(spec):
     # Add "gen_java = True" option
     flag = "gen_" + name
     attrs[flag] = attr.bool(
-        default = True,
+        default = False,
     )
 
     # Add a "gen_java_plugin_options=[]".
@@ -69,9 +65,9 @@ def implement(spec):
     attrs[opts] = attr.string_list()
 
     # If there is a plugin binary, create this label now.
-    if hasattr(lang, "plugin_exe"):
-        attrs["gen_" + name + "_plugin_exe"] = attr.label(
-            default = Label(lang.plugin_exe),
+    if hasattr(lang, "plugin_executable"):
+        attrs["gen_" + name + "_plugin_executable"] = attr.label(
+            default = Label(lang.plugin_executable),
             cfg = HOST_CFG,
             executable = True,
         )
@@ -80,34 +76,51 @@ def implement(spec):
     if hasattr(lang, "supports_grpc"):
         attrs["with_grpc"] = attr.bool()
 
-  # ================================================================
-  # Binary tool substitution options
-  # ================================================================
-
-  # attrs["protoc_gen_grpc_java"] = attr.label(
-  #   default = Label("//third_party/protoc_gen_grpc_java:protoc_gen_grpc_java_bin"),
-  #   cfg = HOST_CFG,
-  #   executable = True,
-  # )
-
-  # attrs["protoc_gen_go"] = attr.label(
-  #   default = Label("@com_github_golang_protobuf//:protoc_gen_go"),
-  #   cfg = HOST_CFG,
-  #   executable = True,
-  # )
-
-  # attrs["protoc_gen_grpc"] = attr.label(
-  #   # Note: the default value here is a cc_binary that expects to find
-  #   # //external:protobuf_compiler, so that must be bind'ed.
-  #   default = Label("@com_github_grpc_grpc//:grpc_cpp_plugin"),
-  #   cfg = HOST_CFG,
-  #   executable = True,
-  # )
-
   #print("attrs: %s" % attrs.keys())
+  return attrs
+
+
+def build_library_attributes(spec):
+
+  attrs = {}
+
+  for name in spec:
+    lang = LANGUAGES.get(name)
+    if not lang: fail("Language not defined: %s" % name)
+
+    attrs[name + "_deps"] = attr.label_list()
+    attrs[name + "_srcs"] = attr.label_list()
+
+  return attrs
+
+
+def implement_compile(spec, attrs={}):
+
+  outputs = {
+      #"descriptor_set": "%{name}_descriptor.proto",
+  }
+
+  attrs = build_compile_attributes(spec)
 
   return rule(
-    implementation = _execute,
+    implementation = _execute_compile,
+    attrs = attrs,
+    outputs = outputs,
+    output_to_genfiles = False,
+  )
+
+
+def implement_library(spec, attrs={}):
+
+  outputs = {
+      #"descriptor_set": "%{name}_descriptor.proto",
+  }
+
+  attrs = build_compile_attributes(spec)
+  attrs += build_library_attributes(spec)
+
+  return rule(
+    implementation = _execute_library,
     attrs = attrs,
     outputs = outputs,
     output_to_genfiles = False,
@@ -132,6 +145,7 @@ def get_gendir(ctx):
   # return get_path(ctx, ctx.label.package + '/' + ctx.attr.includes[0])
 
 def build_imports(ctx, lang, builder):
+  #builder["imports"] += ["."]
   pass
 
     # if gendir:
@@ -150,24 +164,36 @@ def post_execute(ctx, lang, builder):
 
 
 def build_source_files(ctx, builder):
+  dsfile = builder["descriptor_set_file"]
+  outdir = dsfile.dirname
+  print("outdir: %s" % outdir);
   # Copy the proto source to the gendir namespace (where the
   # BUILD rule is called)
   for srcfile in ctx.files.srcs:
-    protofile = ctx.new_file(builder["descriptor_set_file"], (srcfile.short_path))
-    print("Copying %s .. %s" % (srcfile.path, protofile.path))
+    protofile = ctx.new_file(dsfile, (srcfile.short_path))
+    # print("Copying %s .. %s" % (srcfile.path, protofile.path))
     ctx.action(
       mnemonic = "CpProtoToPackageGengiles",
       inputs = [srcfile],
       outputs = [protofile],
-      arguments = [srcfile.dirname, srcfile.path, protofile.path],
-      command = "mkdir -p $1 && cp2 $2 $3")
-    builder["imports"] += [srcfile.dirname]
+      arguments = [srcfile.path, protofile.path],
+      command = "cp $1 $2")
     builder["srcs"] += [protofile]
 
 
 # Rational default for the generation path is: the GEN_DIR + package path +
 def build_protoc_arguments(ctx, lang, builder):
-  builder["args"] += ["--%s_out=%s" % (lang.name, ".")]
+  outdir = builder["descriptor_set_file"].dirname
+  builder["args"] += ["--%s_out=%s" % (lang.name, outdir)]
+  #builder["args"] += ["--%s_out=%s" % (lang.name, ".")]
+
+def build_plugin_invocation(ctx, lang, builder):
+  if hasattr(lang, "plugin_executable"):
+    plugin_exe_name = "gen_" + lang.name + "_plugin_executable"
+    if not hasattr(ctx.executable, plugin_exe_name):
+      fail("Plugin executable not found: %s" % plugin_exe_name)
+    plugin = getattr(ctx.executable, plugin_exe_name)
+    builder["args"] += ["--plugin=%s=%s" % (lang.plugin_name, plugin.path)]
 
 
 def build_provided_pb_files(ctx, lang, builder):
@@ -179,8 +205,24 @@ def build_provided_pb_files(ctx, lang, builder):
         pbfile = ctx.new_file(srcfile, base + ext)
         builder["provides"] += [pbfile]
 
+#a = ["my_prefix_what_ever", "my_prefix_what_so_ever", "my_prefix_doesnt_matter"]
 
-def _execute(ctx):
+def common_prefix(a, b):
+  a_len = len(a)
+  b_len = len(b)
+  #print("common_prefix a: %s (%s)" % (a, a_len))
+  #print("common_prefix b: %s (%s)" % (b, b_len))
+  prefix_len = min(a_len, b_len)
+  for x in range(prefix_len):
+    #print("check b.sw(%s) & (%s)" % (a[:prefix_len], prefix_len))
+    if b.startswith(a[:prefix_len]):
+      #print("common_prefix: %s" % a[:prefix_len])
+      return a[:prefix_len]
+    prefix_len -= 1
+  return None
+
+
+def _execute_compile(ctx):
   """Execute protoc for all defined languages.
 
   """
@@ -211,7 +253,6 @@ def _execute(ctx):
   # Arguments to satisfy the *.descriptor.proto implicit output target
   descriptor_set_filename = ctx.label.name + "_descriptor.proto"
   descriptor_set_file = ctx.new_file(descriptor_set_filename)
-  args += ["--descriptor_build_out=%s" % descriptor_set_filename]
   provides += [descriptor_set_file]
 
   builder = {
@@ -231,15 +272,29 @@ def _execute(ctx):
     _build_imports = getattr(lang, "build_imports", build_imports)
     _build_imports(ctx, lang, builder)
 
+    _build_plugin_invocation = getattr(lang, "build_plugin_invocation", build_plugin_invocation)
+    _build_plugin_invocation(ctx, lang, builder)
+
     _build_provided_pb_files = getattr(lang, "build_provided_pb_files", build_provided_pb_files)
     _build_provided_pb_files(ctx, lang, builder)
 
     _build_protoc_arguments = getattr(lang, "build_protoc_arguments", build_protoc_arguments)
     _build_protoc_arguments(ctx, lang, builder)
 
+  builder["requires"] += builder["srcs"]
+
   # Run protoc
   #
-  arguments = list(set(builder["args"] + ["-I" + i for i in builder["imports"]] + [src.basename for src in builder["srcs"]]))
+  outdir = builder["descriptor_set_file"].dirname
+  srcfiles = []
+  for src in builder["srcs"]:
+    common = common_prefix(outdir, src.path)
+    common_len = len(common) + 1
+    srcfiles += [src.path[common_len:]]
+
+  builder["args"] += ["--descriptor_set_out=%s" % (descriptor_set_file.path)]
+
+  arguments = list(set(builder["args"] + ["-I" + i for i in builder["imports"]] + srcfiles))
   inputs = list(set(builder["requires"]))
   outputs = list(set(builder["provides"] + ctx.outputs.outs))
 
@@ -275,3 +330,49 @@ def _execute(ctx):
       ),
 
   )
+
+def build_library(ctx, lang, compile_result):
+  print("proto_library build_%s has no build steps: %s" % (lang.name, compile_result));
+  pass
+
+def _execute_library(ctx):
+  compile_result = _execute_compile(ctx)
+
+  spec = []
+  for name, lang in LANGUAGES.items():
+    if getattr(ctx.attr, "gen_" + name):
+      spec += [lang]
+
+  for lang in spec:
+    _build_library = getattr(lang, "build_library", build_library)
+    _build_library(ctx, lang, compile_result)
+
+  return struct(
+    files=compile_result.files,
+    proto=compile_result.proto,
+  )
+
+
+  # ================================================================
+  # Binary tool substitution options
+  # ================================================================
+
+  # attrs["protoc_gen_grpc_java"] = attr.label(
+  #   default = Label("//third_party/protoc_gen_grpc_java:protoc_gen_grpc_java_bin"),
+  #   cfg = HOST_CFG,
+  #   executable = True,
+  # )
+
+  # attrs["protoc_gen_go"] = attr.label(
+  #   default = Label("@com_github_golang_protobuf//:protoc_gen_go"),
+  #   cfg = HOST_CFG,
+  #   executable = True,
+  # )
+
+  # attrs["protoc_gen_grpc"] = attr.label(
+  #   # Note: the default value here is a cc_binary that expects to find
+  #   # //external:protobuf_compiler, so that must be bind'ed.
+  #   default = Label("@com_github_grpc_grpc//:grpc_cpp_plugin"),
+  #   cfg = HOST_CFG,
+  #   executable = True,
+  # )
