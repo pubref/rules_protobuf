@@ -1,31 +1,12 @@
 package(default_visibility = ["//visibility:public"])
 
-#load("//bzl:rules.bzl", "protoc_py")
-load("//bzl:protobuf.bzl", "proto_compile")
+load("//bzl:python/rules.bzl", "py_proto_library")
 
-# protoc_py(
-#     name = "proto",
-#     srcs = ["//examples/helloworld/proto:srcs"],
-#     verbose = 0,
-#     with_grpc = True,
-# )
-
-# protobuf_py(
-#     name = "protobuf",
-#     srcs = ["//examples/helloworld/proto:srcs"],
-#     verbose = 1,
-#     with_grpc = True,
-# )
-
-proto_compile(
+py_proto_library(
     name = "protos",
-    srcs = ["//examples/helloworld/proto:srcs"],
+    protos = ["//examples/helloworld/proto:helloworld.proto"],
     verbose = 1,
-    gen_py = True,
-    gen_ruby = True,
-    gen_go = True,
-    gen_cpp = True,
-    with_grpc = True,
+    with_grpc = False,
 )
 
 # py_protobuf_generate(

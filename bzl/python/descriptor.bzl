@@ -1,16 +1,13 @@
+load("//bzl:base/descriptor.bzl", BASE = "DESCRIPTOR")
+load("//bzl:invoke.bzl", "invoke", "invokesuper")
+
 DESCRIPTOR = struct(
+    parent = BASE,
     name = "python",
     short_name = "py",
-    pb_file_extensions = ["_pb2.py"],
-    supports_grpc = True,
-    #plugin_exe = "//external:protoc-gen-grpc",
-    plugin_name = 'ruby',
-    plugin_default_options = [],
-    requires = [
-        "protobuf",
-        "external_protoc",
-        "grpc",
-        "libssl",
-        "zlib",
-    ]
+    protobuf = struct(
+        file_extensions = ["_pb2.py"],
+        compile_deps = [
+        ],
+    ),
 )

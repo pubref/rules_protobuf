@@ -13,7 +13,7 @@ def require(target, context):
 
     dep = repos.get(target)
     opt = opts.get(target) or {}
-    verbose = opts.get("verbose")
+    verbose = context.verbose
     #verbose = True
 
     # Is the dep defined?

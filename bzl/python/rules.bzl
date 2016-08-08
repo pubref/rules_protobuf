@@ -1,10 +1,10 @@
 load("//bzl:protoc.bzl", "protoc")
-load("//bzl:cpp/descriptor.bzl", CPP = "DESCRIPTOR")
+load("//bzl:python/descriptor.bzl", PYTHON = "DESCRIPTOR")
 
-def cc_proto_library(
+def py_proto_library(
     name,
     protos,
-    lang = CPP,
+    lang = PYTHON,
     srcs = [],
     imports = [],
     visibility = None,
@@ -12,8 +12,6 @@ def cc_proto_library(
     protoc_executable = None,
     protobuf_plugin_executable = None,
     with_grpc = False,
-    deps = [],
-    hdrs = [],
     **kwargs):
 
   result = protoc(
@@ -29,14 +27,13 @@ def cc_proto_library(
     with_grpc = with_grpc,
   )
 
-  cc_deps = [str(Label(dep)) for dep in getattr(lang.protobuf, "compile_deps", [])]
+  deps = [str(Label(dep)) for dep in getattr(lang.protobuf, "compile_deps", [])]
   if with_grpc:
-    cc_deps += [str(Label(dep)) for dep in getattr(lang.grpc, "compile_deps", [])]
+    deps += [str(Label(dep)) for dep in getattr(lang.grpc, "compile_deps", [])]
 
-  native.cc_library(
+  native.py_library(
     name = name,
     srcs = srcs + result.outs,
-    deps = deps + cc_deps,
-    hdrs = result.hdrs + hdrs,
+    deps = deps,
     **kwargs
   )

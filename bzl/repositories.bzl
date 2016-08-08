@@ -21,8 +21,8 @@
 
 REPOSITORIES = {
 
-### intended to be compatible with loose json parser to generate documentation from this.
-###:begin
+    ### intended to be compatible with loose json parser to generate documentation from this.
+    ###:begin
 
     # ****************************************************************
     # Protoc
@@ -93,8 +93,8 @@ REPOSITORIES = {
         "actual": "@com_github_madler_zlib//:zlib",
     },
 
-    # grpc++ expecte
-    # Protobuf required by grpc++
+    # Protobuf required for multiple reasons, including the cc_binary
+    # 'protoc' and the cc_library 'protobuf_clib'
     "protobuf": {
         "kind": "git_repository",
         "name": "com_github_google_protobuf",
@@ -155,7 +155,6 @@ REPOSITORIES = {
         "name": "third_party",
         "actual": "@com_github_google_protobuf//:protoc_lib",
     },
-
 
     # ****************************************************************
     # GO
@@ -387,6 +386,6 @@ REPOSITORIES = {
         "sha256": "850fd0420cb896dfcd1f7d1edd6b3cb010890f8732f84821af5ef6b5f89e885d",
     },
 
-###:end
+    ###:end
 
 }

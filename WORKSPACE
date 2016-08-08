@@ -25,4 +25,5 @@ protobuf_repositories(
     ruby = True,
     python = True,
     cpp = True,
+    with_grpc = True,
 )

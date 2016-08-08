@@ -15,6 +15,7 @@ def protobuf_repositories(
     python=False,
     ruby=False,
 
+    with_grpc = False,
     verbose = False,
     extensions = [],
     overrides = {},
@@ -27,16 +28,26 @@ def protobuf_repositories(
   )
 
   load = []
+  requires = ["protobuf",
+              "external_protoc"]
 
   if cpp: load += ["cpp"]
   if python: load += ["py"]
-  if ruby: load += ["ruby"]
+  #if ruby: load += ["ruby"]
   if go: load += ["go"]
 
   for name in load:
     lang = LANGUAGES[name]
+
     if not lang:
       fail("Unknown language " + name)
-    requires = getattr(lang, "requires", [])
-    for target in requires:
-      require(target, context)
+
+    if not hasattr(lang, "protobuf"):
+      fail("Required struct 'protobuf' missing in language %s" % lang.name)
+    requires += getattr(lang.protobuf, "requires", [])
+
+    if with_grpc and hasattr(lang, "grpc"):
+      requires += getattr(lang.grpc, "requires", [])
+
+  for target in requires:
+    require(target, context)
