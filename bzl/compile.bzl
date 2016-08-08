@@ -106,7 +106,7 @@ def implement_compile(spec, attrs={}):
     implementation = _execute_compile,
     attrs = attrs,
     outputs = outputs,
-    output_to_genfiles = False,
+    output_to_genfiles = True,
   )
 
 
@@ -123,7 +123,7 @@ def implement_library(spec, attrs={}):
     implementation = _execute_library,
     attrs = attrs,
     outputs = outputs,
-    output_to_genfiles = False,
+    output_to_genfiles = True,
   )
 
 
@@ -164,28 +164,29 @@ def post_execute(ctx, lang, builder):
 
 
 def build_source_files(ctx, builder):
-  dsfile = builder["descriptor_set_file"]
-  outdir = dsfile.dirname
-  print("outdir: %s" % outdir);
+  #dsfile = builder["descriptor_set_file"]
+  #outdir = dsfile.dirname
+  #print("outdir: %s" % outdir);
   # Copy the proto source to the gendir namespace (where the
   # BUILD rule is called)
   for srcfile in ctx.files.srcs:
-    protofile = ctx.new_file(dsfile, (srcfile.short_path))
-    # print("Copying %s .. %s" % (srcfile.path, protofile.path))
-    ctx.action(
-      mnemonic = "CpProtoToPackageGengiles",
-      inputs = [srcfile],
-      outputs = [protofile],
-      arguments = [srcfile.path, protofile.path],
-      command = "cp $1 $2")
-    builder["srcs"] += [protofile]
+    # protofile = ctx.new_file(dsfile, (srcfile.short_path))
+    # # print("Copying %s .. %s" % (srcfile.path, protofile.path))
+    # ctx.action(
+    #   mnemonic = "CpProtoToPackageGengiles",
+    #   inputs = [srcfile],
+    #   outputs = [protofile],
+    #   arguments = [srcfile.path, protofile.path],
+    #   command = "cp $1 $2")
+    builder["srcs"] += [srcfile]
 
 
 # Rational default for the generation path is: the GEN_DIR + package path +
 def build_protoc_arguments(ctx, lang, builder):
-  outdir = builder["descriptor_set_file"].dirname
-  builder["args"] += ["--%s_out=%s" % (lang.name, outdir)]
-  #builder["args"] += ["--%s_out=%s" % (lang.name, ".")]
+  #outdir = builder["descriptor_set_file"].dirname
+  #builder["args"] += ["--%s_out=%s" % (lang.name, outdir)]
+  builder["args"] += ["--%s_out=%s" % (lang.name, ".")]
+
 
 def build_plugin_invocation(ctx, lang, builder):
   if hasattr(lang, "plugin_executable"):
@@ -197,13 +198,14 @@ def build_plugin_invocation(ctx, lang, builder):
 
 
 def build_provided_pb_files(ctx, lang, builder):
-    exts = getattr(lang, "pb_file_extensions", [".pb"])
-    for srcfile in builder["srcs"]:
-      #print("srcfile path: %s" % srcfile.path)
-      base = srcfile.basename[:-len(".proto")]
-      for ext in exts:
-        pbfile = ctx.new_file(srcfile, base + ext)
-        builder["provides"] += [pbfile]
+  pass
+  # exts = getattr(lang, "pb_file_extensions", [".pb"])
+    # for srcfile in builder["srcs"]:
+    #   #print("srcfile path: %s" % srcfile.path)
+    #   base = srcfile.basename[:-len(".proto")]
+    #   for ext in exts:
+    #     pbfile = ctx.new_file(srcfile, base + ext)
+    #     builder["provides"] += [pbfile]
 
 #a = ["my_prefix_what_ever", "my_prefix_what_so_ever", "my_prefix_doesnt_matter"]
 
@@ -251,9 +253,9 @@ def _execute_compile(ctx):
       requires += dep.proto.deps
 
   # Arguments to satisfy the *.descriptor.proto implicit output target
-  descriptor_set_filename = ctx.label.name + "_descriptor.proto"
-  descriptor_set_file = ctx.new_file(descriptor_set_filename)
-  provides += [descriptor_set_file]
+  #descriptor_set_filename = ctx.label.name + "_descriptor.proto"
+  #descriptor_set_file = ctx.new_file(descriptor_set_filename)
+  #provides += [descriptor_set_file]
 
   builder = {
     "gendir": gendir,
@@ -262,7 +264,7 @@ def _execute_compile(ctx):
     "srcs": srcs,
     "requires": requires,
     "provides": provides,
-    "descriptor_set_file": descriptor_set_file,
+    #"descriptor_set_file": descriptor_set_file,
   }
 
   build_source_files(ctx, builder)
@@ -285,14 +287,15 @@ def _execute_compile(ctx):
 
   # Run protoc
   #
-  outdir = builder["descriptor_set_file"].dirname
+  #outdir = builder["descriptor_set_file"].dirname
   srcfiles = []
   for src in builder["srcs"]:
-    common = common_prefix(outdir, src.path)
-    common_len = len(common) + 1
-    srcfiles += [src.path[common_len:]]
+    #common = common_prefix(outdir, src.path)
+    #common_len = len(common) + 1
+    #srcfiles += [src.path[common_len:]]
+    srcfiles += [src.path]
 
-  builder["args"] += ["--descriptor_set_out=%s" % (descriptor_set_file.path)]
+  #builder["args"] += ["--descriptor_set_out=%s" % (descriptor_set_file.path)]
 
   arguments = list(set(builder["args"] + ["-I" + i for i in builder["imports"]] + srcfiles))
   inputs = list(set(builder["requires"]))
@@ -322,7 +325,7 @@ def _execute_compile(ctx):
     _post_execute(ctx, lang, builder)
 
   return struct(
-      files=set(builder["provides"]),
+      #files=set(builder["provides"]),
       proto=struct(
           srcs=set(builder["srcs"]),
           imports=builder["imports"],

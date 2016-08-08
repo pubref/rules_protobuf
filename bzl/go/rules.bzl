@@ -51,10 +51,12 @@ def go_proto_library(name,
     #plugin_language = "go",
     #plugin_options = opts,
     gen_go = True,
+    verbose = 1,
     outs = genfiles,
     #visibility = ["//visibility:private"],
   )
 
+  print("genfiles: %s" % type(genfiles[0]))
   go_library(
     name = name,
     srcs = genfiles + srcs,
