@@ -7,6 +7,7 @@ go_proto_compile(
     name = "protos",
     protos = ["//examples/helloworld/proto:helloworld.proto"],
     gen_grpc_go = True,
+    verbose = 1,
 )
 
 # go_proto_library(

@@ -1,36 +1,4 @@
-def build_source_files(lang, self):
-  print("build_source_files!")
-  ctx = self.get("ctx", None)
-  if ctx == None:
-      fail("build_source_files can only be calling in bazel rule context")
-
-  # Copy the proto source to the gendir namespace (where the
-  # BUILD rule is called).
-  if self.get("copy_protos_to_genfiles", True):
-    for srcfile in ctx.files.protos:
-      protofile = ctx.new_file(srcfile.basename)
-      if self["verbose"]:
-        print("Copying %s .. %s" % (srcfile.path, protofile.path))
-      ctx.action(
-        mnemonic = "CpProtoToPackageGenfiles",
-        inputs = [srcfile],
-        outputs = [protofile],
-        arguments = [srcfile.path, protofile.path],
-        command = "cp $1 $2")
-      self["srcs"] += [protofile]
-      self["imports"] += [protofile.dirname]
-  else:
-    if self["verbose"]:
-      print("No Copy source files.")
-    for srcfile in ctx.files.protos:
-      self["srcs"] += [srcfile]
-
-  # Note: no need to populate the provides list at this time, we add
-  # it to the list from "srcs" later.
-
-
-def build_generated_filenames(lang, self):
-    """Build a list of generated filenames (used by genrule)"""
+def get_generated_filename_extensions(lang, self):
 
     if not hasattr(lang, "protobuf"):
         fail("Required struct 'protobuf' not found in lang %s" % lang.name)
@@ -50,11 +18,36 @@ def build_generated_filenames(lang, self):
             fail("Language %s does not support gRPC" % lang.name)
         exts += getattr(lang.grpc, "file_extensions", [])
 
-    protos = self.get("protos", [])
+    return exts
+
+def build_generated_files(lang, self):
+    """Build a list of generated filenames (used by rule)"""
+    exts = get_generated_filename_extensions(lang, self)
+
+    ctx = self.get("ctx", None)
+    if ctx == None:
+        fail("build_generated_files can only be used in bazel context")
+
+    protos = self.get("srcs", [])
     if not protos:
         fail("Empty proto file input list.")
 
-    for srcfile in self.get("protos", []):
+    for srcfile in self.get("srcs", []):
+        basename = srcfile.basename[:-len(".proto")]
+        for ext in exts:
+            pbfile = ctx.new_file(srcfile, basename + ext)
+            self["provides"] += [pbfile]
+
+
+def build_generated_filenames(lang, self):
+    """Build a list of generated filenames (used by genrule)"""
+    exts = get_generated_filename_extensions(lang, self)
+
+    protos = self.get("protos", [])
+    if not protos:
+        fail("Empty proto filename input list.")
+
+    for srcfile in protos:
         if not srcfile.endswith('.proto'):
             fail("Non .proto source file: %s" % srcfile, "protos")
         for ext in exts:
@@ -184,7 +177,7 @@ CLASS = struct(
         ]
     ),
 
-    build_source_files = build_source_files,
+    build_generated_files = build_generated_files,
     build_generated_filenames = build_generated_filenames,
     build_imports = build_imports,
     build_tools = build_tools,

@@ -2,16 +2,9 @@ load("//bzl:base/class.bzl", BASE = "CLASS", "build_plugin_out")
 load("//bzl:util.bzl", "invokesuper")
 
 
-def _build_grpc_out(lang, self):
-    """Grpc out invocation is slightly different for java, looks like
-       --grpc-java_out=%s rather than --grpc_out=%s
-    """
-    build_plugin_out("grpc-java", "grpc", lang, self)
-
-
-def _build_source_files(lang, self):
+def _build_generated_files(lang, self):
     """Build a jar file for protoc to dump java classes into."""
-    invokesuper("build_source_files", lang, self)
+    #invokesuper("build_source_files", lang, self)
 
     ctx = self.get("ctx", None)
     if ctx == None:
@@ -27,6 +20,13 @@ def _build_source_files(lang, self):
     # This will generate the jar in the BINDIR
     self["gendir"] = protojar.path
     self["provides"] += [protojar]
+
+
+def _build_grpc_out(lang, self):
+    """Grpc out invocation is slightly different for java, looks like
+       --grpc-java_out=%s rather than --grpc_out=%s
+    """
+    build_plugin_out("grpc-java", "grpc", lang, self)
 
 
 def _post_execute(lang, self):
@@ -124,7 +124,7 @@ CLASS = struct(
             ],
         ),
 
-        build_source_files = _build_source_files,
+        build_generated_files = _build_generated_files,
         build_grpc_out = _build_grpc_out,
         post_execute = _post_execute,
 )

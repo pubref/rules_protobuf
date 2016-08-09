@@ -25,7 +25,7 @@ def _execute_genrule(self):
 def protoc(name,
            spec = [],
            self = {},
-           gendir = "$(GENDIR)",
+           gendir = "$(BINDIR)",
            protos = [],
            protoc=EXECUTABLE,
            protobuf_plugin=None,
@@ -99,7 +99,7 @@ def _get_path(ctx, path):
 
 
 def _get_gendir(ctx):
-  return ctx.var["GENDIR"] + "/" + ctx.label.package
+  return ctx.var["BINDIR"] + "/" + ctx.label.package
   # if not ctx.attr.includes:
   #   return ctx.label.workspace_root
   # if not ctx.attr.includes[0]:
@@ -116,6 +116,7 @@ def _execute_rule(self):
 
   self["requires"] += self["srcs"]
 
+  print("requires %s" % self["requires"])
   srcfiles = []
   for src in self["srcs"]:
     srcfiles += [src.path]
@@ -143,6 +144,35 @@ def _execute_rule(self):
       outputs=outputs,
   )
 
+
+def _build_source_files(ctx, self):
+
+  ctx = self.get("ctx", None)
+  if ctx == None:
+      fail("build_source_files can only be calling in bazel rule context")
+
+  # Copy the proto source to the gendir namespace (where the
+  # BUILD rule is called).
+  if self.get("copy_protos_to_genfiles", True):
+    for srcfile in ctx.files.protos:
+      protofile = ctx.new_file(srcfile.basename)
+      if self["verbose"]:
+        print("Copying %s .. %s" % (srcfile.path, protofile.path))
+      ctx.action(
+        mnemonic = "CpProtoToPackageGenfiles",
+        inputs = [srcfile],
+        outputs = [protofile],
+        arguments = [srcfile.path, protofile.path],
+        command = "cp $1 $2")
+      self["srcs"] += [protofile]
+      self["imports"] += [protofile.dirname]
+  else:
+    if self["verbose"]:
+      print("No Copy source files.")
+    for srcfile in ctx.files.protos:
+      self["srcs"] += [srcfile]
+
+
 def _protoc_rule_impl(ctx):
 
   print("ctx.files.protos %s" % ctx.files.protos)
@@ -167,7 +197,7 @@ def _protoc_rule_impl(ctx):
     self["srcs"] += dep.proto.srcs
 
   # Copy source files over to gendir
-  #_build_source_files(ctx, self)
+  _build_source_files(ctx, self)
 
   # Make a list of languages that were specified for this run
   spec = []
@@ -178,10 +208,8 @@ def _protoc_rule_impl(ctx):
   # Prepreprocessing for all requested languages.
   for lang in spec:
     # First language in spec builds the source files.  Kinda hacky.
-    if spec.index(lang) == 0:
-      invoke("build_source_files", lang, self)
 
-    #invoke("build_generated_filenames", lang, self)
+    invoke("build_generated_files", lang, self)
     invoke("build_imports", lang, self)
     invoke("build_protobuf_invocation", lang, self)
     invoke("build_protobuf_out", lang, self)
