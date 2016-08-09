@@ -6,7 +6,7 @@ cc_proto_compile = implement(["cpp"])
 
 def cc_proto_library(
     name,
-    protos,
+    protos = [],
     lang = CPP,
     srcs = [],
     imports = [],
@@ -30,9 +30,10 @@ def cc_proto_library(
     "outs": [],
   }
 
+  print("self %s" % self)
+
   invoke("build_generated_filenames", lang, self)
 
-  #print("self %s" % self)
 
   cc_proto_compile(
     name = name + "_pb",
@@ -41,6 +42,7 @@ def cc_proto_library(
     gen_cpp = True,
     gen_grpc_cpp = with_grpc,
     protoc = protoc_executable,
+    verbose = 1,
   )
 
   cc_deps = [str(Label(dep)) for dep in getattr(lang.protobuf, "compile_deps", [])]

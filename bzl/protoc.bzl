@@ -1,6 +1,7 @@
 load("//bzl:util.bzl", "invoke")
 load("//bzl:classes.bzl", "CLASSES")
 
+
 EXECUTABLE = Label("@com_github_google_protobuf//:protoc")
 
 
@@ -38,9 +39,7 @@ def _execute_rule(self):
   inputs = list(set(self["requires"]))
   outputs = list(set(self["provides"] + ctx.outputs.outs))
 
-  #if ctx.attr.verbose:
-  if True:
-    print("outputs %s", ctx.outputs)
+  if ctx.attr.verbose:
     print("protoc binary: " + ctx.executable.protoc.path)
     for i in range(len(arguments)):
       print(" > arg%s: %s" % (i, arguments[i]))
@@ -62,10 +61,10 @@ def protoc(name,
            self = {},
            gendir = "$(GENDIR)",
            protos = [],
-           protoc_executable=EXECUTABLE,
-           protobuf_plugin_executable=None,
+           protoc=EXECUTABLE,
+           protobuf_plugin=None,
            protobuf_plugin_options=[],
-           grpc_plugin_executable=None,
+           grpc_plugin=None,
            grpc_plugin_options=[],
            imports = [],
            args = [],
@@ -76,18 +75,18 @@ def protoc(name,
            descriptor_set = None,
            execute = True):
 
-  if protoc_executable == None:
-    protoc_executable = EXECUTABLE
+  if protoc == None:
+    protoc = EXECUTABLE
 
   self += {
     "name": name,
     "ctx": None,
     "gendir": gendir,
     "protos": protos,
-    "protoc": protoc_executable,
-    "protobuf_plugin": protobuf_plugin_executable,
+    "protoc": protoc,
+    "protobuf_plugin": protobuf_plugin,
     "protobuf_plugin_options": protobuf_plugin_options,
-    "grpc_plugin": grpc_plugin_executable,
+    "grpc_plugin": grpc_plugin,
     "grpc_plugin_options": grpc_plugin_options,
     "imports": imports,
     "testonly": testonly,
@@ -102,7 +101,6 @@ def protoc(name,
     "verbose": verbose,
     "execute": execute,
   }
-
 
   for lang in spec:
     if self["with_grpc"] and not hasattr(lang, "grpc"):
@@ -161,11 +159,12 @@ def _build_source_files(ctx, self):
         command = "cp $1 $2")
       self["srcs"] += [protofile]
       self["imports"] += [protofile.dirname]
-    print("Copied protos!")
   else:
-    print("No copy protos!")
+    if self["verbose"]:
+      print("No Copy source files.")
     for srcfile in ctx.files.protos:
       self["srcs"] += [srcfile]
+
 
 def _protoc_rule_impl(ctx):
 
@@ -213,7 +212,6 @@ def _protoc_rule_impl(ctx):
   for lang in spec:
     invoke("post_execute", lang, self)
 
-  print("final list of provides %s" % self["provides"])
   return struct(
     files=set(self["provides"]),
     proto=struct(
@@ -281,12 +279,13 @@ def implement(spec):
   # attribute", add that in.
   for name in spec:
     lang = CLASSES.get(name)
+    index = spec.index(name)
     if not lang: fail("Language not defined: %s" % name)
 
-    # Add "gen_java = True" option
+    # Add "gen_java = X" option where X is True if this is the first language specified.
     flag = "gen_" + name
     attrs[flag] = attr.bool(
-        default = False,
+        default = (index == 0),
     )
 
     # Add a "gen_java_plugin_options=[]".
@@ -296,7 +295,7 @@ def implement(spec):
     # If there is a plugin binary, create this label now.
     if hasattr(lang, "protobuf"):
       if hasattr(lang.protobuf, "executable"):
-        attrs["gen_" + name + "_protobuf_plugin_executable"] = attr.label(
+        attrs["gen_" + name + "_protobuf_plugin"] = attr.label(
           default = Label(lang.protobuf.executable),
           cfg = HOST_CFG,
           executable = True,
@@ -308,7 +307,7 @@ def implement(spec):
     if hasattr(lang, "grpc"):
       attrs["gen_grpc_" + name] = attr.bool()
       if hasattr(lang.grpc, "executable"):
-        attrs["gen_" + name + "_grpc_plugin_executable"] = attr.label(
+        attrs["gen_grpc_" + name + "_plugin"] = attr.label(
           default = Label(lang.grpc.executable),
           cfg = HOST_CFG,
           executable = True,
@@ -316,7 +315,6 @@ def implement(spec):
       if hasattr(lang.grpc, "outputs"):
         outputs += lang.grpc.outputs
 
-  print("outputs %s" % outputs)
   return rule(
     implementation = _protoc_rule_impl,
     attrs = attrs,

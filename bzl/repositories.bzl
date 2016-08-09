@@ -394,6 +394,13 @@ REPOSITORIES = {
         "sha256": "850fd0420cb896dfcd1f7d1edd6b3cb010890f8732f84821af5ef6b5f89e885d",
     },
 
+    "junit_junit_4": {
+        "kind": "maven_jar",
+        "name": "junit_junit_4",
+        "artifact": "junit:junit:jar:4.12",
+        "sha1": "2973d150c0dc1fefe998f834810d68f278ea58ec",
+    },
+
     ###:end
 
 }

@@ -51,7 +51,7 @@ public class HelloWorldServer {
   private int port = 50051;
   private Server server;
 
-  private void start() throws IOException {
+  void start() throws IOException {
     server = ServerBuilder.forPort(port)
         .addService(new GreeterImpl())
         .build()
@@ -68,7 +68,7 @@ public class HelloWorldServer {
     });
   }
 
-  private void stop() {
+  void stop() {
     if (server != null) {
       server.shutdown();
     }

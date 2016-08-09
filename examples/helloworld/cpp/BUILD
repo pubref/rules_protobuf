@@ -1,15 +1,24 @@
 package(default_visibility = ["//visibility:public"])
 
-load("//bzl:cpp/rules.bzl", "cc_proto_library")
+load("//bzl:cpp/rules.bzl", "cc_proto_library", "cc_proto_compile")
 
-cc_proto_library(
-    name = 'proto',
+cc_proto_compile(
+    name = 'protos',
     protos = [
-        'helloworld.proto',
+        '//examples/helloworld/proto:srcs',
     ],
-    with_grpc = True,
-    linkopts = ['-ldl'],
+    gen_grpc_cpp = True,
+    verbose = 1,
 )
+
+# cc_proto_compile(
+#     name = 'protos',
+#     protos = [
+#         '//examples/helloworld/proto:srcs',
+#     ],
+#     with_grpc = True,
+#     linkopts = ['-ldl'],
+# )
 
 cc_binary(
     name = 'client',
@@ -17,7 +26,7 @@ cc_binary(
         'greeter_client.cc',
     ],
     deps = [
-        ":proto",
+        ":protos",
     ],
     linkopts = ['-ldl'],
 )
@@ -28,7 +37,7 @@ cc_binary(
         'greeter_server.cc',
     ],
     deps = [
-        ":proto",
+        ":protos",
     ],
     linkopts = ['-ldl'],
 )

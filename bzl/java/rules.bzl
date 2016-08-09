@@ -21,34 +21,31 @@ def java_proto_library(
     verbose = True,
     with_grpc = False,
     deps = [],
-    hdrs = [],
     **kwargs):
 
   self = {
     "protos": protos,
     "with_grpc": with_grpc,
-    "outs": [name + ".srcjar"],
   }
-
-  #print("self %s" % self)
 
   java_proto_compile(
     name = name + "_pb",
     protos = protos,
-    outs = self["outs"],
     gen_java = True,
+    deps = deps,
     gen_grpc_java = with_grpc,
     copy_protos_to_genfiles = False,
     protoc = protoc_executable,
   )
 
-  java_deps = [str(Label(dep)) for dep in getattr(lang.protobuf, "compile_deps", [])]
   if with_grpc:
-    java_deps += [str(Label(dep)) for dep in getattr(lang.grpc, "compile_deps", [])]
+    proto_deps = [str(Label(dep)) for dep in getattr(lang.grpc, "compile_deps", [])]
+  else:
+    proto_deps = [str(Label(dep)) for dep in getattr(lang.protobuf, "compile_deps", [])]
 
   native.java_library(
     name = name,
-    srcs = srcs + self["outs"],
-    deps = deps + java_deps,
+    srcs = srcs + [name + "_pb.srcjar"],
+    deps = deps + proto_deps,
     **kwargs
   )

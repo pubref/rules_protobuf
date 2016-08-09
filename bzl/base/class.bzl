@@ -9,13 +9,18 @@ def build_generated_filenames(lang, self):
 
     exts = getattr(lang.protobuf, "file_extensions")
 
-    if (self["with_grpc"]):
+    with_grpc = self.get("with_grpc", False)
+    ctx = self.get("ctx", None)
+    if ctx != None:
+        with_grpc = getattr(ctx.attr, "gen_grpc_" + lang.name, False)
+
+    if with_grpc:
         if not hasattr(lang, "grpc"):
             fail("Language %s does not support gRPC" % lang.name)
-        grpc = getattr(lang, "grpc")
-        exts += getattr(grpc, "file_extensions", [])
+        exts += getattr(lang.grpc, "file_extensions", [])
 
-    for srcfile in self["protos"]:
+    print("source protos: %s" % self["protos"])
+    for srcfile in self.get("protos", []):
         if not srcfile.endswith('.proto'):
             fail("Non .proto source file: %s" % srcfile, "protos")
         for ext in exts:
@@ -62,7 +67,7 @@ def build_plugin_invocation(key, lang, self):
         return
 
     ctx = self.get("ctx")
-    plugin_binary = self.get(key + "_plugin_executable", plugin.executable)
+    plugin_binary = self.get(key + "_plugin", plugin.executable)
     location = None
 
     # If we are in the context of a genrule...
@@ -71,7 +76,7 @@ def build_plugin_invocation(key, lang, self):
     else:
         # If we are in the context of a rule, we need to get the value
         # from the ctx.executable struct.
-        attrkey = "gen_" + lang.name + "_" + key + "_plugin_executable"
+        attrkey = "gen_" + key + "_" + lang.name + "_plugin"
 
         if not hasattr(ctx.executable, attrkey):
             fail("Plugin executable not found: %s" % attrkey)

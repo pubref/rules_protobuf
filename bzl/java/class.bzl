@@ -17,12 +17,11 @@ def _build_generated_filenames(lang, self):
         fail("Java implementation requires bazel context")
 
     srcjar = ctx.outputs.srcjar
-    protojar = ctx.outputs.protojar
-    #basename = srcjar.basename[:-len(".srcjar")]
-    #protojar = ctx.new_file(srcjar, "%s.jar" % basename)
-
+    basename = srcjar.basename[:-len(".srcjar")]
+    protojar = ctx.new_file(srcjar, "%s.jar" % basename)
+    self["protojar"] = protojar
     # This will generate the jar inthe source tree itself
-    self["gendir"] = protojar.short_path
+    #self["gendir"] = protojar.short_path
 
     # This will generate the jar in the BINDIR
     self["gendir"] = protojar.path
@@ -33,14 +32,11 @@ def _post_execute(lang, self):
     """Copy jar to srcjar"""
 
     ctx = self.get("ctx", None)
-    #protojar = self["protojar"]
-    #srcjar = self["srcjar"]
     srcjar = ctx.outputs.srcjar
-    protojar = ctx.outputs.protojar
+    protojar = self["protojar"]
 
     # Rename protojar to srcjar so that rules like java_library can
     # consume it.
-    print("Copying jar ****************************************************************")
     ctx.action(
         mnemonic = "FixProtoSrcJar",
         inputs = [protojar],
@@ -48,20 +44,19 @@ def _post_execute(lang, self):
         arguments = [protojar.path, srcjar.path],
         command = "cp $1 $2",
     )
-    print("Copied jar ****************************************************************")
 
     # Remove protojar from the list of provided outputs
-    #self["provides"] = [e for e in self["provides"] if e != protojar]
+    self["provides"] = [e for e in self["provides"] if e != protojar]
     self["provides"] += [srcjar]
 
-    #print("Copied jar %s srcjar to %s" % (protojar.path, srcjar.path))
+    if self["verbose"]:
+        print("Copied jar %s srcjar to %s" % (protojar.path, srcjar.path))
 
 
 CLASS = struct(
         parent = BASE,
         name = "java",
         short_name = "java",
-        copy_protos_to_genfiles = False,
 
         protobuf = struct(
             file_extensions = [".java"],
@@ -73,10 +68,10 @@ CLASS = struct(
                 "com_google_protobuf_protobuf_java",
                 "com_google_code_gson_gson",
                 "com_google_guava_guava",
+                "junit_junit_4", # TODO: separate test requirements
             ],
             outputs = {
                 "srcjar": "%{name}.srcjar",
-                "protojar": "%{name}.jar",
             }
         ),
         grpc = struct(
@@ -109,11 +104,13 @@ CLASS = struct(
                 "com_google_code_findbugs_jsr305",
             ],
             compile_deps = [
+                "@com_google_guava_guava//jar",
+                "@com_google_protobuf_protobuf_java//jar",
                 "@io_grpc_grpc_core//jar",
                 "@io_grpc_grpc_protobuf//jar",
                 "@io_grpc_grpc_stub//jar",
             ],
-            runtime_deps = [
+            netty_runtime_deps = [
                 "@io_grpc_grpc_netty//jar",
                 "@io_grpc_grpc_protobuf_lite//jar",
                 "@io_netty_netty_buffer//jar",
