@@ -17,7 +17,7 @@ go_repositories()
 # Load self
 # ================================================================
 
-load("//bzl:protobuf.bzl", "protobuf_repositories")
+load("//bzl:rules.bzl", "protobuf_repositories")
 
 protobuf_repositories(
     go = True,

@@ -1,22 +1,53 @@
-load("//bzl:protoc/gen.bzl",
-     common_attrs = "attrs",
-     common_impl = "gen",
-)
+load("//bzl:protoc.bzl", "EXECUTABLE", "implement")
+load("//bzl:util.bzl", "invoke")
+load("//bzl:java/class.bzl", JAVA = "CLASS")
 
+java_proto_compile = implement(["java"])
 
-def attrs():
-  """Returns: a map of rule attributes
-  """
-  attrs = common_attrs()
-  attrs["gen_java"] = attr.bool(default = True)
-  return attrs
+def java_proto_library(
+    name,
+    protos,
+    lang = JAVA,
+    srcs = [],
+    imports = [],
+    visibility = None,
+    testonly = 0,
+    protoc_executable = EXECUTABLE,
+    protobuf_plugin_options = [],
+    protobuf_plugin_executable = None,
+    grpc_plugin_executable = None,
+    grpc_plugin_options = [],
+    descriptor_set = None,
+    verbose = True,
+    with_grpc = False,
+    deps = [],
+    hdrs = [],
+    **kwargs):
 
+  self = {
+    "protos": protos,
+    "with_grpc": with_grpc,
+    "outs": [name + ".srcjar"],
+  }
 
-gen = rule(
-  implementation=common_impl,
-  attrs = attrs(),
-  output_to_genfiles=True,
-  outputs = {
-    "java_src": "%{name}.srcjar",
-  },
-)
+  #print("self %s" % self)
+
+  java_proto_compile(
+    name = name + "_pb",
+    protos = protos,
+    outs = self["outs"],
+    gen_java = True,
+    gen_grpc_java = with_grpc,
+    protoc = protoc_executable,
+  )
+
+  java_deps = [str(Label(dep)) for dep in getattr(lang.protobuf, "compile_deps", [])]
+  if with_grpc:
+    java_deps += [str(Label(dep)) for dep in getattr(lang.grpc, "compile_deps", [])]
+
+  native.java_library(
+    name = name,
+    srcs = srcs + self["outs"],
+    deps = deps + java_deps,
+    **kwargs
+  )

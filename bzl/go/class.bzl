@@ -1,18 +1,20 @@
-load("//bzl:base/descriptor.bzl", BASE = "DESCRIPTOR")
-load("//bzl:invoke.bzl", "invoke", "invokesuper")
+load("//bzl:base/class.bzl", BASE = "CLASS")
+load("//bzl:util.bzl", "invokesuper")
 
-def build_protoc_out(lang, self):
+
+def _build_protobuf_out(lang, self):
     """Override behavior to add a plugin option before building the --go_out option"""
     if self["with_grpc"]:
         self["protobuf_plugin_options"] += ["plugins=grpc"]
-    invokesuper("build_protoc_out", lang, self)
+    invokesuper("build_protobuf_out", lang, self)
 
-def build_grpc_out(lang, self):
+
+def _build_grpc_out(lang, self):
     """Override behavior to skip the --grpc_out option (protoc-gen-go does not use it)"""
     pass
 
 
-DESCRIPTOR = struct(
+CLASS = struct(
     parent = BASE,
     name = "go",
     short_name = "go",
@@ -45,6 +47,6 @@ DESCRIPTOR = struct(
         ],
     ),
 
-    build_protoc_out = build_protoc_out,
-    build_grpc_out = build_grpc_out,
+    build_protobuf_out = _build_protobuf_out,
+    build_grpc_out = _build_grpc_out,
 )

@@ -1,3 +1,49 @@
+#load("//bzl:classes.bzl", "CLASSES")
+
+# This should be set to the length of the longest CLASSES heirarcy
+# chain.  By definition, it cannot be longer than the lienght of the
+# list itself.  This is hardcoded to avoid dependency cycle.
+#
+MAX_INVOKE_DEPTH = range(4)
+
+def invokeall(name, lang, self):
+    current = lang
+    """Invoke the all methods found on the class chain"""
+    for i in MAX_INVOKE_DEPTH:
+        if current == None:
+            return
+        if hasattr(current, name):
+            method = getattr(current, name)
+            method(lang, self)
+        current = getattr(current, "parent", None)
+
+
+def invokesuper(name, lang, self):
+    current = getattr(lang, "parent", None)
+    """Invoke the first method found on the superclass chain"""
+    for i in MAX_INVOKE_DEPTH:
+        if current == None:
+            return
+        if hasattr(current, name):
+            method = getattr(current, name)
+            method(lang, self)
+            return
+        current = getattr(current, "parent", None)
+
+
+def invoke(name, lang, self):
+    current = lang
+    """Invoke the first method found on the class chain"""
+    for i in MAX_INVOKE_DEPTH:
+        if current == None:
+            return
+        if hasattr(current, name):
+            method = getattr(current, name)
+            method(lang, self)
+            return
+        current = getattr(current, "parent", None)
+
+
 def require(target, context):
     """Load external dependency during WORKSPACE loading.
 

@@ -1,5 +1,5 @@
 load("//bzl:protoc.bzl", "protoc")
-load("//bzl:go/descriptor.bzl", GO = "DESCRIPTOR")
+load("//bzl:go/class.bzl", GO = "CLASS")
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 def go_proto_library(
@@ -16,7 +16,7 @@ def go_proto_library(
     **kwargs):
 
   result = protoc(
-    lang = lang,
+    spec = [lang],
     name = name + "_pb",
     protos = protos,
     protoc_executable = protoc_executable,

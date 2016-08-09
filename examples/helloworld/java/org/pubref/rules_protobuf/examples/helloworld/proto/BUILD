@@ -1,9 +1,9 @@
 package(default_visibility = ["//visibility:public"])
 
-load("//bzl:rules.bzl", "protoc_java")
+load("//bzl:java/rules.bzl", "java_proto_library")
 
-protoc_java(
+java_proto_library(
     name = "proto",
-    srcs = ["//examples/helloworld/proto:srcs"],
+    protos = ["//examples/helloworld/proto:srcs"],
     with_grpc = True,
 )

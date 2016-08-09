@@ -8,7 +8,7 @@ genrule(
         ":darwin": ["@protoc_gen_grpc_java_macosx//file"],
         "//conditions:default": ["@protoc_gen_grpc_java_linux_x86_64//file"],
     }),
-    outs = ["protoc-gen-grpc-java"],
+    outs = ["protoc_gen_grpc_java"],
     cmd = " && ".join([
         "IN=$$(pwd)/$(SRCS)",
         "OUT=$$(pwd)/$@",

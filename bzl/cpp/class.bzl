@@ -1,10 +1,10 @@
-load("//bzl:base/descriptor.bzl", BASE = "DESCRIPTOR")
-load("//bzl:invoke.bzl", "invoke", "invokesuper")
+load("//bzl:base/class.bzl", BASE = "CLASS")
 
-DESCRIPTOR = struct(
+CLASS = struct(
     parent = BASE,
     name = "cpp",
     short_name = "cpp",
+
     protobuf = struct(
         file_extensions = [".pb.h", ".pb.cc"],
         compile_deps = [
@@ -35,4 +35,5 @@ DESCRIPTOR = struct(
             '@com_github_grpc_grpc//:grpc++',
         ],
     ),
+
 )

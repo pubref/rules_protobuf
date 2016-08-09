@@ -1,7 +1,7 @@
-load("//bzl:base/descriptor.bzl", BASE = "DESCRIPTOR")
-load("//bzl:invoke.bzl", "invoke", "invokesuper")
+load("//bzl:base/class.bzl", BASE = "CLASS")
 
-DESCRIPTOR = struct(
+
+CLASS = struct(
     parent = BASE,
     name = "python",
     short_name = "py",

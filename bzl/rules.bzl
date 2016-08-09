@@ -1,10 +1,6 @@
 load("//bzl:repositories.bzl", "REPOSITORIES")
-load("//bzl:languages.bzl", "LANGUAGES")
-load("//bzl:compile.bzl", "implement_compile", "implement_library")
-load("//bzl:require.bzl", "require")
-
-proto_compile = implement_compile(LANGUAGES.keys())
-proto_library = implement_library(LANGUAGES.keys())
+load("//bzl:classes.bzl", "CLASSES")
+load("//bzl:util.bzl", "require", "invoke")
 
 def protobuf_repositories(
     protoc = True,
@@ -27,20 +23,20 @@ def protobuf_repositories(
     options = {},
   )
 
-  load = []
-  requires = [
-    "protobuf",
-    "external_protoc",
-    "third_party_protoc",
-  ]
+  classes = []
+  requires = []
 
-  if cpp: load += ["cpp"]
-  if python: load += ["py"]
-  #if ruby: load += ["ruby"]
-  if go: load += ["go"]
+  if cpp:
+    classes += ["cpp"]
+  if python:
+    classes += ["py"]
+  if go:
+    classes += ["go"]
+  if java:
+    classes += ["java"]
 
-  for name in load:
-    lang = LANGUAGES[name]
+  for name in classes:
+    lang = CLASSES[name]
 
     if not lang:
       fail("Unknown language " + name)
