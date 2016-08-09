@@ -148,19 +148,24 @@ def _get_gendir(ctx):
 def _build_source_files(ctx, self):
   # Copy the proto source to the gendir namespace (where the
   # BUILD rule is called).
-  for srcfile in ctx.files.protos:
-    protofile = ctx.new_file(srcfile.basename)
-    if self["verbose"]:
-      print("Copying %s .. %s" % (srcfile.path, protofile.path))
-    ctx.action(
-      mnemonic = "CpProtoToPackageGengiles",
-      inputs = [srcfile],
-      outputs = [protofile],
-      arguments = [srcfile.path, protofile.path],
-      command = "cp $1 $2")
-    self["srcs"] += [protofile]
-    self["imports"] += [protofile.dirname]
-
+  if self.get("copy_protos_to_genfiles", True):
+    for srcfile in ctx.files.protos:
+      protofile = ctx.new_file(srcfile.basename)
+      if self["verbose"]:
+        print("Copying %s .. %s" % (srcfile.path, protofile.path))
+      ctx.action(
+        mnemonic = "CpProtoToPackageGengiles",
+        inputs = [srcfile],
+        outputs = [protofile],
+        arguments = [srcfile.path, protofile.path],
+        command = "cp $1 $2")
+      self["srcs"] += [protofile]
+      self["imports"] += [protofile.dirname]
+    print("Copied protos!")
+  else:
+    print("No copy protos!")
+    for srcfile in ctx.files.protos:
+      self["srcs"] += [srcfile]
 
 def _protoc_rule_impl(ctx):
 
@@ -171,6 +176,7 @@ def _protoc_rule_impl(ctx):
     "args": [],
     "srcs": [],
     "requires": [],
+    "copy_protos_to_genfiles": getattr(ctx.attr, "copy_protos_to_genfiles", True),
     "provides": [],
     "verbose": getattr(ctx.attr, "verbose", True),
     #"descriptor_set_file": descriptor_set_file,
@@ -207,7 +213,7 @@ def _protoc_rule_impl(ctx):
   for lang in spec:
     invoke("post_execute", lang, self)
 
-
+  print("final list of provides %s" % self["provides"])
   return struct(
     files=set(self["provides"]),
     proto=struct(
@@ -261,6 +267,11 @@ def implement(spec):
   # Generate the descriptor? Shouldn't we just always generate this?
   #attrs["with_descriptor"] = attr.bool()
 
+  # Implemntation detail that varies between output languages.
+  attrs["copy_protos_to_genfiles"] = attr.bool(
+    default = True,
+  )
+
   # ================================================================
   # Flags for registered languages
   # ================================================================
@@ -310,5 +321,5 @@ def implement(spec):
     implementation = _protoc_rule_impl,
     attrs = attrs,
     outputs = outputs,
-    output_to_genfiles = True,
+    output_to_genfiles = False,
   )

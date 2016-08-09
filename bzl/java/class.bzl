@@ -10,20 +10,22 @@ def _build_grpc_out(lang, self):
 
 
 def _build_generated_filenames(lang, self):
-    """We skip this step for java since the rule implementation java_out output will suffice."""
+    """Build a jar file for protoc to dump java classes into."""
 
     ctx = self.get("ctx", None)
-    print("self: %s" % self)
     if ctx == None:
         fail("Java implementation requires bazel context")
 
-    # Example: protojar is 'echo.jar', srcjar is 'echo.srcjar'
-    jar_basename = ctx.outputs.java_src.basename[:-len(".srcjar")]
-    protojar = ctx.new_file("%s.jar" % jar_basename)
-    srcjar = ctx.new_file("%s.srcjar" % jar_basename)
+    srcjar = ctx.outputs.srcjar
+    protojar = ctx.outputs.protojar
+    #basename = srcjar.basename[:-len(".srcjar")]
+    #protojar = ctx.new_file(srcjar, "%s.jar" % basename)
+
+    # This will generate the jar inthe source tree itself
     self["gendir"] = protojar.short_path
-    self["protojar_file"] = protojar
-    self["srcjar_file"] = srcjar
+
+    # This will generate the jar in the BINDIR
+    self["gendir"] = protojar.path
     self["provides"] += [protojar]
 
 
@@ -31,28 +33,35 @@ def _post_execute(lang, self):
     """Copy jar to srcjar"""
 
     ctx = self.get("ctx", None)
-    protojar = self["protojar_file"]
-    srcjar = self["srcjar_file"]
+    #protojar = self["protojar"]
+    #srcjar = self["srcjar"]
+    srcjar = ctx.outputs.srcjar
+    protojar = ctx.outputs.protojar
 
     # Rename protojar to srcjar so that rules like java_library can
     # consume it.
+    print("Copying jar ****************************************************************")
     ctx.action(
-    mnemonic = "FixProtoSrcJar",
+        mnemonic = "FixProtoSrcJar",
         inputs = [protojar],
         outputs = [srcjar],
-        arguments = [protojar.short_path, srcjar.short_path],
-        command = "cp $1 $2")
+        arguments = [protojar.path, srcjar.path],
+        command = "cp $1 $2",
+    )
+    print("Copied jar ****************************************************************")
 
     # Remove protojar from the list of provided outputs
-    self["provides"] = [e for e in self["provides"] if e != protojar]
-    #self["provides"] += [srcjar]
+    #self["provides"] = [e for e in self["provides"] if e != protojar]
+    self["provides"] += [srcjar]
 
-    print("Copied jar %s srcjar to %s" % (protojar.path, srcjar.path))
+    #print("Copied jar %s srcjar to %s" % (protojar.path, srcjar.path))
+
 
 CLASS = struct(
         parent = BASE,
         name = "java",
         short_name = "java",
+        copy_protos_to_genfiles = False,
 
         protobuf = struct(
             file_extensions = [".java"],
@@ -66,7 +75,8 @@ CLASS = struct(
                 "com_google_guava_guava",
             ],
             outputs = {
-                "java_src": "%{name}.srcjar",
+                "srcjar": "%{name}.srcjar",
+                "protojar": "%{name}.jar",
             }
         ),
         grpc = struct(

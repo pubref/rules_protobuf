@@ -38,6 +38,7 @@ def java_proto_library(
     outs = self["outs"],
     gen_java = True,
     gen_grpc_java = with_grpc,
+    copy_protos_to_genfiles = False,
     protoc = protoc_executable,
   )
 
