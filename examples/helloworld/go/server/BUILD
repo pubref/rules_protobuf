@@ -1,4 +1,5 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary")
+load("//bzl:go/class.bzl", GO = "CLASS")
 
 go_binary(
     name = "server",
@@ -6,9 +7,6 @@ go_binary(
         "main.go",
     ],
     deps = [
-        "//examples/helloworld/proto:golib",
-        "@com_github_golang_glog//:go_default_library",
-        "@org_golang_google_grpc//:go_default_library",
-        "@org_golang_x_net//:context",
-    ],
+        "//examples/helloworld/proto:go",
+    ] + GO.grpc.compile_deps,
 )

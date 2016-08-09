@@ -97,7 +97,7 @@ def build_plugin_invocation(key, lang, self):
     plugin_binary = self.get("gen_" + key + "_" + lang.name + "_plugin", plugin.executable)
     location = None
 
-    print("plugin binary %s" % plugin_binary)
+    #print("plugin binary %s" % plugin_binary)
 
     # If we are in the context of a genrule...
     if ctx == None:

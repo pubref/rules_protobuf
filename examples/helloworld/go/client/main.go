@@ -40,12 +40,12 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
-	pb "github.com/pubref/rules_protobuf/examples/helloworld/proto/golib"
+	pb "github.com/pubref/rules_protobuf/examples/helloworld/proto/go"
 	//  ^A                               ^B                        ^C
 	//
 	// A: go_prefix("github.com/pubref/rules_protobuf")
 	// B: path to proto file directory "//examples/helloworld/proto"
-	// C: name of BUILD target that generated the protobufs: ":golib"
+	// C: name of BUILD target that generated the protobufs: ":go"
 )
 
 const (

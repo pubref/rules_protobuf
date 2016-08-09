@@ -22,24 +22,25 @@ def _execute_genrule(self):
   )
 
 
-def protoc(name,
-           spec = [],
-           self = {},
-           gendir = "$(BINDIR)",
-           protos = [],
-           protoc=EXECUTABLE,
-           protobuf_plugin=None,
-           protobuf_plugin_options=[],
-           grpc_plugin=None,
-           grpc_plugin_options=[],
-           imports = [],
-           args = [],
-           testonly = False,
-           visibility = None,
-           with_grpc = False,
-           verbose = False,
-           descriptor_set = None,
-           execute = True):
+def protoc_genrule(name,
+                   spec = [],
+                   self = {},
+                   #gendir = "$(BINDIR)", Note: It *has* to be GENDIR for some reason.
+                   gendir = "$(GENDIR)",
+                   protos = [],
+                   protoc=EXECUTABLE,
+                   protobuf_plugin=None,
+                   protobuf_plugin_options=[],
+                   grpc_plugin=None,
+                   grpc_plugin_options=[],
+                   imports = [],
+                   args = [],
+                   testonly = False,
+                   visibility = None,
+                   with_grpc = False,
+                   verbose = False,
+                   descriptor_set = None,
+                   execute = True):
 
   if protoc == None:
     protoc = EXECUTABLE
@@ -115,8 +116,8 @@ def _execute_rule(self):
       fail("Bazel context required for rule execution")
 
   self["requires"] += self["srcs"]
+  #print("requires %s" % self["requires"])
 
-  print("requires %s" % self["requires"])
   srcfiles = []
   for src in self["srcs"]:
     srcfiles += [src.path]
@@ -175,7 +176,7 @@ def _build_source_files(ctx, self):
 
 def _protoc_rule_impl(ctx):
 
-  print("ctx.files.protos %s" % ctx.files.protos)
+  #print("ctx.files.protos %s" % ctx.files.protos)
 
   self = {
     "ctx": ctx,
@@ -184,7 +185,7 @@ def _protoc_rule_impl(ctx):
     "args": [],
     "srcs": [],
     "requires": [],
-    "copy_protos_to_genfiles": getattr(ctx.attr, "copy_protos_to_genfiles", True),
+    "copy_protos_to_genfiles": getattr(ctx.attr, "copy_protos_to_genfiles", False),
     "provides": [],
     "verbose": getattr(ctx.attr, "verbose", True),
     #"descriptor_set_file": descriptor_set_file,
@@ -276,7 +277,8 @@ def implement(spec):
   # Generate the descriptor? Shouldn't we just always generate this?
   #attrs["with_descriptor"] = attr.bool()
 
-  # Implemntation detail that varies between output languages.
+  # Implemntation detail that varies between output languages. JAVA:
+  # does not matter.  GO: True required.
   attrs["copy_protos_to_genfiles"] = attr.bool(
     default = True,
   )
