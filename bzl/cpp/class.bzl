@@ -32,6 +32,7 @@ CLASS = struct(
             "external_protoc_gen_grpc_cpp",
         ],
         compile_deps = [
+            "//external:protobuf_clib",
             '@com_github_grpc_grpc//:grpc++',
         ],
     ),

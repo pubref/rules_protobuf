@@ -2,6 +2,7 @@ package(default_visibility = ["//visibility:public"])
 
 load("@io_bazel_rules_go//go:def.bzl", "go_binary")
 load("//bzl:go/rules.bzl", "go_proto_library")
+load("//bzl:cpp/rules.bzl", "cc_proto_library")
 
 filegroup(
     name = "srcs",
@@ -20,7 +21,14 @@ go_proto_library(
     verbose = 1,
 )
 
-exports_files(["helloworld.proto"])
+cc_proto_library(
+    name = 'cpp',
+    protos = ["helloworld.proto"],
+    with_grpc = True,
+    verbose = 0,
+)
+
+#exports_files(["helloworld.proto"])
 
 # go_proto_library(
 #     name = "golib",
