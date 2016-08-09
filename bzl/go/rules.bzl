@@ -1,6 +1,8 @@
-load("//bzl:protoc.bzl", "protoc")
+load("//bzl:protoc.bzl", "protoc", "implement")
 load("//bzl:go/class.bzl", GO = "CLASS")
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_proto_compile = implement(["go"])
 
 def go_proto_library(
     name,
@@ -14,6 +16,8 @@ def go_proto_library(
     protobuf_plugin_executable = None,
     with_grpc = False,
     **kwargs):
+
+  print("protos %s" % protos)
 
   result = protoc(
     spec = [lang],

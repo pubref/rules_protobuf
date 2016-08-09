@@ -1,3 +1,34 @@
+def build_source_files(lang, self):
+  print("build_source_files!")
+  ctx = self.get("ctx", None)
+  if ctx == None:
+      fail("build_source_files can only be calling in bazel rule context")
+
+  # Copy the proto source to the gendir namespace (where the
+  # BUILD rule is called).
+  if self.get("copy_protos_to_genfiles", True):
+    for srcfile in ctx.files.protos:
+      protofile = ctx.new_file(srcfile.basename)
+      if self["verbose"]:
+        print("Copying %s .. %s" % (srcfile.path, protofile.path))
+      ctx.action(
+        mnemonic = "CpProtoToPackageGenfiles",
+        inputs = [srcfile],
+        outputs = [protofile],
+        arguments = [srcfile.path, protofile.path],
+        command = "cp $1 $2")
+      self["srcs"] += [protofile]
+      self["imports"] += [protofile.dirname]
+  else:
+    if self["verbose"]:
+      print("No Copy source files.")
+    for srcfile in ctx.files.protos:
+      self["srcs"] += [srcfile]
+
+  # Note: no need to populate the provides list at this time, we add
+  # it to the list from "srcs" later.
+
+
 def build_generated_filenames(lang, self):
     """Build a list of generated filenames (used by genrule)"""
 
@@ -19,7 +50,10 @@ def build_generated_filenames(lang, self):
             fail("Language %s does not support gRPC" % lang.name)
         exts += getattr(lang.grpc, "file_extensions", [])
 
-    print("source protos: %s" % self["protos"])
+    protos = self.get("protos", [])
+    if not protos:
+        fail("Empty proto file input list.")
+
     for srcfile in self.get("protos", []):
         if not srcfile.endswith('.proto'):
             fail("Non .proto source file: %s" % srcfile, "protos")
@@ -67,8 +101,10 @@ def build_plugin_invocation(key, lang, self):
         return
 
     ctx = self.get("ctx")
-    plugin_binary = self.get(key + "_plugin", plugin.executable)
+    plugin_binary = self.get("gen_" + key + "_" + lang.name + "_plugin", plugin.executable)
     location = None
+
+    print("plugin binary %s" % plugin_binary)
 
     # If we are in the context of a genrule...
     if ctx == None:
@@ -148,6 +184,7 @@ CLASS = struct(
         ]
     ),
 
+    build_source_files = build_source_files,
     build_generated_filenames = build_generated_filenames,
     build_imports = build_imports,
     build_tools = build_tools,

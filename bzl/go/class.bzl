@@ -4,7 +4,7 @@ load("//bzl:util.bzl", "invokesuper")
 
 def _build_protobuf_out(lang, self):
     """Override behavior to add a plugin option before building the --go_out option"""
-    if self["with_grpc"]:
+    if self.get("with_grpc", False):
         self["protobuf_plugin_options"] += ["plugins=grpc"]
     invokesuper("build_protobuf_out", lang, self)
 

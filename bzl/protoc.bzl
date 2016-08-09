@@ -22,40 +22,6 @@ def _execute_genrule(self):
   )
 
 
-def _execute_rule(self):
-  ctx = self["ctx"]
-  if ctx == None:
-      fail("Bazel context required for rule execution")
-
-  self["requires"] += self["srcs"]
-
-  srcfiles = []
-  for src in self["srcs"]:
-    srcfiles += [src.path]
-
-  #self["args"] += ["--descriptor_set_out=%s" % (descriptor_set_file.path)]
-
-  arguments = list(set(self["args"] + ["-I" + i for i in self["imports"]] + srcfiles))
-  inputs = list(set(self["requires"]))
-  outputs = list(set(self["provides"] + ctx.outputs.outs))
-
-  if ctx.attr.verbose:
-    print("protoc binary: " + ctx.executable.protoc.path)
-    for i in range(len(arguments)):
-      print(" > arg%s: %s" % (i, arguments[i]))
-    for i in inputs:
-      print(" > input: %s" % i)
-    for o in outputs:
-      print(" > output: %s" % o)
-
-  ctx.action(
-      mnemonic="ProtoCompile",
-      executable=ctx.executable.protoc,
-      arguments=arguments,
-      inputs=inputs,
-      outputs=outputs,
-  )
-
 def protoc(name,
            spec = [],
            self = {},
@@ -143,30 +109,43 @@ def _get_gendir(ctx):
   # return get_path(ctx, ctx.label.package + '/' + ctx.attr.includes[0])
 
 
-def _build_source_files(ctx, self):
-  # Copy the proto source to the gendir namespace (where the
-  # BUILD rule is called).
-  if self.get("copy_protos_to_genfiles", True):
-    for srcfile in ctx.files.protos:
-      protofile = ctx.new_file(srcfile.basename)
-      if self["verbose"]:
-        print("Copying %s .. %s" % (srcfile.path, protofile.path))
-      ctx.action(
-        mnemonic = "CpProtoToPackageGengiles",
-        inputs = [srcfile],
-        outputs = [protofile],
-        arguments = [srcfile.path, protofile.path],
-        command = "cp $1 $2")
-      self["srcs"] += [protofile]
-      self["imports"] += [protofile.dirname]
-  else:
-    if self["verbose"]:
-      print("No Copy source files.")
-    for srcfile in ctx.files.protos:
-      self["srcs"] += [srcfile]
+def _execute_rule(self):
+  ctx = self["ctx"]
+  if ctx == None:
+      fail("Bazel context required for rule execution")
 
+  self["requires"] += self["srcs"]
+
+  srcfiles = []
+  for src in self["srcs"]:
+    srcfiles += [src.path]
+
+  #self["args"] += ["--descriptor_set_out=%s" % (descriptor_set_file.path)]
+
+  arguments = list(set(self["args"] + ["-I" + i for i in self["imports"]] + srcfiles))
+  inputs = list(set(self["requires"]))
+  outputs = list(set(self["provides"] + ctx.outputs.outs))
+
+  if ctx.attr.verbose:
+    print("protoc binary: " + ctx.executable.protoc.path)
+    for i in range(len(arguments)):
+      print(" > arg%s: %s" % (i, arguments[i]))
+    for i in inputs:
+      print(" > input: %s" % i)
+    for o in outputs:
+      print(" > output: %s" % o)
+
+  ctx.action(
+      mnemonic="ProtoCompile",
+      executable=ctx.executable.protoc,
+      arguments=arguments,
+      inputs=inputs,
+      outputs=outputs,
+  )
 
 def _protoc_rule_impl(ctx):
+
+  print("ctx.files.protos %s" % ctx.files.protos)
 
   self = {
     "ctx": ctx,
@@ -188,7 +167,7 @@ def _protoc_rule_impl(ctx):
     self["srcs"] += dep.proto.srcs
 
   # Copy source files over to gendir
-  _build_source_files(ctx, self)
+  #_build_source_files(ctx, self)
 
   # Make a list of languages that were specified for this run
   spec = []
@@ -198,7 +177,11 @@ def _protoc_rule_impl(ctx):
 
   # Prepreprocessing for all requested languages.
   for lang in spec:
-    invoke("build_generated_filenames", lang, self)
+    # First language in spec builds the source files.  Kinda hacky.
+    if spec.index(lang) == 0:
+      invoke("build_source_files", lang, self)
+
+    #invoke("build_generated_filenames", lang, self)
     invoke("build_imports", lang, self)
     invoke("build_protobuf_invocation", lang, self)
     invoke("build_protobuf_out", lang, self)
@@ -295,7 +278,7 @@ def implement(spec):
     # If there is a plugin binary, create this label now.
     if hasattr(lang, "protobuf"):
       if hasattr(lang.protobuf, "executable"):
-        attrs["gen_" + name + "_protobuf_plugin"] = attr.label(
+        attrs["gen_protobuf_" + name + "_plugin"] = attr.label(
           default = Label(lang.protobuf.executable),
           cfg = HOST_CFG,
           executable = True,

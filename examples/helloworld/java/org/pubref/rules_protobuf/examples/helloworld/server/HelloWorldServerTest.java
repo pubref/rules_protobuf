@@ -19,7 +19,6 @@ public class HelloWorldServerTest {
 
   HelloWorldServer server;
 
-
   @Before
   public void setUp() throws Exception {
     server = new HelloWorldServer();

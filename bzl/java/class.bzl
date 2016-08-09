@@ -9,8 +9,9 @@ def _build_grpc_out(lang, self):
     build_plugin_out("grpc-java", "grpc", lang, self)
 
 
-def _build_generated_filenames(lang, self):
+def _build_source_files(lang, self):
     """Build a jar file for protoc to dump java classes into."""
+    invokesuper("build_source_files", lang, self)
 
     ctx = self.get("ctx", None)
     if ctx == None:
@@ -123,7 +124,7 @@ CLASS = struct(
             ],
         ),
 
-        build_generated_filenames = _build_generated_filenames,
+        build_source_files = _build_source_files,
         build_grpc_out = _build_grpc_out,
         post_execute = _post_execute,
 )
