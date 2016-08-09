@@ -153,7 +153,7 @@ def _build_source_files(ctx, self):
 
   # Copy the proto source to the gendir namespace (where the
   # BUILD rule is called).
-  if self.get("copy_protos_to_genfiles", True):
+  if self.get("copy_protos_to_genfiles", False):
     for srcfile in ctx.files.protos:
       protofile = ctx.new_file(srcfile.basename)
       if self["verbose"]:
