@@ -1,33 +1,36 @@
-# `rules_protobuf_go`
-
-## Rule `protoc_go` arguments
-
-Includes all [common attributes][../protoc]:
-
-| Name | Type | Description | Default |
-| ---- | ---- | ----------- | ------- |
-| `gen_go` | `boolean` | Generate go sources | `True` |
-| `gen_go_options` | `string_list` | Optional plugin arguments |  |
-| `protoc_gen_go` | `executable` | The go protoc plugin binary | `@com_github_golang_protobuf//:protoc_gen_go` |
+# `go_proto_library`
 
 ## Usage
 
-Load the `protoc_go` rule in your `BUILD` file:
+
+### Load dependencies for golang support in your `WORKSPACE` by
+    setting the `go=True` flag:
 
 ```python
-load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protoc_go")
+load("@org_pubref_rules_protobuf//bzl:protobuf.bzl", "protobuf_repositories")
+protobuf_repositories(
+  go = True,
+  with_grpc = True,
+)
 ```
 
-Bazel support for `go` is provided by
-[rules_go](https://github.com/bazelbuild/rules_go) which is loaded by
-this `WORKSPACE`.
 
-### 1. Generate protobuf classes into a `*.pb.go` outputs
+### Load the `go_proto_library` rule in your `BUILD` file:
 
 ```python
-protoc_go(
-  name = "my_protobufs",
-  srcs = ["my.proto"],
+load("@org_pubref_rules_protobuf//bzl:go/rules.bzl", "go_proto_library")
+```
+
+Note: this rule internally calls the `go_library` rule provided by
+[rules_go](https://github.com/bazelbuild/rules_go).
+
+
+### Generate and compile `*.pb.go` outputs.
+
+```python
+go_proto_library(
+  name = "proto",
+  srcs = ["helloworld.proto"],
 
   # Default is false, so omit this if you are not using service
   # definitions in your .proto files
@@ -36,11 +39,66 @@ protoc_go(
 ```
 
 ```sh
-$ bazel build my_protobufs
-$ less bazel-genfiles/.../my.proto.pb.go
+$ bazel build examples/helloworld/protos:golib
+
+# fyi: The "_pb" implicit build target yields the generated *.pb.go files:
+$ bazel build examples/helloworld/protos:golib_pb
 ```
 
-### 2,3. Compile/run generated protobufs (+/- gRPC)
 
-Compilation of the output `*.pb.go` files is a work-in-progress. See
-https://github.com/pubref/rules_protobuf/issues/1.
+### Compile and run the gRPC server
+
+```python
+load("@io_bazel_rules_go//go:def.bzl", "go_binary")
+
+go_binary(
+    name = "server",
+    srcs = [
+        "main.go",
+    ],
+    deps = [
+        "//examples/helloworld/proto:golib",
+        "@com_github_golang_glog//:go_default_library",
+        "@org_golang_google_grpc//:go_default_library",
+        "@org_golang_x_net//:context",
+    ],
+)
+```
+
+```sh
+$ bazel build examples/helloworld/go/server
+
+# The run command will block until shutdown, preventing any other
+  bazel commands.  Better to invoke the server binary from the shell
+  directly.  This executable file can be copied to a location in your
+  PATH if desired.
+
+# bazel run examples/helloworld/go/server
+$ bazel-bin/examples/helloworld/go/server/server
+```
+
+
+### Compile and run the gRPC client
+
+```python
+load("@io_bazel_rules_go//go:def.bzl", "go_binary")
+
+go_binary(
+    name = "client",
+    srcs = [
+        "main.go",
+    ],
+    deps = [
+        "//examples/helloworld/proto:golib",
+        "@com_github_golang_glog//:go_default_library",
+        "@org_golang_google_grpc//:go_default_library",
+        "@org_golang_x_net//:context",
+    ],
+)
+```
+
+```sh
+$ bazel build examples/helloworld/go/client
+$ bazel   run examples/helloworld/go/client
+$ bazel-bin/examples/helloworld/go/client/client
+```

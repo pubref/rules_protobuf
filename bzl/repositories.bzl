@@ -156,6 +156,14 @@ REPOSITORIES = {
         "actual": "@com_github_google_protobuf//:protoc_lib",
     },
 
+    # # Bind the protobuf proto_lib (protoc) into //external.  Required
+    # # for compiling the protoc_gen_grpc plugin
+    "third_party_protoc": {
+        "kind": "bind",
+        "name": "third_party",
+        "actual": "@com_github_google_protobuf//:protoc_lib",
+    },
+
     # ****************************************************************
     # GO
     # ****************************************************************

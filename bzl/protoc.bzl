@@ -16,7 +16,8 @@ def protoc(lang,
            visibility = None,
            with_grpc = False,
            verbose = False,
-           descriptor_set = None):
+           descriptor_set = None,
+           execute = True):
 
   if protoc_executable == None:
     protoc_executable = EXECUTABLE
@@ -38,7 +39,9 @@ def protoc(lang,
     "tools": [],
     "cmd": [],
     "outs": [],
+    "hdrs": [],
     "verbose": verbose,
+    "execute": execute,
   }
 
   invoke("build_generated_files", lang, self)
@@ -55,8 +58,12 @@ def protoc(lang,
     invoke("build_grpc_invocation", lang, self)
 
   invoke("build_protoc_command", lang, self)
-  invoke("execute_protoc_command", lang, self)
 
-  self["hdrs"] = [src for src in self["outs"]]
+  if execute:
+    invoke("execute_protoc_command", lang, self)
+
+  for src in self["outs"]:
+    if src.endswith(".h"):
+      self["hdrs"] = [src]
 
   return struct(**self)

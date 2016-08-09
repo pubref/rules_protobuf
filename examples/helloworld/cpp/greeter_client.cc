@@ -37,6 +37,7 @@
 
 #include <grpc++/grpc++.h>
 
+#include "examples/helloworld/cpp/helloworld.pb.h"
 #include "examples/helloworld/cpp/helloworld.grpc.pb.h"
 
 using grpc::Channel;

@@ -28,8 +28,11 @@ def protobuf_repositories(
   )
 
   load = []
-  requires = ["protobuf",
-              "external_protoc"]
+  requires = [
+    "protobuf",
+    "external_protoc",
+    "third_party_protoc",
+  ]
 
   if cpp: load += ["cpp"]
   if python: load += ["py"]

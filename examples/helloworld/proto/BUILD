@@ -15,11 +15,11 @@ filegroup(
 
 exports_files(["helloworld.proto"])
 
-# go_proto_library(
-#     name = "golib",
-#     protos = ["helloworld.proto"],
-#     with_grpc = True,
-# )
+go_proto_library(
+    name = "golib",
+    protos = ["helloworld.proto"],
+    with_grpc = True,
+)
 
 # py_proto_library(
 #     name = "pylib",

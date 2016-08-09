@@ -6,12 +6,12 @@ def build_compile_attributes(spec):
   attrs = {}
 
   attrs["verbose"] = attr.int(
-      default = 0,
+    default = 0,
   )
 
   # The set of files to compile
-  attrs["srcs"] = attr.label_list(
-      allow_files = FileType([".proto"]),
+  attrs["protos"] = attr.label_list(
+    allow_files = FileType([".proto"]),
   )
 
   # ? How to deps interact here?  Don't understand this. Provider
@@ -27,11 +27,11 @@ def build_compile_attributes(spec):
   attrs["outs"] = attr.output_list()
 
   # The protoc executable (built from source by default)
-  attrs["protoc_exe"] = attr.label(
-      default = Label("//external:protoc"),
-      # TODO: isn't HOST_CFG deprecated?
+  attrs["protoc"] = attr.label(
+    default = Label("//external:protoc"),
+    # TODO: isn't HOST_CFG deprecated?
     cfg = HOST_CFG,
-      executable = True,
+    executable = True,
   )
 
   # Support for protoc plugins not defined here.
@@ -65,16 +65,22 @@ def build_compile_attributes(spec):
     attrs[opts] = attr.string_list()
 
     # If there is a plugin binary, create this label now.
-    if hasattr(lang, "plugin_executable"):
-        attrs["gen_" + name + "_plugin_executable"] = attr.label(
-            default = Label(lang.plugin_executable),
-            cfg = HOST_CFG,
-            executable = True,
-        )
+    if hasattr(lang, "protobuf") and hasattr(lang.protobuf, "executable"):
+      attrs["gen_" + name + "_protobuf_plugin_executable"] = attr.label(
+        default = Label(lang.protobuf.executable),
+        cfg = HOST_CFG,
+        executable = True,
+      )
 
     # If this language supports gRPC, add this boolean flag in.
-    if hasattr(lang, "supports_grpc"):
-        attrs["with_grpc"] = attr.bool()
+    if hasattr(lang, "grpc"):
+      attrs["gen_grpc_" + name] = attr.bool()
+      if hasattr(lang.grpc, "executable"):
+        attrs["gen_" + name + "_grpc_plugin_executable"] = attr.label(
+          default = Label(lang.grpc.executable),
+          cfg = HOST_CFG,
+          executable = True,
+        )
 
   #print("attrs: %s" % attrs.keys())
   return attrs
@@ -144,6 +150,7 @@ def get_gendir(ctx):
   #   return get_path(ctx, ctx.attr.includes[0])
   # return get_path(ctx, ctx.label.package + '/' + ctx.attr.includes[0])
 
+
 def build_imports(ctx, lang, builder):
   #builder["imports"] += ["."]
   pass
@@ -169,32 +176,45 @@ def build_source_files(ctx, builder):
   #print("outdir: %s" % outdir);
   # Copy the proto source to the gendir namespace (where the
   # BUILD rule is called)
-  for srcfile in ctx.files.srcs:
-    # protofile = ctx.new_file(dsfile, (srcfile.short_path))
-    # # print("Copying %s .. %s" % (srcfile.path, protofile.path))
-    # ctx.action(
-    #   mnemonic = "CpProtoToPackageGengiles",
-    #   inputs = [srcfile],
-    #   outputs = [protofile],
-    #   arguments = [srcfile.path, protofile.path],
-    #   command = "cp $1 $2")
-    builder["srcs"] += [srcfile]
+  for srcfile in ctx.files.protos:
+    protofile = ctx.new_file(srcfile.basename)
+    print("Copying %s .. %s" % (srcfile.path, protofile.path))
+    ctx.action(
+      mnemonic = "CpProtoToPackageGengiles",
+      inputs = [srcfile],
+      outputs = [protofile],
+      arguments = [srcfile.path, protofile.path],
+      command = "cp $1 $2")
+    builder["srcs"] += [protofile]
+    builder["imports"] += [protofile.dirname]
 
 
 # Rational default for the generation path is: the GEN_DIR + package path +
 def build_protoc_arguments(ctx, lang, builder):
   #outdir = builder["descriptor_set_file"].dirname
-  #builder["args"] += ["--%s_out=%s" % (lang.name, outdir)]
-  builder["args"] += ["--%s_out=%s" % (lang.name, ".")]
+  builder["args"] += ["--%s_out=%s" % (lang.name, builder["gendir"])]
+  #builder["args"] += ["--%s_out=%s" % (lang.name, ".")]
 
 
 def build_plugin_invocation(ctx, lang, builder):
-  if hasattr(lang, "plugin_executable"):
-    plugin_exe_name = "gen_" + lang.name + "_plugin_executable"
+  print("executables: %s" % dir(ctx.executable) );
+  if hasattr(lang, "protobuf") and hasattr(lang.protobuf, "executable"):
+    plugin_exe_name = "gen_" + lang.name + "_protobuf_plugin_executable"
     if not hasattr(ctx.executable, plugin_exe_name):
       fail("Plugin executable not found: %s" % plugin_exe_name)
     plugin = getattr(ctx.executable, plugin_exe_name)
-    builder["args"] += ["--plugin=%s=%s" % (lang.plugin_name, plugin.path)]
+    builder["args"] += ["--plugin=%s=%s" % (lang.protobuf.name, plugin.path)]
+
+def build_grpc_invocation(ctx, lang, builder):
+  if hasattr(lang, "grpc") and hasattr(lang.grpc, "executable"):
+    grpc_exe_name = "gen_" + lang.name + "_grpc_plugin_executable"
+    if not hasattr(ctx.executable, grpc_exe_name):
+      fail("Grpc executable not found: %s" % grpc_exe_name)
+    grpc = getattr(ctx.executable, grpc_exe_name)
+    builder["args"] += ["--plugin=%s=%s" % (lang.grpc.name, grpc.path)]
+    #builder["args"] += ["--grpc_out=%s" % (".")]
+    builder["args"] += ["--grpc_out=%s" % builder["gendir"]]
+    #builder["imports"] += ["."]
 
 
 def build_provided_pb_files(ctx, lang, builder):
@@ -208,6 +228,7 @@ def build_provided_pb_files(ctx, lang, builder):
     #     builder["provides"] += [pbfile]
 
 #a = ["my_prefix_what_ever", "my_prefix_what_so_ever", "my_prefix_doesnt_matter"]
+
 
 def common_prefix(a, b):
   a_len = len(a)
@@ -237,9 +258,8 @@ def _execute_compile(ctx):
   # Per-language Setup and Preprocessing
   #
   for name, lang in LANGUAGES.items():
-    if getattr(ctx.attr, "gen_" + name):
+    if getattr(ctx.attr, "gen_" + name, False):
       spec += [lang]
-
 
   imports = []
   args = []
@@ -280,6 +300,9 @@ def _execute_compile(ctx):
     _build_provided_pb_files = getattr(lang, "build_provided_pb_files", build_provided_pb_files)
     _build_provided_pb_files(ctx, lang, builder)
 
+    _build_grpc_invocation = getattr(lang, "build_grpc_invocation", build_grpc_invocation)
+    _build_grpc_invocation(ctx, lang, builder)
+
     _build_protoc_arguments = getattr(lang, "build_protoc_arguments", build_protoc_arguments)
     _build_protoc_arguments(ctx, lang, builder)
 
@@ -297,12 +320,14 @@ def _execute_compile(ctx):
 
   #builder["args"] += ["--descriptor_set_out=%s" % (descriptor_set_file.path)]
 
+  print("outputs %s", ctx.outputs)
   arguments = list(set(builder["args"] + ["-I" + i for i in builder["imports"]] + srcfiles))
   inputs = list(set(builder["requires"]))
   outputs = list(set(builder["provides"] + ctx.outputs.outs))
 
-  if ctx.attr.verbose:
-    print("protoc binary: " + ctx.executable.protoc_exe.path)
+  #if ctx.attr.verbose:
+  if True:
+    print("protoc binary: " + ctx.executable.protoc.path)
     for i in range(len(arguments)):
       print(" > arg%s: %s" % (i, arguments[i]))
     for i in inputs:
@@ -312,7 +337,7 @@ def _execute_compile(ctx):
 
   ctx.action(
       mnemonic="ProtoCompile",
-      executable=ctx.executable.protoc_exe,
+      executable=ctx.executable.protoc,
       arguments=arguments,
       inputs=inputs,
       outputs=outputs,
@@ -325,7 +350,7 @@ def _execute_compile(ctx):
     _post_execute(ctx, lang, builder)
 
   return struct(
-      #files=set(builder["provides"]),
+      files=set(builder["provides"]),
       proto=struct(
           srcs=set(builder["srcs"]),
           imports=builder["imports"],
@@ -354,28 +379,3 @@ def _execute_library(ctx):
     files=compile_result.files,
     proto=compile_result.proto,
   )
-
-
-  # ================================================================
-  # Binary tool substitution options
-  # ================================================================
-
-  # attrs["protoc_gen_grpc_java"] = attr.label(
-  #   default = Label("//third_party/protoc_gen_grpc_java:protoc_gen_grpc_java_bin"),
-  #   cfg = HOST_CFG,
-  #   executable = True,
-  # )
-
-  # attrs["protoc_gen_go"] = attr.label(
-  #   default = Label("@com_github_golang_protobuf//:protoc_gen_go"),
-  #   cfg = HOST_CFG,
-  #   executable = True,
-  # )
-
-  # attrs["protoc_gen_grpc"] = attr.label(
-  #   # Note: the default value here is a cc_binary that expects to find
-  #   # //external:protobuf_compiler, so that must be bind'ed.
-  #   default = Label("@com_github_grpc_grpc//:grpc_cpp_plugin"),
-  #   cfg = HOST_CFG,
-  #   executable = True,
-  # )
