@@ -24,7 +24,9 @@ def protobuf_repositories(
   )
 
   classes = []
-  requires = []
+  requires = [
+    "external_protoc",
+  ]
 
   if cpp:
     classes += ["cpp"]
