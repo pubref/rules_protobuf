@@ -34,7 +34,7 @@ def cc_proto_library(
 
   invoke("build_generated_files", lang, self)
 
-  print("self %s" % self)
+  #print("self %s" % self)
 
   proto_compile(
     name = name + "_pb",

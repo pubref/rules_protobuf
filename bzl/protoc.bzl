@@ -2,8 +2,10 @@ load("//bzl:invoke.bzl", "invoke")
 
 EXECUTABLE = Label("@com_github_google_protobuf//:protoc")
 
-def protoc(lang,
+def protoc(spec = [],
            name,
+           gendir = "$(GENDIR)",
+           ctx = None,
            protos = [],
            protoc_executable=EXECUTABLE,
            protobuf_plugin_executable=None,
@@ -24,6 +26,7 @@ def protoc(lang,
 
   self = {
     "name": name,
+    "gendir": gendir,
     "protos": protos,
     "protoc": protoc_executable,
     "protobuf_plugin": protobuf_plugin_executable,
@@ -44,23 +47,27 @@ def protoc(lang,
     "execute": execute,
   }
 
-  invoke("build_generated_files", lang, self)
-  invoke("build_tools", lang, self)
-  invoke("build_imports", lang, self)
-  invoke("build_protoc_out", lang, self)
-  invoke("build_protobuf_invocation", lang, self)
-  invoke("build_protoc_arguments", lang, self)
+  for lang in spec:
+    invoke("build_generated_files", lang, self, ctx)
+    invoke("build_tools", lang, self, ctx)
+    invoke("build_imports", lang, self, ctx)
+    invoke("build_protoc_out", lang, self, ctx)
+    invoke("build_protobuf_invocation", lang, self, ctx)
+    invoke("build_protoc_arguments", lang, self, ctx)
 
-  if self["with_grpc"]:
-    if not hasattr(lang, "grpc"):
-      fail("Language %s does not support gRPC" % lang.name)
-    invoke("build_grpc_out", lang, self)
-    invoke("build_grpc_invocation", lang, self)
+    if self["with_grpc"]:
+      if not hasattr(lang, "grpc"):
+        fail("Language %s does not support gRPC" % lang.name)
+        invoke("build_grpc_out", lang, self, ctx)
+        invoke("build_grpc_invocation", lang, self, ctx)
 
-  invoke("build_protoc_command", lang, self)
+    invoke("build_protoc_command", lang, self, ctx)
 
   if execute:
-    invoke("execute_protoc_command", lang, self)
+    if ctx:
+      invoke("execute_protoc_rule", self, ctx)
+    else:
+      invoke("execute_protoc_genrule", self)
 
   for src in self["outs"]:
     if src.endswith(".h"):
