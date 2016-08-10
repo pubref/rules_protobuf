@@ -18,9 +18,12 @@ go_proto_library(
     name = "go",
     protos = ["helloworld.proto"],
     with_grpc = True,
-    verbose = 1,
+    verbose = 0,
 )
 
+# cc_proto_library implementation cannot accept proto filesets from
+# say, a filegroup.  It needs to be an explicit filename.  This is the
+# reason this rule is in the proto dir.
 cc_proto_library(
     name = 'cpp',
     protos = ["helloworld.proto"],
@@ -28,22 +31,8 @@ cc_proto_library(
     verbose = 0,
 )
 
-#exports_files(["helloworld.proto"])
-
-# go_proto_library(
-#     name = "golib",
-#     protos = ["helloworld.proto"],
-#     with_grpc = True,
-# )
-
 # py_proto_library(
 #     name = "pylib",
 #     protos = ["helloworld.proto"],
 #     with_grpc = False,
-# )
-
-# cc_proto_library(
-#     name = "cclib",
-#     protos = ["helloworld.proto"],
-#     with_grpc = True,
 # )

@@ -6,8 +6,7 @@ EXECUTABLE = Label("@com_github_google_protobuf//:protoc")
 
 
 def _execute_genrule(self):
-  #if self["verbose"]:
-  if True:
+  if self["verbose"]:
     print("COMMAND:\n%s" % "\n".join(self["cmd"]));
 
   native.genrule(

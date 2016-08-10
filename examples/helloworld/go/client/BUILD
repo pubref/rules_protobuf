@@ -30,3 +30,16 @@ go_binary(
         "//examples/helloworld/proto:go",
     ] + GO.grpc.compile_deps,
 )
+
+# Unlike CPP and JAVA, The GO rules don't work like this, one has to
+# depend on the library and not the source files.
+#
+# go_binary(
+#     name = "client_from_source",
+#     srcs = [
+#         "main.go",
+#         "//examples/helloworld/proto:go_pb",
+#     ],
+#     deps = GO.grpc.compile_deps,
+# )
+#

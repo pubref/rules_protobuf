@@ -3,15 +3,8 @@ package(default_visibility = ["//visibility:public"])
 load("//bzl:cpp/rules.bzl", "cc_proto_library", "cc_proto_compile")
 load("//bzl:cpp/class.bzl", CPP = "CLASS")
 
-cc_proto_compile(
-    name = 'protos',
-    protos = [
-        '//examples/helloworld/proto:srcs',
-    ],
-    gen_grpc_cpp = True,
-    verbose = 1,
-)
-
+# This won't work from here, becuase macros don't do well with non
+# non-label lists.
 # cc_proto_library(
 #     name = 'protolib',
 #     protos = [
@@ -32,17 +25,6 @@ cc_proto_compile(
 # )
 
 cc_binary(
-    name = 'client_alt1',
-    srcs = [
-        'greeter_client.cc',
-        ":protos",
-    ],
-    deps = [
-    ] + CPP.grpc.compile_deps,
-    linkopts = ['-ldl'],
-)
-
-cc_binary(
     name = 'client',
     srcs = [
         'greeter_client.cc',
@@ -53,13 +35,23 @@ cc_binary(
     linkopts = ['-ldl'],
 )
 
-# cc_binary(
-#     name = 'server',
-#     srcs = [
-#         'greeter_server.cc',
-#     ],
-#     deps = [
-#         ":protos",
-#     ],
-#     linkopts = ['-ldl'],
-# )
+cc_binary(
+    name = 'client_from_source',
+    srcs = [
+        'greeter_client.cc',
+        "//examples/helloworld/proto:cpp_pb",
+    ],
+    deps = CPP.grpc.compile_deps,
+    linkopts = ['-ldl'],
+)
+
+cc_binary(
+    name = 'server',
+    srcs = [
+        'greeter_server.cc',
+    ],
+    deps = [
+        "//examples/helloworld/proto:cpp",
+    ],
+    linkopts = ['-ldl'],
+)

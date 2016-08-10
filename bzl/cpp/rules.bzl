@@ -1,4 +1,4 @@
-load("//bzl:protoc.bzl", "EXECUTABLE", "implement")
+load("//bzl:protoc.bzl", "EXECUTABLE", "implement", "protoc_genrule")
 load("//bzl:util.bzl", "invoke")
 load("//bzl:cpp/class.bzl", CPP = "CLASS")
 
@@ -25,21 +25,16 @@ def cc_proto_library(
     linkopts = ['-ldl'],
     **kwargs):
 
-  self = {
-    "protos": protos,
-    "with_grpc": with_grpc,
-    "outs": [],
-  }
-
-  invoke("build_generated_filenames", lang, self)
-
-  cc_proto_compile(
+  result = protoc_genrule(
+    spec = [lang],
     name = name + "_pb",
     protos = protos,
-    outs = self["outs"],
-    gen_cpp = True,
-    gen_grpc_cpp = with_grpc,
     protoc = protoc,
+    protobuf_plugin = protobuf_plugin,
+    visibility = visibility,
+    testonly = testonly,
+    imports = imports,
+    with_grpc = with_grpc,
     verbose = verbose,
   )
 
@@ -48,13 +43,10 @@ def cc_proto_library(
   else:
     cc_deps = [str(Label(dep)) for dep in getattr(lang.protobuf, "compile_deps", [])]
 
-  #print("hdrs: $location(%s)" % result.hdrs)
-
   native.cc_library(
     name = name,
-    srcs = srcs + self["outs"],
+    srcs = srcs + result.outs,
     deps = deps + cc_deps,
     linkopts = linkopts,
-    #hdrs = result.hdrs + hdrs,
     **kwargs
   )
