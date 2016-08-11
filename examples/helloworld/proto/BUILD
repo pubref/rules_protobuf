@@ -17,18 +17,18 @@ filegroup(
 go_proto_library(
     name = "go",
     protos = ["helloworld.proto"],
-    with_grpc = True,
     verbose = 0,
+    with_grpc = True,
 )
 
 # cc_proto_library implementation cannot accept proto filesets from
 # say, a filegroup.  It needs to be an explicit filename.  This is the
 # reason this rule is in the proto dir.
 cc_proto_library(
-    name = 'cpp',
+    name = "cpp",
     protos = ["helloworld.proto"],
-    with_grpc = True,
     verbose = 0,
+    with_grpc = True,
 )
 
 # py_proto_library(

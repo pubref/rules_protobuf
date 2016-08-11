@@ -1,7 +1,10 @@
 package(default_visibility = ["//visibility:public"])
 
 load("//bzl:cpp/rules.bzl", "cc_proto_library", "cc_proto_compile")
-load("//bzl:cpp/class.bzl", CPP = "CLASS")
+load(
+    "//bzl:cpp/class.bzl",
+    CPP = "CLASS",
+)
 
 # This won't work from here, becuase macros don't do well with non
 # non-label lists.
@@ -27,53 +30,53 @@ load("//bzl:cpp/class.bzl", CPP = "CLASS")
 cc_test(
     name = "test",
     srcs = ["greeter_client_test.cc"],
+    copts = ["-Iexternal/gtest/include"],
+    linkopts = ["-ldl"],
     deps = [
         ":clientlib",
         "@gtest//:main",
     ],
-    linkopts = ['-ldl'],
-    copts = ["-Iexternal/gtest/include"],
 )
 
 cc_library(
-    name = 'clientlib',
+    name = "clientlib",
     srcs = [
-        'greeter_client.cc',
+        "greeter_client.cc",
     ],
     hdrs = [
-        'greeter_client.h',
+        "greeter_client.h",
     ],
+    linkopts = ["-ldl"],
     deps = [
         "//examples/helloworld/proto:cpp",
     ],
-    linkopts = ['-ldl'],
 )
 
 cc_binary(
-    name = 'client',
+    name = "client",
     deps = [
         ":clientlib",
     ],
 )
 
 cc_binary(
-    name = 'client_from_source',
+    name = "client_from_source",
     srcs = [
-        'greeter_client.h',
-        'greeter_client.cc',
+        "greeter_client.cc",
+        "greeter_client.h",
         "//examples/helloworld/proto:cpp_pb",
     ],
+    linkopts = ["-ldl"],
     deps = CPP.grpc.compile_deps,
-    linkopts = ['-ldl'],
 )
 
 cc_binary(
-    name = 'server',
+    name = "server",
     srcs = [
-        'greeter_server.cc',
+        "greeter_server.cc",
     ],
+    linkopts = ["-ldl"],
     deps = [
         "//examples/helloworld/proto:cpp",
     ],
-    linkopts = ['-ldl'],
 )

@@ -1,20 +1,21 @@
-load("//bzl:java/class.bzl", JAVA = "CLASS")
-
+load(
+    "//bzl:java/class.bzl",
+    JAVA = "CLASS",
+)
 
 java_test(
     name = "netty_test",
-    test_class = "org.pubref.rules_protobuf.examples.helloworld.client.HelloWorldClientTest",
     srcs = [
         "HelloWorldClientTest.java",
     ],
+    test_class = "org.pubref.rules_protobuf.examples.helloworld.client.HelloWorldClientTest",
+    runtime_deps = JAVA.grpc.netty_runtime_deps,
     deps = [
         ":client",
         "//examples/helloworld/java/org/pubref/rules_protobuf/examples/helloworld/server",
         "@junit_junit_4//jar",
     ],
-    runtime_deps = JAVA.grpc.netty_runtime_deps,
 )
-
 
 java_binary(
     name = "netty",
@@ -23,7 +24,6 @@ java_binary(
         ":client",
     ] + JAVA.grpc.netty_runtime_deps,
 )
-
 
 java_library(
     name = "client",
@@ -34,7 +34,6 @@ java_library(
         "//examples/helloworld/java/org/pubref/rules_protobuf/examples/helloworld/proto:proto",
     ] + JAVA.grpc.compile_deps,
 )
-
 
 java_library(
     name = "client_from_srcs",

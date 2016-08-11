@@ -2,12 +2,11 @@ package(default_visibility = ["//visibility:public"])
 
 load("//bzl:java/rules.bzl", "java_proto_library", "java_proto_compile")
 
-
 java_proto_library(
     name = "proto",
     protos = ["//examples/helloworld/proto:srcs"],
-    with_grpc = True,
     verbose = 0,
+    with_grpc = True,
 )
 
 java_proto_compile(
@@ -15,7 +14,6 @@ java_proto_compile(
     protos = ["//examples/helloworld/proto:srcs"],
     with_grpc = True,
 )
-
 
 #load("//bzl:java/class.bzl", JAVA = "CLASS")
 # java_library(

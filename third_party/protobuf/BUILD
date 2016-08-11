@@ -4,5 +4,5 @@ licenses(["notice"])  # BSD
 
 alias(
     name = "protoc",
-    actual = "@com_github_google_protobuf//:protoc"
+    actual = "@com_github_google_protobuf//:protoc",
 )
