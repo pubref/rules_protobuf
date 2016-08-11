@@ -66,17 +66,19 @@ public class HelloWorldClient {
   }
 
   /** Say hello to server. */
-  public void greet(String name) {
+  public String greet(String name) {
     logger.info("Will try to greet " + name + " ...");
     HelloRequest request = HelloRequest.newBuilder().setName(name).build();
     HelloReply response;
     try {
       response = blockingStub.sayHello(request);
+      logger.info("Greeting: " + response.getMessage());
+      return response.getMessage();
     } catch (StatusRuntimeException e) {
-      logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
-      return;
+      String msg = "RPC failed: " + e.getStatus();
+      logger.log(Level.WARNING, msg);
+      return msg;
     }
-    logger.info("Greeting: " + response.getMessage());
   }
 
   /**

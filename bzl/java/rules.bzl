@@ -1,5 +1,4 @@
 load("//bzl:protoc.bzl", "EXECUTABLE", "implement")
-load("//bzl:util.bzl", "invoke")
 load("//bzl:java/class.bzl", JAVA = "CLASS")
 
 java_proto_compile = implement(["java"])
@@ -8,44 +7,45 @@ def java_proto_library(
     name,
     protos,
     lang = JAVA,
+    proto_compile = java_proto_compile,
     srcs = [],
-    imports = [],
+    includes = [],
     visibility = None,
     testonly = 0,
-    protoc_executable = EXECUTABLE,
+    protoc = EXECUTABLE,
     protobuf_plugin_options = [],
-    protobuf_plugin_executable = None,
-    grpc_plugin_executable = None,
+    protobuf_plugin = None,
+    grpc_plugin = None,
     grpc_plugin_options = [],
-    descriptor_set = None,
-    verbose = True,
+    verbose = 0,
     with_grpc = False,
     deps = [],
     **kwargs):
 
-  self = {
-    "protos": protos,
-    "with_grpc": with_grpc,
-  }
+  args = {}
+  args["name"] = name + "_pb"
+  args["deps"] = deps
+  args["protos"] = protos
+  args["verbose"] = verbose
+  args["includes"] = includes
+  args["protoc"] = protoc
+  args["with_grpc"] = with_grpc
+  args["gen_" + lang.name] = True
+  args["gen_grpc_" + lang.name] = with_grpc
+  args["gen_protobuf_" + lang.name + "_plugin"] = protobuf_plugin
+  args["gen_" + lang.name + "_plugin_options"] = protobuf_plugin_options
+  args["gen_grpc_" + lang.name + "_plugin"] = grpc_plugin
 
-  java_proto_compile(
-    name = name + "_pb",
-    protos = protos,
-    gen_java = True,
-    deps = deps,
-    gen_grpc_java = with_grpc,
-    copy_protos_to_genfiles = False,
-    protoc = protoc_executable,
-  )
+  proto_compile(**args)
 
-  if with_grpc:
-    proto_deps = [str(Label(dep)) for dep in getattr(lang.grpc, "compile_deps", [])]
-  else:
-    proto_deps = [str(Label(dep)) for dep in getattr(lang.protobuf, "compile_deps", [])]
+  if with_grpc and hasattr(lang, "grpc"):
+    deps += [str(Label(dep)) for dep in getattr(lang.grpc, "compile_deps", [])]
+  elif hasattr(lang, "protobuf"):
+    deps += [str(Label(dep)) for dep in getattr(lang.protobuf, "compile_deps", [])]
 
   native.java_library(
     name = name,
     srcs = srcs + [name + "_pb.srcjar"],
-    deps = deps + proto_deps,
+    deps = deps,
     **kwargs
   )

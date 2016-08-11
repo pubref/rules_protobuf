@@ -3,13 +3,13 @@ load("//bzl:classes.bzl", "CLASSES")
 load("//bzl:util.bzl", "require", "invoke")
 
 def protobuf_repositories(
-    protoc = True,
-    cpp=False,
-    go=False,
-    java=False,
-    js=False,
-    python=False,
-    ruby=False,
+    with_protoc = True,
+    with_cpp=False,
+    with_go=False,
+    with_java=False,
+    with_js=False,
+    with_python=False,
+    with_ruby=False,
 
     with_grpc = False,
     verbose = False,
@@ -28,13 +28,13 @@ def protobuf_repositories(
     "external_protoc",
   ]
 
-  if cpp:
+  if with_cpp:
     classes += ["cpp"]
-  if python:
+  if with_python:
     classes += ["py"]
-  if go:
+  if with_go:
     classes += ["go"]
-  if java:
+  if with_java:
     classes += ["java"]
 
   for name in classes:

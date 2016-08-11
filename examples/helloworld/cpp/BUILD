@@ -24,10 +24,24 @@ load("//bzl:cpp/class.bzl", CPP = "CLASS")
 #     linkopts = ['-ldl'],
 # )
 
-cc_binary(
-    name = 'client',
+cc_test(
+    name = "test",
+    srcs = ["greeter_client_test.cc"],
+    deps = [
+        ":clientlib",
+        "@gtest//:main",
+    ],
+    linkopts = ['-ldl'],
+    copts = ["-Iexternal/gtest/include"],
+)
+
+cc_library(
+    name = 'clientlib',
     srcs = [
         'greeter_client.cc',
+    ],
+    hdrs = [
+        'greeter_client.h',
     ],
     deps = [
         "//examples/helloworld/proto:cpp",
@@ -36,8 +50,16 @@ cc_binary(
 )
 
 cc_binary(
+    name = 'client',
+    deps = [
+        ":clientlib",
+    ],
+)
+
+cc_binary(
     name = 'client_from_source',
     srcs = [
+        'greeter_client.h',
         'greeter_client.cc',
         "//examples/helloworld/proto:cpp_pb",
     ],

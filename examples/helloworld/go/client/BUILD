@@ -1,25 +1,7 @@
 package(default_visibility = ["//visibility:public"])
 
-load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_test")
-load("//bzl:go/rules.bzl", "go_proto_library", "go_proto_compile")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary")
 load("//bzl:go/class.bzl", GO = "CLASS")
-
-go_proto_compile(
-    name = "protos",
-    protos = ["//examples/helloworld/proto:helloworld.proto"],
-    gen_grpc_go = True,
-    verbose = 1,
-)
-
-go_test(
-    name = "client_test",
-    srcs = [
-        "test.go",
-    ],
-    deps = [
-        "//examples/helloworld/proto:go",
-    ] + GO.grpc.compile_deps,
-)
 
 go_binary(
     name = "client",
@@ -30,6 +12,7 @@ go_binary(
         "//examples/helloworld/proto:go",
     ] + GO.grpc.compile_deps,
 )
+
 
 # Unlike CPP and JAVA, The GO rules don't work like this, one has to
 # depend on the library and not the source files.
@@ -43,3 +26,15 @@ go_binary(
 #     deps = GO.grpc.compile_deps,
 # )
 #
+
+
+# This will generate protobuf classes, but the generated files cannot
+# be transitively used in other dependent rules.
+#
+#load("//bzl:go/rules.bzl", "go_proto_compile")
+# go_proto_compile(
+#     name = "protos",
+#     protos = ["//examples/helloworld/proto:helloworld.proto"],
+#     gen_grpc_go = True,
+#     verbose = 1,
+# )

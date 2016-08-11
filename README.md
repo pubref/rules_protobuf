@@ -14,7 +14,7 @@ Bazel | rules_protobuf | gRPC |
 | ------------------------ | ------------ | ----------- | -------- |
 | [C++](bzl/cpp)           | yes          | yes         | yes      |
 | [C#](bzl/csharp)         |              |             |          |
-| [Go](bzl/go)             | yes          |             |          |
+| [Go](bzl/go)             | yes          | yes         | yes      |
 | [Java](bzl/java)         | yes          | yes         | yes      |
 | [JavaNano](bzl/javanano) |              |             |          |
 | [Javascript](bzl/js)     |              |             |          |
@@ -45,78 +45,78 @@ Build label: 0.3.1
 ...
 ```
 
-# Installation
+# Quick Start
 
 Require these rules your `WORKSPACE` and trigger loading of external
-dependencies (including the `protoc` prebuilt binaries for linux or
-osx) and other required dependencies specific for a particular
-language output.  You must specify which language(s) you'd like
-support for:
+dependencies.  Specify the language(s) you'd like support for.
+
+Note: refer to the
+[bzl/{language}.bzl](https://github.com/pubref/rules_protobuf/tree/master/bzl/repositories.bzl)
+file for the set of external dependencies that will be loaded into
+your project.
+
 
 ```python
 git_repository(
   name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
-  tag = "0.2.0",
+  tag = "0.3.0",
 )
 
-load("@org_pubref_rules_protobuf//bzl:rules.bzl", "rules_protobuf")
-
-# Specify language modules to load
-rules_protobuf(
-  with_java = True,
-  with_go = True,
+load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protobuf_dependencies")
+protobuf_dependencies(
+   with_go = True,
+   with_java = True,
+   with_cpp = True,
 )
 ```
 
-For fine-grained control over the dependencies that `rules_protobuf`
-loads, call the `rules_protobuf` macro and one of the language
-specific modules with `omit_{dependency}` arguments.  For example:
+Build a java-based gRPC library:
+
 
 ```python
-load(
-  "@org_pubref_rules_protobuf//bzl:rules.bzl",
-  "rules_protobuf",
-  "rules_protobuf_java",
-)
+load("@org_pubref_rules_protobuf//bzl:java/rules.bzl", "java_proto_library")
 
-# Make the protoc binary available
-rules_protobuf()
-
-# Make the protoc-gen-grpc-java binary and all dependent jars available,
-# but don't try to load guava.  Guava is still required, so this assumes you have a
-# another workspace rule that provides com_google_guava_guava via another mechanism,
-# possibly a local or alternate version.
-rules_protobuf_java(
-  omit_com_google_guava_guava = True,
+java_proto_library(
+  name = "protolib",
+  srcs = ["my.proto"],
+  with_grpc = True,
 )
 ```
 
-Please refer to the
-[bzl/{language}.bzl](https://github.com/pubref/rules_protobuf/tree/master/protobuf)
-file for the set of external dependencies that will be hoisted into
-your project.
 
 # Examples
 
-- [helloworld](https://github.com/pubref/rules_protobuf/tree/go/examples/helloworld)
+To run the examples & tests in this repository, clone it to your
+workstation.
 
-Demonstrative commands for running the helloworld client/server example (adapted
-from
-`https://github.com/grpc/grpc-java/blob/master/examples/src/main/proto/helloworld.proto`)
-are found in the `examples/helloworld/Makefile`.
-
-```sh
-# In terminal 1:
-$ (cd examples/helloworld && make netty_server)
-
-# In terminal 2:
-$ (cd examples/helloworld && make netty_client)
 ```
+# Clone this repo
+$ git clone https://github.com/pubref/rules_protobuf
+
+# Go to examples/helloworld directory
+$ cd rules_protobuf/examples/helloworld
+
+# Run all tests
+$ bazel test ...
+
+# Build a server
+$ bazel build cpp/server
+
+# Run a server from the command-line
+$ $(bazel info bazel-bin)/examples/helloworld/cpp/server
+
+# Run a client
+$ bazel run go/client
+$ bazel run cpp/client
+$ bazel run java/org/pubref/rules_closure/examples/helloworld/client:netty
+```
+
 
 # Contributing
 
 Contributions welcome; please create Issues or GitHub pull requests.
+
 
 # Credits
 

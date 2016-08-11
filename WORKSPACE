@@ -1,7 +1,7 @@
 workspace(name = "org_pubref_rules_protobuf")
 
 # ================================================================
-# Go language requires rules_go
+# Go support requires rules_go
 # ================================================================
 
 git_repository(
@@ -20,10 +20,10 @@ go_repositories()
 load("//bzl:rules.bzl", "protobuf_repositories")
 
 protobuf_repositories(
-    go = True,
-    java = True,
-    ruby = True,
-    python = True,
-    cpp = True,
+    with_go = True,
+    with_java = True,
+    with_ruby = True,
+    with_python = True,
+    with_cpp = True,
     with_grpc = True,
 )

@@ -77,8 +77,9 @@ def protoc_genrule(name,
     invoke("build_imports", lang, self)
     invoke("build_protobuf_invocation", lang, self)
     invoke("build_protobuf_out", lang, self)
-    invoke("build_grpc_invocation", lang, self)
-    invoke("build_grpc_out", lang, self)
+    if with_grpc:
+      invoke("build_grpc_invocation", lang, self)
+      invoke("build_grpc_out", lang, self)
     invoke("build_protoc_command", lang, self)
 
   if execute:
@@ -175,8 +176,6 @@ def _build_source_files(ctx, self):
 
 def _protoc_rule_impl(ctx):
 
-  #print("ctx.files.protos %s" % ctx.files.protos)
-
   self = {
     "ctx": ctx,
     "gendir": _get_gendir(ctx),
@@ -187,6 +186,7 @@ def _protoc_rule_impl(ctx):
     "copy_protos_to_genfiles": getattr(ctx.attr, "copy_protos_to_genfiles", False),
     "provides": [],
     "verbose": getattr(ctx.attr, "verbose", True),
+    "with_grpc": getattr(ctx.attr, "with_grpc", False),
     #"descriptor_set_file": descriptor_set_file,
   }
 
@@ -213,8 +213,9 @@ def _protoc_rule_impl(ctx):
     invoke("build_imports", lang, self)
     invoke("build_protobuf_invocation", lang, self)
     invoke("build_protobuf_out", lang, self)
-    invoke("build_grpc_invocation", lang, self)
-    invoke("build_grpc_out", lang, self)
+    if self["with_grpc"]:
+      invoke("build_grpc_invocation", lang, self)
+      invoke("build_grpc_out", lang, self)
 
   # Run protoc
   _execute_rule(self)
@@ -281,6 +282,9 @@ def implement(spec):
   attrs["copy_protos_to_genfiles"] = attr.bool(
     default = True,
   )
+
+  # Flag that sets gen_grpc_{lang} to true for all languages.
+  attrs["with_grpc"] = attr.bool()
 
   # ================================================================
   # Flags for registered languages

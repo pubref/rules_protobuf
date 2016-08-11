@@ -48,10 +48,18 @@ public class HelloWorldServer {
   private static final Logger logger = Logger.getLogger(HelloWorldServer.class.getName());
 
   /* The port on which the server should run */
-  private int port = 50051;
+  private final int port;
   private Server server;
 
-  void start() throws IOException {
+  public HelloWorldServer() {
+    this(50051);
+  }
+
+  public HelloWorldServer(int port) {
+    this.port = port;
+  }
+
+  public void start() throws IOException {
     server = ServerBuilder.forPort(port)
         .addService(new GreeterImpl())
         .build()
@@ -68,7 +76,7 @@ public class HelloWorldServer {
     });
   }
 
-  void stop() {
+  public void stop() {
     if (server != null) {
       server.shutdown();
     }

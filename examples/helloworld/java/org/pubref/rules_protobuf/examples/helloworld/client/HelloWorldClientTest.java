@@ -8,16 +8,31 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.AfterClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import org.pubref.rules_protobuf.examples.helloworld.server.HelloWorldServer;
 
 /**
  * A simple test that primarily checks that the client can compile.
  */
 public class HelloWorldClientTest {
 
+  static HelloWorldServer server;
+
   HelloWorldClient client;
+
+  @BeforeClass
+  public static void init() throws Exception {
+    server = new HelloWorldServer();
+    server.start();
+  }
+
+  @AfterClass
+  public static void destroy() throws InterruptedException {
+    server.stop();
+  }
 
   @Before
   public void setUp() throws Exception {
@@ -31,7 +46,8 @@ public class HelloWorldClientTest {
 
   @Test
   public void testGreet() throws InterruptedException {
-    client.greet("world");
+    String msg = client.greet("world");
+    assertEquals("Blocking message should return correct string", "Hello world", msg);
   }
 
 }

@@ -13,6 +13,8 @@ CLASS = struct(
         requires = [
             "protobuf",
             "external_protobuf_clib",
+            "gtest", # not really a protobuf dependency, but needed
+                     # for our internal tests.  Clean this up.
         ],
     ),
     grpc = struct(
