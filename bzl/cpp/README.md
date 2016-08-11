@@ -1,70 +1,72 @@
-# `rules_protobuf_cpp`
+# C++ Rules
 
-## Usage
+| Rule | Description |
+| ---  | --- |
+| `cc_proto_library` | Generates and compiles protobuf source files. |
+| `cc_proto_compile` | Generates protobuf source files. |
 
-Require dependencies in your `WORKSPACE` file:
+
+## Installation
+
+Enable cpp support by loading the set of cpp dependencies in your workspace.
 
 ```python
-load("@org_pubref_rules_protobuf//bzl:rules.bzl", "rules_protobuf_cpp")
-rules_protobuf_cpp()
+protobuf_dependencies(
+  with_cpp=True,
+  with_grpc=True,
+)
 ```
 
-Load the `protoc_cpp` rule in your `BUILD` file:
+
+## Usage of `cc_proto_library`
+
+Load the rule in your `BUILD` file:
 
 ```python
-load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protoc_cpp")
+load("@org_pubref_rules_protobuf//bzl:cpp/rules.bzl", "cc_proto_library")
 ```
 
-### 1. Generate protobuf classes to `*.pb.cc` and `*.pb.h` outputs
+Invoke the rule.  Pass the set of protobuf source files to the
+`protos` attribute.
 
 ```python
-protoc_cpp(
-  name = "protos",
-  srcs = ["//examples/helloworld/proto:srcs"],
+cc_proto_library(
+  name = "protolib",
+  protos = ["my.proto"],
   with_grpc = True,
 )
 ```
 
 ```sh
-$ cd examples/helloworld/cpp
-$ bazel build :protos
-$ less $(bazel info bazel-genfiles)/examples/helloworld/cpp/helloworld.pb.h
-$ less $(bazel info bazel-genfiles)/examples/helloworld/cpp/helloworld.pb.cc
-$ less $(bazel info bazel-genfiles)/examples/helloworld/cpp/helloworld.grpc.pb.h
-$ less $(bazel info bazel-genfiles)/examples/helloworld/cpp/helloworld.grpc.pb.cc
+$ bazel build :protolib
 ```
 
-### 2,3. Compile/run generated protobufs (+/- gRPC)
+When using the compiled library in other rules, `#include` the
+generated files relative to the `WORKSPACE` root.  For example, the
+`//examples/helloworld/proto/helloworld.proto` functions can be loaded
+via:
 
-Include the header file relative to the workspace root:
 
-```c
-#include "examples/helloworld/cpp/helloworld.grpc.pb.h"
+```cpp
+#include <grpc++/grpc++.h>
+
+#include "examples/helloworld/proto/helloworld.pb.h"
+#include "examples/helloworld/proto/helloworld.grpc.pb.h"
 ```
+
+To get the list of required compile-time dependencies for grpc-related
+code, load the class descriptor and use the `grpc.compile_deps` list:
 
 ```python
-cc_binary(
-    name = 'server',
-    srcs = [
-        'greeter_server.cc',
-        ':protos',
-    ],
-    deps = [
-        '@com_github_grpc_grpc//:grpc++',
-    ],
-    linkopts = ['-ldl'],
+load("@org_pubref_rules_protobuf//bzl:cpp/class.bzl", CPP = "CLASS")
+
+cc_library(
+  name = "mylib",
+  srcs = ['MyApp.cpp'],
+  deps = [
+    ":protolib"
+  ] + CC.grpc.compile_deps,
 )
 ```
 
-
-```sh
-$ bazel run :server
-...
-Server listening on 0.0.0.0:50051
-```
-
-```sh
-$ bazel run :client
-...
-Greeter received: Hello world
-```
+Consult source files in the `examples/helloworld/cpp/` directory for additional information.

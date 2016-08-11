@@ -1,4 +1,4 @@
-# Java
+# Java Rules
 
 | Rule | Description |
 | ---  | --- |

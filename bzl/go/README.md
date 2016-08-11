@@ -1,104 +1,115 @@
-# `go_proto_library`
+# Go Rules
 
-## Usage
+| Rule | Description |
+| ---  | --- |
+| `go_proto_library` | Generates and compiles protobuf source files. |
+| `go_proto_compile` | Generates protobuf source files. |
 
+## Installation
 
-### Load dependencies for golang support in your `WORKSPACE` by
-    setting the `go=True` flag:
+Enable go support by loading the set of go dependencies in your workspace.
 
 ```python
-load("@org_pubref_rules_protobuf//bzl:protobuf.bzl", "protobuf_repositories")
-protobuf_repositories(
-  go = True,
-  with_grpc = True,
+protobuf_dependencies(
+  with_go=True,
+  with_grpc=True,
 )
 ```
 
+## Usage of `go_proto_library`
 
-### Load the `go_proto_library` rule in your `BUILD` file:
+Load the rule in your `BUILD` file:
 
 ```python
 load("@org_pubref_rules_protobuf//bzl:go/rules.bzl", "go_proto_library")
 ```
 
-Note: this rule internally calls the `go_library` rule provided by
-[rules_go](https://github.com/bazelbuild/rules_go).
-
-
-### Generate and compile `*.pb.go` outputs.
+Invoke the rule.  Pass the set of protobuf source files to the
+`protos` attribute.
 
 ```python
 go_proto_library(
-  name = "proto",
-  srcs = ["helloworld.proto"],
-
-  # Default is false, so omit this if you are not using service
-  # definitions in your .proto files
+  name = "protolib",
+  protos = ["my.proto"],
   with_grpc = True,
 )
 ```
 
 ```sh
-$ bazel build examples/helloworld/protos:golib
-
-# fyi: The "_pb" implicit build target yields the generated *.pb.go files:
-$ bazel build examples/helloworld/protos:golib_pb
+$ bazel build :protolib
 ```
 
+For other rules that use gRPC or protobuf related classes, you can
+access the list of dependencies in the GO language descriptor:
 
-### Compile and run the gRPC server
 
 ```python
-load("@io_bazel_rules_go//go:def.bzl", "go_binary")
+load("@org_pubref_rules_protobuf//bzl:go/class.bzl", GO = "CLASS")
+```
 
+```python
 go_binary(
-    name = "server",
-    srcs = [
-        "main.go",
-    ],
-    deps = [
-        "//examples/helloworld/proto:golib",
-        "@com_github_golang_glog//:go_default_library",
-        "@org_golang_google_grpc//:go_default_library",
-        "@org_golang_x_net//:context",
-    ],
+  name = "myapp",
+  srcs = ["main.go"],
+  deps = [
+    ":protolib"
+  ] + GO.grpc.compile_deps,
 )
 ```
 
 ```sh
-$ bazel build examples/helloworld/go/server
+# Run your app
+$ bazel run :myapp
+```
 
-# The run command will block until shutdown, preventing any other
-  bazel commands.  Better to invoke the server binary from the shell
-  directly.  This executable file can be copied to a location in your
-  PATH if desired.
+Consult source files in the `examples/helloworld/go/` directory for additional information.
 
-# bazel run examples/helloworld/go/server
-$ bazel-bin/examples/helloworld/go/server/server
+
+## Import paths
+
+To use the generated code in other libraries, you'll need to know the
+correct `import` path.  This import path has three parts (2 and 3
+are related to the target pattern used to identify the rule):
+
+1. The go_prefix
+2. The path to the BUILD file
+3. The name of the target in the BUILD file.
+
+First, set the namespace of your code in the root `BUILD` file via the
+`go_prefix` directive from `rules_go`:
+
+```python
+go_prefix("github.com/my_organization_name")
 ```
 
 
-### Compile and run the gRPC client
-
 ```python
-load("@io_bazel_rules_go//go:def.bzl", "go_binary")
-
-go_binary(
-    name = "client",
-    srcs = [
-        "main.go",
-    ],
-    deps = [
-        "//examples/helloworld/proto:golib",
-        "@com_github_golang_glog//:go_default_library",
-        "@org_golang_google_grpc//:go_default_library",
-        "@org_golang_x_net//:context",
-    ],
+# //go/app_1/BUILD
+go_proto_library(
+  name = "protolib",
+  protos = ["my.proto"],
+  with_grpc = True,
 )
 ```
 
-```sh
-$ bazel build examples/helloworld/go/client
-$ bazel   run examples/helloworld/go/client
-$ bazel-bin/examples/helloworld/go/client/client
+To use this in `go/app_2`, the import path would be:
+
+```go
+import (
+	pb "github.com/my_organization_name/go/app_1/protolib"
+)
+```
+
+And its classes referred to via the `pb` identifier:
+
+```go
+func main() {
+	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+	c := pb.NewGreeterClient(conn)
+    ...
+}
 ```

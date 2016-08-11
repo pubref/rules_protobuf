@@ -56,14 +56,7 @@ Build label: 0.3.1
 
 # Quick Start
 
-Require these rules your `WORKSPACE` and trigger loading of external
-dependencies.  Specify the language(s) you'd like support for.
-
-Note: refer to the
-[bzl/repositories.bzl](https://github.com/pubref/rules_protobuf/tree/master/bzl/repositories.bzl)
-file for the set of external dependencies that will be loaded into
-your project.
-
+Require these rules your `WORKSPACE`:
 
 ```python
 git_repository(
@@ -71,7 +64,13 @@ git_repository(
   remote = "https://github.com/pubref/rules_protobuf",
   tag = "0.3.0",
 )
+```
 
+ Trigger loading of external dependencies.  Specify the language(s)
+you'd like support for.
+
+
+```python
 load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protobuf_dependencies")
 protobuf_dependencies(
    with_go = True,
@@ -81,8 +80,11 @@ protobuf_dependencies(
 )
 ```
 
-Build a java-based gRPC library:
+> Note: refer to the [bzl/repositories.bzl][repositories.bzl] file for
+> the set of external dependencies that will be loaded into your
+> project.
 
+Build a java-based gRPC library:
 
 ```python
 load("@org_pubref_rules_protobuf//bzl:java/rules.bzl", "java_proto_library")

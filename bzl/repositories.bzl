@@ -25,28 +25,6 @@ REPOSITORIES = {
     ###:begin
 
     # ****************************************************************
-    # Protoc
-    # ****************************************************************
-
-    # TODO: just build from source rather than pulling
-    # platform-specific binaries, you're already pulling in
-    # google/protobuf
-
-    "protoc_linux_x86_64": {
-        "kind": "http_file",
-        "name": "protoc_linux_x86_64",
-        "url": "http://repo1.maven.org/maven2/com/google/protobuf/protoc/3.0.0/protoc-3.0.0-linux-x86_64.exe",
-        "sha256": "98e235228b70e747ac850f1411d1d5de351c2dc3227a4086b1d940b5e099257f",
-    },
-
-    "protoc_macosx": {
-        "kind": "http_file",
-        "name": "protoc_macosx",
-        "url": "http://repo1.maven.org/maven2/com/google/protobuf/protoc/3.0.0/protoc-3.0.0-osx-x86_64.exe",
-        "sha256": "d9a1dd45e3eee4a9abfbb4be26172d69bf82018a3ff5b1dff790c58edbfcaf4a",
-    },
-
-    # ****************************************************************
     # CPP
     # ****************************************************************
 

@@ -26,8 +26,6 @@ def protobuf_repositories(
     else:
       repos[k] = v
 
-  print("repos %s" % repos.keys())
-
   context = struct(
     repos = repos,
     verbose = verbose,
