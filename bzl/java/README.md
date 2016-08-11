@@ -16,22 +16,21 @@ protobuf_dependencies(
 )
 ```
 
-# `java_proto_library`
+## Usage of `java_proto_library`
 
-## Usage
-
-1. Load the `java_proto_library` rule in your `BUILD` file:
+Load the rule in your `BUILD` file:
 
 ```python
 load("@org_pubref_rules_protobuf//bzl:java/rules.bzl", "java_proto_library")
 ```
 
-2. Invoke the rule.
+Invoke the rule.  Pass the set of protobuf source files to the
+`protos` attribute.
 
 ```python
 java_proto_library(
   name = "protolib",
-  srcs = ["my.proto"],
+  protos = ["my.proto"],
   with_grpc = True,
 )
 ```
@@ -40,9 +39,9 @@ java_proto_library(
 $ bazel build :protolib
 ```
 
-3. When using the compiled library in other rules, you'll likely need
-the compile-time or runtime dependencies.  You can access that list on
-the class descriptor:
+When using the compiled library in other rules, you'll likely need the
+compile-time or runtime dependencies.  You can access that list on the
+class descriptor:
 
 
 ```python
@@ -52,15 +51,29 @@ load("@org_pubref_rules_protobuf//bzl:java/class.bzl", JAVA = "CLASS")
 ```python
 java_library(
   name = "mylib",
+  srcs = ['MyApp.java'],
   deps = [
-  ":protolib"
+    ":protolib"
   ] + JAVA.grpc.compile_deps,
 )
 ```
 
-4. When using runnable gRPC related code in a `java_binary` or
-   `java_test`, you'll likely need the additional netty-related
-   runtime dependencies as well.
+One could also specify all the sources needed in the
+`java_proto_library` itself:
+
+
+```python
+java_proto_library(
+  name = "mylib",
+  protos = ["my.proto"],
+  srcs = ['MyApp.java'],
+  with_grpc = True,
+)
+```
+
+When using runnable gRPC related code in a `java_binary` or
+`java_test`, you'll likely need the additional netty-related runtime
+dependencies as well.
 
 
 ```python
@@ -68,7 +81,7 @@ java_binary(
   name = "myapp",
   main_class = "example.MyApp",
   runtime_deps = [
-  ":mylib"
+    ":mylib"
   ] + JAVA.grpc.netty_runtime_deps,
 )
 ```

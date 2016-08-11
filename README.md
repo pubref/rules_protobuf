@@ -10,21 +10,21 @@ Bazel | rules_protobuf | gRPC |
 
 ---
 
-| Language                 | Generate (1) | Compile (2) | gRPC (3) |
+| Language                 | Compile (1) | Build (2) | gRPC (3) |
 | ------------------------ | ------------ | ----------- | -------- |
-| [C++](bzl/cpp)           | yes          | yes         | yes      |
+| [C++][cpp]           | [cc_proto_compile][cpp] | [cc_proto_library][ccp] | yes |
 | [C#](bzl/csharp)         |              |             |          |
-| [Go](bzl/go)             | yes          | yes         | yes      |
-| [Java](bzl/java)         | yes          | yes         | yes      |
+| [Go][go]           | [go_proto_compile][go] | [go_proto_library][go] | yes |
+| [Java][java]           | [java_proto_compile][java] | [java_proto_library][java] | yes |
 | [JavaNano](bzl/javanano) |              |             |          |
 | [Javascript](bzl/js)     |              |             |          |
 | [Objective-C](bzl/objc)  |              |             |          |
 | [Python](bzl/python)     | yes          |             |          |
 | [Ruby](bzl/ruby)         |              |             |          |
 
-1. Support for generation of protobuf classes.
+1. Support for generation of protobuf classes via the `protoc` tool.
 2. Support for generation + compilation of outputs with protobuf dependencies.
-3. Support for compilation, with gRPC support.
+3. gRPC support via the `with_grpc` flag.
 
 ---
 
@@ -45,13 +45,21 @@ Build label: 0.3.1
 ...
 ```
 
+> Note about protoc and related tools: bazel and rules_protobuf will
+> download or build-from-source all required dependencies, including
+> the `protoc` tool and required plugins.  If you do already have
+> these tools installed, bazel will not use them.
+
+> Note about golang: this project uses [rules-go][rules_go] for
+> `go_library`, `go_binary`, and `go_test`.
+
 # Quick Start
 
 Require these rules your `WORKSPACE` and trigger loading of external
 dependencies.  Specify the language(s) you'd like support for.
 
 Note: refer to the
-[bzl/{language}.bzl](https://github.com/pubref/rules_protobuf/tree/master/bzl/repositories.bzl)
+[bzl/repositories.bzl](https://github.com/pubref/rules_protobuf/tree/master/bzl/repositories.bzl)
 file for the set of external dependencies that will be loaded into
 your project.
 
@@ -90,7 +98,7 @@ java_proto_library(
 To run the examples & tests in this repository, clone it to your
 workstation.
 
-```
+```sh
 # Clone this repo
 $ git clone https://github.com/pubref/rules_protobuf
 
@@ -145,3 +153,7 @@ Contributions welcome; please create Issues or GitHub pull requests.
 [bazel_image]: https://github.com/pubref/rules_protobuf/blob/master/images/bazel.png
 [wtfcat_image]: https://github.com/pubref/rules_protobuf/blob/master/images/wtfcat.png
 [grpc_image]: https://github.com/pubref/rules_protobuf/blob/master/images/gRPC.png
+
+[cpp]: bzl/cpp
+[go]: bzl/go
+[java]: bzl/java
