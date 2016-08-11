@@ -17,8 +17,19 @@ def protobuf_repositories(
     overrides = {},
 ):
 
+
+  repos = {}
+  for k, v in REPOSITORIES.items():
+    over = overrides.get(k)
+    if over:
+      repos[k] = v + over
+    else:
+      repos[k] = v
+
+  print("repos %s" % repos.keys())
+
   context = struct(
-    repos = REPOSITORIES,
+    repos = repos,
     verbose = verbose,
     options = {},
   )

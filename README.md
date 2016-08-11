@@ -12,7 +12,7 @@ Bazel | rules_protobuf | gRPC |
 
 | Language                 | Compile (1) | Build (2) | gRPC (3) |
 | ------------------------ | ------------ | ----------- | -------- |
-| [C++][cpp]           | [cc_proto_compile][cpp] | [cc_proto_library][ccp] | yes |
+| [C++][cpp]           | [cc_proto_compile][cpp] | [cc_proto_library][cpp] | yes |
 | [C#](bzl/csharp)         |              |             |          |
 | [Go][go]           | [go_proto_compile][go] | [go_proto_library][go] | yes |
 | [Java][java]           | [java_proto_compile][java] | [java_proto_library][java] | yes |
@@ -34,6 +34,12 @@ These are build rules for [bazel][bazel-home].  If you have not already
 installed `bazel` on your workstation, follow the
 [bazel instructions][bazel-install].  Here's one way (osx):
 
+
+> Note about protoc and related tools: bazel and rules_protobuf will
+> download or build-from-source all required dependencies, including
+> the `protoc` tool and required plugins.  If you do already have
+> these tools installed, bazel will not use them.
+
 ```sh
 $ curl -O -J -L https://github.com/bazelbuild/bazel/releases/download/0.3.1/bazel-0.3.1-installer-darwin-x86_64.sh
 $ shasum -a256 bazel-0.3.1-installer-darwin-x86_64.sh
@@ -44,11 +50,6 @@ $ bazel version
 Build label: 0.3.1
 ...
 ```
-
-> Note about protoc and related tools: bazel and rules_protobuf will
-> download or build-from-source all required dependencies, including
-> the `protoc` tool and required plugins.  If you do already have
-> these tools installed, bazel will not use them.
 
 > Note about golang: this project uses [rules-go][rules_go] for
 > `go_library`, `go_binary`, and `go_test`.
@@ -76,6 +77,7 @@ protobuf_dependencies(
    with_go = True,
    with_java = True,
    with_cpp = True,
+   with_grpc = True,
 )
 ```
 
@@ -91,7 +93,6 @@ java_proto_library(
   with_grpc = True,
 )
 ```
-
 
 # Examples
 
@@ -120,6 +121,26 @@ $ bazel run cpp/client
 $ bazel run java/org/pubref/rules_closure/examples/helloworld/client:netty
 ```
 
+
+# Overriding Dependencies
+
+To load alternate versions of dependencies, pass in a `dict` having
+the same overall structure of the [repositories.bzl][repositories.bzl]
+file.  Entries having a matching key will override those found in the
+file.  For example, to load a different version of
+https://github.com/golang/protobuf, provide a different commit ID:
+
+```
+load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protobuf_dependencies")
+protobuf_dependencies(
+   with_go = True,
+   overrides = {
+     "com_github_golang_protobuf": {
+       "commit": "2c1988e8c18d14b142c0b472624f71647cf39adb", # Aug 8, 2016
+     }
+   },
+)
+```
 
 # Contributing
 
@@ -157,3 +178,4 @@ Contributions welcome; please create Issues or GitHub pull requests.
 [cpp]: bzl/cpp
 [go]: bzl/go
 [java]: bzl/java
+[repositories.bzl]: bzl/repositories.bzl

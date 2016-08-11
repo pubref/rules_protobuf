@@ -26,4 +26,9 @@ protobuf_repositories(
     with_python = True,
     with_cpp = True,
     with_grpc = True,
+    overrides = {
+        "com_github_golang_protobuf": {
+            "commit": "2c1988e8c18d14b142c0b472624f71647cf39adb", # Aug 8, 2016
+        }
+    },
 )
