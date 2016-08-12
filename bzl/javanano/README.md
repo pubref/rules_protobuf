@@ -20,7 +20,7 @@ protobuf_dependencies(
 ## Usage of `android_proto_library`
 
 Usage of `android_proto_library` is identical to
-[`java_proto_library`][/bzl/java].  If invoked in a BUILD file, this rule
-generates [JavaNano][javanano] prococol buffers rather than standard ones.
+[`java_proto_library`][bzl/java].  If invoked in a BUILD file, this rule
+generates [JavaNano][javanano] protocol buffers rather than standard ones.
 
 [javanano]: https://github.com/google/protobuf/tree/master/javanano#nano-version
