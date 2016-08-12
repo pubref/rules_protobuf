@@ -1,3 +1,10 @@
+dist: trusty
+compiler:
+  - clang
+os:
+  - linux
+  - osx
+
 addons:
   apt:
     sources:
@@ -25,6 +32,10 @@ before_install:
   - chmod +x install.sh
   - ./install.sh --user
   - rm -f install.sh
+
+branches:
+  only:
+  - travis
 
 script:
   - |
