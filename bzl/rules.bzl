@@ -7,6 +7,7 @@ def protobuf_repositories(
     with_cpp=False,
     with_go=False,
     with_java=False,
+    with_javanano=False,
     with_js=False,
     with_python=False,
     with_ruby=False,
@@ -45,6 +46,8 @@ def protobuf_repositories(
     classes += ["go"]
   if with_java:
     classes += ["java"]
+  if with_javanano:
+    classes += ["javanano"]
 
   for name in classes:
     lang = CLASSES[name]

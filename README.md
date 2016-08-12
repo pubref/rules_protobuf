@@ -16,7 +16,7 @@ Bazel | rules_protobuf | gRPC |
 | [C#](bzl/csharp)         |              |             |          |
 | [Go][go]           | [go_proto_compile][go] | [go_proto_library][go] | yes |
 | [Java][java]           | [java_proto_compile][java] | [java_proto_library][java] | yes |
-| [JavaNano](bzl/javanano) |              |             |          |
+| [JavaNano][javanano]           | [android_proto_compile][javanano] | [android_proto_library][javanano] | yes |
 | [Javascript](bzl/js)     |              |             |          |
 | [Objective-C](bzl/objc)  |              |             |          |
 | [Python](bzl/python)     | yes          |             |          |
@@ -180,4 +180,5 @@ Contributions welcome; please create Issues or GitHub pull requests.
 [cpp]: bzl/cpp
 [go]: bzl/go
 [java]: bzl/java
+[javanano]: bzl/javanano
 [repositories.bzl]: bzl/repositories.bzl

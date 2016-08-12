@@ -43,6 +43,10 @@ def java_proto_library(
   elif hasattr(lang, "protobuf"):
     deps += [str(Label(dep)) for dep in getattr(lang.protobuf, "compile_deps", [])]
 
+  print("java_proto_library compile deps: %s" % deps)
+
+  deps = list(set(deps))
+
   native.java_library(
     name = name,
     srcs = srcs + [name + "_pb.srcjar"],

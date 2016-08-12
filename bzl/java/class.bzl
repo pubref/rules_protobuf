@@ -75,6 +75,7 @@ CLASS = struct(
                 "srcjar": "%{name}.srcjar",
             }
         ),
+
         grpc = struct(
             executable = "//third_party/protoc_gen_grpc_java:protoc_gen_grpc_java_bin",
             name = "protoc-gen-grpc-java",
@@ -88,8 +89,7 @@ CLASS = struct(
                 "io_grpc_grpc_netty",
                 "io_grpc_grpc_okhttp",
                 "io_grpc_grpc_protobuf",
-                "io_grpc_grpc_protobuf_lite",
-                "io_grpc_grpc_protobuf_nano",
+                #"io_grpc_grpc_protobuf_lite",
                 "io_grpc_grpc_stub",
                 "io_netty_netty_buffer",
                 "io_netty_netty_codec",
@@ -100,7 +100,6 @@ CLASS = struct(
                 "io_netty_netty_resolver",
                 "io_netty_netty_transport",
                 "com_google_protobuf_protobuf_java_util",
-                "com_google_protobuf_nano_protobuf_javanano",
                 "com_google_auth_google_auth_library_credentials",
                 "com_google_code_findbugs_jsr305",
             ],
@@ -113,7 +112,7 @@ CLASS = struct(
             ],
             netty_runtime_deps = [
                 "@io_grpc_grpc_netty//jar",
-                "@io_grpc_grpc_protobuf_lite//jar",
+                #"@io_grpc_grpc_protobuf_lite//jar",
                 "@io_netty_netty_buffer//jar",
                 "@io_netty_netty_codec//jar",
                 "@io_netty_netty_codec_http2//jar",
