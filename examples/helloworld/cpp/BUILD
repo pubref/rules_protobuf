@@ -54,6 +54,9 @@ cc_library(
 
 cc_binary(
     name = "client",
+    srcs = [
+        "greeter_client_main.cc",
+    ],
     deps = [
         ":clientlib",
     ],
