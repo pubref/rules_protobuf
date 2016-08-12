@@ -21,6 +21,7 @@ go_repositories()
 load("//bzl:rules.bzl", "protobuf_repositories")
 
 protobuf_repositories(
+    # For demonstration purposes
     overrides = {
         "com_github_golang_protobuf": {
             "commit": "2c1988e8c18d14b142c0b472624f71647cf39adb",  # Aug 8, 2016
@@ -33,5 +34,5 @@ protobuf_repositories(
     with_javanano = True,
     with_python = True,
     with_ruby = True,
-    verbose = 1,
+    verbose = 0,
 )
