@@ -19,7 +19,7 @@ Bazel | rules_protobuf | gRPC |
 | [JavaNano][javanano]           | [android_proto_compile][javanano] | [android_proto_library][javanano] | yes |
 | [Javascript](bzl/js)     |              |             |          |
 | [Objective-C](bzl/objc)  |              |             |          |
-| [Python](bzl/python)     | yes          |             |          |
+| [Python](bzl/python)     |              |             |          |
 | [Ruby](bzl/ruby)         |              |             |          |
 
 1. Support for generation of protobuf classes via the `protoc` tool.
@@ -62,7 +62,7 @@ Require these rules your `WORKSPACE`:
 git_repository(
   name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
-  tag = "0.3.0",
+  tag = "v0.3.0",
 )
 ```
 
