@@ -59,16 +59,16 @@ cc_binary(
     ],
 )
 
-cc_binary(
-    name = "client_from_source",
-    srcs = [
-        "greeter_client.cc",
-        "greeter_client.h",
-        "//examples/helloworld/proto:cpp_pb",
-    ],
-    linkopts = ["-ldl"],
-    deps = CPP.grpc.compile_deps,
-)
+# cc_binary(
+#     name = "client_from_source",
+#     srcs = [
+#         "greeter_client.cc",
+#         "greeter_client.h",
+#         "//examples/helloworld/proto:cpp_pb",
+#     ],
+#     linkopts = ["-ldl"],
+#     deps = CPP.grpc.compile_deps,
+# )
 
 cc_binary(
     name = "server",

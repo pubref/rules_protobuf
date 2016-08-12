@@ -54,6 +54,7 @@ script:
       --local_resources=400,1,1.0 \
       examples/helloworld/go/... \
       examples/helloworld/java/... \
+      examples/helloworld/cpp/... \
       $FLAGS
 
 notifications:
