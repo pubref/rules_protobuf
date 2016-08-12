@@ -24,7 +24,7 @@ Bazel | rules_protobuf | gRPC |
 
 1. Support for generation of protobuf classes via the `protoc` tool.
 2. Support for generation + compilation of outputs with protobuf dependencies.
-3. gRPC support via the `with_grpc` flag.
+3. gRPC support.
 
 ---
 
@@ -76,7 +76,6 @@ protobuf_dependencies(
    with_go = True,
    with_java = True,
    with_cpp = True,
-   with_grpc = True,
 )
 ```
 

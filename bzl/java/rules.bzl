@@ -43,7 +43,7 @@ def java_proto_library(
   elif hasattr(lang, "protobuf"):
     deps += [str(Label(dep)) for dep in getattr(lang.protobuf, "compile_deps", [])]
 
-  print("java_proto_library compile deps: %s" % deps)
+  #print("java_proto_library compile deps: %s" % deps)
 
   deps = list(set(deps))
 

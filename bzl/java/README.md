@@ -12,7 +12,6 @@ Enable java support by loading the set of java dependencies in your workspace.
 ```python
 protobuf_dependencies(
   with_java=True,
-  with_grpc=True,
 )
 ```
 

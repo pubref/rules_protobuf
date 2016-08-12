@@ -320,6 +320,11 @@ def implement(spec):
         outputs += lang.protobuf.outputs
 
     # If this language supports gRPC, add this boolean flag in.
+    # However, if we didn't load grpc, we don't actually want to
+    # generate the label for the executable lest we actually need to
+    # have the executable available.  TODO: figure out how to write a
+    # variable in the loading phase of workspace and read it here.
+
     if hasattr(lang, "grpc"):
       attrs["gen_grpc_" + name] = attr.bool()
       if hasattr(lang.grpc, "executable"):

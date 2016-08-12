@@ -1,10 +1,8 @@
 load("//bzl:base/class.bzl", BASE = "CLASS", "build_plugin_out")
-load("//bzl:util.bzl", "invokesuper")
 
 
 def _build_generated_files(lang, self):
     """Build a jar file for protoc to dump java classes into."""
-    #invokesuper("build_source_files", lang, self)
 
     ctx = self.get("ctx", None)
     if ctx == None:

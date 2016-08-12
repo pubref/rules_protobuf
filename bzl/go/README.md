@@ -12,7 +12,6 @@ Enable go support by loading the set of go dependencies in your workspace.
 ```python
 protobuf_dependencies(
   with_go=True,
-  with_grpc=True,
 )
 ```
 

@@ -12,12 +12,16 @@ def protobuf_repositories(
     with_python=False,
     with_ruby=False,
 
-    with_grpc = False,
     verbose = 0,
     extensions = [],
     overrides = {},
 ):
 
+  # Disabling skipping of grpc-related dependencies.  Adding this back
+  # in will require the ability to write a configuration setting that
+  # can be read later by the 'implement' function.
+
+  with_grpc = True,
 
   repos = {}
   for k, v in REPOSITORIES.items():
@@ -35,6 +39,7 @@ def protobuf_repositories(
 
   classes = []
   requires = [
+    "protobuf",
     "external_protoc",
   ]
 

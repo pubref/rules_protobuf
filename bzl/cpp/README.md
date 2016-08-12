@@ -13,7 +13,6 @@ Enable cpp support by loading the set of cpp dependencies in your workspace.
 ```python
 protobuf_dependencies(
   with_cpp=True,
-  with_grpc=True,
 )
 ```
 

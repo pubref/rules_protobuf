@@ -13,7 +13,7 @@ genrule(
         "IN=$$(pwd)/$(SRCS)",
         "OUT=$$(pwd)/$@",
         "TMP=$$(mktemp -d $${TMPDIR:-/tmp}/genrule.XXXXXXXXXX)",
-        "cd $$TMP",
+    "cd $$TMP",
         "cp $$IN $$OUT",
         "rm -rf $$TMP",
     ]),
