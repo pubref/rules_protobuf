@@ -89,7 +89,7 @@ CLASS = struct(
                 "io_grpc_grpc_netty",
                 "io_grpc_grpc_okhttp",
                 "io_grpc_grpc_protobuf",
-                #"io_grpc_grpc_protobuf_lite",
+                "io_grpc_grpc_protobuf_lite",
                 "io_grpc_grpc_stub",
                 "io_netty_netty_buffer",
                 "io_netty_netty_codec",
@@ -112,7 +112,7 @@ CLASS = struct(
             ],
             netty_runtime_deps = [
                 "@io_grpc_grpc_netty//jar",
-                #"@io_grpc_grpc_protobuf_lite//jar",
+                "@io_grpc_grpc_protobuf_lite//jar",
                 "@io_netty_netty_buffer//jar",
                 "@io_netty_netty_codec//jar",
                 "@io_netty_netty_codec_http2//jar",
