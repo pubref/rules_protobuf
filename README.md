@@ -159,6 +159,8 @@ Contributions welcome; please create Issues or GitHub pull requests.
 * [@jart][jart]: Overall repository structure and bazel code layout
   (based on [rules_closure]).
 
+* [@korfuri][korfuri]: Prior research on travis-ci integration.
+
 * Much thanks to all the members of the bazel, protobuf, and gRPC teams.
 
 ---
@@ -166,6 +168,7 @@ Contributions welcome; please create Issues or GitHub pull requests.
 [yugui]: http://github.com/yugui "Yuki Yugui Sonoda"
 [jart]: http://github.com/jart "Justine Tunney"
 [mzhaom]: http://github.com/mzhaom "Ming Zhao"
+[korfuri]: http://github.com/korfuri "Uriel Korfa"
 
 [protobuf-home]: https://developers.google.com/protocol-buffers/ "Protocol Buffers Developer Documentation"
 [bazel-home]: http://bazel.io "Bazel Homepage"
