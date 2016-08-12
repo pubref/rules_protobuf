@@ -13,7 +13,7 @@ def protobuf_repositories(
     with_ruby=False,
 
     with_grpc = False,
-    verbose = False,
+    verbose = 0,
     extensions = [],
     overrides = {},
 ):

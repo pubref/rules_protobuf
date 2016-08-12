@@ -129,6 +129,6 @@ def require(target, context):
     args.pop("kind")
 
     if verbose:
-        print("Invoke %s %s (@%s) with args %s" % (kind, target, name, args))
+        print("Load %s %s (@%s) with args %s" % (kind, target, name, args))
 
     return rule(**args)

@@ -33,4 +33,5 @@ protobuf_repositories(
     with_javanano = True,
     with_python = True,
     with_ruby = True,
+    verbose = 1,
 )
