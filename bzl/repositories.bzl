@@ -61,7 +61,7 @@ REPOSITORIES = {
         "name": "com_github_madler_zlib",
         "remote": "https://github.com/madler/zlib",
         "tag": "v1.2.8",
-        "build_file": "//third_party/com_github_madler_zlib:BUILD",
+        "build_file": "//bzl:build_file/com_github_madler_zlib.BUILD",
     },
 
     # grpc++ expects //external:zlib
@@ -134,22 +134,13 @@ REPOSITORIES = {
         "actual": "@com_github_google_protobuf//:protoc_lib",
     },
 
-    # # Bind the protobuf proto_lib (protoc) into //external.  Required
-    # # for compiling the protoc_gen_grpc plugin
-    "third_party_protoc": {
-        "kind": "bind",
-        "name": "third_party",
-        "actual": "@com_github_google_protobuf//:protoc_lib",
-    },
-
     # GTest is for our own internal cc tests.
-
     "gtest": {
         "kind": "new_http_archive",
         "name": "gtest",
         "url": "https://googletest.googlecode.com/files/gtest-1.7.0.zip",
         "sha256": "247ca18dd83f53deb1328be17e4b1be31514cedfc1e3424f672bf11fd7e0d60d",
-        "build_file": "//third_party/gtest:BUILD",
+        "build_file": "//bzl:build_file/gtest.BUILD",
         "strip_prefix": "gtest-1.7.0",
     },
 
@@ -162,7 +153,7 @@ REPOSITORIES = {
         "name": "com_github_golang_glog",
         "remote": "https://github.com/golang/glog.git",
         "commit": "23def4e6c14b4da8ac2ed8007337bc5eb5007998", # Jan 25, 2016
-        "build_file": "//third_party/com_github_golang_glog:BUILD",
+        "build_file": "//bzl:build_file/com_github_golang_glog.BUILD",
     },
 
     "com_github_golang_protobuf": {
@@ -170,7 +161,7 @@ REPOSITORIES = {
         "name": "com_github_golang_protobuf",
         "remote": "https://github.com/golang/protobuf.git",
         "commit": "c3cefd437628a0b7d31b34fe44b3a7a540e98527", # Jul 27, 2016
-        "build_file": "//third_party/com_github_golang_protobuf:BUILD",
+        "build_file": "//bzl:build_file/com_github_golang_protobuf.BUILD",
     },
 
     "org_golang_google_grpc": {
@@ -179,7 +170,7 @@ REPOSITORIES = {
         "remote": "https://github.com/grpc/grpc-go.git",
         #"commit": "13edeeffdea7a41d5aad96c28deb4c7bd01a9397", #v1.0.0
         "tag": "v1.0.0",
-        "build_file": "//third_party/org_golang_google_grpc:BUILD",
+        "build_file": "//bzl:build_file/org_golang_google_grpc.BUILD",
     },
 
     "org_golang_x_net": {
@@ -187,7 +178,7 @@ REPOSITORIES = {
         "name": "org_golang_x_net",
         "remote": "https://github.com/golang/net.git",
         "commit": "2a35e686583654a1b89ca79c4ac78cb3d6529ca3",
-        "build_file": "//third_party/org_golang_x_net:BUILD",
+        "build_file": "//bzl:build_file/org_golang_x_net.BUILD",
     },
 
     # ****************************************************************

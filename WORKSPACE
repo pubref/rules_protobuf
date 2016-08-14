@@ -28,7 +28,6 @@ protobuf_repositories(
         },
     },
     verbose = 0,
-
     with_cpp = True,
     with_go = True,
     with_java = True,
