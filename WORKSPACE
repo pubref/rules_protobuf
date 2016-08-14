@@ -27,12 +27,13 @@ protobuf_repositories(
             "commit": "2c1988e8c18d14b142c0b472624f71647cf39adb",  # Aug 8, 2016
         },
     },
-    verbose = 0,
+    verbose = 1,
 
     with_cpp = True,
     with_go = True,
     with_java = True,
     with_javanano = True,
+    with_gateway = True,
     # with_python = True,
     # with_ruby = True,
 )

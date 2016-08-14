@@ -80,6 +80,16 @@ REPOSITORIES = {
         "tag": "v3.0.0",
     },
 
+    # Another copy of Protobuf, bound with a different label and build
+    # file.  Experimental for grpc-gateway.
+    "new_protobuf": {
+        "kind": "new_git_repository",
+        "name": "new_protobuf",
+        "remote": "https://github.com/google/protobuf.git",
+        "tag": "v3.0.0",
+        "build_file": "//third_party/com_github_google_protobuf:BUILD",
+    },
+
     # This binds the cc_binary "protoc" into //external:protoc.  This
     # is required for all protoc related rules in this repo.
     "external_protoc": {
@@ -123,14 +133,6 @@ REPOSITORIES = {
     "external_protobuf_compiler": {
         "kind": "bind",
         "name": "protobuf_compiler",
-        "actual": "@com_github_google_protobuf//:protoc_lib",
-    },
-
-    # # Bind the protobuf proto_lib (protoc) into //external.  Required
-    # # for compiling the protoc_gen_grpc plugin
-    "third_party_protoc": {
-        "kind": "bind",
-        "name": "third_party",
         "actual": "@com_github_google_protobuf//:protoc_lib",
     },
 
@@ -188,6 +190,18 @@ REPOSITORIES = {
         "remote": "https://github.com/golang/net.git",
         "commit": "2a35e686583654a1b89ca79c4ac78cb3d6529ca3",
         "build_file": "//third_party/org_golang_x_net:BUILD",
+    },
+
+    # ****************************************************************
+    # grpc-gateway
+    # ****************************************************************
+
+    "com_github_grpc_ecosystem_grpc_gateway": {
+        "kind": "new_git_repository",
+        "name": "com_github_grpc_ecosystem_grpc_gateway",
+        "remote": "https://github.com/grpc-ecosystem/grpc-gateway.git",
+        "commit": "ccd4e6b091a44f9f6b32848ffc63b3e8f8e26092",
+        "build_file": "//third_party/com_github_grpc_ecosystem_grpc_gateway:BUILD",
     },
 
     # ****************************************************************

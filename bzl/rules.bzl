@@ -11,6 +11,7 @@ def protobuf_repositories(
     with_js=False,
     with_python=False,
     with_ruby=False,
+    with_gateway=False,
 
     verbose = 0,
     extensions = [],
@@ -53,6 +54,8 @@ def protobuf_repositories(
     classes += ["java"]
   if with_javanano:
     classes += ["javanano"]
+  if with_gateway:
+    classes += ["gateway"]
 
   for name in classes:
     lang = CLASSES[name]

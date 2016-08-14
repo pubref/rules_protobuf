@@ -5,10 +5,12 @@ load("//bzl:python/class.bzl", PYTHON = "CLASS")
 load("//bzl:ruby/class.bzl", RUBY = "CLASS")
 load("//bzl:java/class.bzl", JAVA = "CLASS")
 load("//bzl:javanano/class.bzl", JAVANANO = "CLASS")
+load("//bzl:gateway/class.bzl", GATEWAY = "CLASS")
 
 CLASSES = {
     "base": BASE,
     "cpp": CPP,
+    "gateway": GATEWAY,
     "java": JAVA,
     "javanano": JAVANANO,
     "go": GO,

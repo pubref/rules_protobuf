@@ -132,7 +132,7 @@ def build_protoc_command(lang, self):
     """Build a command list required for genrule execution"""
 
     self["cmd"] += ["$(location %s)" % self["protoc"]]
-    self["cmd"] += ["--proto_path" + i for i in self["imports"]]
+    self["cmd"] += ["-I" + i for i in self["imports"]]
     self["cmd"] += self["args"]
     self["cmd"] += ["$(location " + proto + ")" for proto in self["protos"]]
 
