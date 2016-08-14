@@ -27,6 +27,7 @@ branches:
   only:
   - travis
   - master
+ - /^v\d+\.\d+\.\d+$/
 
 script:
   - |
