@@ -4,15 +4,24 @@ workspace(name = "org_pubref_rules_protobuf")
 # Go support requires rules_go
 # ================================================================
 
+
+git_repository(
+    name = "io_bazel_buildifier",
+    remote = "https://github.com/bazelbuild/buildifier.git",
+    commit = "88525b110d7c5a3cdeebc92926a35864874bd878",
+)
+
 git_repository(
     name = "io_bazel_rules_go",
     remote = "https://github.com/bazelbuild/rules_go.git",
-    tag = "0.0.4",
+    #tag = "0.0.4",
+    commit = "fbd0bc8f5cf2526533c9b9846db0f2f242113faf",
 )
 
 load("@io_bazel_rules_go//go:def.bzl", "go_repositories")
 
 go_repositories()
+
 
 # ================================================================
 # Load self
@@ -27,7 +36,7 @@ protobuf_repositories(
             "commit": "2c1988e8c18d14b142c0b472624f71647cf39adb",  # Aug 8, 2016
         },
     },
-    verbose = 1,
+    verbose = 0,
 
     with_cpp = True,
     with_go = True,

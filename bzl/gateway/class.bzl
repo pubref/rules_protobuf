@@ -30,7 +30,7 @@ CLASS = struct(
                 "@com_github_grpc_ecosystem_grpc_gateway//:googleapis",
             ],
             default_options = [
-                "Mgoogle/api/annotations.proto=external/com_github_grpc_ecosystem_grpc_gateway/third_party/googleapis/google/api",
+                #"Mgoogle/api/annotations.proto=external/com_github_grpc_ecosystem_grpc_gateway/third_party/googleapis/google/api",
                 #"Mgoogle/api/http.proto=external/com_github_grpc_ecosystem_grpc_gateway/third_party/googleapis/google/api",
                 "Mgoogle/protobuf/descriptor.proto=external/com_github_google_protobuf/src/google/protobuf",
             ],

@@ -1,3 +1,9 @@
+load("//bzl:build_content/zlib.bzl", BUILD_ZLIB = "BUILD")
+load("//bzl:build_content/new_protobuf.bzl", BUILD_NEW_PROTOBUF = "BUILD")
+load("//bzl:build_content/gtest.bzl", BUILD_GTEST = "BUILD")
+load("//bzl:build_content/glog.bzl", BUILD_GLOG = "BUILD")
+load("//bzl:build_content/com_github_golang_protobuf.bzl", BUILD_COM_GITHUB_GOLANG_PROTOBUF = "BUILD")
+
 # ****************************************************************
 # Master list of external dependencies
 # ****************************************************************
@@ -18,6 +24,7 @@
 # $ curl -O -J -L https://repo1.maven.org/maven2/com/google/protobuf/protoc/3.0.0/protoc-3.0.0-linux-x86_64.exe
 # $ sha256sum protoc-3.0.0-linux-x86_64.exe #linux
 # $ shasum -a256 protoc-3.0.0-osx-x86_64.exe # macosx
+
 
 REPOSITORIES = {
 
@@ -61,7 +68,7 @@ REPOSITORIES = {
         "name": "com_github_madler_zlib",
         "remote": "https://github.com/madler/zlib",
         "tag": "v1.2.8",
-        "build_file": "//third_party/com_github_madler_zlib:BUILD",
+        "build_file_content": BUILD_ZLIB,
     },
 
     # grpc++ expects //external:zlib
@@ -87,7 +94,8 @@ REPOSITORIES = {
         "name": "new_protobuf",
         "remote": "https://github.com/google/protobuf.git",
         "tag": "v3.0.0",
-        "build_file": "//third_party/com_github_google_protobuf:BUILD",
+        "build_file_content": BUILD_NEW_PROTOBUF,
+        #"build_file": "//third_party/com_github_google_protobuf:BUILD",
     },
 
     # This binds the cc_binary "protoc" into //external:protoc.  This
@@ -151,7 +159,8 @@ REPOSITORIES = {
         "name": "gtest",
         "url": "https://googletest.googlecode.com/files/gtest-1.7.0.zip",
         "sha256": "247ca18dd83f53deb1328be17e4b1be31514cedfc1e3424f672bf11fd7e0d60d",
-        "build_file": "//third_party/gtest:BUILD",
+        #"build_file": "//third_party/gtest:BUILD",
+        "build_file_content": BUILD_GTEST,
         "strip_prefix": "gtest-1.7.0",
     },
 
@@ -164,7 +173,8 @@ REPOSITORIES = {
         "name": "com_github_golang_glog",
         "remote": "https://github.com/golang/glog.git",
         "commit": "23def4e6c14b4da8ac2ed8007337bc5eb5007998", # Jan 25, 2016
-        "build_file": "//third_party/com_github_golang_glog:BUILD",
+        "build_file_content": BUILD_GLOG,
+        #"build_file": "//third_party/com_github_golang_glog:BUILD",
     },
 
     "com_github_golang_protobuf": {
@@ -172,7 +182,8 @@ REPOSITORIES = {
         "name": "com_github_golang_protobuf",
         "remote": "https://github.com/golang/protobuf.git",
         "commit": "c3cefd437628a0b7d31b34fe44b3a7a540e98527", # Jul 27, 2016
-        "build_file": "//third_party/com_github_golang_protobuf:BUILD",
+        "build_file_content": BUILD_COM_GITHUB_GOLANG_PROTOBUF,
+        #"build_file": "//third_party/com_github_golang_protobuf:BUILD",
     },
 
     "org_golang_google_grpc": {
