@@ -44,6 +44,9 @@ def protobuf_repositories(
     "external_protoc",
   ]
 
+  if with_grpc_gateway:
+    with_go = True
+
   if with_cpp:
     classes += ["cpp"]
   if with_python:
