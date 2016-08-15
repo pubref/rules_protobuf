@@ -19,6 +19,7 @@
 # $ sha256sum protoc-3.0.0-linux-x86_64.exe #linux
 # $ shasum -a256 protoc-3.0.0-osx-x86_64.exe # macosx
 
+
 REPOSITORIES = {
 
     ### intended to be compatible with loose json parser to generate documentation from this.
@@ -179,6 +180,18 @@ REPOSITORIES = {
         "remote": "https://github.com/golang/net.git",
         "commit": "2a35e686583654a1b89ca79c4ac78cb3d6529ca3",
         "build_file": str(Label("//bzl:build_file/org_golang_x_net.BUILD")),
+    },
+
+    # ****************************************************************
+    # grpc-gateway
+    # ****************************************************************
+
+    "com_github_grpc_ecosystem_grpc_gateway": {
+        "kind": "new_git_repository",
+        "name": "com_github_grpc_ecosystem_grpc_gateway",
+        "remote": "https://github.com/grpc-ecosystem/grpc-gateway.git",
+        "commit": "ccd4e6b091a44f9f6b32848ffc63b3e8f8e26092",
+        "build_file": str(Label("//bzl/build_file/com_github_grpc_ecosystem_grpc_gateway.BUILD")),
     },
 
     # ****************************************************************

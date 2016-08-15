@@ -130,6 +130,6 @@ def require(target, context):
 
     if verbose:
         #print("Load %s %s (@%s) with args %s" % (kind, target, name, args))
-        print("Load %s %s (@%s)" % (kind, target, name))
+        print("Load %s (@%s)" % (target, name))
 
     return rule(**args)
