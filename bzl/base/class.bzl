@@ -60,6 +60,7 @@ def build_imports(lang, self):
 
 
 def build_plugin_out(name, key, lang, self):
+    #print("build_plugin_out(%s, %s)" % (name, key))
     if not hasattr(lang, key):
         return
     plugin = getattr(lang, key)

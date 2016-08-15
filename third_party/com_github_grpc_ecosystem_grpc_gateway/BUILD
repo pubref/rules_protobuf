@@ -6,40 +6,32 @@ load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_prefix")
 
 go_prefix("github.com/grpc-ecosystem/grpc-gateway")
 
-go_binary(
-    name = 'protoc-gen-grpc-gateway',
-    srcs = [
-    ],
-    deps = [
-    ],
-)
-
-
 go_library(
     name = "third_party/googleapis/google/api",
     srcs = [
-        "third_party/googleapis/google/api/annotations.go",
-        "third_party/googleapis/google/api/http.go"
+        "third_party/googleapis/google/api/annotations.pb.go",
+        "third_party/googleapis/google/api/http.pb.go",
     ],
     deps = [
-        "protoc-gen-go/descriptor",
-        "protoc-gen-go/plugin",
+        "@com_github_golang_protobuf//:proto",
+        "@com_github_golang_protobuf//:protoc-gen-go/descriptor",
     ],
 )
 
 filegroup(
-    name = 'googleapis',
+    name = "googleapis",
     srcs = glob([
         "third_party/googleapis/google/api/*.proto",
     ]),
 )
 
-filegroup(
-    name = 'googleapis_pb_files',
-    srcs = glob([
-        "third_party/googleapis/google/api/*.pb.go",
-    ]),
-)
+# go_library(
+#     name = 'third_party/googleapis/google/api',
+#     srcs = [
+#         "third_party/googleapis/google/api/annotations.pb.go",
+#         "third_party/googleapis/google/api/http.pb.go",
+#     ],
+# )
 
 # go_proto_library(
 #     name = 'googleapis_protos',
@@ -49,7 +41,7 @@ filegroup(
 # )
 
 go_library(
-    name = 'runtime',
+    name = "runtime",
     srcs = [
         "runtime/context.go",
         "runtime/convert.go",
@@ -64,7 +56,6 @@ go_library(
         "runtime/pattern.go",
         "runtime/proto2_convert.go",
         "runtime/query.go",
-        "runtime/internal/stream_chunk.pb.go",
     ],
     deps = [
         "runtime/internal",
@@ -79,9 +70,8 @@ go_library(
     ],
 )
 
-
 go_library(
-    name    = 'runtime/internal',
+    name = "runtime/internal",
     srcs = [
         "runtime/internal/stream_chunk.pb.go",
     ],
@@ -91,12 +81,88 @@ go_library(
 )
 
 go_library(
-    name = 'utilities',
+    name = "utilities",
     srcs = [
         "utilities/doc.go",
         "utilities/pattern.go",
         "utilities/trie.go",
     ],
     deps = [
+    ],
+)
+
+# @com_github_grpc_ecosystem_grpc_gateway//:protoc-gen-grpc-gateway
+
+go_binary(
+    name = "protoc-gen-grpc-gateway_bin",
+    srcs = [
+        "protoc-gen-grpc-gateway/main.go",
+    ],
+    deps = [
+        "protoc-gen-grpc-gateway/descriptor",
+        "protoc-gen-grpc-gateway/gengateway",
+        ":runtime",
+        "@com_github_golang_glog//:go_default_library",
+        "@com_github_golang_protobuf//:proto",
+        "@com_github_golang_protobuf//:protoc-gen-go/plugin",
+    ],
+)
+
+go_library(
+    name = "protoc-gen-grpc-gateway/descriptor",
+    srcs = [
+        "protoc-gen-grpc-gateway/descriptor/registry.go",
+        "protoc-gen-grpc-gateway/descriptor/services.go",
+        "protoc-gen-grpc-gateway/descriptor/types.go",
+    ],
+    deps = [
+        "protoc-gen-grpc-gateway/httprule",
+        "third_party/googleapis/google/api",
+        "@com_github_golang_glog//:go_default_library",
+        "@com_github_golang_protobuf//:proto",
+        "@com_github_golang_protobuf//:protoc-gen-go/descriptor",
+        "@com_github_golang_protobuf//:protoc-gen-go/generator",
+        "@com_github_golang_protobuf//:protoc-gen-go/plugin",
+    ],
+)
+
+go_library(
+    name = "protoc-gen-grpc-gateway/httprule",
+    srcs = [
+        "protoc-gen-grpc-gateway/httprule/compile.go",
+        "protoc-gen-grpc-gateway/httprule/parse.go",
+        "protoc-gen-grpc-gateway/httprule/types.go",
+    ],
+    deps = [
+        ":utilities",
+        "@com_github_golang_glog//:go_default_library",
+    ],
+)
+
+go_library(
+    name = "protoc-gen-grpc-gateway/generator",
+    srcs = [
+        "protoc-gen-grpc-gateway/generator/generator.go",
+    ],
+    deps = [
+        "protoc-gen-grpc-gateway/descriptor",
+        "@com_github_golang_protobuf//:protoc-gen-go/plugin",
+    ],
+)
+
+go_library(
+    name = "protoc-gen-grpc-gateway/gengateway",
+    srcs = [
+        "protoc-gen-grpc-gateway/gengateway/doc.go",
+        "protoc-gen-grpc-gateway/gengateway/generator.go",
+        "protoc-gen-grpc-gateway/gengateway/template.go",
+    ],
+    deps = [
+        "protoc-gen-grpc-gateway/descriptor",
+        "protoc-gen-grpc-gateway/generator",
+        "utilities",
+        "@com_github_golang_glog//:go_default_library",
+        "@com_github_golang_protobuf//:proto",
+        "@com_github_golang_protobuf//:protoc-gen-go/plugin",
     ],
 )

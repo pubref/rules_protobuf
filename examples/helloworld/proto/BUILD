@@ -1,8 +1,8 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@io_bazel_rules_go//go:def.bzl", "go_binary")
-#load("//bzl:go/rules.bzl", "go_proto_library")
-load("//bzl:gateway/rules.bzl", "gateway_proto_library")
+load("//bzl:go/rules.bzl", "go_proto_library")
+load("//bzl:grpc_gateway/rules.bzl", "grpc_gateway_proto_library")
 load("//bzl:cpp/rules.bzl", "cc_proto_library")
 
 filegroup(
@@ -15,12 +15,12 @@ filegroup(
 # Go proto library implementation cannot accept proto filesets from
 # say, a filegroup.  It needs to be an explicit filename.  This is the
 # reason this rule is in the proto dir.
-# go_proto_library(
-#     name = "go",
-#     protos = ["helloworld.proto"],
-#     verbose = 0,
-#     with_grpc = True,
-# )
+go_proto_library(
+    name = "go",
+    protos = ["helloworld.proto"],
+    verbose = 0,
+    with_grpc = True,
+)
 
 # cc_proto_library implementation cannot accept proto filesets from
 # say, a filegroup.  It needs to be an explicit filename.  This is the
@@ -32,15 +32,14 @@ cc_proto_library(
     with_grpc = True,
 )
 
+grpc_gateway_proto_library(
+    name = "gw",
+    protos = ["helloworld_gateway.proto"],
+    verbose = 0,
+)
+
 # py_proto_library(
 #     name = "pylib",
 #     protos = ["helloworld.proto"],
 #     with_grpc = False,
 # )
-
-gateway_proto_library(
-    name = "gateway",
-    protos = ["helloworld.gateway.proto"],
-    verbose = 1,
-    with_grpc = True,
-)

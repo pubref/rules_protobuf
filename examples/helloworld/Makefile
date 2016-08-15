@@ -15,8 +15,17 @@ java_client:
 go_client:
 	bazel run go/client
 
+go_server:
+	bazel build go/server && $(BAZEL_BIN)/examples/helloworld/go/server/server
+
 cpp_server:
-	bazel run cpp/server
+	bazel build cpp/server && $(BAZEL_BIN)/examples/helloworld/cpp/server
 
 cpp_client:
 	bazel run cpp/client
+
+grpc_gateway:
+	bazel build go/gateway:greeter && $(BAZEL_BIN)/examples/helloworld/go/gateway/greeter
+
+curl_gateway:
+	curl -X POST -k http://localhost:8080/v1/helloworld/sayhello -d '{"name": "gRPC-gateway!"}'
