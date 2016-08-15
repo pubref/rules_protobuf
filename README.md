@@ -21,6 +21,7 @@ Bazel | rules_protobuf | gRPC |
 | [Objective-C](bzl/objc)  |              |             |          |
 | [Python](bzl/python)     |              |             |          |
 | [Ruby](bzl/ruby)         |              |             |          |
+| [gRPC gateway][grpc-gateway-home]           | [grpc_gateway_proto_compile][grpc_gateway] | [grpc_gateway_proto_library][grpc_gateway] | yes |
 
 1. Support for generation of protobuf classes via the `protoc` tool.
 2. Support for generation + compilation of outputs with protobuf dependencies.
@@ -62,7 +63,7 @@ Require these rules your `WORKSPACE`:
 git_repository(
   name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
-  tag = "v0.3.3",
+  tag = "v0.3.4",
 )
 ```
 
@@ -174,6 +175,7 @@ Contributions welcome; please create Issues or GitHub pull requests.
 [bazel-install]: http://bazel.io/docs/install.html "Bazel Installation"
 [rules_closure]: http://github.com/bazelbuild/rules_closure "Rules Closure"
 [rules_go]: http://github.com/bazelbuild/rules_go "Rules Go"
+[grpc-gateway-home]:https://github.com/grpc-ecosystem/grpc-gateway
 
 [bazel_image]: https://github.com/pubref/rules_protobuf/blob/master/images/bazel.png
 [wtfcat_image]: https://github.com/pubref/rules_protobuf/blob/master/images/wtfcat.png
@@ -183,4 +185,5 @@ Contributions welcome; please create Issues or GitHub pull requests.
 [go]: bzl/go
 [java]: bzl/java
 [javanano]: bzl/javanano
+[grpc_gateway]: bzl/grpc_gateway
 [repositories.bzl]: bzl/repositories.bzl

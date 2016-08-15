@@ -191,7 +191,7 @@ REPOSITORIES = {
         "name": "com_github_grpc_ecosystem_grpc_gateway",
         "remote": "https://github.com/grpc-ecosystem/grpc-gateway.git",
         "commit": "ccd4e6b091a44f9f6b32848ffc63b3e8f8e26092",
-        "build_file": str(Label("//bzl/build_file/com_github_grpc_ecosystem_grpc_gateway.BUILD")),
+        "build_file": str(Label("//bzl:build_file/com_github_grpc_ecosystem_grpc_gateway.BUILD")),
     },
 
     # ****************************************************************

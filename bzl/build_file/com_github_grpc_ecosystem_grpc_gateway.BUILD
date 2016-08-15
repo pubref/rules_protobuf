@@ -25,21 +25,6 @@ filegroup(
     ]),
 )
 
-# go_library(
-#     name = 'third_party/googleapis/google/api',
-#     srcs = [
-#         "third_party/googleapis/google/api/annotations.pb.go",
-#         "third_party/googleapis/google/api/http.pb.go",
-#     ],
-# )
-
-# go_proto_library(
-#     name = 'googleapis_protos',
-#     srcs = glob([
-#         "third_party/googleapis/google/api/*.pb.go",
-#     ]),
-# )
-
 go_library(
     name = "runtime",
     srcs = [
@@ -90,8 +75,6 @@ go_library(
     deps = [
     ],
 )
-
-# @com_github_grpc_ecosystem_grpc_gateway//:protoc-gen-grpc-gateway
 
 go_binary(
     name = "protoc-gen-grpc-gateway_bin",
