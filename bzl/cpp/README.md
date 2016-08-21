@@ -11,7 +11,7 @@
 Enable cpp support by loading the set of cpp dependencies in your workspace.
 
 ```python
-protobuf_dependencies(
+protobuf_repositories(
   with_cpp=True,
 )
 ```

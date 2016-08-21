@@ -10,7 +10,7 @@
 Enable java support by loading the set of java dependencies in your workspace.
 
 ```python
-protobuf_dependencies(
+protobuf_repositories(
   with_java=True,
   with_javanano=True,
   with_grpc=True,

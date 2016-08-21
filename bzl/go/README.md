@@ -10,7 +10,7 @@
 Enable go support by loading the set of go dependencies in your workspace.
 
 ```python
-protobuf_dependencies(
+protobuf_repositories(
   with_go=True,
 )
 ```
