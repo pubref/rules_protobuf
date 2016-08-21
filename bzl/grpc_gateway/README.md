@@ -14,7 +14,7 @@
 Enable [grpc-gateway][grpc-gateway-home] support by loading the set of dependencies in your workspace.
 
 ```python
-protobuf_dependencies(
+protobuf_repositories(
   with_go=True,
   with_grpc_gateway=True,
 )

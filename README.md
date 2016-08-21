@@ -72,8 +72,8 @@ you'd like support for.
 
 
 ```python
-load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protobuf_dependencies")
-protobuf_dependencies(
+load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protobuf_repositories")
+protobuf_repositories(
    with_go = True,
    with_java = True,
    with_cpp = True,
@@ -133,8 +133,8 @@ file.  For example, to load a different version of
 https://github.com/golang/protobuf, provide a different commit ID:
 
 ```
-load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protobuf_dependencies")
-protobuf_dependencies(
+load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protobuf_repositories")
+protobuf_repositories(
    with_go = True,
    overrides = {
      "com_github_golang_protobuf": {
