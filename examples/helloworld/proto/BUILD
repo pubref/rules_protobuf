@@ -36,7 +36,7 @@ cc_proto_library(
 grpc_gateway_proto_library(
     name = "gw",
     protos = ["helloworld_gateway.proto"],
-    verbose = 1,
+    verbose = 0,
 )
 
 # py_proto_library(

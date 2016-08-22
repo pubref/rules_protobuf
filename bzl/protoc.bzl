@@ -346,9 +346,6 @@ def implement(spec):
     default = output_to_genfiles,
   )
 
-  if spec[0] == "gateway":
-    print("gateway attrs: %s" % attrs.keys())
-
   return rule(
     implementation = _protoc_rule_impl,
     attrs = attrs,
