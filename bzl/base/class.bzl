@@ -138,6 +138,12 @@ def build_protoc_command(lang, self):
     self["cmd"] += ["$(location " + proto + ")" for proto in self["protos"]]
 
 
+def build_inputs(lang, self):
+    """Build a list of inputs to the ctx.action protoc"""
+    #self["inputs"] += self["srcs"]
+    self["requires"] += self["srcs"]
+
+
 def build_tools(lang, self):
     """Build a list of tools required for genrule execution"""
 
@@ -181,6 +187,7 @@ CLASS = struct(
     build_generated_files = build_generated_files,
     build_generated_filenames = build_generated_filenames,
     build_imports = build_imports,
+    build_inputs = build_inputs,
     build_tools = build_tools,
     build_protobuf_invocation = build_protobuf_invocation,
     build_protobuf_out = build_protobuf_out,

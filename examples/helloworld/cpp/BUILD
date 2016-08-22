@@ -5,6 +5,7 @@ load("//bzl:cpp/class.bzl", CPP = "CLASS")
 
 cc_test(
     name = "test",
+    size = "small",
     srcs = ["greeter_client_test.cc"],
     copts = ["-Iexternal/gtest/include"],
     deps = [

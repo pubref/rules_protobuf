@@ -116,8 +116,6 @@ def _execute_rule(self):
   if ctx == None:
       fail("Bazel context required for rule execution")
 
-  self["requires"] += self["srcs"]
-
   srcfiles = []
   for src in self["srcs"]:
     srcfiles += [src.path]
@@ -190,7 +188,7 @@ def _protoc_rule_impl(ctx):
     #"descriptor_set_file": descriptor_set_file,
   }
 
-  # Propogate proto deps
+  # Propogate proto deps: TODO: this is completely untested.
   for dep in ctx.attr.deps:
     self["imports"] += dep.proto.imports
     self["requires"] += dep.proto.deps
@@ -211,12 +209,12 @@ def _protoc_rule_impl(ctx):
 
     invoke("build_generated_files", lang, self)
     invoke("build_imports", lang, self)
-    #invoke("build_tools", lang, self)
     invoke("build_protobuf_invocation", lang, self)
     invoke("build_protobuf_out", lang, self)
     if self["with_grpc"]:
       invoke("build_grpc_invocation", lang, self)
       invoke("build_grpc_out", lang, self)
+    invoke("build_inputs", lang, self)
 
   # Run protoc
   _execute_rule(self)

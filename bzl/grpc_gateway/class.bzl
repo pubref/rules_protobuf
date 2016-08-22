@@ -3,17 +3,18 @@ load("//bzl:go/class.bzl", GO = "CLASS")
 load("//bzl:util.bzl", "invokesuper")
 
 
-def build_protobuf_out(lang, self):
-    """Build the --{lang}_out option"""
-    build_plugin_out(lang.name, "protobuf", lang, self)
-
-
 def build_imports(lang, self):
     invokesuper("build_imports", lang, self)
     self["imports"] += [
         "external/com_github_grpc_ecosystem_grpc_gateway/third_party/googleapis",
         "external/com_github_google_protobuf/src",
         ".",
+    ]
+
+def build_inputs(lang, self):
+    invokesuper("build_inputs", lang, self)
+    self["requires"] += [
+        "@com_github_grpc_ecosystem_grpc_gateway/third_party/googleapis",
     ]
 
 def build_grpc_out(lang, self):
@@ -64,4 +65,5 @@ CLASS = struct(
         build_protobuf_out = GO.build_protobuf_out,
         build_grpc_out = build_grpc_out,
         build_imports = build_imports,
+        build_inputs = build_inputs,
 )
