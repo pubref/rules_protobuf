@@ -56,8 +56,9 @@ def build_generated_filenames(lang, self):
 
 def build_imports(lang, self):
     """Build the list of imports"""
-    pass
-
+    ctx = self["ctx"]
+    if ctx:
+        self["imports"] = self.get("imports", []) + ctx.attr.imports
 
 def build_plugin_out(name, key, lang, self):
     #print("build_plugin_out(%s, %s)" % (name, key))
@@ -131,7 +132,6 @@ def build_protobuf_invocation(lang, self):
 
 def build_protoc_command(lang, self):
     """Build a command list required for genrule execution"""
-
     self["cmd"] += ["$(location %s)" % self["protoc"]]
     self["cmd"] += ["-I" + i for i in self["imports"]]
     self["cmd"] += self["args"]

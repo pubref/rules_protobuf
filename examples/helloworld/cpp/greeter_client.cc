@@ -35,6 +35,10 @@
 
 #include "greeter_client.h"
 
+// Constructor with "initialization list"
+GreeterClient::GreeterClient(std::shared_ptr<Channel> channel)
+  : stub_(Greeter::NewStub(channel)) {}
+
 std::string GreeterClient::SayHello(const std::string& user) {
   // Data we are sending to the server.
   HelloRequest request;

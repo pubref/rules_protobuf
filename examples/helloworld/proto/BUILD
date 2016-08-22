@@ -17,6 +17,7 @@ filegroup(
 # reason this rule is in the proto dir.
 go_proto_library(
     name = "go",
+    #name = "go_default_library", a viable alternative
     protos = ["helloworld.proto"],
     verbose = 0,
     with_grpc = True,
@@ -35,7 +36,7 @@ cc_proto_library(
 grpc_gateway_proto_library(
     name = "gw",
     protos = ["helloworld_gateway.proto"],
-    verbose = 0,
+    verbose = 1,
 )
 
 # py_proto_library(

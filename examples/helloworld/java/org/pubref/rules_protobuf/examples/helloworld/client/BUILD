@@ -5,6 +5,7 @@ load(
 
 java_test(
     name = "netty_test",
+    size = "small",
     srcs = [
         "HelloWorldClientTest.java",
     ],

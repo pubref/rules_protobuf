@@ -1,7 +1,5 @@
 #include "gtest/gtest.h"
 #include "greeter_client.h"
-//#include <future>
-//#include <thread>
 
 using grpc::Server;
 using grpc::ServerBuilder;
@@ -58,6 +56,7 @@ class GreeterClientTest : public ::testing::Test {
 // point of the test is to ensure that bazel can compile and build it,
 // so at some level, even if we can run a test that does nothing is a
 // success.
+
 
 TEST_F(GreeterClientTest, testHello) {
   GreeterClient greeter(grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials()));

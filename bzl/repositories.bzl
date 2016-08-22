@@ -25,6 +25,25 @@ REPOSITORIES = {
     ### intended to be compatible with loose json parser to generate documentation from this.
     ###:begin
 
+    # Protobuf required for multiple reasons, including the cc_binary
+    # 'protoc' and the cc_library 'protobuf_clib'
+    "protobuf": {
+        "kind": "git_repository",
+        "name": "com_github_google_protobuf",
+        "remote": "https://github.com/google/protobuf.git",
+        #"tag": "v3.0.0",
+        "commit": "ff2a6600e5df21683b86aca7e30bbb80c0aed848",
+    },
+
+    # This binds the cc_binary "protoc" into //external:protoc.  This
+    # is required for several protoc related rules in this repo. TODO:
+    # document which ones, but includes grpc++
+    "external_protoc": {
+        "kind": "bind",
+        "name": "protoc",
+        "actual": "@com_github_google_protobuf//:protoc",
+    },
+
     # ****************************************************************
     # CPP
     # ****************************************************************
@@ -70,23 +89,6 @@ REPOSITORIES = {
         "kind": "bind",
         "name": "zlib",
         "actual": "@com_github_madler_zlib//:zlib",
-    },
-
-    # Protobuf required for multiple reasons, including the cc_binary
-    # 'protoc' and the cc_library 'protobuf_clib'
-    "protobuf": {
-        "kind": "git_repository",
-        "name": "com_github_google_protobuf",
-        "remote": "https://github.com/google/protobuf.git",
-        "tag": "v3.0.0",
-    },
-
-    # This binds the cc_binary "protoc" into //external:protoc.  This
-    # is required for all protoc related rules in this repo.
-    "external_protoc": {
-        "kind": "bind",
-        "name": "protoc",
-        "actual": "@com_github_google_protobuf//:protoc",
     },
 
     # grpc++ expects "//external:protobuf_clib"

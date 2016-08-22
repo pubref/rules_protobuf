@@ -58,7 +58,7 @@ def protobuf_repositories(
   if with_javanano:
     classes += ["javanano"]
   if with_grpc_gateway:
-    classes += ["grpc_gateway"]
+    classes += ["gateway"]
 
   for name in classes:
     lang = CLASSES[name]

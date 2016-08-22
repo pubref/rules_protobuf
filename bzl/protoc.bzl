@@ -8,6 +8,10 @@ EXECUTABLE = Label("@com_github_google_protobuf//:protoc")
 def _execute_genrule(self):
   if self["verbose"]:
     print("COMMAND:\n%s" % "\n".join(self["cmd"]));
+    if self["verbose"] > 1:
+      print("SRCS: %s" % self["protos"]);
+      print("OUTS: %s" % self["outs"]);
+      print("TOOLS: %s" % self["tools"]);
 
   native.genrule(
     name = self["name"],
@@ -100,14 +104,11 @@ def _get_path(ctx, path):
 
 
 def _get_gendir(ctx):
-  return ctx.var["BINDIR"] + "/" + ctx.label.package
-  # if not ctx.attr.includes:
-  #   return ctx.label.workspace_root
-  # if not ctx.attr.includes[0]:
-  #   return get_path(ctx, ctx.label.package)
-  # if not ctx.label.package:
-  #   return get_path(ctx, ctx.attr.includes[0])
-  # return get_path(ctx, ctx.label.package + '/' + ctx.attr.includes[0])
+  if ctx.attr.output_to_genfiles:
+    outdir = ctx.var["GENDIR"]
+  else:
+    outdir = ctx.var["BINDIR"]
+  return outdir + "/" + ctx.label.package
 
 
 def _execute_rule(self):
@@ -116,7 +117,6 @@ def _execute_rule(self):
       fail("Bazel context required for rule execution")
 
   self["requires"] += self["srcs"]
-  #print("requires %s" % self["requires"])
 
   srcfiles = []
   for src in self["srcs"]:
@@ -172,7 +172,7 @@ def _build_source_files(ctx, self):
       print("No Copy source files.")
     for srcfile in ctx.files.protos:
       self["srcs"] += [srcfile]
-
+      self["imports"] += [srcfile.dirname]
 
 def _protoc_rule_impl(ctx):
 
@@ -211,6 +211,7 @@ def _protoc_rule_impl(ctx):
 
     invoke("build_generated_files", lang, self)
     invoke("build_imports", lang, self)
+    #invoke("build_tools", lang, self)
     invoke("build_protobuf_invocation", lang, self)
     invoke("build_protobuf_out", lang, self)
     if self["with_grpc"]:
@@ -239,6 +240,9 @@ def implement(spec):
   attrs = {}
   outputs = {}
 
+  # Language descriptor has an opportunity to override this.
+  output_to_genfiles = False
+
   attrs["verbose"] = attr.int(
     default = 0,
   )
@@ -254,7 +258,7 @@ def implement(spec):
 
   # Additional include options to protoc.  These should be
   # directories.  TODO(user): should this be typed as directory only?
-  attrs["includes"] = attr.string_list()
+  attrs["imports"] = attr.string_list()
 
   # The list of files the rule generates.  How is this actually being
   # used?
@@ -278,7 +282,7 @@ def implement(spec):
   #attrs["with_descriptor"] = attr.bool()
 
   # Implemntation detail that varies between output languages. JAVA:
-  # does not matter.  GO: True required.
+  # does not matter.
   attrs["copy_protos_to_genfiles"] = attr.bool(
     default = True,
   )
@@ -303,6 +307,8 @@ def implement(spec):
     attrs[flag] = attr.bool(
         default = (index == 0),
     )
+
+    output_to_genfiles = getattr(lang, "output_to_genfiles", output_to_genfiles)
 
     # Add a "gen_java_plugin_options=[]".
     opts = flag + "_plugin_options"
@@ -336,9 +342,18 @@ def implement(spec):
       if hasattr(lang.grpc, "outputs"):
         outputs += lang.grpc.outputs
 
+
+  # Flag that sets gen_grpc_{lang} to true for all languages.
+  attrs["output_to_genfiles"] = attr.bool(
+    default = output_to_genfiles,
+  )
+
+  if spec[0] == "gateway":
+    print("gateway attrs: %s" % attrs.keys())
+
   return rule(
     implementation = _protoc_rule_impl,
     attrs = attrs,
     outputs = outputs,
-    output_to_genfiles = False,
+    output_to_genfiles = output_to_genfiles,
   )

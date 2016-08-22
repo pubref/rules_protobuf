@@ -22,6 +22,7 @@ go_binary(
 
 go_test(
     name = "greeter_test",
+    size = "small",
     srcs = [
         "greeter.go",
         "greeter_test.go",

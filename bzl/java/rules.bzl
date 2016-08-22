@@ -9,7 +9,7 @@ def java_proto_library(
     lang = JAVA,
     proto_compile = java_proto_compile,
     srcs = [],
-    includes = [],
+    imports = [],
     visibility = None,
     testonly = 0,
     protoc = EXECUTABLE,
@@ -27,7 +27,7 @@ def java_proto_library(
   args["deps"] = deps
   args["protos"] = protos
   args["verbose"] = verbose
-  args["includes"] = includes
+  args["imports"] = imports
   args["protoc"] = protoc
   args["with_grpc"] = with_grpc
   args["gen_" + lang.name] = True

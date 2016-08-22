@@ -4,6 +4,7 @@ CLASS = struct(
         parent = JAVA,
         name = "javanano",
         short_name = "javanano",
+
         protobuf = struct(
             file_extensions = JAVA.protobuf.file_extensions,
             requires = JAVA.protobuf.requires + [
@@ -15,6 +16,7 @@ CLASS = struct(
             ],
             default_options = ["ignore_services=true"],
         ),
+
         grpc = struct(
             executable = JAVA.grpc.executable,
             name = JAVA.grpc.name,
@@ -27,6 +29,7 @@ CLASS = struct(
                 "@io_grpc_grpc_protobuf_nano//jar",
             ],
         ),
+
         build_generated_files = JAVA.build_generated_files,
         build_grpc_out = JAVA.build_grpc_out,
         post_execute = JAVA.post_execute,

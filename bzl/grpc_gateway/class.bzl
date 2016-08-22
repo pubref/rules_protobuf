@@ -2,6 +2,12 @@ load("//bzl:base/class.bzl", BASE = "CLASS", "build_plugin_out")
 load("//bzl:go/class.bzl", GO = "CLASS")
 load("//bzl:util.bzl", "invokesuper")
 
+
+def build_protobuf_out(lang, self):
+    """Build the --{lang}_out option"""
+    build_plugin_out(lang.name, "protobuf", lang, self)
+
+
 def build_imports(lang, self):
     invokesuper("build_imports", lang, self)
     self["imports"] += [
@@ -9,7 +15,6 @@ def build_imports(lang, self):
         "external/com_github_google_protobuf/src",
         ".",
     ]
-
 
 def build_grpc_out(lang, self):
     opts = self.get("gateway_plugin_options", [])
@@ -22,7 +27,7 @@ def build_grpc_out(lang, self):
 
 CLASS = struct(
         parent = BASE,
-        name = "go",
+        name = "go", # Left as "go" to implement gen_go and hence --protoc-gen-go=...
         short_name = "gateway",
 
         protobuf = struct(

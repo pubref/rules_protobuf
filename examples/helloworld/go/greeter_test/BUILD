@@ -8,6 +8,7 @@ load(
 
 go_test(
     name = "greeter_test",
+    size = "small",
     srcs = ["greeter_test.go"],
     deps = [
         "//examples/helloworld/proto:go",
