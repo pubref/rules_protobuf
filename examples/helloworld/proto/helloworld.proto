@@ -5,6 +5,8 @@ option java_multiple_files = true;
 option java_package = "org.pubref.rules_protobuf.examples.helloworld";
 option java_outer_classname = "HelloWorldProto";
 
+import "examples/proto/common.proto";
+
 package helloworld;
 
 // The greeting service definition.
@@ -16,6 +18,7 @@ service Greeter {
 // The request message containing the user's name.
 message HelloRequest {
   string name = 1;
+  common.Config config = 2;
 }
 
 // The response message containing the greetings

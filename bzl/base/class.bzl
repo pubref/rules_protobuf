@@ -33,9 +33,9 @@ def build_generated_files(lang, self):
         fail("Empty proto file input list.")
 
     for srcfile in self.get("srcs", []):
-        basename = srcfile.basename[:-len(".proto")]
+        base = srcfile.basename[:-len(".proto")]
         for ext in exts:
-            pbfile = ctx.new_file(srcfile, basename + ext)
+            pbfile = ctx.new_file(base + ext)
             self["provides"] += [pbfile]
 
 
@@ -54,11 +54,42 @@ def build_generated_filenames(lang, self):
             self["outs"] += [srcfile.rsplit('.', 1)[0] + ext]
 
 
-def build_imports(lang, self):
+def build_paths(lang, self):
     """Build the list of imports"""
     ctx = self["ctx"]
     if ctx:
-        self["imports"] = self.get("imports", []) + ctx.attr.imports
+        self["paths"] = self.get("paths", []) + ctx.attr.paths
+
+def build_imports(lang, self):
+    """Copy any named proto files in the imports to the genfiles area to make visible to protoc.  Not sure this is necessary anymore."""
+    ctx = self["ctx"]
+    if not ctx:
+        fail("Bazel context is required for build_imports")
+    #print("ctx.attr.imports: %s" % type(ctx.attr.imports))
+    for target in ctx.attr.imports:
+        for srcfile in target.files:
+            print("srcfile: %s" % srcfile.path)
+            dstfile = ctx.new_file(srcfile.path)
+            #dstfile = ctx.new_file(srcfile.path)
+            # By declaring that the proto action (happening later)
+            # depends on these files, we ensure that the
+            # CpImportToPackageGenfile action is run.  Without this
+            # linkage, bazel assumes the action isn't required.
+            self["requires"] += [dstfile]
+            if ctx.attr.verbose > 1:
+                print("Copying import %s --> %s" % (srcfile.path, dstfile.path))
+            ctx.action(mnemonic = "CpImportToPackageGenfiles",
+                       inputs = [srcfile],
+                       outputs = [dstfile],
+                       arguments = [srcfile.path, dstfile.path],
+                       command = "cp $1 $2")
+            # These probably need to be compiled also.  Nope: if you
+            # try this you get "inconsistent package names" from
+            # https://github.com/golang/protobuf/blob/1687f003bf0280bd6182a5a1c7241856b269a6c0/protoc-gen-go/generator/generator.go#L750
+            #self["srcs"] += [dstfile]
+
+            #self["go_plugin_options"] = self.get("go_plugin_options", []) + ["M" + srcfile.path + "="]
+    self["paths"] += [self["outdir"]]
 
 def build_plugin_out(name, key, lang, self):
     #print("build_plugin_out(%s, %s)" % (name, key))
@@ -67,7 +98,7 @@ def build_plugin_out(name, key, lang, self):
     plugin = getattr(lang, key)
     opts = getattr(plugin, "default_options", [])
     opts += self.get(key + "_plugin_options", [])
-    outdir = self["gendir"]
+    outdir = self["outdir"]
     if opts:
         outdir = ",".join(opts) + ":" + outdir
     self["args"] += ["--%s_out=%s" % (name, outdir)]
@@ -133,7 +164,7 @@ def build_protobuf_invocation(lang, self):
 def build_protoc_command(lang, self):
     """Build a command list required for genrule execution"""
     self["cmd"] += ["$(location %s)" % self["protoc"]]
-    self["cmd"] += ["-I" + i for i in self["imports"]]
+    self["cmd"] += ["--proto_path=" + i for i in self["paths"]]
     self["cmd"] += self["args"]
     self["cmd"] += ["$(location " + proto + ")" for proto in self["protos"]]
 
@@ -188,6 +219,7 @@ CLASS = struct(
     build_generated_filenames = build_generated_filenames,
     build_imports = build_imports,
     build_inputs = build_inputs,
+    build_paths = build_paths,
     build_tools = build_tools,
     build_protobuf_invocation = build_protobuf_invocation,
     build_protobuf_out = build_protobuf_out,

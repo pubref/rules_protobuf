@@ -13,6 +13,7 @@ def go_proto_library(
     grpc_plugin_options = [],
     imports = [],
     lang = GO,
+    paths = [],
     proto_compile = go_proto_compile,
     protobuf_plugin_options = [],
     protobuf_plugin = None,
@@ -33,6 +34,7 @@ def go_proto_library(
   args["gen_protobuf_" + lang.name + "_plugin"] = protobuf_plugin
   args["gen_" + lang.name + "_plugin_options"] = protobuf_plugin_options
   args["gen_grpc_" + lang.name + "_plugin"] = grpc_plugin
+  args["paths"] = paths
   args["protoc"] = protoc
   args["protos"] = protos
   args["verbose"] = verbose

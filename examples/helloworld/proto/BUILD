@@ -15,13 +15,15 @@ filegroup(
 # Go proto library implementation cannot accept proto filesets from
 # say, a filegroup.  It needs to be an explicit filename.  This is the
 # reason this rule is in the proto dir.
-go_proto_library(
-    name = "go",
-    #name = "go_default_library", a viable alternative
-    protos = ["helloworld.proto"],
-    verbose = 0,
-    with_grpc = True,
-)
+# go_proto_library(
+#     name = "go",
+#     protos = ["helloworld.proto"],
+#     imports = [
+#         "//examples/proto:srcs",
+#     ],
+#     verbose = 2,
+#     with_grpc = True,
+# )
 
 # cc_proto_library implementation cannot accept proto filesets from
 # say, a filegroup.  It needs to be an explicit filename.  This is the
@@ -29,15 +31,18 @@ go_proto_library(
 cc_proto_library(
     name = "cpp",
     protos = ["helloworld.proto"],
+    deps = [
+        "//examples/proto:cpplib",
+    ],
     verbose = 0,
     with_grpc = True,
 )
 
-grpc_gateway_proto_library(
-    name = "gw",
-    protos = ["helloworld_gateway.proto"],
-    verbose = 0,
-)
+# grpc_gateway_proto_library(
+#     name = "gw",
+#     protos = ["helloworld_gateway.proto"],
+#     verbose = 0,
+# )
 
 # py_proto_library(
 #     name = "pylib",

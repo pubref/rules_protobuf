@@ -13,10 +13,10 @@ def _build_generated_files(lang, self):
     protojar = ctx.new_file(srcjar, "%s.jar" % basename)
     self["protojar"] = protojar
     # This will generate the jar inthe source tree itself
-    #self["gendir"] = protojar.short_path
+    #self["outdir"] = protojar.short_path
 
     # This will generate the jar in the BINDIR
-    self["gendir"] = protojar.path
+    self["outdir"] = protojar.path
     self["provides"] += [protojar]
 
 

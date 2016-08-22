@@ -78,7 +78,7 @@ def protoc_genrule(name,
 
     invoke("build_generated_filenames", lang, self)
     invoke("build_tools", lang, self)
-    invoke("build_imports", lang, self)
+    invoke("build_paths", lang, self)
     invoke("build_protobuf_invocation", lang, self)
     invoke("build_protobuf_out", lang, self)
     if with_grpc:
@@ -96,20 +96,11 @@ def protoc_genrule(name,
   return struct(**self)
 
 
-def _get_path(ctx, path):
-  if ctx.label.workspace_root:
-    return ctx.label.workspace_root + '/' + path
-  else:
-    return path
-
-
 def _get_gendir(ctx):
   if ctx.attr.output_to_genfiles:
-    outdir = ctx.var["GENDIR"]
+    return ctx.var["GENDIR"]
   else:
-    outdir = ctx.var["BINDIR"]
-
-  return outdir + "/" + ctx.label.package
+    return ctx.var["BINDIR"]
 
 
 def _execute_rule(self):
@@ -118,13 +109,16 @@ def _execute_rule(self):
       fail("Bazel context required for rule execution")
 
   srcfiles = []
-  for src in self["srcs"]:
-    srcfiles += [src.path]
-
+  for src in self["srcfilenames"]:
+    srcfiles += [src]
+    #srcfiles += [src.path]
 
   #self["args"] += ["--descriptor_set_out=%s" % (descriptor_set_file.path)]
 
-  arguments = list(set(self["args"] + ["-I" + i for i in self["imports"]] + srcfiles))
+  arglist = list(set(self["args"]))
+  pathlist = ["--proto_path=" + i for i in set(self["paths"])]
+
+  arguments = arglist + pathlist + srcfiles
   inputs = list(set(self["requires"]))
   outputs = list(set(self["provides"] + ctx.outputs.outs))
 
@@ -166,22 +160,33 @@ def _build_source_files(ctx, self):
         arguments = [srcfile.path, protofile.path],
         command = "cp $1 $2")
       self["srcs"] += [protofile]
-      self["imports"] += [protofile.dirname]
+      self["srcfilenames"] += [srcfile.short_path]
   else:
     if self["verbose"]:
       print("No Copy source files.")
     for srcfile in ctx.files.protos:
       self["srcs"] += [srcfile]
-      self["imports"] += [srcfile.dirname]
+      self["srcfilenames"] += [srcfile.short_path]
+
+  # This is the key to enable imports: protoc can see the entire
+  # source tree from the workspace root.
+  self["paths"] += ["."]
 
 def _protoc_rule_impl(ctx):
 
+  gendir = _get_gendir(ctx)
+  outdir = gendir
+  #outdir = gendir + "/" + ctx.label.package
+
   self = {
     "ctx": ctx,
-    "gendir": _get_gendir(ctx),
+    "gendir": gendir,
+    "outdir": outdir,
     "imports": [],
+    "paths": [],
     "args": [],
     "srcs": [],
+    "srcfilenames": [],
     "requires": [],
     "copy_protos_to_genfiles": getattr(ctx.attr, "copy_protos_to_genfiles", False),
     "provides": [],
@@ -192,11 +197,12 @@ def _protoc_rule_impl(ctx):
 
   # Propogate proto deps: TODO: this is completely untested.
   for dep in ctx.attr.deps:
-    self["imports"] += dep.proto.imports
-    self["requires"] += dep.proto.deps
-    self["srcs"] += dep.proto.srcs
+    if hasattr(dep, "proto"):
+      self["paths"] += dep.proto.paths
+      self["requires"] += dep.proto.deps
+      self["srcs"] += dep.proto.srcs
 
-  # Copy source files over to gendir
+  # Copy source files over to outdir
   _build_source_files(ctx, self)
 
   # Make a list of languages that were specified for this run
@@ -211,6 +217,7 @@ def _protoc_rule_impl(ctx):
 
     invoke("build_generated_files", lang, self)
     invoke("build_imports", lang, self)
+    invoke("build_paths", lang, self)
     invoke("build_protobuf_invocation", lang, self)
     invoke("build_protobuf_out", lang, self)
     if self["with_grpc"]:
@@ -230,6 +237,7 @@ def _protoc_rule_impl(ctx):
     proto=struct(
       srcs = set(self["srcs"]),
       imports = self["imports"],
+      paths = self["paths"],
       deps = self["requires"],
     ),
   )
@@ -254,11 +262,21 @@ def implement(spec):
 
   # ? How to deps interact here?  Don't understand this. Provider
   # aspect is "proto".
-  attrs["deps"] = attr.label_list(providers = ["proto"])
+  #attrs["deps"] = attr.label_list(providers = ["proto"])
+  attrs["deps"] = attr.label_list()
 
-  # Additional include options to protoc.  These should be
-  # directories.  TODO(user): should this be typed as directory only?
-  attrs["imports"] = attr.string_list()
+  # Options to be passed to protoc as --proto_path.  Differs from
+  # imports in that these are raw strings rather than labels.
+  attrs["paths"] = attr.string_list()
+
+  # Protos that should be made available for proto imports.  These are
+  # not added as options but rather copied over to the sandbox where
+  # protoc is run, making them available for import. TODO: is this
+  # really needed?  Test it by using the descriptor protos from
+  # google/protobuf.
+  attrs["imports"] = attr.label_list(
+    allow_files = FileType([".proto"]),
+  )
 
   # The list of files the rule generates.  How is this actually being
   # used?
@@ -281,10 +299,9 @@ def implement(spec):
   # Generate the descriptor? Shouldn't we just always generate this?
   #attrs["with_descriptor"] = attr.bool()
 
-  # Implemntation detail that varies between output languages. JAVA:
-  # does not matter.
+  # Implementation detail that varies between output languages.
   attrs["copy_protos_to_genfiles"] = attr.bool(
-    default = True,
+    default = False,
   )
 
   # Flag that sets gen_grpc_{lang} to true for all languages.

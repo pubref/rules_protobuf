@@ -7,12 +7,13 @@ cc_proto_compile = implement(["cpp"])
 def cc_proto_library(
     name,
     protos,
-    copy_protos_to_genfiles = True,
+    copy_protos_to_genfiles = False,
     deps = [],
     grpc_plugin = None,
     grpc_plugin_options = [],
     imports = [],
     lang = CPP,
+    paths = [],
     proto_compile = cc_proto_compile,
     protobuf_plugin_options = [],
     protobuf_plugin = None,
@@ -33,6 +34,7 @@ def cc_proto_library(
   args["gen_protobuf_" + lang.name + "_plugin"] = protobuf_plugin
   args["gen_" + lang.name + "_plugin_options"] = protobuf_plugin_options
   args["gen_grpc_" + lang.name + "_plugin"] = grpc_plugin
+  args["paths"] = paths
   args["protoc"] = protoc
   args["protos"] = protos
   args["verbose"] = verbose
