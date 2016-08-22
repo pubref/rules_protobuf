@@ -1,6 +1,7 @@
 load("//bzl:repositories.bzl", "REPOSITORIES")
 load("//bzl:classes.bzl", "CLASSES")
 load("//bzl:util.bzl", "require", "invoke")
+load("@io_bazel_rules_go//go:def.bzl", "go_repositories")
 
 def protobuf_repositories(
     with_protoc = True,
@@ -46,6 +47,9 @@ def protobuf_repositories(
 
   if with_grpc_gateway:
     with_go = True
+
+  if with_go:
+    go_repositories()
 
   if with_cpp:
     classes += ["cpp"]

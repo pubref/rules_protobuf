@@ -38,7 +38,14 @@ cc_proto_library(
 
 ```sh
 $ bazel build :protolib
+$ bazel build --spawn_strategy=standalone :protolib
 ```
+
+> Note: there are some remaining issues with grpc++ compiling on linux
+> that may require disabling the sandbox via the
+> `--spawn_strategy=standalone` build option. See
+> https://github.com/pubref/rules_protobuf/issues/7
+
 
 When using the compiled library in other rules, `#include` the
 generated files relative to the `WORKSPACE` root.  For example, the

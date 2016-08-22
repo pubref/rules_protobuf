@@ -25,6 +25,7 @@ def java_proto_library(
   args = {}
   args["name"] = name + "_pb"
   args["deps"] = deps
+  args["copy_protos_to_genfiles"] = False
   args["protos"] = protos
   args["verbose"] = verbose
   args["imports"] = imports

@@ -108,6 +108,7 @@ def _get_gendir(ctx):
     outdir = ctx.var["GENDIR"]
   else:
     outdir = ctx.var["BINDIR"]
+
   return outdir + "/" + ctx.label.package
 
 
@@ -119,6 +120,7 @@ def _execute_rule(self):
   srcfiles = []
   for src in self["srcs"]:
     srcfiles += [src.path]
+
 
   #self["args"] += ["--descriptor_set_out=%s" % (descriptor_set_file.path)]
 
