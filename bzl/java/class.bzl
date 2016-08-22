@@ -34,8 +34,8 @@ def _post_execute(lang, self):
     srcjar = ctx.outputs.srcjar
     protojar = self["protojar"]
 
-    # Rename protojar to srcjar so that rules like java_library can
-    # consume it.
+    # Rename proto.jar to proto.srcjar so that bazel
+    # java_{library,binary} rules can consume it.
     ctx.action(
         mnemonic = "FixProtoSrcJar",
         inputs = [protojar],

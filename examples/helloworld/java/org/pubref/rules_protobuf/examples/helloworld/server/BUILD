@@ -13,11 +13,11 @@ java_test(
     ],
     tags = ["exclusive"],  # Address already in use if another server being tested has same port
     test_class = "org.pubref.rules_protobuf.examples.helloworld.server.HelloWorldServerTest",
-    runtime_deps = JAVA.grpc.netty_runtime_deps,
     deps = [
         ":server",
         "@junit_junit_4//jar",
     ],
+    runtime_deps = JAVA.grpc.netty_runtime_deps,
 )
 
 java_binary(
@@ -32,9 +32,10 @@ java_library(
     name = "server",
     srcs = [
         "HelloWorldServer.java",
-        "//examples/helloworld/java/org/pubref/rules_protobuf/examples/helloworld/proto:srcs",
     ],
-    deps = JAVA.grpc.compile_deps,
+    deps = [
+        "//examples/helloworld/java/org/pubref/rules_protobuf/examples/helloworld/proto",
+    ] + JAVA.grpc.compile_deps,
 )
 
 java_library(

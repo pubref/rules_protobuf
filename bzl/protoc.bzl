@@ -29,8 +29,9 @@ def protoc_genrule(name,
                    spec = [],
                    self = {},
                    #gendir = "$(BINDIR)", Note: It *has* to be GENDIR for some reason.
-                   gendir = "$(GENDIR)",
+                   outdir = "$(GENDIR)",
                    protos = [],
+                   paths = [],
                    protoc=EXECUTABLE,
                    protobuf_plugin=None,
                    protobuf_plugin_options=[],
@@ -51,8 +52,10 @@ def protoc_genrule(name,
   self += {
     "name": name,
     "ctx": None,
-    "gendir": gendir,
+    "gendir": outdir,
+    "outdir": outdir,
     "protos": protos,
+    "paths": paths,
     "protoc": protoc,
     "protobuf_plugin": protobuf_plugin,
     "protobuf_plugin_options": protobuf_plugin_options,
@@ -193,14 +196,21 @@ def _protoc_rule_impl(ctx):
     "verbose": getattr(ctx.attr, "verbose", True),
     "with_grpc": getattr(ctx.attr, "with_grpc", False),
     #"descriptor_set_file": descriptor_set_file,
+    "transitive_imports": [],
+    "transitive_paths": [],
+    "transitive_packages": {},
+    "transitive_requires": [],
+    "transitive_srcs": [],
   }
 
-  # Propogate proto deps: TODO: this is completely untested.
-  for dep in ctx.attr.deps:
-    if hasattr(dep, "proto"):
-      self["paths"] += dep.proto.paths
-      self["requires"] += dep.proto.deps
-      self["srcs"] += dep.proto.srcs
+  # Propogate proto deps:
+  for dep in ctx.attr.proto_deps:
+    print("ctx.attr dep: %s" % dir(dep))
+    self["transitive_imports"] += dep.proto.transitive_imports
+    self["transitive_paths"] += dep.proto.transitive_paths
+    self["transitive_packages"] += dep.proto.transitive_packages
+    self["transitive_requires"] += dep.proto.transitive_requires
+    self["transitive_srcs"] += dep.proto.transitive_srcs
 
   # Copy source files over to outdir
   _build_source_files(ctx, self)
@@ -232,13 +242,25 @@ def _protoc_rule_impl(ctx):
   for lang in spec:
     invoke("post_execute", lang, self)
 
+  self["packages"] = {
+    ctx.label.package + ':' + ctx.label.name: self["srcs"],
+  }
+
   return struct(
     files=set(self["provides"]),
     proto=struct(
-      srcs = set(self["srcs"]),
+
       imports = self["imports"],
       paths = self["paths"],
-      deps = self["requires"],
+      packages = self["packages"],
+      srcs = set(self["srcs"]),
+      requires = self["requires"],
+
+      transitive_requires = self["requires"] + self["transitive_requires"],
+      transitive_imports = self["imports"] + self["transitive_imports"],
+      transitive_paths = self["paths"] + self["transitive_paths"],
+      transitive_packages = self["packages"] + self["transitive_packages"],
+      transitive_srcs = self["srcs"] + self["transitive_srcs"],
     ),
   )
 
@@ -246,7 +268,10 @@ def _protoc_rule_impl(ctx):
 def implement(spec):
 
   attrs = {}
-  outputs = {}
+
+  outputs = {
+    #"proto": "%{name}.proto",
+  }
 
   # Language descriptor has an opportunity to override this.
   output_to_genfiles = False
@@ -260,10 +285,10 @@ def implement(spec):
     allow_files = FileType([".proto"]),
   )
 
-  # ? How to deps interact here?  Don't understand this. Provider
-  # aspect is "proto".
   #attrs["deps"] = attr.label_list(providers = ["proto"])
   attrs["deps"] = attr.label_list()
+
+  attrs["proto_deps"] = attr.label_list(providers = ["proto"])
 
   # Options to be passed to protoc as --proto_path.  Differs from
   # imports in that these are raw strings rather than labels.
@@ -363,6 +388,17 @@ def implement(spec):
   # Flag that sets gen_grpc_{lang} to true for all languages.
   attrs["output_to_genfiles"] = attr.bool(
     default = output_to_genfiles,
+  )
+
+  # Get the go_prefox
+  attrs["go_prefix"] = attr.label(
+    providers = ["go_prefix"],
+    default = Label(
+      "//:go_prefix",
+      relative_to_caller_repository = True,
+    ),
+    allow_files = False,
+    cfg = HOST_CFG,
   )
 
   return rule(

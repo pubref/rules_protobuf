@@ -15,15 +15,25 @@ filegroup(
 # Go proto library implementation cannot accept proto filesets from
 # say, a filegroup.  It needs to be an explicit filename.  This is the
 # reason this rule is in the proto dir.
-# go_proto_library(
-#     name = "go",
-#     protos = ["helloworld.proto"],
-#     imports = [
-#         "//examples/proto:srcs",
-#     ],
-#     verbose = 2,
-#     with_grpc = True,
-# )
+go_proto_library(
+    name = "go",
+    protos = ["helloworld.proto"],
+    imports = [
+        # If we use deps, we could in theory pull in the dependencies
+        # from the library rule.  But that rule knows the set of files
+        # that it contains, so we *should* be able to access the set
+        # of files in the deps.  Try that.
+        "//examples/proto:srcs",
+    ],
+    # proto_deps = [
+    #     "//examples/proto:go_default_library_pb",
+    # ],
+    deps = [
+        "//examples/proto:go_default_library",
+    ],
+    verbose = 2,
+    with_grpc = True,
+)
 
 # cc_proto_library implementation cannot accept proto filesets from
 # say, a filegroup.  It needs to be an explicit filename.  This is the
@@ -38,11 +48,11 @@ cc_proto_library(
     with_grpc = True,
 )
 
-# grpc_gateway_proto_library(
-#     name = "gw",
-#     protos = ["helloworld_gateway.proto"],
-#     verbose = 0,
-# )
+grpc_gateway_proto_library(
+    name = "gw",
+    protos = ["helloworld_gateway.proto"],
+    verbose = 0,
+)
 
 # py_proto_library(
 #     name = "pylib",
