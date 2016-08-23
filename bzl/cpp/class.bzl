@@ -5,7 +5,8 @@ CLASS = struct(
         name = "cpp",
         short_name = "cpp",
         # cc_*.pb.* outputs need to output to genfiles (not binfiles)
-        # for some reason.
+        # for some reason.  Mentioned in
+        # http://bazel.io/docs/skylark/lib/globals.html#rule.output_to_genfiles.
         output_to_genfiles = True,
 
         protobuf = struct(

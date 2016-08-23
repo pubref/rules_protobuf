@@ -48,11 +48,11 @@ cc_proto_library(
     with_grpc = True,
 )
 
-grpc_gateway_proto_library(
-    name = "gw",
-    protos = ["helloworld_gateway.proto"],
-    verbose = 0,
-)
+# grpc_gateway_proto_library(
+#     name = "gw",
+#     protos = ["helloworld_gateway.proto"],
+#     verbose = 0,
+# )
 
 # py_proto_library(
 #     name = "pylib",

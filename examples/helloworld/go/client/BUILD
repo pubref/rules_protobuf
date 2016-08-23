@@ -12,14 +12,14 @@ go_binary(
     ] + GO.grpc.compile_deps,
 )
 
-# if you depend on this rule, the proto sources get copied to the
-# namespace of the calling BUILD file (examples/helloworld/go/client),
-# affecting the go "import" naming.
-go_proto_library(
-    name = 'protolib',
-    protos = [
-        '//examples/helloworld/proto:srcs',
-    ],
-    with_grpc = True,
-    verbose = 0,
-)
+# # if you depend on this rule, the proto sources get copied to the
+# # namespace of the calling BUILD file (examples/helloworld/go/client),
+# # affecting the go "import" naming.
+# go_proto_library(
+#     name = 'protolib',
+#     protos = [
+#         '//examples/helloworld/proto:srcs',
+#     ],
+#     with_grpc = True,
+#     verbose = 0,
+# )
