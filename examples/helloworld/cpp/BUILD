@@ -1,10 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
-load("//bzl:cpp/rules.bzl", "cc_proto_library", "cc_proto_compile")
-load(
-    "//bzl:cpp/class.bzl",
-    CPP = "CLASS",
-)
+load("//bzl:cpp/class.bzl", CPP = "CLASS")
 
 cc_test(
     name = "test",

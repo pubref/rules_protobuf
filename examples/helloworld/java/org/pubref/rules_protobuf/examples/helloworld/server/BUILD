@@ -1,9 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
-load(
-    "//bzl:java/class.bzl",
-    JAVA = "CLASS",
-)
+load("//bzl:java/class.bzl", JAVA = "CLASS")
 
 java_test(
     name = "netty_test",
@@ -11,11 +8,11 @@ java_test(
     srcs = ["HelloWorldServerTest.java"],
     tags = ["exclusive"],  # Address already in use if another server being tested has same port
     test_class = "org.pubref.rules_protobuf.examples.helloworld.server.HelloWorldServerTest",
-    runtime_deps = JAVA.grpc.netty_runtime_deps,
     deps = [
         ":server",
         "@junit_junit_4//jar",
     ],
+    runtime_deps = JAVA.grpc.netty_runtime_deps,
 )
 
 java_binary(

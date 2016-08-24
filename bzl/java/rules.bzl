@@ -11,7 +11,6 @@ def java_proto_library(
     grpc_plugin_options = [],
     imports = [],
     lang = JAVA,
-    paths = [],
     protobuf_plugin_options = [],
     protobuf_plugin = None,
     proto_compile = java_proto_compile,
@@ -34,7 +33,6 @@ def java_proto_library(
   args["gen_protobuf_" + lang.name + "_plugin"] = protobuf_plugin
   args["gen_" + lang.name + "_plugin_options"] = protobuf_plugin_options
   args["gen_grpc_" + lang.name + "_plugin"] = grpc_plugin
-  args["paths"] = paths
   args["protoc"] = protoc
   args["protos"] = srcs
   args["verbose"] = verbose

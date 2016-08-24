@@ -55,7 +55,6 @@ def protoc_genrule(name,
     "gendir": outdir,
     "outdir": outdir,
     "protos": protos,
-    "paths": paths,
     "protoc": protoc,
     "protobuf_plugin": protobuf_plugin,
     "protobuf_plugin_options": protobuf_plugin_options,
@@ -81,7 +80,7 @@ def protoc_genrule(name,
 
     invoke("build_generated_filenames", lang, self)
     invoke("build_tools", lang, self)
-    invoke("build_paths", lang, self)
+    invoke("build_imports", lang, self)
     invoke("build_protobuf_invocation", lang, self)
     invoke("build_protobuf_out", lang, self)
     if with_grpc:
@@ -119,7 +118,7 @@ def _execute_rule(self):
   #self["args"] += ["--descriptor_set_out=%s" % (descriptor_set_file.path)]
 
   arglist = list(set(self["args"]))
-  pathlist = ["--proto_path=" + i for i in set(self["paths"])]
+  pathlist = ["--proto_path=" + i for i in set(self["imports"])]
 
   arguments = arglist + pathlist + srcfiles
   inputs = list(set(self["requires"]))
@@ -171,9 +170,9 @@ def _build_source_files(ctx, self):
       self["srcs"] += [srcfile]
       self["srcfilenames"] += [srcfile.short_path]
 
-  # This is the key to enable imports: protoc can see the entire
-  # source tree from the workspace root.
-  self["paths"] += ["."]
+  # This is the key for protoc to see the entire source tree from the
+  # workspace root.
+  self["imports"] += ["."]
 
 def _protoc_rule_impl(ctx):
 
@@ -189,7 +188,6 @@ def _protoc_rule_impl(ctx):
     "gendir": gendir,
     "outdir": outdir,
     "imports": [],
-    "paths": [],
     "args": [],
     "srcs": [],
     "srcfilenames": [],
@@ -200,7 +198,6 @@ def _protoc_rule_impl(ctx):
     "with_grpc": getattr(ctx.attr, "with_grpc", False),
     #"descriptor_set_file": descriptor_set_file,
     "transitive_imports": [],
-    "transitive_paths": [],
     "transitive_packages": {},
     "transitive_requires": [],
     "transitive_srcs": [],
@@ -209,7 +206,6 @@ def _protoc_rule_impl(ctx):
   # Propogate proto deps:
   for dep in ctx.attr.deps:
     self["transitive_imports"] += dep.proto.transitive_imports
-    self["transitive_paths"] += dep.proto.transitive_paths
     self["transitive_packages"] += dep.proto.transitive_packages
     self["transitive_requires"] += dep.proto.transitive_requires
     self["transitive_srcs"] += dep.proto.transitive_srcs
@@ -230,7 +226,6 @@ def _protoc_rule_impl(ctx):
 
     invoke("build_generated_files", lang, self)
     invoke("build_imports", lang, self)
-    invoke("build_paths", lang, self)
     invoke("build_protobuf_invocation", lang, self)
     invoke("build_protobuf_out", lang, self)
     if self["with_grpc"]:
@@ -254,14 +249,12 @@ def _protoc_rule_impl(ctx):
     proto=struct(
 
       imports = self["imports"],
-      paths = self["paths"],
       packages = self["packages"],
       srcs = set(self["srcs"]),
       requires = self["requires"],
 
       transitive_requires = self["requires"] + self["transitive_requires"],
       transitive_imports = self["imports"] + self["transitive_imports"],
-      transitive_paths = self["paths"] + self["transitive_paths"],
       transitive_packages = self["packages"] + self["transitive_packages"],
       transitive_srcs = self["srcs"] + self["transitive_srcs"],
     ),
@@ -289,18 +282,8 @@ def implement(spec):
 
   attrs["deps"] = attr.label_list(providers = ["proto"])
 
-  # Options to be passed to protoc as --proto_path.  Differs from
-  # imports in that these are raw strings rather than labels.
-  attrs["paths"] = attr.string_list()
-
-  # Protos that should be made available for proto imports.  These are
-  # not added as options but rather copied over to the sandbox where
-  # protoc is run, making them available for import. TODO: is this
-  # really needed?  Test it by using the descriptor protos from
-  # google/protobuf.
-  attrs["imports"] = attr.label_list(
-    allow_files = FileType([".proto"]),
-  )
+  # Options to be passed to protoc as --proto_path.
+  attrs["imports"] = attr.string_list()
 
   # The list of files the rule generates.  How is this actually being
   # used?

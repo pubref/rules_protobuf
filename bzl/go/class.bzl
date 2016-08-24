@@ -15,7 +15,7 @@ def _build_grpc_out(lang, self):
 
 
 def _build_imports(lang, self):
-    """@Override: Copy any named proto files in the imports to the genfiles area to make visible to protoc.  Not sure this is necessary anymore."""
+    """@Override: for all transitive packages source file names, provide import mapping."""
     invokesuper("build_imports", lang, self)
 
     ctx = self["ctx"]
