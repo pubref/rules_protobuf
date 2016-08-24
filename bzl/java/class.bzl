@@ -1,12 +1,11 @@
 load("//bzl:base/class.bzl", BASE = "CLASS", "build_plugin_out")
+load("//bzl:util.bzl", "invoke", "invokesuper")
 
 
 def _build_generated_files(lang, self):
     """Build a jar file for protoc to dump java classes into."""
 
     ctx = self.get("ctx", None)
-    if ctx == None:
-        fail("Java implementation requires bazel context")
 
     srcjar = ctx.outputs.srcjar
     basename = srcjar.basename[:-len(".srcjar")]

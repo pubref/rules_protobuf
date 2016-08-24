@@ -32,12 +32,31 @@ def _execute_rule(self):
     for i in range(len(outputs)):
       print(" > output%s: %s" % (i, outputs[i]))
 
+  if ctx.attr.output_to_workspace:
+    manifest = ["//" + file.short_path for file in self["provides"]]
+    print(
+"""
+>**************************************************************************
+* - Generating files into the workspace...  This is potentially           *
+*   dangerous (may overwrite existing files) and violates bazel's         *
+*   sandbox policy.                                                       *
+* - Disregard "ERROR: output 'foo.pb.*' was not created." messages.       *
+* - Build will halt following the "not all outputs were created" message. *
+* - Output manifest is printed below.                                     *
+**************************************************************************<
+%s
+>*************************************************************************<
+""" % "\n".join(manifest)
+    )
+
   ctx.action(
-      mnemonic="ProtoCompile",
-      executable=ctx.executable.protoc,
-      arguments=arguments,
-      inputs=inputs,
-      outputs=outputs,
+    mnemonic="ProtoCompile",
+    executable=ctx.executable.protoc,
+    arguments=arguments,
+    inputs=inputs,
+    outputs=outputs,
+    env = {
+    }
   )
 
 
@@ -81,7 +100,9 @@ def _protoc_rule_impl(ctx):
 
   gendir = _get_gendir(ctx)
   outdir = gendir
-  #outdir = gendir + "/" + ctx.label.package
+
+  if ctx.attr.output_to_workspace:
+    outdir = "."
 
   self = {
     "ctx": ctx,
@@ -220,9 +241,15 @@ def implement(spec):
     invoke("implement_compile_outputs", lang, self)
     invoke("implement_compile_output_to_genfiles", lang, self)
 
-  # Generation location.  cpp requires genfiles, everyone else not.
+  # Flag to place generated files in bazel-genfiles.  cpp requires
+  # genfiles, everyone else not.
   attrs["output_to_genfiles"] = attr.bool(
     default = self["output_to_genfiles"],
+  )
+
+  # Flag to place generated files in the bazel workspace.  May violate sandbox constraints.
+  attrs["output_to_workspace"] = attr.bool(
+    default = False,
   )
 
   return rule(

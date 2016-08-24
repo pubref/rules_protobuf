@@ -11,6 +11,7 @@ def java_proto_library(
     grpc_plugin_options = [],
     imports = [],
     lang = JAVA,
+    output_to_workspace = False,
     protobuf_plugin_options = [],
     protobuf_plugin = None,
     proto_compile = java_proto_compile,
@@ -32,6 +33,7 @@ def java_proto_library(
   args["gen_protobuf_" + lang.name + "_plugin"] = protobuf_plugin
   args["gen_" + lang.name + "_plugin_options"] = protobuf_plugin_options
   args["gen_grpc_" + lang.name + "_plugin"] = grpc_plugin
+  args["output_to_workspace"] = output_to_workspace
   args["proto_deps"] = [d + "_pb" for d in deps]
   args["protoc"] = protoc
   args["protos"] = protos

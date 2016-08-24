@@ -14,6 +14,7 @@ def grpc_gateway_proto_library(
     grpc_plugin_options = [],
     imports = [],
     lang = GATEWAY,
+    output_to_workspace = False,
     protobuf_plugin_options = [],
     protobuf_plugin = None,
     proto_compile = grpc_gateway_proto_compile,
@@ -50,6 +51,7 @@ def grpc_gateway_proto_library(
   args["gen_protobuf_" + GO.name + "_plugin"] = GO.protobuf.executable
   args[GO.name + "_import_map"] = go_import_map + GATEWAY.default_go_import_map
 
+  args["output_to_workspace"] = output_to_workspace
   args["proto_deps"] = [d + ".pb" for d in proto_deps]
   args["protoc"] = protoc
   args["protos"] = protos

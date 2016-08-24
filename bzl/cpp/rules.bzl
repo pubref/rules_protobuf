@@ -12,6 +12,7 @@ def cc_proto_library(
     grpc_plugin_options = [],
     imports = [],
     lang = CPP,
+    output_to_workspace = False,
     protobuf_plugin_options = [],
     protobuf_plugin = None,
     proto_compile = cc_proto_compile,
@@ -33,6 +34,7 @@ def cc_proto_library(
   args["gen_protobuf_" + lang.name + "_plugin"] = protobuf_plugin
   args["gen_" + lang.name + "_plugin_options"] = protobuf_plugin_options
   args["gen_grpc_" + lang.name + "_plugin"] = grpc_plugin
+  args["output_to_workspace"] = output_to_workspace
   args["proto_deps"] = [d + ".pb" for d in proto_deps]
   args["protoc"] = protoc
   args["protos"] = protos
