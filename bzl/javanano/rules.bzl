@@ -2,7 +2,7 @@ load("//bzl:protoc.bzl", "implement")
 load("//bzl:javanano/class.bzl", JAVANANO = "CLASS")
 load("//bzl:java/rules.bzl", "java_proto_library")
 
-android_proto_compile = implement(["javanano"])
+android_proto_compile = implement([JAVANANO.name])
 
 def android_proto_library(name, **kwargs):
   java_proto_library(name,

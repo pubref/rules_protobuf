@@ -19,11 +19,20 @@ def implement_compile_attributes(lang, self):
         cfg = HOST_CFG,
     )
 
+    attrs["go_import_map"] = attr.string_dict()
+
 
 def build_protobuf_out(lang, self):
     """Override behavior to add a plugin option before building the --go_out option"""
     if self.get("with_grpc", False):
         self["protobuf_plugin_options"] = self.get("protobuf_plugin_options", []) + ["plugins=grpc"]
+
+    ctx = self["ctx"]
+    if ctx.attr.verbose > 1:
+        print("go_import_map: %s" % ctx.attr.go_import_map)
+    for k, v in ctx.attr.go_import_map.items():
+        self["protobuf_plugin_options"] += ["M%s=%s" % (k, v)]
+
     invokesuper("build_protobuf_out", lang, self)
 
 
@@ -37,8 +46,6 @@ def build_imports(lang, self):
     invokesuper("build_imports", lang, self)
 
     ctx = self["ctx"]
-    if not ctx:
-        fail("Bazel context is required for build_imports")
 
     go_prefix = ctx.attr.go_prefix.go_prefix
 

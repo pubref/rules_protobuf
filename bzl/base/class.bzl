@@ -1,12 +1,9 @@
 def get_generated_filename_extensions(lang, self):
 
     if not hasattr(lang, "protobuf"):
-        fail("Required struct 'protobuf' not found in lang %s" % lang.name)
+        return
 
-    if not hasattr(lang.protobuf, "file_extensions"):
-      fail("Required string_list 'file_extensions' not found in protobuf struct %s" % lang.protobuf)
-
-    exts = getattr(lang.protobuf, "file_extensions")
+    exts = getattr(lang.protobuf, "file_extensions", [])
 
     with_grpc = self.get("with_grpc", False)
     ctx = self.get("ctx", None)
@@ -24,6 +21,9 @@ def build_generated_files(lang, self):
     """Build a list of generated filenames (used by rule)"""
     exts = get_generated_filename_extensions(lang, self)
 
+    if not exts:
+        return
+
     ctx = self.get("ctx", None)
     if ctx == None:
         fail("build_generated_files can only be used in bazel context")
@@ -32,7 +32,7 @@ def build_generated_files(lang, self):
     if not protos:
         fail("Empty proto file input list.")
 
-    for srcfile in self.get("srcs", []):
+    for srcfile in protos:
         base = srcfile.basename[:-len(".proto")]
         for ext in exts:
             pbfile = ctx.new_file(base + ext)
@@ -57,8 +57,7 @@ def build_generated_filenames(lang, self):
 def build_imports(lang, self):
     """Build the list of imports"""
     ctx = self["ctx"]
-    if ctx:
-        self["imports"] = self.get("imports", []) + ctx.attr.imports
+    self["imports"] = self.get("imports", []) + ctx.attr.imports
 
 def build_plugin_out(name, key, lang, self):
     #print("build_plugin_out(%s, %s)" % (name, key))
@@ -140,7 +139,6 @@ def build_protoc_command(lang, self):
 
 def build_inputs(lang, self):
     """Build a list of inputs to the ctx.action protoc"""
-    #self["inputs"] += self["srcs"]
     self["requires"] += self["srcs"]
 
 

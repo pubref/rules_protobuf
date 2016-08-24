@@ -8,12 +8,12 @@ load("//bzl:javanano/class.bzl", JAVANANO = "CLASS")
 load("//bzl:grpc_gateway/class.bzl", GATEWAY = "CLASS")
 
 CLASSES = {
-    "base": BASE,
-    "cpp": CPP,
-    "gateway": GATEWAY,
-    "java": JAVA,
-    "javanano": JAVANANO,
-    "go": GO,
-    "py": PYTHON,
-    "ruby": RUBY,
+    BASE.name: BASE,
+    CPP.name: CPP,
+    GATEWAY.name: GATEWAY,
+    JAVA.name: JAVA,
+    JAVANANO.name: JAVANANO,
+    GO.name: GO,
+    PYTHON.name: PYTHON,
+    RUBY.name: RUBY,
 }

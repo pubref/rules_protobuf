@@ -1,88 +1,73 @@
-load("//bzl:protoc.bzl", "EXECUTABLE", "implement", "protoc_genrule")
-load("//bzl:grpc_gateway/class.bzl", GRPC_GATEWAY = "CLASS")
+load("//bzl:protoc.bzl", "EXECUTABLE", "implement")
+load("//bzl:go/class.bzl", GO = "CLASS")
+load("//bzl:grpc_gateway/class.bzl", GATEWAY = "CLASS")
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
-grpc_gateway_proto_compile = implement(["gateway"])
+gateway_proto_compile = implement([GATEWAY.name, GO.name])
 
-def grpc_gateway_proto_library(
+def gateway_proto_library(
     name,
-    protos,
-    lang = GRPC_GATEWAY,
-    srcs = [],
+    copy_protos_to_genfiles = False,
+    deps = [],
+    grpc_plugin = None,
+    grpc_plugin_options = [],
     imports = [],
-    visibility = None,
-    testonly = 0,
-    protoc = None,
+    lang = GATEWAY,
+    protobuf_plugin_options = [],
     protobuf_plugin = None,
+    proto_compile = gateway_proto_compile,
+    protoc = EXECUTABLE,
+    srcs = [],
     verbose = 0,
+    visibility = None,
+    go_deps = [],
+    go_srcs = [],
+
+    logtostderr = True,
+    alsologtostderr = False,
+    log_dir = None,
+    log_level = None,
+    import_prefix = None,
+    go_import_map = {},
+
     **kwargs):
 
-  result = protoc_genrule(
-    spec = [lang],
-    name = name + ".pb.gw",
-    protos = protos,
-    protoc = protoc,
-    protobuf_plugin = protobuf_plugin,
-    visibility = visibility,
-    testonly = testonly,
-    imports = imports,
-    with_grpc = True,
-    verbose = verbose,
-  )
+  args = {}
+  args["name"] = name + ".pb"
+  args["copy_protos_to_genfiles"] = copy_protos_to_genfiles
+  args["deps"] = [d + ".pb" for d in deps]
+  args["imports"] = imports
 
-  deps = [str(Label(dep)) for dep in getattr(lang.grpc, "compile_deps", [])]
+  args["gen_" + lang.name] = True
+  args["gen_grpc_" + lang.name] = True
+  args["gen_protobuf_" + lang.name + "_plugin"] = protobuf_plugin
+  args["gen_" + lang.name + "_plugin_options"] = protobuf_plugin_options
+  args["gen_grpc_" + lang.name + "_plugin"] = grpc_plugin
+
+  args["gen_" + GO.name] = True
+  args["gen_grpc_" + GO.name] = True
+  args["gen_protobuf_" + GO.name + "_plugin"] = GO.protobuf.executable
+  args[GO.name + "_import_map"] = go_import_map + GATEWAY.default_go_import_map
+
+  args["protoc"] = protoc
+  args["protos"] = srcs
+  args["verbose"] = verbose
+  args["with_grpc"] = True
+
+  args["logtostderr"] = logtostderr
+  args["alsologtostderr"] = alsologtostderr
+  args["log_dir"] = log_dir
+  args["log_level"] = log_level
+  args["import_prefix"] = import_prefix
+
+  proto_compile(**args)
+
+  deps += [str(Label(dep)) for dep in lang.grpc.compile_deps]
+  deps = list(set(deps + go_deps))
 
   go_library(
-    name = name,
-    srcs = result.outs,
-    deps = deps,
-    **kwargs
+     name = name,
+     srcs = go_srcs + [name + ".pb"],
+     deps = deps,
+     **kwargs
   )
-
-
-# Not working yet as a rule...
-#
-# def grpc_gateway_proto_library_rule(
-#     name,
-#     protos,
-#     copy_protos_to_genfiles = True,
-#     deps = [],
-#     grpc_plugin = None,
-#     grpc_plugin_options = [],
-#     imports = [],
-#     lang = GRPC_GATEWAY,
-#     proto_compile = grpc_gateway_proto_compile,
-#     protobuf_plugin_options = [],
-#     protobuf_plugin = None,
-#     protoc = EXECUTABLE,
-#     srcs = [],
-#     verbose = 0,
-#     visibility = None,
-#     **kwargs):
-
-#   args = {}
-#   args["name"] = name + "_pb_gw"
-#   args["copy_protos_to_genfiles"] = copy_protos_to_genfiles
-#   args["deps"] = deps
-#   args["imports"] = imports
-#   args["gen_grpc_gateway"] = True
-#   args["gen_protobuf_go_plugin"] = protobuf_plugin
-#   args["gen_go_plugin_options"] = protobuf_plugin_options
-#   #args["gen_grpc_" + lang.name + "_plugin"] = grpc_plugin
-#   args["protoc"] = protoc
-#   args["protos"] = protos
-#   args["verbose"] = verbose
-#   args["with_grpc"] = True
-
-#   proto_compile(**args)
-
-#   proto_deps = [str(Label(dep)) for dep in getattr(lang.grpc, "compile_deps", [])]
-
-#   grpc_gateway_deps = list(set(deps + proto_deps))
-
-#   go_library(
-#      name = name,
-#      srcs = srcs + [name + "_pb_gw"],
-#      deps = grpc_gateway_deps,
-#      **kwargs
-#   )

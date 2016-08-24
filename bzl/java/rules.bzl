@@ -1,7 +1,7 @@
 load("//bzl:protoc.bzl", "EXECUTABLE", "implement")
 load("//bzl:java/class.bzl", JAVA = "CLASS")
 
-java_proto_compile = implement(["java"])
+java_proto_compile = implement([JAVA.name])
 
 def java_proto_library(
     name,

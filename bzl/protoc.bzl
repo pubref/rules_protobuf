@@ -1,102 +1,7 @@
 load("//bzl:util.bzl", "invoke")
 load("//bzl:classes.bzl", "CLASSES")
 
-
 EXECUTABLE = Label("@com_github_google_protobuf//:protoc")
-
-
-def _execute_genrule(self):
-  if self["verbose"]:
-    print("COMMAND:\n%s" % "\n".join(self["cmd"]));
-    if self["verbose"] > 1:
-      print("SRCS: %s" % self["protos"]);
-      print("OUTS: %s" % self["outs"]);
-      print("TOOLS: %s" % self["tools"]);
-
-  native.genrule(
-    name = self["name"],
-    srcs = self["protos"],
-    testonly = self["testonly"],
-    visibility = self["visibility"],
-    message = "Generating Protocol Buffer File(s)",
-    outs = self["outs"],
-    tools = self["tools"],
-    cmd = " ".join(self["cmd"]),
-  )
-
-
-def protoc_genrule(name,
-                   spec = [],
-                   self = {},
-                   #gendir = "$(BINDIR)", Note: It *has* to be GENDIR for some reason.
-                   outdir = "$(GENDIR)",
-                   protos = [],
-                   paths = [],
-                   protoc=EXECUTABLE,
-                   protobuf_plugin=None,
-                   protobuf_plugin_options=[],
-                   grpc_plugin=None,
-                   grpc_plugin_options=[],
-                   imports = [],
-                   args = [],
-                   testonly = False,
-                   visibility = None,
-                   with_grpc = False,
-                   verbose = False,
-                   descriptor_set = None,
-                   execute = True):
-
-  if protoc == None:
-    protoc = EXECUTABLE
-
-  self += {
-    "name": name,
-    "ctx": None,
-    "gendir": outdir,
-    "outdir": outdir,
-    "protos": protos,
-    "protoc": protoc,
-    "protobuf_plugin": protobuf_plugin,
-    "protobuf_plugin_options": protobuf_plugin_options,
-    "grpc_plugin": grpc_plugin,
-    "grpc_plugin_options": grpc_plugin_options,
-    "imports": imports,
-    "testonly": testonly,
-    "visibility": visibility,
-    "args": args,
-    "with_grpc": with_grpc,
-    "descriptor_set": descriptor_set,
-    "tools": [],
-    "cmd": [],
-    "outs": [],
-    "hdrs": [],
-    "verbose": verbose,
-    "execute": execute,
-  }
-
-  for lang in spec:
-    if self["with_grpc"] and not hasattr(lang, "grpc"):
-      fail("Language %s does not support gRPC" % lang.name)
-
-    invoke("build_generated_filenames", lang, self)
-    invoke("build_tools", lang, self)
-    invoke("build_imports", lang, self)
-    invoke("build_protobuf_invocation", lang, self)
-    invoke("build_protobuf_out", lang, self)
-    if with_grpc:
-      invoke("build_grpc_invocation", lang, self)
-      invoke("build_grpc_out", lang, self)
-    invoke("build_protoc_command", lang, self)
-
-  if execute:
-    _execute_genrule(self)
-
-  for src in self["outs"]:
-    if src.endswith(".h"):
-      self["hdrs"] = [src]
-
-  return struct(**self)
-
 
 def _get_gendir(ctx):
   if ctx.attr.output_to_genfiles:
@@ -107,16 +12,10 @@ def _get_gendir(ctx):
 
 def _execute_rule(self):
   ctx = self["ctx"]
-  if ctx == None:
-      fail("Bazel context required for rule execution")
-
-  srcfiles = []
-  for src in self["srcfilenames"]:
-    srcfiles += [src]
-    #srcfiles += [src.path]
 
   #self["args"] += ["--descriptor_set_out=%s" % (descriptor_set_file.path)]
 
+  srcfiles = self["srcfilenames"]
   arglist = list(set(self["args"]))
   pathlist = ["--proto_path=" + i for i in set(self["imports"])]
 
@@ -215,6 +114,7 @@ def _protoc_rule_impl(ctx):
   # Make a list of languages that were specified for this run
   spec = []
   for name, lang in CLASSES.items():
+    #print("gen_%s? %s" % (name, getattr(ctx.attr, "gen_" + name, False)))
     if getattr(ctx.attr, "gen_" + name, False):
       spec += [lang]
 

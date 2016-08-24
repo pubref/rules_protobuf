@@ -2,7 +2,7 @@ load("//bzl:protoc.bzl", "implement", "EXECUTABLE")
 load("//bzl:util.bzl", "invoke")
 load("//bzl:cpp/class.bzl", CPP = "CLASS")
 
-cc_proto_compile = implement(["cpp"])
+cc_proto_compile = implement([CPP.name])
 
 def cc_proto_library(
     name,

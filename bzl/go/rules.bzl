@@ -2,7 +2,7 @@ load("//bzl:protoc.bzl", "implement", "EXECUTABLE")
 load("//bzl:go/class.bzl", GO = "CLASS")
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
-go_proto_compile = implement(["go"])
+go_proto_compile = implement([GO.name])
 
 def go_proto_library(
     name,

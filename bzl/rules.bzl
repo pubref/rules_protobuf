@@ -70,9 +70,8 @@ def protobuf_repositories(
     if not lang:
       fail("Unknown language " + name)
 
-    if not hasattr(lang, "protobuf"):
-      fail("Required struct 'protobuf' missing in language %s" % lang.name)
-    requires += getattr(lang.protobuf, "requires", [])
+    if hasattr(lang, "protobuf"):
+      requires += getattr(lang.protobuf, "requires", [])
 
     if with_grpc and hasattr(lang, "grpc"):
       requires += getattr(lang.grpc, "requires", [])

@@ -19,7 +19,7 @@ go_library(
 )
 
 filegroup(
-    name = "googleapis",
+    name = "googleapi_protos",
     srcs = glob([
         "third_party/googleapis/google/api/*.proto",
     ]),

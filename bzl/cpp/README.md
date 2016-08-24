@@ -71,7 +71,7 @@ cc_library(
   srcs = ['MyApp.cpp'],
   deps = [
     ":protolib"
-  ] + CC.grpc.compile_deps,
+  ] + CPP.grpc.compile_deps,
 )
 ```
 

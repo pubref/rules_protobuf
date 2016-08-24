@@ -2,7 +2,7 @@ package(default_visibility = ["//visibility:public"])
 
 load("//bzl:cpp/rules.bzl", "cc_proto_library")
 load("//bzl:go/rules.bzl", "go_proto_library")
-load("//bzl:grpc_gateway/rules.bzl", "grpc_gateway_proto_library")
+load("//bzl:grpc_gateway/rules.bzl", "gateway_proto_library")
 
 filegroup(
     name = "srcs",
@@ -29,11 +29,11 @@ cc_proto_library(
     ],
 )
 
-# grpc_gateway_proto_library(
-#     name = "gw",
-#     protos = ["helloworld_gateway.proto"],
-#     verbose = 0,
-# )
+gateway_proto_library(
+    name = "gw",
+    srcs = ["helloworld_gateway.proto"],
+    verbose = 0,
+)
 
 # py_proto_library(
 #     name = "pylib",
