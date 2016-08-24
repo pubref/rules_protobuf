@@ -7,14 +7,14 @@ load("//bzl:grpc_gateway/rules.bzl", "grpc_gateway_proto_library", "grpc_gateway
 
 # grpc_gateway_proto_library(
 #     name = "gateway",
-#     srcs = ["helloworld.proto"],
+#     protos = ["helloworld.proto"],
 #     verbose = 2,
 # )
 
 grpc_gateway_binary(
     name = "greeter",
     srcs = ["greeter.go"],
-    protolib_name = "gateway",
+    proto_label = "gateway",
     protos = ["helloworld.proto"],
     verbose = 0,
 )
@@ -33,13 +33,6 @@ grpc_gateway_binary(
 #     ],
 # )
 
-
-# grpc_gateway_binary(
-#     name = "gateway",
-#     srcs = ["helloworld.proto"],
-#     go_srcs = ["greeter.go"]
-#     verbose = 2,
-# )
 
 go_test(
     name = "greeter_test",

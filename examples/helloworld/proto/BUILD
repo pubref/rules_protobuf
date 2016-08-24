@@ -4,26 +4,26 @@ load("//bzl:cpp/rules.bzl", "cc_proto_library")
 load("//bzl:go/rules.bzl", "go_proto_library")
 
 filegroup(
-    name = "srcs",
+    name = "protos",
     srcs = ["helloworld.proto"],
 )
 
 go_proto_library(
     name = "go",
-    srcs = [":srcs"],
+    protos = [":protos"],
     verbose = 0,
     with_grpc = True,
-    deps = [
+    proto_deps = [
         "//examples/proto:go_default_library",
     ],
 )
 
 cc_proto_library(
     name = "cpp",
-    srcs = [":srcs"],
+    protos = [":protos"],
     verbose = 0,
     with_grpc = True,
-    deps = [
+    proto_deps = [
         "//examples/proto:cpp",
     ],
 )

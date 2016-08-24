@@ -4,9 +4,9 @@ load("//bzl:java/rules.bzl", "java_proto_library")
 
 java_proto_library(
     name = "proto",
-    srcs = [
-        "//examples/helloworld/proto:srcs",
-        "//examples/proto:srcs",
+    protos = [
+        "//examples/helloworld/proto:protos",
+        "//examples/proto:protos",
     ],
     verbose = 0,
     with_grpc = True,

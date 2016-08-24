@@ -49,7 +49,7 @@ def build_imports(lang, self):
 
     go_prefix = ctx.attr.go_prefix.go_prefix
 
-    for dep in ctx.attr.deps:
+    for dep in ctx.attr.proto_deps:
         provider = dep.proto
         proto_packages = provider.transitive_packages
         for pkg, srcs in proto_packages.items():

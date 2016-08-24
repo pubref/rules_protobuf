@@ -17,27 +17,26 @@ def grpc_gateway_proto_library(
     protobuf_plugin_options = [],
     protobuf_plugin = None,
     proto_compile = grpc_gateway_proto_compile,
+    proto_deps = [],
     protoc = PROTOC,
+    protos = [],
     srcs = [],
     verbose = 0,
     visibility = None,
-    go_deps = [],
     go_rule = go_library,
-    go_srcs = [],
 
+    go_import_map = {},
     logtostderr = True,
     alsologtostderr = False,
     log_dir = None,
     log_level = None,
     import_prefix = None,
-    go_import_map = {},
 
     **kwargs):
 
   args = {}
   args["name"] = name + ".pb"
   args["copy_protos_to_genfiles"] = copy_protos_to_genfiles
-  args["deps"] = [d + ".pb" for d in deps]
   args["imports"] = imports
 
   args["gen_" + lang.name] = True
@@ -51,8 +50,9 @@ def grpc_gateway_proto_library(
   args["gen_protobuf_" + GO.name + "_plugin"] = GO.protobuf.executable
   args[GO.name + "_import_map"] = go_import_map + GATEWAY.default_go_import_map
 
+  args["proto_deps"] = [d + ".pb" for d in proto_deps]
   args["protoc"] = protoc
-  args["protos"] = srcs
+  args["protos"] = protos
   args["verbose"] = verbose
   args["with_grpc"] = True
 
@@ -65,26 +65,26 @@ def grpc_gateway_proto_library(
   proto_compile(**args)
 
   deps += [str(Label(dep)) for dep in lang.grpc.compile_deps]
-  deps = list(set(deps + go_deps))
+  deps = list(set(deps + proto_deps))
 
   go_rule(
      name = name,
-     srcs = go_srcs + [name + ".pb"],
+     srcs = srcs + [name + ".pb"],
      deps = deps,
      **kwargs
   )
 
 
-def grpc_gateway_binary(name, protolib_name = "go_default_library", srcs = [], deps = [], protos = [], proto_deps = [], **kwargs):
+def grpc_gateway_binary(name, srcs = [], deps = [], protos = [], proto_label = "go_default_library", proto_deps = [], **kwargs):
   grpc_gateway_proto_library(
-    name = protolib_name,
-    srcs = protos,
-    deps = proto_deps,
+    name = proto_label,
+    protos = protos,
+    proto_deps = proto_deps,
      **kwargs
   )
 
   go_binary(
      name = name,
      srcs = srcs,
-     deps = deps + [protolib_name] + GATEWAY.grpc.compile_deps,
+     deps = deps + [proto_label] + GATEWAY.grpc.compile_deps,
   )

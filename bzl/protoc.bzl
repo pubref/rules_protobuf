@@ -103,7 +103,7 @@ def _protoc_rule_impl(ctx):
   }
 
   # Propogate proto deps:
-  for dep in ctx.attr.deps:
+  for dep in ctx.attr.proto_deps:
     self["transitive_imports"] += dep.proto.transitive_imports
     self["transitive_packages"] += dep.proto.transitive_packages
     self["transitive_requires"] += dep.proto.transitive_requires
@@ -188,7 +188,7 @@ def implement(spec):
   )
 
   # *_proto_{compile,library} rule dependencies.
-  attrs["deps"] = attr.label_list(providers = ["proto"])
+  attrs["proto_deps"] = attr.label_list(providers = ["proto"])
 
   # Options to be passed to protoc as --proto_path.
   attrs["imports"] = attr.string_list()
