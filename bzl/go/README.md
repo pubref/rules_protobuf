@@ -24,12 +24,12 @@ load("@org_pubref_rules_protobuf//bzl:go/rules.bzl", "go_proto_library")
 ```
 
 Invoke the rule.  Pass the set of protobuf source files to the
-`protos` attribute.
+`srcs` attribute.
 
 ```python
 go_proto_library(
   name = "protolib",
-  protos = ["my.proto"],
+  srcs = ["my.proto"],
   with_grpc = True,
 )
 ```
@@ -86,7 +86,7 @@ go_prefix("github.com/my_organization_name")
 # //go/app_1/BUILD
 go_proto_library(
   name = "protolib",
-  protos = ["my.proto"],
+  srcs = ["my.proto"],
   with_grpc = True,
 )
 ```

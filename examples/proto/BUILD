@@ -12,11 +12,11 @@ filegroup(
 
 go_proto_library(
     name = "go_default_library",
-    protos = ["common.proto"],
+    srcs = ["common.proto"],
 )
 
 cc_proto_library(
-    name = "cpplib",
-    protos = ["common.proto"],
-    verbose = 2,
+    name = "cpp",
+    srcs = ["common.proto"],
+    verbose = 0,
 )

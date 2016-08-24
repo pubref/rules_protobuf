@@ -8,20 +8,12 @@ load(
 
 go_binary(
     name = "server",
-    srcs = [
-        "main.go",
-    ],
-    deps = [
-        "//examples/helloworld/proto:go",
-    ] + GO.grpc.compile_deps,
+    srcs = ["main.go"],
+    deps = ["//examples/helloworld/proto:go"] + GO.grpc.compile_deps,
 )
 
 go_library(
     name = "greeter",
-    srcs = [
-        "main.go",
-    ],
-    deps = [
-        "//examples/helloworld/proto:go",
-    ] + GO.grpc.compile_deps,
+    srcs = ["main.go"],
+    deps = ["//examples/helloworld/proto:go"] + GO.grpc.compile_deps,
 )

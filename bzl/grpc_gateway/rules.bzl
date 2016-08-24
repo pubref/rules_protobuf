@@ -19,7 +19,7 @@ def grpc_gateway_proto_library(
 
   result = protoc_genrule(
     spec = [lang],
-    name = name + "_pb_gw",
+    name = name + ".pb.gw",
     protos = protos,
     protoc = protoc,
     protobuf_plugin = protobuf_plugin,

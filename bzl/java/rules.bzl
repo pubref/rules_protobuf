@@ -5,37 +5,40 @@ java_proto_compile = implement(["java"])
 
 def java_proto_library(
     name,
-    protos,
-    lang = JAVA,
-    proto_compile = java_proto_compile,
-    srcs = [],
-    imports = [],
-    visibility = None,
-    testonly = 0,
-    protoc = EXECUTABLE,
-    protobuf_plugin_options = [],
-    protobuf_plugin = None,
+    copy_protos_to_genfiles = False,
+    deps = [],
     grpc_plugin = None,
     grpc_plugin_options = [],
+    imports = [],
+    lang = JAVA,
+    paths = [],
+    protobuf_plugin_options = [],
+    protobuf_plugin = None,
+    proto_compile = java_proto_compile,
+    protoc = EXECUTABLE,
+    srcs = [],
     verbose = 0,
+    visibility = None,
     with_grpc = False,
-    deps = [],
+    java_deps = [],
+    java_srcs = [],
     **kwargs):
 
   args = {}
-  args["name"] = name + "_pb"
-  args["deps"] = deps
+  args["name"] = name + ".pb"
   args["copy_protos_to_genfiles"] = False
-  args["protos"] = protos
-  args["verbose"] = verbose
+  args["deps"] = [d + "_pb" for d in deps]
   args["imports"] = imports
-  args["protoc"] = protoc
-  args["with_grpc"] = with_grpc
   args["gen_" + lang.name] = True
   args["gen_grpc_" + lang.name] = with_grpc
   args["gen_protobuf_" + lang.name + "_plugin"] = protobuf_plugin
   args["gen_" + lang.name + "_plugin_options"] = protobuf_plugin_options
   args["gen_grpc_" + lang.name + "_plugin"] = grpc_plugin
+  args["paths"] = paths
+  args["protoc"] = protoc
+  args["protos"] = srcs
+  args["verbose"] = verbose
+  args["with_grpc"] = with_grpc
 
   proto_compile(**args)
 
@@ -44,13 +47,11 @@ def java_proto_library(
   elif hasattr(lang, "protobuf"):
     deps += [str(Label(dep)) for dep in getattr(lang.protobuf, "compile_deps", [])]
 
-  #print("java_proto_library compile deps: %s" % deps)
-
-  deps = list(set(deps))
+  deps = list(set(deps + java_deps))
 
   native.java_library(
     name = name,
-    srcs = srcs + [name + "_pb.srcjar"],
+    srcs = java_srcs + [name + ".pb.srcjar"],
     deps = deps,
     **kwargs
   )

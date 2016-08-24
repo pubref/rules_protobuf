@@ -26,12 +26,12 @@ load("@org_pubref_rules_protobuf//bzl:cpp/rules.bzl", "cc_proto_library")
 ```
 
 Invoke the rule.  Pass the set of protobuf source files to the
-`protos` attribute.
+`srcs` attribute.
 
 ```python
 cc_proto_library(
   name = "protolib",
-  protos = ["my.proto"],
+  srcs = ["my.proto"],
   with_grpc = True,
 )
 ```

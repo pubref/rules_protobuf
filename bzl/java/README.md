@@ -24,12 +24,12 @@ load("@org_pubref_rules_protobuf//bzl:java/rules.bzl", "java_proto_library")
 ```
 
 Invoke the rule.  Pass the set of protobuf source files to the
-`protos` attribute.
+`srcs` attribute.
 
 ```python
 java_proto_library(
   name = "protolib",
-  protos = ["my.proto"],
+  srcs = ["my.proto"],
   with_grpc = True,
 )
 ```
@@ -64,8 +64,8 @@ One could also specify all the sources needed in the
 ```python
 java_proto_library(
   name = "mylib",
-  protos = ["my.proto"],
-  srcs = ['MyApp.java'],
+  srcs = ["my.proto"],
+  java_srcs = ['MyApp.java'],
   with_grpc = True,
 )
 ```

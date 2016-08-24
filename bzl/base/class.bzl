@@ -68,7 +68,7 @@ def build_imports(lang, self):
     #print("ctx.attr.imports: %s" % type(ctx.attr.imports))
     for target in ctx.attr.imports:
         for srcfile in target.files:
-            print("srcfile: %s" % srcfile.path)
+            #print("srcfile: %s" % srcfile.path)
             dstfile = ctx.new_file(srcfile.path)
             #dstfile = ctx.new_file(srcfile.path)
             # By declaring that the proto action (happening later)
@@ -89,7 +89,7 @@ def build_imports(lang, self):
             #self["srcs"] += [dstfile]
 
             #self["go_plugin_options"] = self.get("go_plugin_options", []) + ["M" + srcfile.path + "="]
-    self["paths"] += [self["outdir"]]
+    #self["paths"] += [self["outdir"]]
 
 def build_plugin_out(name, key, lang, self):
     #print("build_plugin_out(%s, %s)" % (name, key))

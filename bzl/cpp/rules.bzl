@@ -6,7 +6,6 @@ cc_proto_compile = implement(["cpp"])
 
 def cc_proto_library(
     name,
-    protos,
     copy_protos_to_genfiles = False,
     deps = [],
     grpc_plugin = None,
@@ -14,20 +13,22 @@ def cc_proto_library(
     imports = [],
     lang = CPP,
     paths = [],
-    proto_compile = cc_proto_compile,
     protobuf_plugin_options = [],
     protobuf_plugin = None,
+    proto_compile = cc_proto_compile,
     protoc = EXECUTABLE,
     srcs = [],
     verbose = 0,
     visibility = None,
     with_grpc = False,
+    cc_deps = [],
+    cc_srcs = [],
     **kwargs):
 
   args = {}
-  args["name"] = name + "_pb"
+  args["name"] = name + ".pb"
   args["copy_protos_to_genfiles"] = copy_protos_to_genfiles
-  args["deps"] = deps
+  args["deps"] = [d + ".pb" for d in deps]
   args["imports"] = imports
   args["gen_" + lang.name] = True
   args["gen_grpc_" + lang.name] = with_grpc
@@ -36,22 +37,22 @@ def cc_proto_library(
   args["gen_grpc_" + lang.name + "_plugin"] = grpc_plugin
   args["paths"] = paths
   args["protoc"] = protoc
-  args["protos"] = protos
+  args["protos"] = srcs
   args["verbose"] = verbose
   args["with_grpc"] = with_grpc
 
   proto_compile(**args)
 
   if with_grpc and hasattr(lang, "grpc"):
-    proto_deps = [str(Label(dep)) for dep in getattr(lang.grpc, "compile_deps", [])]
+    deps += [str(Label(dep)) for dep in getattr(lang.grpc, "compile_deps", [])]
   elif hasattr(lang, "protobuf"):
-    proto_deps = [str(Label(dep)) for dep in getattr(lang.protobuf, "compile_deps", [])]
+    deps += [str(Label(dep)) for dep in getattr(lang.protobuf, "compile_deps", [])]
 
-  cc_deps = list(set(deps + proto_deps))
+  deps = list(set(deps + cc_deps))
 
   native.cc_library(
     name = name,
-    srcs = srcs + [name + "_pb"],
-    deps = cc_deps,
+    srcs = cc_srcs + [name + ".pb"],
+    deps = deps,
     **kwargs
   )

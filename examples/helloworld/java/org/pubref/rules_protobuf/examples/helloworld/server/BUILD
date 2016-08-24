@@ -8,31 +8,25 @@ load(
 java_test(
     name = "netty_test",
     size = "small",
-    srcs = [
-        "HelloWorldServerTest.java",
-    ],
+    srcs = ["HelloWorldServerTest.java"],
     tags = ["exclusive"],  # Address already in use if another server being tested has same port
     test_class = "org.pubref.rules_protobuf.examples.helloworld.server.HelloWorldServerTest",
+    runtime_deps = JAVA.grpc.netty_runtime_deps,
     deps = [
         ":server",
         "@junit_junit_4//jar",
     ],
-    runtime_deps = JAVA.grpc.netty_runtime_deps,
 )
 
 java_binary(
     name = "netty",
     main_class = "org.pubref.rules_protobuf.examples.helloworld.server.HelloWorldServer",
-    runtime_deps = [
-        ":server",
-    ] + JAVA.grpc.netty_runtime_deps,
+    runtime_deps = [":server"] + JAVA.grpc.netty_runtime_deps,
 )
 
 java_library(
     name = "server",
-    srcs = [
-        "HelloWorldServer.java",
-    ],
+    srcs = ["HelloWorldServer.java"],
     deps = [
         "//examples/helloworld/java/org/pubref/rules_protobuf/examples/helloworld/proto",
     ] + JAVA.grpc.compile_deps,
@@ -40,10 +34,8 @@ java_library(
 
 java_library(
     name = "server_alt2",
-    srcs = [
-        "HelloWorldServer.java",
-    ],
+    srcs = ["HelloWorldServer.java"],
     deps = [
-        "//examples/helloworld/java/org/pubref/rules_protobuf/examples/helloworld/proto:proto",
+        "//examples/helloworld/java/org/pubref/rules_protobuf/examples/helloworld/proto",
     ] + JAVA.grpc.compile_deps,
 )

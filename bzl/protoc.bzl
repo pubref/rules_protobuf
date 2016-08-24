@@ -155,7 +155,7 @@ def _build_source_files(ctx, self):
     for srcfile in ctx.files.protos:
       protofile = ctx.new_file(srcfile.basename)
       if self["verbose"]:
-        print("Copying %s .. %s" % (srcfile.path, protofile.path))
+        print("Copying source file to build_path %s .. %s" % (srcfile.path, protofile.path))
       ctx.action(
         mnemonic = "CpProtoToPackageGenfiles",
         inputs = [srcfile],
@@ -176,6 +176,9 @@ def _build_source_files(ctx, self):
   self["paths"] += ["."]
 
 def _protoc_rule_impl(ctx):
+
+  if ctx.attr.verbose:
+    print("Execute rule %s:%s"  % (ctx.build_file_path, ctx.label.name))
 
   gendir = _get_gendir(ctx)
   outdir = gendir
@@ -204,13 +207,13 @@ def _protoc_rule_impl(ctx):
   }
 
   # Propogate proto deps:
-  for dep in ctx.attr.proto_deps:
-    print("ctx.attr dep: %s" % dir(dep))
+  for dep in ctx.attr.deps:
     self["transitive_imports"] += dep.proto.transitive_imports
     self["transitive_paths"] += dep.proto.transitive_paths
     self["transitive_packages"] += dep.proto.transitive_packages
     self["transitive_requires"] += dep.proto.transitive_requires
     self["transitive_srcs"] += dep.proto.transitive_srcs
+    #print("transitive_srcs: %s" % self["transitive_srcs"])
 
   # Copy source files over to outdir
   _build_source_files(ctx, self)
@@ -270,7 +273,6 @@ def implement(spec):
   attrs = {}
 
   outputs = {
-    #"proto": "%{name}.proto",
   }
 
   # Language descriptor has an opportunity to override this.
@@ -285,10 +287,7 @@ def implement(spec):
     allow_files = FileType([".proto"]),
   )
 
-  #attrs["deps"] = attr.label_list(providers = ["proto"])
-  attrs["deps"] = attr.label_list()
-
-  attrs["proto_deps"] = attr.label_list(providers = ["proto"])
+  attrs["deps"] = attr.label_list(providers = ["proto"])
 
   # Options to be passed to protoc as --proto_path.  Differs from
   # imports in that these are raw strings rather than labels.
