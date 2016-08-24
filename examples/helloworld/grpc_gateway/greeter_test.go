@@ -15,7 +15,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	greeter "github.com/pubref/rules_protobuf/examples/helloworld/go/server/greeter"
 	pb "github.com/pubref/rules_protobuf/examples/helloworld/proto/go"
-	gw "github.com/pubref/rules_protobuf/examples/helloworld/proto/gw"
+	gateway "github.com/pubref/rules_protobuf/examples/helloworld/grpc_gateway/gateway"
 )
 
 const (
@@ -55,7 +55,7 @@ func testGreet(t *testing.T) {
 		t.Logf("%s", buf)
 	}
 
-	var reply gw.HelloReply
+	var reply gateway.HelloReply
 	if err := jsonpb.UnmarshalString(string(buf), &reply); err != nil {
 		t.Errorf("jsonpb.UnmarshalString(%s, &reply) failed with %v; want success", buf, err)
 		return
@@ -82,7 +82,7 @@ func startGateway() error {
 
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-	err := gw.RegisterGreeterHandlerFromEndpoint(ctx, mux, *endpoint, opts)
+	err := gateway.RegisterGreeterHandlerFromEndpoint(ctx, mux, *endpoint, opts)
 	if err != nil {
 		return err
 	}

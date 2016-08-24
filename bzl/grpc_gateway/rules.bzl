@@ -1,11 +1,12 @@
-load("//bzl:protoc.bzl", "EXECUTABLE", "implement")
+load("//bzl:protoc.bzl", "PROTOC", "implement")
 load("//bzl:go/class.bzl", GO = "CLASS")
 load("//bzl:grpc_gateway/class.bzl", GATEWAY = "CLASS")
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_binary")
 
-gateway_proto_compile = implement([GATEWAY.name, GO.name])
+grpc_gateway_proto_compile = implement([GO.name, GATEWAY.name])
 
-def gateway_proto_library(
+
+def grpc_gateway_proto_library(
     name,
     copy_protos_to_genfiles = False,
     deps = [],
@@ -15,12 +16,13 @@ def gateway_proto_library(
     lang = GATEWAY,
     protobuf_plugin_options = [],
     protobuf_plugin = None,
-    proto_compile = gateway_proto_compile,
-    protoc = EXECUTABLE,
+    proto_compile = grpc_gateway_proto_compile,
+    protoc = PROTOC,
     srcs = [],
     verbose = 0,
     visibility = None,
     go_deps = [],
+    go_rule = go_library,
     go_srcs = [],
 
     logtostderr = True,
@@ -65,9 +67,24 @@ def gateway_proto_library(
   deps += [str(Label(dep)) for dep in lang.grpc.compile_deps]
   deps = list(set(deps + go_deps))
 
-  go_library(
+  go_rule(
      name = name,
      srcs = go_srcs + [name + ".pb"],
      deps = deps,
      **kwargs
+  )
+
+
+def grpc_gateway_binary(name, protolib_name = "go_default_library", srcs = [], deps = [], protos = [], proto_deps = [], **kwargs):
+  grpc_gateway_proto_library(
+    name = protolib_name,
+    srcs = protos,
+    deps = proto_deps,
+     **kwargs
+  )
+
+  go_binary(
+     name = name,
+     srcs = srcs,
+     deps = deps + [protolib_name] + GATEWAY.grpc.compile_deps,
   )

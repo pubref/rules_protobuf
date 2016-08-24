@@ -1,7 +1,7 @@
 load("//bzl:util.bzl", "invoke")
 load("//bzl:classes.bzl", "CLASSES")
 
-EXECUTABLE = Label("@com_github_google_protobuf//:protoc")
+PROTOC = Label("//external:protoc")
 
 def _get_gendir(ctx):
   if ctx.attr.output_to_genfiles:
@@ -24,13 +24,13 @@ def _execute_rule(self):
   outputs = list(set(self["provides"] + ctx.outputs.outs))
 
   if ctx.attr.verbose:
-    print("protoc binary: " + ctx.executable.protoc.path)
+    print("protoc executable: " + ctx.executable.protoc.path)
     for i in range(len(arguments)):
       print(" > arg%s: %s" % (i, arguments[i]))
-    for i in inputs:
-      print(" > input: %s" % i)
-    for o in outputs:
-      print(" > output: %s" % o)
+    for i in range(len(inputs)):
+      print(" > input%s: %s" % (i, inputs[i]))
+    for i in range(len(outputs)):
+      print(" > output%s: %s" % (i, outputs[i]))
 
   ctx.action(
       mnemonic="ProtoCompile",
@@ -72,6 +72,7 @@ def _build_source_files(ctx, self):
   # This is the key for protoc to see the entire source tree from the
   # workspace root.
   self["imports"] += ["."]
+
 
 def _protoc_rule_impl(ctx):
 

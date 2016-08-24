@@ -1,4 +1,4 @@
-load("//bzl:protoc.bzl", "EXECUTABLE", "implement")
+load("//bzl:protoc.bzl", "PROTOC", "implement")
 load("//bzl:java/class.bzl", JAVA = "CLASS")
 
 java_proto_compile = implement([JAVA.name])
@@ -14,7 +14,7 @@ def java_proto_library(
     protobuf_plugin_options = [],
     protobuf_plugin = None,
     proto_compile = java_proto_compile,
-    protoc = EXECUTABLE,
+    protoc = PROTOC,
     srcs = [],
     verbose = 0,
     visibility = None,

@@ -1,10 +1,14 @@
 syntax = "proto3";
-package helloworld;
 
 import "google/api/annotations.proto";
 
+package helloworld;
 
-// The greeting service definition.
+// The greeting service definition.  We repeat the definition here
+// rather than using examples/helloworld/proto/helloworld.proto so the
+// other implementations / tests don't have to account for the
+// annotations import.
+
 service Greeter {
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply) {

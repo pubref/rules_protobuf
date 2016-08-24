@@ -1,4 +1,4 @@
-load("//bzl:protoc.bzl", "implement", "EXECUTABLE")
+load("//bzl:protoc.bzl", "implement", "PROTOC")
 load("//bzl:go/class.bzl", GO = "CLASS")
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
@@ -15,7 +15,7 @@ def go_proto_library(
     protobuf_plugin_options = [],
     protobuf_plugin = None,
     proto_compile = go_proto_compile,
-    protoc = EXECUTABLE,
+    protoc = PROTOC,
     srcs = [],
     verbose = 0,
     visibility = None,

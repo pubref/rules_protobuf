@@ -6,9 +6,9 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	gw "github.com/pubref/rules_protobuf/examples/helloworld/proto/gw"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
+	gateway "github.com/pubref/rules_protobuf/examples/helloworld/grpc_gateway/gateway"
 )
 
 var (
@@ -22,7 +22,7 @@ func run() error {
 
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-	err := gw.RegisterGreeterHandlerFromEndpoint(ctx, mux, *endpoint, opts)
+	err := gateway.RegisterGreeterHandlerFromEndpoint(ctx, mux, *endpoint, opts)
 	if err != nil {
 		return err
 	}

@@ -1,4 +1,4 @@
-load("//bzl:protoc.bzl", "implement", "EXECUTABLE")
+load("//bzl:protoc.bzl", "implement", "PROTOC")
 load("//bzl:util.bzl", "invoke")
 load("//bzl:cpp/class.bzl", CPP = "CLASS")
 
@@ -15,7 +15,7 @@ def cc_proto_library(
     protobuf_plugin_options = [],
     protobuf_plugin = None,
     proto_compile = cc_proto_compile,
-    protoc = EXECUTABLE,
+    protoc = PROTOC,
     srcs = [],
     verbose = 0,
     visibility = None,

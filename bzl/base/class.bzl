@@ -1,30 +1,29 @@
 def get_generated_filename_extensions(lang, self):
-
-    if not hasattr(lang, "protobuf"):
-        return
-
-    exts = getattr(lang.protobuf, "file_extensions", [])
-
-    with_grpc = self.get("with_grpc", False)
     ctx = self.get("ctx", None)
-    if ctx != None:
-        with_grpc = getattr(ctx.attr, "gen_grpc_" + lang.name, False)
+    with_grpc = self["with_grpc"]
+    exts = []
 
-    if with_grpc:
-        if not hasattr(lang, "grpc"):
-            fail("Language %s does not support gRPC" % lang.name)
-        exts += getattr(lang.grpc, "file_extensions", [])
+    if hasattr(lang, "protobuf"):
+        exts += getattr(lang.protobuf, "file_extensions", [])
+
+    if with_grpc or getattr(ctx.attr, "gen_grpc_" + lang.name, False):
+        if hasattr(lang, "grpc"):
+            exts += getattr(lang.grpc, "file_extensions", [])
 
     return exts
+
 
 def build_generated_files(lang, self):
     """Build a list of generated filenames (used by rule)"""
     exts = get_generated_filename_extensions(lang, self)
 
+    ctx = self.get("ctx", None)
+    if ctx.attr.verbose > 1:
+        print("generated_file extensions for language %s: %s" % (lang.name, exts))
+
     if not exts:
         return
 
-    ctx = self.get("ctx", None)
     if ctx == None:
         fail("build_generated_files can only be used in bazel context")
 
@@ -39,25 +38,11 @@ def build_generated_files(lang, self):
             self["provides"] += [pbfile]
 
 
-def build_generated_filenames(lang, self):
-    """Build a list of generated filenames (used by genrule)"""
-    exts = get_generated_filename_extensions(lang, self)
-
-    protos = self.get("protos", [])
-    if not protos:
-        fail("Empty proto filename input list.")
-
-    for srcfile in protos:
-        if not srcfile.endswith('.proto'):
-            fail("Non .proto source file: %s" % srcfile, "protos")
-        for ext in exts:
-            self["outs"] += [srcfile.rsplit('.', 1)[0] + ext]
-
-
 def build_imports(lang, self):
     """Build the list of imports"""
     ctx = self["ctx"]
     self["imports"] = self.get("imports", []) + ctx.attr.imports
+
 
 def build_plugin_out(name, key, lang, self):
     #print("build_plugin_out(%s, %s)" % (name, key))
@@ -142,30 +127,6 @@ def build_inputs(lang, self):
     self["requires"] += self["srcs"]
 
 
-def build_tools(lang, self):
-    """Build a list of tools required for genrule execution"""
-
-    self["tools"] += [self["protoc"]]
-
-    protobuf_plugin = self["protobuf_plugin"]
-    if not protobuf_plugin:
-        if hasattr(lang, "protobuf") and hasattr(lang.protobuf, "executable"):
-            protobuf_plugin = lang.protobuf.executable
-
-    if protobuf_plugin:
-        self["tools"] += [protobuf_plugin]
-
-    grpc_plugin = self["grpc_plugin"]
-    if self["with_grpc"] and not grpc_plugin:
-        if hasattr(lang, "grpc") and hasattr(lang.grpc, "executable"):
-            grpc_plugin = lang.grpc.executable
-
-    if grpc_plugin:
-        self["tools"] += [grpc_plugin]
-
-    #print("tools: %s" % self["tools"])
-
-
 def post_execute(lang, self):
     """No default post-execute actions"""
     pass
@@ -236,10 +197,8 @@ CLASS = struct(
     ),
 
     build_generated_files = build_generated_files,
-    build_generated_filenames = build_generated_filenames,
     build_imports = build_imports,
     build_inputs = build_inputs,
-    build_tools = build_tools,
     build_protobuf_invocation = build_protobuf_invocation,
     build_protobuf_out = build_protobuf_out,
     build_grpc_out = build_grpc_out,

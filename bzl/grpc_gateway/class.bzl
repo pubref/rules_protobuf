@@ -8,7 +8,6 @@ load("//bzl:util.bzl", "invokesuper")
 def implement_compile_attributes(lang, self):
     """Override attributes for the X_proto_compile rule"""
     GO.implement_compile_attributes(lang, self)
-    #invokesuper("implement_compile_attributes", lang, self)
 
     attrs = self["attrs"]
 
@@ -27,15 +26,17 @@ def implement_compile_attributes(lang, self):
     # TODO:-vmodule value: what does this mean?
 
     attrs["import_prefix"] = attr.string()
+    attrs["gateway_imports"] = attr.string_list(
+        default = lang.default_imports
+    )
 
 
 def build_imports(lang, self):
     invokesuper("build_imports", lang, self)
+    # TODO(this is hardcoded.  Make it configurable.)
+    ctx = self["ctx"]
+    self["imports"] += ctx.attr.gateway_imports
 
-    self["imports"] += [
-        "external/com_github_grpc_ecosystem_grpc_gateway/third_party/googleapis/",
-        "external/com_github_google_protobuf/src/",
-    ]
 
 def build_inputs(lang, self):
     invokesuper("build_inputs", lang, self)
@@ -82,12 +83,17 @@ CLASS = struct(
             "google/api/annotations.proto": "github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis/google/api"
         },
 
+        default_imports = [
+            "external/com_github_grpc_ecosystem_grpc_gateway/third_party/googleapis/",
+            "external/com_github_google_protobuf/src/",
+        ],
+
         grpc = struct(
             name = 'protoc-gen-grpc-gateway',
             file_extensions = [".pb.gw.go"],
             executable = "@com_github_grpc_ecosystem_grpc_gateway//:protoc-gen-grpc-gateway_bin",
             default_options = GO.grpc.default_options,
-            requires = GO.grpc.requires + [
+            requires = [
                 "com_github_grpc_ecosystem_grpc_gateway",
             ],
             compile_deps = GO.grpc.compile_deps + [
@@ -99,9 +105,8 @@ CLASS = struct(
             ],
         ),
 
-        build_protobuf_out = build_protobuf_out,
         implement_compile_attributes = implement_compile_attributes,
-
+        build_protobuf_out = build_protobuf_out,
         build_grpc_out = build_grpc_out,
         build_imports = build_imports,
         build_inputs = build_inputs,
