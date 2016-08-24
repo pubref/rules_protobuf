@@ -2,19 +2,37 @@ load("//bzl:base/class.bzl", BASE = "CLASS")
 load("//bzl:util.bzl", "invokesuper")
 
 
-def _build_protobuf_out(lang, self):
+def implement_compile_attributes(lang, self):
+    """Override attributes for the X_proto_compile rule"""
+    invokesuper("implement_compile_attributes", lang, self)
+
+    attrs = self["attrs"]
+
+    # go_prefix is necessary for protoc-gen-go import mapping of dependent protos.
+    attrs["go_prefix"] = attr.label(
+        providers = ["go_prefix"],
+        default = Label(
+            "//:go_prefix",
+            relative_to_caller_repository = True,
+        ),
+        allow_files = False,
+        cfg = HOST_CFG,
+    )
+
+
+def build_protobuf_out(lang, self):
     """Override behavior to add a plugin option before building the --go_out option"""
     if self.get("with_grpc", False):
         self["protobuf_plugin_options"] = self.get("protobuf_plugin_options", []) + ["plugins=grpc"]
     invokesuper("build_protobuf_out", lang, self)
 
 
-def _build_grpc_out(lang, self):
+def build_grpc_out(lang, self):
     """Override behavior to skip the --grpc_out option (protoc-gen-go does not use it)"""
     pass
 
 
-def _build_imports(lang, self):
+def build_imports(lang, self):
     """@Override: for all transitive packages source file names, provide import mapping."""
     invokesuper("build_imports", lang, self)
 
@@ -26,12 +44,9 @@ def _build_imports(lang, self):
 
     for dep in ctx.attr.deps:
         provider = dep.proto
-        #print("proto provider: %s" % dir(provider))
         proto_packages = provider.transitive_packages
-        #print("proto_packages: %s" % proto_packages)
         for pkg, srcs in proto_packages.items():
             target = pkg.rsplit(':') # [0] == ctx.label.package, [1] == ctx.label.name
-            #print("target: %s" % target)
             for srcfile in srcs:
                 src = srcfile.short_path
                 dst = go_prefix + '/' + target[0]
@@ -39,6 +54,7 @@ def _build_imports(lang, self):
                     # slice off the '.pb' from 'mylib.protos'
                     dst += "/" + target[1][:-len(".pb")]
                 self["protobuf_plugin_options"] = self.get("protobuf_plugin_options", []) + ["M%s=%s" % (src, dst)]
+
 
 CLASS = struct(
     parent = BASE,
@@ -74,7 +90,8 @@ CLASS = struct(
         ],
     ),
 
-    build_protobuf_out = _build_protobuf_out,
-    build_grpc_out = _build_grpc_out,
-    build_imports = _build_imports,
+    build_protobuf_out = build_protobuf_out,
+    build_grpc_out = build_grpc_out,
+    build_imports = build_imports,
+    implement_compile_attributes = implement_compile_attributes,
 )

@@ -173,6 +173,59 @@ def post_execute(lang, self):
     pass
 
 
+def implement_compile_attributes(lang, self):
+    """Add attributes for the X_proto_compile rule"""
+
+    name = lang.name
+    attrs = self["attrs"]
+
+    # Add "gen_java = X" option where X is True if this is the first
+    # language specified.
+    flag = "gen_" + name
+    attrs[flag] = attr.bool(
+        default = True,
+    )
+
+    # Add a "gen_java_plugin_options=[]".
+    opts = flag + "_plugin_options"
+    attrs[opts] = attr.string_list()
+
+    # If there is a plugin binary, create this label now.
+    if hasattr(lang, "protobuf") and hasattr(lang.protobuf, "executable"):
+        attrs["gen_protobuf_" + name + "_plugin"] = attr.label(
+            default = Label(lang.protobuf.executable),
+            cfg = HOST_CFG,
+            executable = True,
+        )
+
+    # If this language supports gRPC, add this boolean flag in.
+    # However, if we didn't load grpc, we don't actually want to
+    # generate the label for the executable lest we actually need to
+    # have the executable available.  TODO: figure out how to write a
+    # variable in the loading phase of workspace and read it here.
+
+    if hasattr(lang, "grpc"):
+      attrs["gen_grpc_" + name] = attr.bool()
+      if hasattr(lang.grpc, "executable"):
+        attrs["gen_grpc_" + name + "_plugin"] = attr.label(
+          default = Label(lang.grpc.executable),
+          cfg = HOST_CFG,
+          executable = True,
+        )
+
+
+def implement_compile_outputs(lang, self):
+    """Add customizable outputs for the proto_compile rule"""
+    if hasattr(lang, "protobuf") and hasattr(lang.protobuf, "outputs"):
+        self["outputs"] += lang.protobuf.outputs
+    if hasattr(lang, "grpc") and hasattr(lang.grpc, "outputs"):
+        self["outputs"] += lang.grpc.outputs
+
+
+def implement_compile_output_to_genfiles(lang, self):
+    self["output_to_genfiles"] = getattr(lang, "output_to_genfiles", self["output_to_genfiles"])
+
+
 CLASS = struct(
     name = "base",
 
@@ -194,5 +247,10 @@ CLASS = struct(
     build_grpc_out = build_grpc_out,
     build_grpc_invocation = build_grpc_invocation,
     build_protoc_command = build_protoc_command,
+
     post_execute = post_execute,
+
+    implement_compile_attributes = implement_compile_attributes,
+    implement_compile_outputs = implement_compile_outputs,
+    implement_compile_output_to_genfiles = implement_compile_output_to_genfiles,
 )

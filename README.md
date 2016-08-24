@@ -144,6 +144,78 @@ protobuf_repositories(
 )
 ```
 
+
+# Imports
+
+In all cases, these rules will include a `--proto_path=.` argument.
+This is functionally equivalent to `--proto_path=$(bazel info
+execution_root)`.  Therefore, when the protoc tool is invoked, it will
+'see' whatever directory struture exists at the bazel execution root
+for your workspace.  To better learn what this looks like, `cd $(bazel
+info execution_root)` and look around.  In general, it contains all
+your sourcefiles as they appear in your workspace, with an additional
+`external/WORKSPACE_NAME` directory for all dependencies used.
+
+This has implications for import statements in your protobuf
+sourcefiles, if you use them.  The two cases to consider are imports
+*within* your workspace (referred to here as 'internal' imports), and
+imports of other protobuf files in an external workspace.
+
+### Internal Imports
+
+Internal imports should require no additional parameters if your
+import statements follow the directory structure of your workspace.
+For example, the `examples/helloworld/proto/helloworld.proto` file
+imports the `examples/proto/common.proto` file.  Since this follows
+the same directory structure as the workspace, `protoc` can find it,
+and no additional arguments to a `cc_proto_library` are required for
+protoc tool.
+
+*However*, the `cc_proto_library` rule in
+`examples/helloworld/proto/BUILD:cpp` names the
+`//examples/proto:cpp`'s `cc_proto_library` rule as a dependency in
+order to (1) trigger generation of the `common.pb.{h,cc}` files AND
+(2) include those generated files in the `cc_library` rule for
+compiling the object files.
+
+Additional `--proto_path` (`-I`) arguments can be supplied via the
+`imports = []` attribute common to all rules.
+
+### External Imports
+
+The same logic applied to external imports.  The two questions to answer are
+
+1. *Can protoc "see" the imported file?* In order to satisfy this
+   requirement, pass in the full path of the required file relative to
+   your execution root.  For example, the the well-known descriptor
+   proto could be made visible to protoc via something like...
+
+```python
+java_proto_library(
+  name = 'fooprotos',
+  srcs = 'foo.proto`,
+  imports = [
+    "external/com_github_google_protobuf/src/",
+  ],
+)
+```
+
+...given that the file
+`@com_github_google_protobuf/src/google/protobuf/descriptor.proto` is
+in the package `google.protobuf`.
+
+2. *Can the `{LANG}_proto_library` rule "see" the generated protobuf
+   files (in this case `descripttor.pb.{h,cc}`.  Just because the file
+   was imported does not imply that protoc will generate outputs for
+   it, so somewhere in the `cc_library` rule dependency chain these
+   files must be present.  This could be via another
+   `cc_proto_library` rule defined elswhere, or a some other filegroup
+   or label list.  If the source is another `cc_proto_library` rule,
+   specify that in the `deps` attribute to the calling
+   `cc_proto_library` rule.  Otherwise, pass it to the `cc_srcs` or
+   perhaps `cc_deps` attribute to the calling `cc_proto_library` rule.
+   Hopefully that made sense.  It's tricky.
+
 # Contributing
 
 Contributions welcome; please create Issues or GitHub pull requests.

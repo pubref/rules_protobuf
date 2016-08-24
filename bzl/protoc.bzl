@@ -177,7 +177,7 @@ def _build_source_files(ctx, self):
 def _protoc_rule_impl(ctx):
 
   if ctx.attr.verbose:
-    print("Execute rule %s:%s"  % (ctx.build_file_path, ctx.label.name))
+    print("proto_compile %s:%s"  % (ctx.build_file_path, ctx.label.name))
 
   gendir = _get_gendir(ctx)
   outdir = gendir
@@ -196,7 +196,6 @@ def _protoc_rule_impl(ctx):
     "provides": [],
     "verbose": getattr(ctx.attr, "verbose", True),
     "with_grpc": getattr(ctx.attr, "with_grpc", False),
-    #"descriptor_set_file": descriptor_set_file,
     "transitive_imports": [],
     "transitive_packages": {},
     "transitive_requires": [],
@@ -209,7 +208,6 @@ def _protoc_rule_impl(ctx):
     self["transitive_packages"] += dep.proto.transitive_packages
     self["transitive_requires"] += dep.proto.transitive_requires
     self["transitive_srcs"] += dep.proto.transitive_srcs
-    #print("transitive_srcs: %s" % self["transitive_srcs"])
 
   # Copy source files over to outdir
   _build_source_files(ctx, self)
@@ -264,128 +262,71 @@ def _protoc_rule_impl(ctx):
 def implement(spec):
 
   attrs = {}
+  outputs = {}
 
-  outputs = {
+  self = {
+    "attrs": attrs,
+    "outputs": outputs,
+    "output_to_genfiles": False,
   }
 
-  # Language descriptor has an opportunity to override this.
-  output_to_genfiles = False
+  attrs["verbose"] = attr.int()
 
-  attrs["verbose"] = attr.int(
-    default = 0,
+  # The protoc executable (built from source by default)
+  attrs["protoc"] = attr.label(
+    default = Label("//external:protoc"),
+    # TODO(pcj): isn't HOST_CFG deprecated?
+    cfg = HOST_CFG,
+    executable = True,
   )
 
-  # The set of files to compile
+  # The set of files to compile.  This is actually exposed by the
+  # macros as 'srcs'.  TODO(pcj): clean this up.
   attrs["protos"] = attr.label_list(
     allow_files = FileType([".proto"]),
   )
 
+  # *_proto_{compile,library} rule dependencies.
   attrs["deps"] = attr.label_list(providers = ["proto"])
 
   # Options to be passed to protoc as --proto_path.
   attrs["imports"] = attr.string_list()
 
-  # The list of files the rule generates.  How is this actually being
-  # used?
+  # Flag that sets gen_grpc_{lang} to true for all languages.
+  attrs["with_grpc"] = attr.bool()
+
+  # Implementation detail that varies between output languages.
+  attrs["copy_protos_to_genfiles"] = attr.bool()
+
+  # Support for genrule implementation that I'd like to deprecate.
   attrs["outs"] = attr.output_list()
 
-  # The protoc executable (built from source by default)
-  attrs["protoc"] = attr.label(
-    default = Label("//external:protoc"),
-    # TODO: isn't HOST_CFG deprecated?
-    cfg = HOST_CFG,
-    executable = True,
-  )
+  # Generate the descriptor? TOOD(pcj): Why not just always generate this?
+  #attrs["with_descriptor"] = attr.bool()
 
-  # Support for protoc plugins not defined here.
+  # Support for protoc plugins not defined in this project.
+  # Note: not implemented yet. TODO(pcj): implement this.
   attrs["plugin_name"] = attr.string()
   attrs["plugin_args"] = attr.string_list()
   attrs["plugin_binary"] = attr.string_list()
   attrs["plugin_generated_file_extension"] = attr.string_list()
 
-  # Generate the descriptor? Shouldn't we just always generate this?
-  #attrs["with_descriptor"] = attr.bool()
-
-  # Implementation detail that varies between output languages.
-  attrs["copy_protos_to_genfiles"] = attr.bool(
-    default = False,
-  )
-
-  # Flag that sets gen_grpc_{lang} to true for all languages.
-  attrs["with_grpc"] = attr.bool()
-
-  # ================================================================
-  # Flags for registered languages
-  # ================================================================
-
-  # Add (for example) "gen_java = False" and "gen_java_options=[]"
-  # foreach language.  If the lang descriptor has a "plugin_binary
-  # attribute", add that in.
+  # Add attributes foreach language.
   for name in spec:
     lang = CLASSES.get(name)
-    index = spec.index(name)
     if not lang: fail("Language not defined: %s" % name)
+    invoke("implement_compile_attributes", lang, self)
+    invoke("implement_compile_outputs", lang, self)
+    invoke("implement_compile_output_to_genfiles", lang, self)
 
-    # Add "gen_java = X" option where X is True if this is the first language specified.
-    flag = "gen_" + name
-    attrs[flag] = attr.bool(
-        default = (index == 0),
-    )
-
-    output_to_genfiles = getattr(lang, "output_to_genfiles", output_to_genfiles)
-
-    # Add a "gen_java_plugin_options=[]".
-    opts = flag + "_plugin_options"
-    attrs[opts] = attr.string_list()
-
-    # If there is a plugin binary, create this label now.
-    if hasattr(lang, "protobuf"):
-      if hasattr(lang.protobuf, "executable"):
-        attrs["gen_protobuf_" + name + "_plugin"] = attr.label(
-          default = Label(lang.protobuf.executable),
-          cfg = HOST_CFG,
-          executable = True,
-        )
-      if hasattr(lang.protobuf, "outputs"):
-        outputs += lang.protobuf.outputs
-
-    # If this language supports gRPC, add this boolean flag in.
-    # However, if we didn't load grpc, we don't actually want to
-    # generate the label for the executable lest we actually need to
-    # have the executable available.  TODO: figure out how to write a
-    # variable in the loading phase of workspace and read it here.
-
-    if hasattr(lang, "grpc"):
-      attrs["gen_grpc_" + name] = attr.bool()
-      if hasattr(lang.grpc, "executable"):
-        attrs["gen_grpc_" + name + "_plugin"] = attr.label(
-          default = Label(lang.grpc.executable),
-          cfg = HOST_CFG,
-          executable = True,
-        )
-      if hasattr(lang.grpc, "outputs"):
-        outputs += lang.grpc.outputs
-
-
-  # Flag that sets gen_grpc_{lang} to true for all languages.
+  # Generation location.  cpp requires genfiles, everyone else not.
   attrs["output_to_genfiles"] = attr.bool(
-    default = output_to_genfiles,
-  )
-
-  # Get the go_prefox
-  attrs["go_prefix"] = attr.label(
-    providers = ["go_prefix"],
-    default = Label(
-      "//:go_prefix",
-      relative_to_caller_repository = True,
-    ),
-    allow_files = False,
-    cfg = HOST_CFG,
+    default = self["output_to_genfiles"],
   )
 
   return rule(
     implementation = _protoc_rule_impl,
-    attrs = attrs,
-    outputs = outputs,
-    output_to_genfiles = output_to_genfiles,
+    attrs = self["attrs"],
+    outputs = self["outputs"],
+    output_to_genfiles = self["output_to_genfiles"],
   )
