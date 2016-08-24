@@ -63,7 +63,7 @@ Require these rules your `WORKSPACE`:
 git_repository(
   name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
-  tag = "v0.3.5",
+  tag = "v0.4.0",
 )
 ```
 
@@ -158,8 +158,8 @@ your sourcefiles as they appear in your workspace, with an additional
 
 This has implications for import statements in your protobuf
 sourcefiles, if you use them.  The two cases to consider are imports
-*within* your workspace (referred to here as 'internal' imports), and
-imports of other protobuf files in an external workspace.
+*within* your workspace (referred to here as *'internal' imports*), and
+imports of other protobuf files in an external workspace (*external imports*).
 
 ### Internal Imports
 
@@ -179,11 +179,12 @@ order to (1) trigger generation of the `common.pb.{h,cc}` files AND
 compiling the object files.
 
 Additional `--proto_path` (`-I`) arguments can be supplied via the
-`imports = []` attribute common to all rules.
+`imports = []` attribute common to all rules if needed.
 
 ### External Imports
 
-The same logic applied to external imports.  The two questions to answer are
+The same logic applied to external imports.  The two questions to
+answer are:
 
 1. *Can protoc "see" the imported file?* In order to satisfy this
    requirement, pass in the full path of the required file relative to
@@ -200,21 +201,22 @@ java_proto_library(
 )
 ```
 
-...given that the file
+...if imported as `import "google/protobuf/descriptor.proto"` given
+that the file
 `@com_github_google_protobuf/src/google/protobuf/descriptor.proto` is
 in the package `google.protobuf`.
 
-2. *Can the `{LANG}_proto_library` rule "see" the generated protobuf
-   files (in this case `descripttor.pb.{h,cc}`.  Just because the file
-   was imported does not imply that protoc will generate outputs for
-   it, so somewhere in the `cc_library` rule dependency chain these
-   files must be present.  This could be via another
-   `cc_proto_library` rule defined elswhere, or a some other filegroup
-   or label list.  If the source is another `cc_proto_library` rule,
-   specify that in the `deps` attribute to the calling
-   `cc_proto_library` rule.  Otherwise, pass it to the `cc_srcs` or
-   perhaps `cc_deps` attribute to the calling `cc_proto_library` rule.
-   Hopefully that made sense.  It's tricky.
+2. *Can the `cc_proto_library` rule "see" the generated protobuf files*
+   (in this case `descriptor.pb.{h,cc}`.  Just because the file was
+   imported does not imply that protoc will generate outputs for it,
+   so somewhere in the `cc_library` rule dependency chain these files
+   must be present.  This could be via another `cc_proto_library` rule
+   defined elswhere, or a some other filegroup or label list.  If the
+   source is another `cc_proto_library` rule, specify that in the
+   `deps` attribute to the calling `cc_proto_library` rule.
+   Otherwise, pass it to the `cc_srcs` or perhaps `cc_deps` attribute
+   to the calling `cc_proto_library` rule.  Hopefully that made sense.
+   It's tricky.
 
 # Contributing
 
