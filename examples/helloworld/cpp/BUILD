@@ -13,7 +13,7 @@ cc_test(
     tags = ["exclusive"],
     deps = [
         ":clientlib",
-        "@gtest//:main",
+        "@gtest//:gtest",
     ],
 )
 

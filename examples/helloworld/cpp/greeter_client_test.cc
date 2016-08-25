@@ -57,11 +57,16 @@ class GreeterClientTest : public ::testing::Test {
 // so at some level, even if we can run a test that does nothing is a
 // success.
 
-
 TEST_F(GreeterClientTest, testHello) {
   GreeterClient greeter(grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials()));
   std::string user("world");
   std::string reply = ("Hello world");
   //std::string reply = greeter.SayHello(user);
   EXPECT_EQ("Hello world", reply);
+}
+
+
+int main(int ac, char* av[]) {
+  testing::InitGoogleTest(&ac, av);
+  return RUN_ALL_TESTS();
 }

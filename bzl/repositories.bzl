@@ -139,12 +139,11 @@ REPOSITORIES = {
 
     # GTest is for our own internal cc tests.
     "gtest": {
-        "kind": "new_http_archive",
+        "kind": "new_git_repository",
         "name": "gtest",
-        "url": "https://googletest.googlecode.com/files/gtest-1.7.0.zip",
-        "sha256": "247ca18dd83f53deb1328be17e4b1be31514cedfc1e3424f672bf11fd7e0d60d",
+        "remote": "https://github.com/google/googletest.git",
+        "commit": "ed9d1e1ff92ce199de5ca2667a667cd0a368482a",
         "build_file": str(Label("//bzl:build_file/gtest.BUILD")),
-        "strip_prefix": "gtest-1.7.0",
     },
 
     # ****************************************************************

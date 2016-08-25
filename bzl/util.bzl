@@ -119,6 +119,9 @@ def require(target, context):
     #     for ext in requires:
     #         require(ext, opts)
 
+    if not hasattr(native, kind):
+        fail("No native workspace rule named '%s' in dependency %s" % (kind, name))
+
     rule = getattr(native, kind)
     if not rule:
         fail("During require (%s), kind '%s' has no matching native rule" % (target, dep.kind))

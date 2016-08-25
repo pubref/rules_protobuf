@@ -59,22 +59,38 @@ Build label: 0.3.1
 
 # Quick Start
 
-Require these rules your `WORKSPACE`:
+## WORKSPACE
+
+1. Add rules_go to your workspace
+
+Note about golang: this project uses [rules-go][rules_go] for
+`go_library`, `go_binary`, and `go_test`.  Even if you're not using go
+support in rules_protobuf, it is a current requirement for your
+WORKSPACE file (see issue #10).
+
+```python
+git_repository(
+    name = "io_bazel_rules_go",
+    tag = "0.0.4",
+    remote = "https://github.com/bazelbuild/rules_go.git",
+)
+load("@io_bazel_rules_go//go:def.bzl", "go_repositories")
+go_repositories()
+```
+
+2. Require these rules your `WORKSPACE` and trigger loading of
+external dependencies.  Specify the language(s) you'd like support
+for.:
 
 ```python
 git_repository(
   name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
-  tag = "v0.5.0",
+  tag = "v0.5.1",
 )
-```
 
- Trigger loading of external dependencies.  Specify the language(s)
-you'd like support for.
-
-
-```python
 load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protobuf_repositories")
+
 protobuf_repositories(
    with_go = True,
    with_java = True,
@@ -85,6 +101,8 @@ protobuf_repositories(
 > Note: refer to the [bzl/repositories.bzl][repositories.bzl] file for
 > the set of external dependencies that will be loaded into your
 > project.
+
+## BUILD
 
 Build a java-based gRPC library:
 
