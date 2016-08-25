@@ -1,27 +1,18 @@
 load("//bzl:base/class.bzl", BASE = "CLASS")
 
+def ruby_library(**kwargs):
+    """Dummy implementation."""
+    pass
+
+
 CLASS = struct(
-        name = "ruby",
-        short_name = "ruby",
+    parent = BASE,
+    name = "ruby",
 
-        protobuf = struct(
-            file_extensions = [".pb.rb"],
-            compile_deps = [
-            ],
-            requires = [
-                "protobuf",
-                "external_protobuf_clib",
-            ],
-        ),
+    protobuf = struct(
+        file_extensions = ["_pb.rb"],
+        compile_deps = [],
+    ),
 
-        grpc = struct(
-            executable = "//external:protoc_gen_grpc",
-            name = "protoc-gen-grpc",
-            file_extensions = [".grpc.pb.rb"],
-            requires = [
-            ],
-            compile_deps = [
-            ],
-        ),
-
+    library = ruby_library,
 )

@@ -12,6 +12,7 @@ def protobuf_repositories(
     with_java=False,
     with_javanano=False,
     with_python=False,
+    with_ruby=False,
     with_grpc_gateway=False,
 ):
 
@@ -57,6 +58,8 @@ def protobuf_repositories(
     classes += ["javanano"]
   if with_grpc_gateway:
     classes += ["gateway"]
+  if with_ruby:
+    classes += ["ruby"]
 
   requires = [
     "protobuf",

@@ -12,16 +12,16 @@ Bazel | rules_protobuf | gRPC |
 
 | Language                 | Compile (1) | Build (2) | gRPC (3) |
 | ------------------------ | ------------ | ----------- | -------- |
-| [C++][cpp]           | [cc_proto_compile][cpp] | [cc_proto_library][cpp] | yes |
+| [C++][cpp]               | [cc_proto_compile][cpp] | [cc_proto_library][cpp] | yes |
 | [C#](bzl/csharp)         |              |             |          |
-| [Go][go]           | [go_proto_compile][go] | [go_proto_library][go] | yes |
-| [Java][java]           | [java_proto_compile][java] | [java_proto_library][java] | yes |
-| [JavaNano][javanano]           | [android_proto_compile][javanano] | [android_proto_library][javanano] | yes |
+| [Go][go]                 | [go_proto_compile][go] | [go_proto_library][go] | yes |
+| [Java][java]             | [java_proto_compile][java] | [java_proto_library][java] | yes |
+| [JavaNano][javanano]     | [android_proto_compile][javanano] | [android_proto_library][javanano] | yes |
 | [Javascript](bzl/js)     |              |             |          |
 | [Objective-C](bzl/objc)  |              |             |          |
-| [Python](bzl/python)     |              |             |          |
-| [Ruby](bzl/ruby)         |              |             |          |
-| [gRPC gateway][grpc-gateway-home]           | [grpc_gateway_proto_compile][grpc_gateway] | [grpc_gateway_proto_library][grpc_gateway] | yes |
+| [Python](bzl/python)     | [py_proto_compile][python]  |             |          |
+| [Ruby](bzl/ruby)     | [py_proto_compile][ruby]  |             |          |
+| [gRPC gateway][grpc-gateway-home] | [grpc_gateway_proto_compile][grpc_gateway] | [grpc_gateway_proto_library][grpc_gateway] | yes |
 
 1. Support for generation of protobuf classes via the `protoc` tool.
 2. Support for generation + compilation of outputs with protobuf dependencies.
@@ -268,5 +268,7 @@ Contributions welcome; please create Issues or GitHub pull requests.
 [go]: bzl/go
 [java]: bzl/java
 [javanano]: bzl/javanano
+[python]: bzl/python
+[ruby]: bzl/ruby
 [grpc_gateway]: bzl/grpc_gateway
 [repositories.bzl]: bzl/repositories.bzl
