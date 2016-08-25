@@ -16,6 +16,7 @@ def grpc_gateway_proto_library(
     logtostderr = True,
     log_dir = None,
     log_level = None,
+    proto_compile_args = {},
     verbose = 0,
     **kwargs):
 
@@ -32,7 +33,7 @@ def grpc_gateway_proto_library(
 
   proto_library(name,
                 proto_compile = grpc_gateway_proto_compile,
-                proto_compile_args = args,
+                proto_compile_args = args + proto_compile_args,
                 verbose = verbose,
                 spec = SPEC,
                 **kwargs)
