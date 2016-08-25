@@ -2,7 +2,8 @@
 
 ---
 
-Bazel skylark rules for building [protocol buffers][protobuf-home] on (macosx, linux).
+Bazel skylark rules for building [protocol buffers][protobuf-home]
+with +/- gRPC support on (osx, linux).
 
 | ![Bazel][bazel_image] | ![Protobuf][wtfcat_image] | ![gRPC][grpc_image] |
 | --- | --- | --- |
