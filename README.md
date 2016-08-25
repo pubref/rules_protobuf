@@ -13,19 +13,20 @@ Bazel | rules_protobuf | gRPC |
 | Language                 | Compile (1) | Build (2) | gRPC (3) |
 | ------------------------ | ------------ | ----------- | -------- |
 | [C++][cpp]               | [cc_proto_compile][cpp] | [cc_proto_library][cpp] | yes |
-| [C#](bzl/csharp)         |              |             |          |
+| [C#](bzl/csharp)         | [csharp_proto_compile][csharp] (4) |             |          |
 | [Go][go]                 | [go_proto_compile][go] | [go_proto_library][go] | yes |
 | [Java][java]             | [java_proto_compile][java] | [java_proto_library][java] | yes |
 | [JavaNano][javanano]     | [android_proto_compile][javanano] | [android_proto_library][javanano] | yes |
 | [Javascript](bzl/js)     |              |             |          |
 | [Objective-C](bzl/objc)  |              |             |          |
 | [Python](bzl/python)     | [py_proto_compile][python]  |             |          |
-| [Ruby](bzl/ruby)     | [py_proto_compile][ruby]  |             |          |
+| [Ruby](bzl/ruby)         | [ruby_proto_compile][ruby]  |             |          |
 | [gRPC gateway][grpc-gateway-home] | [grpc_gateway_proto_compile][grpc_gateway] | [grpc_gateway_proto_library][grpc_gateway] | yes |
 
 1. Support for generation of protobuf classes via the `protoc` tool.
 2. Support for generation + compilation of outputs with protobuf dependencies.
 3. gRPC support.
+4. Highly experimental.
 
 ---
 
@@ -265,6 +266,7 @@ Contributions welcome; please create Issues or GitHub pull requests.
 [grpc_image]: https://github.com/pubref/rules_protobuf/blob/master/images/gRPC.png
 
 [cpp]: bzl/cpp
+[csharp]: bzl/csharp
 [go]: bzl/go
 [java]: bzl/java
 [javanano]: bzl/javanano
