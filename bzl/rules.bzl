@@ -8,6 +8,7 @@ def protobuf_repositories(
     overrides = {},
     verbose = 0,
     with_cpp=False,
+    with_csharp=False,
     with_go=False,
     with_java=False,
     with_javanano=False,
@@ -48,6 +49,8 @@ def protobuf_repositories(
 
   if with_cpp:
     classes += ["cpp"]
+  if with_csharp:
+    classes += ["csharp"]
   if with_python:
     classes += ["python"]
   if with_go:
