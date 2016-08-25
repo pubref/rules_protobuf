@@ -215,7 +215,7 @@ that the file
 in the package `google.protobuf`.
 
 2. *Can the `cc_proto_library` rule "see" the generated protobuf
-   files* (in this case `descriptor.pb.{h,cc}`.  Just because the file
+   files*? (in this case `descriptor.pb.{h,cc}`.  Just because the file
    was imported does not imply that protoc will generate outputs for
    it, so somewhere in the `cc_library` rule dependency chain these
    files must be present.  This could be via another
@@ -224,8 +224,8 @@ in the package `google.protobuf`.
    specify that in the `proto_deps` attribute to the calling
    `cc_proto_library` rule.  Otherwise, pass a label that includes the
    (pregenerated) protobuf files to the `deps` attribute, just as you
-   would any typical `cc_library` rule.Hopefully that made sense.
-   It's tricky.
+   would any typical `cc_library` rule.  Hopefully that made sense.
+   It's a bit tricky.
 
 # Contributing
 

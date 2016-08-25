@@ -85,7 +85,7 @@ grpc_gateway_binary(
 The grpc_gateway rules include all common attributes in addition to go rule attributes in addition to:
 
 | Name | Type | Description | Default |
-
+| ---- | ---- | ----------- | ------- |
 | `log_level` | `int` | Logging threshold level. | `0` |
 | `log_dir` | `string` | Log directory pathname. | `""` |
 | `log_backtrace_at` | `int` | See grpc_gateway docs. | `0` |
