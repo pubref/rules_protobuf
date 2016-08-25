@@ -63,7 +63,7 @@ Require these rules your `WORKSPACE`:
 git_repository(
   name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
-  tag = "v0.4.0",
+  tag = "v0.5.0",
 )
 ```
 
@@ -91,8 +91,9 @@ load("@org_pubref_rules_protobuf//bzl:java/rules.bzl", "java_proto_library")
 
 java_proto_library(
   name = "protolib",
-  srcs = ["my.proto"],
+  protos = ["my.proto"],
   with_grpc = True,
+  verbose = 1, # 0=no output, 1=show protoc command, 2+ more...
 )
 ```
 
@@ -144,8 +145,15 @@ protobuf_repositories(
 )
 ```
 
+# Proto B --> Proto A dependencies
 
-# Imports
+Use the `proto_deps` attribute to name proto rule dependencies. The
+implementation of the dependent rule `B` should match that of the
+dependee `A`.  This relationship is shown in the examples folder of
+this repo.  Use of `proto_deps` implies you're using imports, so read
+on...
+
+## Imports
 
 In all cases, these rules will include a `--proto_path=.` argument.
 This is functionally equivalent to `--proto_path=$(bazel info
@@ -194,7 +202,7 @@ answer are:
 ```python
 java_proto_library(
   name = 'fooprotos',
-  srcs = 'foo.proto`,
+  protos = 'foo.proto`,
   imports = [
     "external/com_github_google_protobuf/src/",
   ],
@@ -206,16 +214,17 @@ that the file
 `@com_github_google_protobuf/src/google/protobuf/descriptor.proto` is
 in the package `google.protobuf`.
 
-2. *Can the `cc_proto_library` rule "see" the generated protobuf files*
-   (in this case `descriptor.pb.{h,cc}`.  Just because the file was
-   imported does not imply that protoc will generate outputs for it,
-   so somewhere in the `cc_library` rule dependency chain these files
-   must be present.  This could be via another `cc_proto_library` rule
-   defined elswhere, or a some other filegroup or label list.  If the
-   source is another `cc_proto_library` rule, specify that in the
-   `deps` attribute to the calling `cc_proto_library` rule.
-   Otherwise, pass it to the `cc_srcs` or perhaps `cc_deps` attribute
-   to the calling `cc_proto_library` rule.  Hopefully that made sense.
+2. *Can the `cc_proto_library` rule "see" the generated protobuf
+   files* (in this case `descriptor.pb.{h,cc}`.  Just because the file
+   was imported does not imply that protoc will generate outputs for
+   it, so somewhere in the `cc_library` rule dependency chain these
+   files must be present.  This could be via another
+   `cc_proto_library` rule defined elswhere, or a some other filegroup
+   or label list.  If the source is another `cc_proto_library` rule,
+   specify that in the `proto_deps` attribute to the calling
+   `cc_proto_library` rule.  Otherwise, pass a label that includes the
+   (pregenerated) protobuf files to the `deps` attribute, just as you
+   would any typical `cc_library` rule.Hopefully that made sense.
    It's tricky.
 
 # Contributing

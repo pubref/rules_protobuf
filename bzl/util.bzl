@@ -7,42 +7,43 @@
 MAX_INVOKE_DEPTH = range(4)
 
 def invokeall(name, lang, self):
-    current = lang
     """Invoke the all methods found on the class chain"""
+    current = lang
+    result = None
     for i in MAX_INVOKE_DEPTH:
         if current == None:
-            return
+            return result
         if hasattr(current, name):
             method = getattr(current, name)
-            method(lang, self)
+            result = method(lang, self)
         current = getattr(current, "parent", None)
-
+    return result
 
 def invokesuper(name, lang, self):
-    current = getattr(lang, "parent", None)
     """Invoke the first method found on the superclass chain"""
+    current = getattr(lang, "parent", None)
+    result = None
     for i in MAX_INVOKE_DEPTH:
         if current == None:
-            return
+            return result
         if hasattr(current, name):
             method = getattr(current, name)
-            method(lang, self)
-            return
+            return method(lang, self)
         current = getattr(current, "parent", None)
-
+    return result
 
 def invoke(name, lang, self):
-    current = lang
     """Invoke the first method found on the class chain"""
+    current = lang
+    result = None
     for i in MAX_INVOKE_DEPTH:
         if current == None:
-            return
+            return result
         if hasattr(current, name):
             method = getattr(current, name)
-            method(lang, self)
-            return
+            return method(lang, self)
         current = getattr(current, "parent", None)
-
+    return result
 
 def require(target, context):
     """Load external dependency during WORKSPACE loading.

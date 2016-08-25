@@ -33,7 +33,6 @@ def implement_compile_attributes(lang, self):
 
 def build_imports(lang, self):
     invokesuper("build_imports", lang, self)
-    # TODO(this is hardcoded.  Make it configurable.)
     ctx = self["ctx"]
     self["imports"] += ctx.attr.gateway_imports
 
@@ -41,19 +40,20 @@ def build_imports(lang, self):
 def build_inputs(lang, self):
     invokesuper("build_inputs", lang, self)
     ctx = self["ctx"]
-    self["requires"] += list(ctx.attr._googleapi_protos.files)
+    self["inputs"] += list(ctx.attr._googleapi_protos.files)
 
 
 def build_protobuf_out(lang, self):
-    # Standard protobuf outputs are implemented by the GO.class, so
-    # there is no additional work to be done here.
+    # Protobuf outputs are implemented by the GO.class, so there is no
+    # additional work to be done here.
     pass
 
 
 def build_grpc_out(lang, self):
     ctx = self["ctx"]
-    outdir = self["outdir"]
-    opts = self.get("gateway_plugin_options", [])
+    optskey = "_".join(["gen", lang.name, "grpc", "options"])
+    opts = getattr(ctx.attr, optskey, [])
+    opts += self.get(optskey, [])
 
     if ctx.attr.logtostderr:
         opts += ["logtostderr=true"]
@@ -70,45 +70,45 @@ def build_grpc_out(lang, self):
     if ctx.attr.import_prefix:
         opts += ["import_prefix=%s" % ctx.attr.import_prefix]
 
-    params = ",".join(opts) + ":" + outdir
+    params = ",".join(opts) + ":" + self["outdir"]
 
     self["args"] += ["--grpc-gateway_out=%s" % params]
 
 
 CLASS = struct(
-        parent = BASE,
-        name = "gateway",
+    parent = BASE,
+    name = "gateway",
 
-        default_go_import_map = {
-            "google/api/annotations.proto": "github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis/google/api"
-        },
+    default_go_import_map = {
+        "google/api/annotations.proto": "github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis/google/api"
+    },
 
-        default_imports = [
-            "external/com_github_grpc_ecosystem_grpc_gateway/third_party/googleapis/",
-            "external/com_github_google_protobuf/src/",
+    default_imports = [
+        "external/com_github_grpc_ecosystem_grpc_gateway/third_party/googleapis/",
+        "external/com_github_google_protobuf/src/",
+    ],
+
+    grpc = struct(
+        name = 'protoc-gen-grpc-gateway',
+        file_extensions = [".pb.gw.go"],
+        executable = "@com_github_grpc_ecosystem_grpc_gateway//:protoc-gen-grpc-gateway_bin",
+        default_options = GO.grpc.default_options,
+        requires = [
+            "com_github_grpc_ecosystem_grpc_gateway",
         ],
+        compile_deps = GO.grpc.compile_deps + [
+            "@com_github_grpc_ecosystem_grpc_gateway//:runtime",
+            "@com_github_grpc_ecosystem_grpc_gateway//:utilities",
+            "@com_github_grpc_ecosystem_grpc_gateway//:third_party/googleapis/google/api",
+            "@org_golang_google_grpc//:codes",
+            "@org_golang_google_grpc//:grpclog",
+        ],
+    ),
 
-        grpc = struct(
-            name = 'protoc-gen-grpc-gateway',
-            file_extensions = [".pb.gw.go"],
-            executable = "@com_github_grpc_ecosystem_grpc_gateway//:protoc-gen-grpc-gateway_bin",
-            default_options = GO.grpc.default_options,
-            requires = [
-                "com_github_grpc_ecosystem_grpc_gateway",
-            ],
-            compile_deps = GO.grpc.compile_deps + [
-                "@com_github_grpc_ecosystem_grpc_gateway//:runtime",
-                "@com_github_grpc_ecosystem_grpc_gateway//:utilities",
-                "@com_github_grpc_ecosystem_grpc_gateway//:third_party/googleapis/google/api",
-                "@org_golang_google_grpc//:codes",
-                "@org_golang_google_grpc//:grpclog",
-            ],
-        ),
-
-        implement_compile_attributes = implement_compile_attributes,
-        build_protobuf_out = build_protobuf_out,
-        build_grpc_out = build_grpc_out,
-        build_imports = build_imports,
-        build_inputs = build_inputs,
-
+    implement_compile_attributes = implement_compile_attributes,
+    build_protobuf_out = build_protobuf_out,
+    build_grpc_out = build_grpc_out,
+    build_imports = build_imports,
+    build_inputs = build_inputs,
+    library = GO.library,
 )

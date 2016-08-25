@@ -1,10 +1,15 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_test")
-load("//bzl:go/class.bzl", GO = "CLASS")
-load("//bzl:grpc_gateway/class.bzl", GRPC_GATEWAY = "CLASS")
+load(
+    "//bzl:go/class.bzl",
+    GO = "CLASS",
+)
+load(
+    "//bzl:grpc_gateway/class.bzl",
+    GRPC_GATEWAY = "CLASS",
+)
 load("//bzl:grpc_gateway/rules.bzl", "grpc_gateway_proto_library", "grpc_gateway_binary")
-
 
 go_test(
     name = "greeter_test",
@@ -21,23 +26,25 @@ go_test(
     ] + GRPC_GATEWAY.grpc.compile_deps,
 )
 
-# Alternate form
+# Alternate form to grpc_gateway_binary
 #
-# grpc_gateway_proto_library(
-#     name = "gateway",
-#     output_to_workspace = True,
-#     protos = ["helloworld.proto"],
-#     verbose = 0,
-# )
-
-grpc_gateway_binary(
-    name = "greeter",
-    srcs = ["greeter.go"],
-    proto_label = "gateway",
+grpc_gateway_proto_library(
+    name = "gateway",
+    output_to_workspace = False,
     protos = ["helloworld.proto"],
-    verbose = 0,
+    verbose = 1,
 )
 
+# grpc_gateway_binary(
+#     name = "greeter",
+#     srcs = ["greeter.go"],
+#     proto_label = "gateway",
+#     protos = ["helloworld.proto"],
+#     verbose = 2,
+# )
+
+# Raw form of using go_binary with explicit deps rather than using grpc_gateway_binary.
+#
 # go_binary(
 #     name = "greeter_gateway",
 #     srcs = [

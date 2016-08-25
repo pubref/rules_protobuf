@@ -2,20 +2,17 @@
 
 | Rule | Description |
 | ---  | --- |
-| `grpc_gateway_proto_library` | Generates and compiles protobuf source files. |
 | `grpc_gateway_proto_compile` | Generates protobuf source files. |
-
-> Note: Support for grpc-gateway is at the proof-of-concept stage.
-> None of the options supported by the protoc-gen-grpc-gateway
-> plugin are supported yet.
+| `grpc_gateway_proto_library` | Generates and compiles protobuf source files. |
+| `grpc_gateway_binary` | Generates everything into a gateway binary. |
 
 ## Installation
 
-Enable [grpc-gateway][grpc-gateway-home] support by loading the set of dependencies in your workspace.
+Enable [grpc-gateway][grpc-gateway-home] support by loading the set of
+dependencies in your workspace.
 
 ```python
 protobuf_repositories(
-  with_go=True,
   with_grpc_gateway=True,
 )
 ```
@@ -62,10 +59,38 @@ go_binary(
 )
 ```
 
+
 In this case `main.go` should implement the http entrypoint for the
 grpc-gateway
 [as described](https://github.com/grpc-ecosystem/grpc-gateway#usage).
 
-Consult source files in the `examples/helloworld/go/gateway/` directory for additional information.
+Consult source files in the `examples/helloworld/grpc-gateway/`
+directory for additional information.
+
+The shortcut rule for this is the `grpc_gateway_binary` rule:
+
+```python
+grpc_gateway_binary(
+  name = "mygateway",
+  srcs = ["main.go"],
+  protos = [my.proto],
+)
+```
 
 [grpc-gateway-home]:https://github.com/grpc-ecosystem/grpc-gateway
+
+
+# `grpc_gateway_proto_compile` attributes`
+
+The grpc_gateway rules include all common attributes in addition to go rule attributes in addition to:
+
+| Name | Type | Description | Default |
+
+| `log_level` | `int` | Logging threshold level. | `0` |
+| `log_dir` | `string` | Log directory pathname. | `""` |
+| `log_backtrace_at` | `int` | See grpc_gateway docs. | `0` |
+| `logtostderr` | `boolean` | Emit logging to stderr instead of a log file. | `True` |
+| `alsologtostderr` | `boolean` | Emit logging to stderr in addition to the log file. | `False` |
+| `stderrthreshold` | `boolean` | Emit logging to stderr rather than a file. | `True` |
+| `stderrthreshold` | `int` | See grpc_gateway docs. | `0` |
+| `log_backtrace_at` | `int` | See grpc_gateway docs. | `0` |

@@ -1,3 +1,4 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
 load("//bzl:base/class.bzl", BASE = "CLASS")
 load("//bzl:util.bzl", "invokesuper")
 
@@ -23,16 +24,44 @@ def implement_compile_attributes(lang, self):
 
 
 def build_protobuf_out(lang, self):
-    """Override behavior to add a plugin option before building the --go_out option"""
-    if self.get("with_grpc", False):
-        self["protobuf_plugin_options"] = self.get("protobuf_plugin_options", []) + ["plugins=grpc"]
-
+    """Override behavior to add plugin options before building the --go_out option"""
     ctx = self["ctx"]
-    if ctx.attr.verbose > 1:
-        print("go_import_map: %s" % ctx.attr.go_import_map)
-    for k, v in ctx.attr.go_import_map.items():
-        self["protobuf_plugin_options"] += ["M%s=%s" % (k, v)]
+    go_prefix = ctx.attr.go_prefix.go_prefix
+    optskey = "gen_" + lang.name + "_protobuf_options"
+    opts = self.get(optskey, [])
 
+    # Add in the 'plugins=grpc' option to the protoc-gen-go plugin if
+    # the user wants grpc.
+    if self["with_grpc"] or getattr(ctx.attr, "gen_" + lang.name + "_grpc", False):
+        opts += ["plugins=grpc"]
+
+    # Build the list of import mappings.  Start with any configured on
+    # the rule by attributes.
+    mappings = {} + ctx.attr.go_import_map
+
+    # Then add in the transitive set from dependent rules.
+    for dep in ctx.attr.proto_deps:
+        provider = dep.proto
+        packages = provider.transitive_packages
+        for pkg, protos in packages.items():
+            target = pkg.rsplit(':') # [0] == ctx.label.package, [1] == ctx.label.name
+            for file in protos:
+                src = file.short_path
+                dst = go_prefix + '/' + target[0] # (A) / (B)
+                # the name of the calling rule is not
+                # 'go_default_library', add that last part (C) in.
+                if target[1] != "go_default_library.pb":
+                    # slice off the '.pb' from 'mylib.protos'
+                    dst += "/" + target[1][:-len(".pb")]
+                mappings[src] = dst
+
+    if ctx.attr.verbose > 1:
+        print("go_import_map: %s" % mappings)
+
+    for k, v in mappings.items():
+        opts += ["M%s=%s" % (k, v)]
+
+    self[optskey] = opts
     invokesuper("build_protobuf_out", lang, self)
 
 
@@ -41,32 +70,9 @@ def build_grpc_out(lang, self):
     pass
 
 
-def build_imports(lang, self):
-    """@Override: for all transitive packages source file names, provide import mapping."""
-    invokesuper("build_imports", lang, self)
-
-    ctx = self["ctx"]
-
-    go_prefix = ctx.attr.go_prefix.go_prefix
-
-    for dep in ctx.attr.proto_deps:
-        provider = dep.proto
-        proto_packages = provider.transitive_packages
-        for pkg, srcs in proto_packages.items():
-            target = pkg.rsplit(':') # [0] == ctx.label.package, [1] == ctx.label.name
-            for srcfile in srcs:
-                src = srcfile.short_path
-                dst = go_prefix + '/' + target[0]
-                if target[1] != "go_default_library.pb":
-                    # slice off the '.pb' from 'mylib.protos'
-                    dst += "/" + target[1][:-len(".pb")]
-                self["protobuf_plugin_options"] = self.get("protobuf_plugin_options", []) + ["M%s=%s" % (src, dst)]
-
-
 CLASS = struct(
     parent = BASE,
     name = "go",
-    short_name = "go",
 
     protobuf = struct(
         name = 'protoc-gen-go',
@@ -97,8 +103,8 @@ CLASS = struct(
         ],
     ),
 
-    build_protobuf_out = build_protobuf_out,
     build_grpc_out = build_grpc_out,
-    build_imports = build_imports,
+    build_protobuf_out = build_protobuf_out,
     implement_compile_attributes = implement_compile_attributes,
+    library = go_library,
 )

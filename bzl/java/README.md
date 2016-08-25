@@ -24,12 +24,12 @@ load("@org_pubref_rules_protobuf//bzl:java/rules.bzl", "java_proto_library")
 ```
 
 Invoke the rule.  Pass the set of protobuf source files to the
-`srcs` attribute.
+`protos` attribute.
 
 ```python
 java_proto_library(
   name = "protolib",
-  srcs = ["my.proto"],
+  protos = ["my.proto"],
   with_grpc = True,
 )
 ```
@@ -38,7 +38,7 @@ java_proto_library(
 $ bazel build :protolib
 ```
 
-When using the compiled library in other rules, you'll likely need the
+When using the compiled library in other rules, you'll likely want the
 compile-time or runtime dependencies.  You can access that list on the
 class descriptor:
 
@@ -64,8 +64,8 @@ One could also specify all the sources needed in the
 ```python
 java_proto_library(
   name = "mylib",
-  srcs = ["my.proto"],
-  java_srcs = ['MyApp.java'],
+  protos = ["my.proto"],
+  srcs = ['MyApp.java'],
   with_grpc = True,
 )
 ```

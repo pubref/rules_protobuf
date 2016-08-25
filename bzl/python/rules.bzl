@@ -1,39 +1,13 @@
-load("//bzl:protoc.bzl", "protoc")
-load("//bzl:python/descriptor.bzl", PYTHON = "DESCRIPTOR")
+load("//bzl:base/rules.bzl", "proto_library")
+load("//bzl:protoc.bzl", "implement")
+load("//bzl:python/class.bzl", PYTHON = "CLASS")
 
-def py_proto_library(
-    name,
-    protos,
-    lang = PYTHON,
-    srcs = [],
-    imports = [],
-    visibility = None,
-    testonly = 0,
-    protoc_executable = None,
-    protobuf_plugin_executable = None,
-    with_grpc = False,
-    **kwargs):
+SPEC = [PYTHON]
 
-  result = protoc(
-    lang = lang,
-    name = name + "_pb",
-    protos = protos,
-    protoc_executable = protoc_executable,
-    protobuf_plugin_executable = protobuf_plugin_executable,
-    visibility = visibility,
-    testonly = testonly,
-    imports = imports,
-    verbose = True,
-    with_grpc = with_grpc,
-  )
+py_proto_compile = implement(SPEC)
 
-  deps = [str(Label(dep)) for dep in getattr(lang.protobuf, "compile_deps", [])]
-  if with_grpc:
-    deps += [str(Label(dep)) for dep in getattr(lang.grpc, "compile_deps", [])]
-
-  native.py_library(
-    name = name,
-    srcs = srcs + result.outs,
-    deps = deps,
-    **kwargs
-  )
+def py_proto_library(name, **kwargs):
+  proto_library(name,
+                proto_compile = py_proto_compile,
+                spec = SPEC,
+                **kwargs)

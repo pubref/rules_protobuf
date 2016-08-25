@@ -5,7 +5,6 @@
 | `cc_proto_library` | Generates and compiles protobuf source files. |
 | `cc_proto_compile` | Generates protobuf source files. |
 
-
 ## Installation
 
 Enable cpp support by loading the set of cpp dependencies in your workspace.
@@ -26,12 +25,12 @@ load("@org_pubref_rules_protobuf//bzl:cpp/rules.bzl", "cc_proto_library")
 ```
 
 Invoke the rule.  Pass the set of protobuf source files to the
-`srcs` attribute.
+`protos` attribute.
 
 ```python
 cc_proto_library(
   name = "protolib",
-  srcs = ["my.proto"],
+  protos = ["my.proto"],
   with_grpc = True,
 )
 ```
@@ -60,8 +59,9 @@ via:
 #include "examples/helloworld/proto/helloworld.grpc.pb.h"
 ```
 
-To get the list of required compile-time dependencies for grpc-related
-code, load the class descriptor and use the `grpc.compile_deps` list:
+To get the list of required compile-time dependencies in other
+contexts for grpc-related code, load the class descriptor and use the
+`grpc.compile_deps` list:
 
 ```python
 load("@org_pubref_rules_protobuf//bzl:cpp/class.bzl", CPP = "CLASS")
@@ -75,4 +75,5 @@ cc_library(
 )
 ```
 
-Consult source files in the `examples/helloworld/cpp/` directory for additional information.
+Consult source files in the `examples/helloworld/cpp/` directory for
+additional information.

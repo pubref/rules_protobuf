@@ -3,7 +3,6 @@ load("//bzl:java/class.bzl", JAVA = "CLASS")
 CLASS = struct(
         parent = JAVA,
         name = "javanano",
-        short_name = "javanano",
 
         protobuf = struct(
             file_extensions = JAVA.protobuf.file_extensions,
@@ -32,5 +31,6 @@ CLASS = struct(
 
         build_generated_files = JAVA.build_generated_files,
         build_grpc_out = JAVA.build_grpc_out,
+        library = JAVA.library,
         post_execute = JAVA.post_execute,
 )
