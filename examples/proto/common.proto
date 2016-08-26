@@ -5,6 +5,7 @@ option java_outer_classname = "CommonProto";
 
 package common;
 
+
 // A configuration object.  This is used to test the viability of
 // protobuf imports.
 message Config {

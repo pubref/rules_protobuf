@@ -6,6 +6,7 @@
 #
 MAX_INVOKE_DEPTH = range(4)
 
+
 def invokeall(name, lang, self):
     """Invoke the all methods found on the class chain"""
     current = lang
@@ -16,8 +17,11 @@ def invokeall(name, lang, self):
         if hasattr(current, name):
             method = getattr(current, name)
             result = method(lang, self)
-        current = getattr(current, "parent", None)
+        if not hasattr(current, "parent"):
+            return result
+        current = current.parent
     return result
+
 
 def invokesuper(name, lang, self):
     """Invoke the first method found on the superclass chain"""
@@ -29,8 +33,11 @@ def invokesuper(name, lang, self):
         if hasattr(current, name):
             method = getattr(current, name)
             return method(lang, self)
-        current = getattr(current, "parent", None)
+        if not hasattr(current, "parent"):
+            return result
+        current = current.parent
     return result
+
 
 def invoke(name, lang, self):
     """Invoke the first method found on the class chain"""
@@ -42,8 +49,11 @@ def invoke(name, lang, self):
         if hasattr(current, name):
             method = getattr(current, name)
             return method(lang, self)
-        current = getattr(current, "parent", None)
+        if not hasattr(current, "parent"):
+            return result
+        current = current.parent
     return result
+
 
 def require(target, context):
     """Load external dependency during WORKSPACE loading.
@@ -137,3 +147,26 @@ def require(target, context):
         print("Load %s (@%s)" % (target, name))
 
     return rule(**args)
+
+
+def get_offset_path(root, path):
+    """Adjust path relative to offset"""
+
+    if path.startswith("/"):
+        fail("path argument must not be absolute: %s" % path)
+
+    if not root:
+        return path
+
+    if root == ".":
+        return path
+
+    # "external/foobar/file.proto" --> "file.proto"
+    if path.startswith(root):
+        start = len(root)
+        if not root.endswith('/'):
+            start += 1
+        return path[start:]
+
+    depth = root.count('/') + 1
+    return "../" * depth + path

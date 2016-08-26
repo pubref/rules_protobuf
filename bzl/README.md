@@ -7,8 +7,10 @@ lists attributes and behavior that is shared across all languages.
 | Name | Type | Description | Default |
 | ---- | ---- | ----------- | ------- |
 | `name` | `string` | The name of the rule (required) | `""` |
+| `imports` | `string_list` | Additional paths to be passed as `-I` arguments to the protoc tool.  | `[]` |
 | `protos` | `label_list` of file type `.proto` | The set of protobuf source files to compile. Must not be empty.  | `[]` |
 | `proto_deps` | `label_list` having provider `proto` | A list of `*_proto_library` that the calling rule is dependent upon. | `[]` |
+| `proto_root` | `string` | A path that shifts the directory scope of the computed execution root  | `""` |
 | `protoc` | executable `label` | Used to override the default protoc binary tool. | `//external:protoc` |
 | `gen_{LANG}` | `boolean` | Enable/disable protobuf output on a language-specific basis. | Usually `True` |
 | `gen_{LANG}_grpc` | `boolean` | Enable/disable gRPC output on a language-specific basis. | `False` |

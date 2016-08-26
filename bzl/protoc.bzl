@@ -1,35 +1,67 @@
-load("//bzl:util.bzl", "invoke")
 load("//bzl:classes.bzl", "CLASSES")
+load("//bzl:util.bzl", "invoke", "get_offset_path")
 
 PROTOC = Label("//external:protoc")
 
-def _get_gendir(ctx):
-  if ctx.attr.output_to_genfiles:
-    return ctx.var["GENDIR"]
-  else:
-    return ctx.var["BINDIR"]
+
+def get_outdir(ctx):
+  return ctx.var["GENDIR" if ctx.attr.output_to_genfiles else "BINDIR"]
 
 
-def _execute_rule(self):
-  ctx = self["ctx"]
+def get_execdir(ctx):
 
-  srcfiles = [file.short_path for file in self["protos"]]
-  arglist = list(set(self["args"]))
-  pathlist = ["--proto_path=" + i for i in set(self["imports"])]
-  arguments = arglist + pathlist + srcfiles
-  inputs = list(set(self["inputs"]))
-  outputs = list(set(self["outputs"] + ctx.outputs.outs))
+  # Proto root is by default the bazel execution root for this
+  # workspace.
+  root = "."
 
-  if ctx.attr.verbose > 2:
-    print("protoc executable: " + ctx.executable.protoc.path)
-    for i in range(len(arguments)):
-      print(" > arg%s: %s" % (i, arguments[i]))
-    for i in range(len(inputs)):
-      print(" > input%s: %s" % (i, inputs[i]))
-    for i in range(len(outputs)):
-      print(" > output%s: %s" % (i, outputs[i]))
+  # Compte set of "external workspace roots" that the proto
+  # sourcefiles belong to.
+  external_roots = []
+  for file in ctx.files.protos:
+    path = file.path.split('/')
+    if path[0] == 'external':
+      external_roots += ["/".join(path[0:2])]
 
-  manifest = ["//" + file.short_path for file in self["outputs"]]
+  # This set size must be 0 or 1. (all source files must exist in this
+  # workspace or the same external workspace).
+  roots = set(external_roots)
+  if len(roots) > 1:
+    fail(
+"""
+You are attempting simultaneous compilation of protobuf source files that span multiple workspaces (%s).
+Decompose your library rules into smaller units having filesets that belong to only a single workspace at a time.
+Note that it is OK to *import* across multiple workspaces, but not compile them as file inputs to protoc.
+""" % roots
+    )
+
+  # If all protos are in an external workspace, set the proto_root to
+  # this dir (the location we'll cd into when calling protoc)
+  if (len(roots)) == 1:
+    root = list(roots)[0]
+
+  # User can augment with the proto_root.
+  if ctx.attr.proto_root:
+    # Fail if user tries to use relative path segments
+    proto_path = ctx.attr.proto_root.split("/")
+    if ("" in proto_path) or ("." in proto_path) or (".." in proto_path):
+      fail("Proto_root cannot contain empty segments, '.', or '..': %s" % proto_path)
+    root += "/".join(proto_path)
+
+  return root
+
+
+def _protoc(ctx, pkg):
+
+  execdir = pkg.execdir
+  protoc = get_offset_path(execdir, ctx.executable.protoc.path)
+  imports = ["--proto_path=" + get_offset_path(execdir, i) for i in pkg.imports]
+  srcs = [get_offset_path(execdir, p.path) for p in pkg.protos]
+  protoc_cmd = [protoc] + list(pkg.args) + imports + srcs
+  manifest = ["//" + f.short_path for f in pkg.outputs]
+
+  cmds = [" ".join(protoc_cmd)]
+  if execdir != ".":
+    cmds.insert(0, "cd %s" % execdir)
 
   if ctx.attr.output_to_workspace:
     print(
@@ -48,21 +80,25 @@ def _execute_rule(self):
     )
 
   if ctx.attr.verbose:
-    cmd = "\n****************************************************************\n"
-    cmd += "(cd $(bazel info execution_root) && \\"
-    cmd += "".join([("\n%s \\" % e) for e in [ctx.executable.protoc.path] + arguments])
-    cmd += "\n)"
-    cmd += "\n****************************************************************\n"
-    cmd += "\n".join(manifest)
-    cmd += "\n****************************************************************\n"
-    print(cmd)
+    print(
+"""
+************************************************************
+cd $(bazel info execution_root)%s && \
+%s
+************************************************************
+%s
+************************************************************
+""" % (
+  "" if execdir == "." else "/" + execdir,
+  " \\ \n".join(protoc_cmd),
+  "\n".join(manifest))
+    )
 
   ctx.action(
-    mnemonic="ProtoCompile",
-    executable=ctx.executable.protoc,
-    arguments=arguments,
-    inputs=inputs,
-    outputs=outputs,
+    mnemonic = "ProtoCompile",
+    command = " && ".join(cmds),
+    inputs = list(pkg.inputs),
+    outputs = list(pkg.outputs),
   )
 
 
@@ -71,30 +107,40 @@ def _protoc_rule_impl(ctx):
   if ctx.attr.verbose > 1:
     print("proto_compile %s:%s"  % (ctx.build_file_path, ctx.label.name))
 
-  gendir = _get_gendir(ctx)
-  outdir = gendir
+  # Get proto root.  This is usually "."
+  execdir = get_execdir(ctx)
+
+  outdir = get_offset_path(execdir, get_outdir(ctx))
 
   # Configure global outdir to execution root if we want to place them
   # in the workspace.
   if ctx.attr.output_to_workspace:
-    outdir = "."
+    outdir = get_offset_path(execdir, ".")
 
+  # Propogate proto deps.  Workaround to use a list since sets cannot
+  # contain struct objects.
+  pkgs = []
+  for dep in ctx.attr.proto_deps:
+    for pkg in dep.proto.transitive_pkgs:
+      if not pkg in pkgs:
+        pkgs += [pkg]
+
+
+  # Mutable builder-like data structure for preparation phase.
   self = {
-    "args": [],
-    "ctx": ctx,
-    "gendir": gendir,
-    "imports": [],
-    "outdir": outdir,
-    "protos": ctx.files.protos,
-    "inputs": [],
-    "outputs": [],
-    "transitive_packages": {},
-    "with_grpc": getattr(ctx.attr, "with_grpc", False),
+    "args": [], # list of string
+    "ctx": ctx, # ctx
+    "prefix": ":".join([ctx.label.package, ctx.label.name]),
+    "imports": [], # list of string
+    "inputs": [], # list of string
+    "outdir": outdir, # string
+    "pkgs": pkgs, # set(struct)
+    "protos": ctx.files.protos, # list of File
+    "execdir": execdir, # string
+    "outputs": [], # list of File
+    "with_grpc": getattr(ctx.attr, "with_grpc", False), # boolean
   }
 
-  # Propogate proto deps:
-  for dep in ctx.attr.proto_deps:
-    self["transitive_packages"] += dep.proto.transitive_packages
 
   # Make a list of languages that were specified for this run
   spec = []
@@ -107,38 +153,45 @@ def _protoc_rule_impl(ctx):
 
   # Prepreprocessing for all requested languages.
   for lang in spec:
+    invoke("build_prefix", lang, self)
     invoke("build_generated_files", lang, self)
     invoke("build_imports", lang, self)
     invoke("build_protobuf_invocation", lang, self)
     invoke("build_protobuf_out", lang, self)
     if self["with_grpc"] or getattr(ctx.attr, "gen_" + lang.name + "_grpc", False):
-      if ctx.attr.verbose > 2:
-        print("gen_" + lang.name + "grpc=True")
       invoke("build_grpc_invocation", lang, self)
       invoke("build_grpc_out", lang, self)
+      if ctx.attr.verbose > 2:
+        print("gen_" + lang.name + "_grpc = yes")
     invoke("build_inputs", lang, self)
 
+
+  # Build immutable for rule and transitive beyond
+  pkg = struct(
+    label = ctx.label,
+    workspace_name = ctx.workspace_name,
+    execdir = self["execdir"],
+    prefix = self["prefix"],
+    args = set(self["args"]),
+    imports = set(self["imports"]),
+    protos = set(self["protos"]),
+    inputs = set(self["inputs"]),
+    outputs = set(self["outputs"] + ctx.outputs.outs),
+  )
+  pkgs.append(pkg)
+
   # Run protoc
-  _execute_rule(self)
+  _protoc(ctx, pkg)
 
   # Postprocessing for all requested languages.
   for lang in spec:
     invoke("post_execute", lang, self)
 
-  # Keep a transitive mapping of package names to the protos it
-  # generates.  This is primarily used by golang to do import mapping.
-  self["packages"] = {
-    ctx.label.package + ':' + ctx.label.name: self["protos"],
-  }
-
   return struct(
-    files=set(self["outputs"]),
-    proto=struct(
-      imports = self["imports"],
-      packages = self["packages"],
-      protos = set(self["protos"]),
-      inputs = self["inputs"],
-      transitive_packages = self["packages"] + self["transitive_packages"],
+    files = set(self["outputs"]),
+    proto = struct(
+      pkg = pkg,
+      transitive_pkgs = pkgs,
     ),
   )
 
@@ -153,8 +206,17 @@ def implement(spec):
 
   attrs = self["attrs"]
 
-  # Options to be passed to protoc as --proto_path.
+  # Augments the calculated proto root.
+  attrs["proto_root"] = attr.string()
+
+  # Options to be passed to protoc as -I.  Raw strings.
   attrs["imports"] = attr.string_list()
+
+  # Options to be passed to protoc as --proto_path.  Label list where
+  # the external workspace root foreach named file will be added as an
+  # import.
+  # NOTE(pcj): not sure if this is actually useful.
+  #attrs["proto_paths"] = attr.label_list()
 
   # The set of files to compile.
   attrs["protos"] = attr.label_list(

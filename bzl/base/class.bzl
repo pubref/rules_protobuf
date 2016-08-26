@@ -1,3 +1,6 @@
+load("//bzl:util.bzl", "get_offset_path")
+
+
 def implement_compile_attributes(lang, self):
     """Add per-language attributes for the proto_compile rule"""
 
@@ -103,9 +106,24 @@ def build_imports(lang, self):
     """Assemble the list of imports"""
     ctx = self["ctx"]
 
-    # The "." is the key for protoc to see the entire source tree from
-    # the workspace root.
-    self["imports"] = ["."] + self.get("imports", []) + ctx.attr.imports
+    # Start with root
+    imports = [self["execdir"]]
+
+    # Add any imports added in by language implementations.
+    imports += self.get("imports", [])
+
+    # Add user-specified ones (list of strings for this one)
+    imports += ctx.attr.imports
+
+    # Add in a workspace root for files specified in external
+    # workspaces, taking into account the root offset.
+    # for file in ctx.files.proto_paths:
+    #     path = file.path.split("/")
+    #     if path[0] == "external":
+    #         imports += ["/".join(path[0:2])]
+
+    # Save into shared state
+    self["imports"] = imports
 
     # if we elect to support transitive imports, this would be the
     # place to do it.  Not sure if this will increase complexity for
@@ -113,6 +131,12 @@ def build_imports(lang, self):
     #
     #for dep in ctx.attr.proto_deps:
     #    ...
+
+
+
+def build_package_prefix(lang, self):
+    """The package prefix.  This is only used by go"""
+    pass
 
 
 def build_plugin_out(name, key, lang, self):
@@ -141,6 +165,7 @@ def build_plugin_out(name, key, lang, self):
 
     # Build the final list of plugin arguments.
     plugin_args = self["outdir"]
+
     if opts:
         plugin_args = ",".join(opts) + ":" + plugin_args
     self["args"] += ["--%s_out=%s" % (name, plugin_args)]
@@ -185,8 +210,10 @@ def build_plugin_invocation(key, lang, self):
         fail("Plugin executable not configured: %s" % plugin_binary_key)
 
     file = getattr(ctx.executable, plugin_binary_key)
+    tool = get_offset_path(self["execdir"], file.path)
+
     self["inputs"] += [file]
-    self["args"] += ["--plugin=%s=%s" % (plugin.name, file.path)]
+    self["args"] += ["--plugin=%s=%s" % (plugin.name, tool)]
 
 
 def build_grpc_invocation(lang, self):
@@ -230,6 +257,7 @@ CLASS = struct(
     build_grpc_out = build_grpc_out,
     build_imports = build_imports,
     build_inputs = build_inputs,
+    build_package_prefix = build_package_prefix,
     build_protobuf_invocation = build_protobuf_invocation,
     build_protobuf_out = build_protobuf_out,
     get_primary_output_suffix = get_primary_output_suffix,

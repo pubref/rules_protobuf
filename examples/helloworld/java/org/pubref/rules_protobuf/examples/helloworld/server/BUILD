@@ -28,14 +28,6 @@ java_library(
     name = "server",
     srcs = ["HelloWorldServer.java"],
     deps = [
-        "//examples/helloworld/java/org/pubref/rules_protobuf/examples/helloworld/proto",
-    ] + JAVA.grpc.compile_deps,
-)
-
-java_library(
-    name = "server_alt2",
-    srcs = ["HelloWorldServer.java"],
-    deps = [
-        "//examples/helloworld/java/org/pubref/rules_protobuf/examples/helloworld/proto",
+        "//examples/helloworld/proto:java",
     ] + JAVA.grpc.compile_deps,
 )

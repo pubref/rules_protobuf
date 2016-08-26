@@ -23,6 +23,27 @@ def implement_compile_attributes(lang, self):
     attrs["go_import_map"] = attr.string_dict()
 
 
+def build_package_prefix(lang, self):
+    ctx = self["ctx"]
+    self["prefix"] = ctx.attr.go_prefix.go_prefix
+    print("PREFIX: " + self["prefix"])
+
+def get_mappings_for(files, label, prefix):
+    """For a set of files that belong the the given context label, create a mapping to the given prefix."""
+    mappings = {}
+    for file in files:
+        src = file.short_path # TODO: what about external protos?
+        dst = [prefix, label.package]
+        name_parts = label.name.split(".")
+        # special case to elide last part if the name is
+        # 'go_default_library.pb'
+        if name_parts[0] != "go_default_library":
+            dst.append(name_parts[0])
+        mappings[src] = "/".join(dst)
+
+    return mappings
+
+
 def build_protobuf_out(lang, self):
     """Override behavior to add plugin options before building the --go_out option"""
     ctx = self["ctx"]
@@ -37,23 +58,16 @@ def build_protobuf_out(lang, self):
 
     # Build the list of import mappings.  Start with any configured on
     # the rule by attributes.
-    mappings = {} + ctx.attr.go_import_map
+    mappings = {}
+    mappings += ctx.attr.go_import_map
+    mappings += get_mappings_for(self["protos"], ctx.label, go_prefix)
 
-    # Then add in the transitive set from dependent rules.
-    for dep in ctx.attr.proto_deps:
-        provider = dep.proto
-        packages = provider.transitive_packages
-        for pkg, protos in packages.items():
-            target = pkg.rsplit(':') # [0] == ctx.label.package, [1] == ctx.label.name
-            for file in protos:
-                src = file.short_path
-                dst = go_prefix + '/' + target[0] # (A) / (B)
-                # the name of the calling rule is not
-                # 'go_default_library', add that last part (C) in.
-                if target[1] != "go_default_library.pb":
-                    # slice off the '.pb' from 'mylib.protos'
-                    dst += "/" + target[1][:-len(".pb")]
-                mappings[src] = dst
+    # Then add in the transitive set from dependent rules. TODO: just
+    # pass the import map transitively rather than recomputing it.
+    for pkg in self["pkgs"]:
+        # Map to this go_prefix if within same workspace, otherwise use theirs.
+        prefix = go_prefix if pkg.workspace_name == ctx.workspace_name else pkg.prefix
+        mappings += get_mappings_for(pkg.protos, pkg.label, prefix)
 
     if ctx.attr.verbose > 1:
         print("go_import_map: %s" % mappings)
@@ -105,6 +119,7 @@ CLASS = struct(
 
     build_grpc_out = build_grpc_out,
     build_protobuf_out = build_protobuf_out,
+    build_package_prefix = build_package_prefix,
     implement_compile_attributes = implement_compile_attributes,
     library = go_library,
 )

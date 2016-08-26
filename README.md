@@ -54,19 +54,15 @@ Build label: 0.3.1
 ...
 ```
 
-> Note about golang: this project uses [rules-go][rules_go] for
-> `go_library`, `go_binary`, and `go_test`.
-
 # Quick Start
 
-## WORKSPACE
-
-1. Add rules_go to your workspace
+## 1. Add rules_go to your WORKSPACE
 
 Note about golang: this project uses [rules-go][rules_go] for
-`go_library`, `go_binary`, and `go_test`.  Even if you're not using go
-support in rules_protobuf, it is a current requirement for your
-WORKSPACE file (see issue #10).
+`go_library`, `go_binary`, and `go_test`.  **Even if you're not >
+using go support in rules_protobuf, it is a current requirement for >
+your WORKSPACE file** (see issue >
+https://github.com/pubref/rules_protobuf/issues/10).
 
 ```python
 git_repository(
@@ -74,13 +70,15 @@ git_repository(
     tag = "0.0.4",
     remote = "https://github.com/bazelbuild/rules_go.git",
 )
+
 load("@io_bazel_rules_go//go:def.bzl", "go_repositories")
+
 go_repositories()
 ```
 
-2. Require these rules your `WORKSPACE` and trigger loading of
-external dependencies.  Specify the language(s) you'd like support
-for.:
+## 2. Add rules_protobuf your WORKSPACE
+
+Specify the language(s) you'd like support for:
 
 ```python
 git_repository(
@@ -98,20 +96,22 @@ protobuf_repositories(
 )
 ```
 
-> Note: refer to the [bzl/repositories.bzl][repositories.bzl] file for
-> the set of external dependencies that will be loaded into your
+> Refer to [bzl/repositories.bzl][repositories.bzl] file for
+> the set of external dependencies that will be available to your
 > project.
 
-## BUILD
+## 3. Add protobuf rules to your BUILD file
 
-Build a java-based gRPC library:
+TO build a java-based gRPC library:
 
 ```python
 load("@org_pubref_rules_protobuf//bzl:java/rules.bzl", "java_proto_library")
 
 java_proto_library(
   name = "protolib",
-  protos = ["my.proto"],
+  protos = [
+    "my.proto"
+  ],
   with_grpc = True,
   verbose = 1, # 0=no output, 1=show protoc command, 2+ more...
 )
@@ -130,7 +130,7 @@ $ git clone https://github.com/pubref/rules_protobuf
 $ cd rules_protobuf/examples/helloworld
 
 # Run all tests
-$ bazel test ...
+$ bazel test examples/...
 
 # Build a server
 $ bazel build cpp/server
@@ -147,11 +147,12 @@ $ bazel run java/org/pubref/rules_closure/examples/helloworld/client:netty
 
 # Overriding Dependencies
 
-To load alternate versions of dependencies, pass in a `dict` having
-the same overall structure of the [repositories.bzl][repositories.bzl]
-file.  Entries having a matching key will override those found in the
-file.  For example, to load a different version of
-https://github.com/golang/protobuf, provide a different commit ID:
+To load alternate versions of dependencies, pass in a
+[dict][skylark-dict] having the same overall structure of the
+[repositories.bzl][repositories.bzl] file.  Entries having a matching
+key will override those found in the file.  For example, to load a
+different version of https://github.com/golang/protobuf, provide a
+different commit ID:
 
 ```
 load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protobuf_repositories")
@@ -186,28 +187,39 @@ your sourcefiles as they appear in your workspace, with an additional
 
 This has implications for import statements in your protobuf
 sourcefiles, if you use them.  The two cases to consider are imports
-*within* your workspace (referred to here as *'internal' imports*), and
-imports of other protobuf files in an external workspace (*external imports*).
+*within* your workspace (referred to here as *'internal' imports*),
+and imports of other protobuf files in an external workspace
+(*external imports*).
+
+If you need them (see below), use the `imports` attribute (a
+[string_list][skylark-string_list]).  This passes arguments directly
+to protoc (normalized to the rootdir where the protoc command runs).
+
 
 ### Internal Imports
 
 Internal imports should require no additional parameters if your
-import statements follow the directory structure of your workspace.
-For example, the `examples/helloworld/proto/helloworld.proto` file
-imports the `examples/proto/common.proto` file.  Since this follows
-the same directory structure as the workspace, `protoc` can find it,
-and no additional arguments to a `cc_proto_library` are required for
-protoc tool.
+import statements follow the same directory structure of your
+workspace.  For example, the
+`examples/helloworld/proto/helloworld.proto` file imports the
+`examples/proto/common.proto` file.  Since this matches the workspace
+directory structure, `protoc` can find it, and no additional arguments
+to a `cc_proto_library` are required for protoc code generation step.
 
-*However*, the `cc_proto_library` rule in
-`examples/helloworld/proto/BUILD:cpp` names the
-`//examples/proto:cpp`'s `cc_proto_library` rule as a dependency in
-order to (1) trigger generation of the `common.pb.{h,cc}` files AND
-(2) include those generated files in the `cc_library` rule for
-compiling the object files.
+Obviously, importing a file does not mean that code will be generated
+for it.  Therefore, *use of the imports attribute implies that the
+generated files for the imported message or service already exist
+somewhere that can be used as a dependency some other library rule*
+(such as `srcs` for `java_library`).
 
-Additional `--proto_path` (`-I`) arguments can be supplied via the
-`imports = []` attribute common to all rules if needed.
+Rather than using `imports`, it often make more sense to declare a
+dependency on another proto_library rule via the `proto_deps`
+attribute.  This makes the import available to the calling rule and
+performs code generation.  For example, the `cc_proto_library` rule in
+`examples/helloworld/proto:cpp` names the `//examples/proto:cpp`'s
+`cc_proto_library` rule in its `proto_deps` attribute to accomplish
+both code generation and compilation of object files for the proto
+chain.
 
 ### External Imports
 
@@ -215,9 +227,10 @@ The same logic applied to external imports.  The two questions to
 answer are:
 
 1. *Can protoc "see" the imported file?* In order to satisfy this
-   requirement, pass in the full path of the required file relative to
-   your execution root.  For example, the the well-known descriptor
-   proto could be made visible to protoc via something like...
+   requirement, pass in the full path of the required file(s) relative
+   to the execution root where protoc will be run.  For example, the
+   the well-known descriptor proto could be made visible to protoc via
+   something like...
 
 ```python
 java_proto_library(
@@ -235,10 +248,10 @@ that the file
 in the package `google.protobuf`.
 
 2. *Can the `cc_proto_library` rule "see" the generated protobuf
-   files*? (in this case `descriptor.pb.{h,cc}`.  Just because the file
-   was imported does not imply that protoc will generate outputs for
-   it, so somewhere in the `cc_library` rule dependency chain these
-   files must be present.  This could be via another
+   files*? (in this case `descriptor.pb.{h,cc}`.  Just because the
+   file was imported does not imply that protoc will generate outputs
+   for it, so somewhere in the `cc_library` rule dependency chain
+   these files must be present.  This could be via another
    `cc_proto_library` rule defined elswhere, or a some other filegroup
    or label list.  If the source is another `cc_proto_library` rule,
    specify that in the `proto_deps` attribute to the calling
@@ -246,6 +259,7 @@ in the package `google.protobuf`.
    (pregenerated) protobuf files to the `deps` attribute, just as you
    would any typical `cc_library` rule.  Hopefully that made sense.
    It's a bit tricky.
+
 
 # Contributing
 
@@ -293,3 +307,8 @@ Contributions welcome; please create Issues or GitHub pull requests.
 [ruby]: bzl/ruby
 [grpc_gateway]: bzl/grpc_gateway
 [repositories.bzl]: bzl/repositories.bzl
+
+[skylark-dict]: https://www.bazel.io/docs/skylark/lib/dict.html "Skylark Documentation for dict"
+[skylark-string]: https://www.bazel.io/docs/skylark/lib/attr.html#string "Skylark string attribute"
+[skylark-string_list]: https://www.bazel.io/docs/skylark/lib/attr.html#string_list "Skylark string_list attribute"
+[skylark-string_list_dict]: https://www.bazel.io/docs/skylark/lib/attr.html#string_list_dict "Skylark string_list_dict attribute"

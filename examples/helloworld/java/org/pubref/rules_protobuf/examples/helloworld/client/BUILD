@@ -26,6 +26,6 @@ java_library(
     name = "client",
     srcs = ["HelloWorldClient.java"],
     deps = [
-        "//examples/helloworld/java/org/pubref/rules_protobuf/examples/helloworld/proto",
+        "//examples/helloworld/proto:java",
     ] + JAVA.grpc.compile_deps,
 )

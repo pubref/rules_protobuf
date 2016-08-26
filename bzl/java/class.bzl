@@ -1,5 +1,5 @@
 load("//bzl:base/class.bzl", BASE = "CLASS", "build_plugin_out")
-load("//bzl:util.bzl", "invoke", "invokesuper")
+load("//bzl:util.bzl", "invoke", "invokesuper", "get_offset_path")
 
 
 def build_generated_files(lang, self):
@@ -8,9 +8,11 @@ def build_generated_files(lang, self):
     srcjar = ctx.outputs.srcjar
     basename = srcjar.basename[:-len(".srcjar")]
     protojar = ctx.new_file(srcjar, "%s.jar" % basename)
+    execdir = self["execdir"]
+
     self["protojar"] = protojar
     self["outputs"] += [protojar]
-    self["outdir"] = protojar.path
+    self["outdir"] = get_offset_path(execdir, protojar.path)
 
 
 def build_grpc_out(lang, self):
@@ -25,6 +27,9 @@ def post_execute(lang, self):
     ctx = self["ctx"]
     srcjar = ctx.outputs.srcjar
     protojar = self["protojar"]
+
+    # Note: in this case, don't have to specify offset_paths since we
+    # already generated the files relative to the offset.
 
     ctx.action(
         mnemonic = "FixProtoSrcJar",
