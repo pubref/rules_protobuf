@@ -45,7 +45,7 @@ Note that it is OK to *import* across multiple workspaces, but not compile them 
     proto_path = ctx.attr.proto_root.split("/")
     if ("" in proto_path) or ("." in proto_path) or (".." in proto_path):
       fail("Proto_root cannot contain empty segments, '.', or '..': %s" % proto_path)
-    root += "/".join(proto_path)
+    root = "/".join([root] + proto_path)
 
   return root
 
