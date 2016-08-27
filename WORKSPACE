@@ -10,6 +10,7 @@ git_repository(
     commit = "fbd0bc8f5cf2526533c9b9846db0f2f242113faf",
     remote = "https://github.com/bazelbuild/rules_go.git",
 )
+go_repositories()
 
 # ================================================================
 # Load self

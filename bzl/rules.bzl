@@ -44,10 +44,6 @@ def protobuf_repositories(
 
   if with_grpc_gateway:
     with_go = True
-
-  if with_go:
-    go_repositories()
-
   if with_cpp:
     classes += ["cpp"]
   if with_csharp:
