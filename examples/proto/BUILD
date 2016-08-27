@@ -33,7 +33,7 @@ cc_proto_library(
 ruby_proto_library(
     name = "rb",
     protos = [":protos"],
-    verbose = 3,
+    verbose = 0,
 )
 
 java_proto_library(
@@ -42,11 +42,11 @@ java_proto_library(
     verbose = 1,
 )
 
-js_proto_library(
+js_proto_compile(
     name = "js",
     protos = [":protos"],
-    verbose = 3,
-    #import_style = "commonjs",
+    verbose = 0,
+    import_style = "closure",
 )
 
 # Work-in-progress. This must be called with ':cs.pb' due to lack of

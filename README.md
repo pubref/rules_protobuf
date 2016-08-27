@@ -18,7 +18,7 @@ Bazel | rules_protobuf | gRPC |
 | [Go][go]                 | [go_proto_compile][go] | [go_proto_library][go] | yes |
 | [Java][java]             | [java_proto_compile][java] | [java_proto_library][java] | yes |
 | [JavaNano][javanano]     | [android_proto_compile][javanano] | [android_proto_library][javanano] | yes |
-| [Javascript](bzl/js)     |              |             |          |
+| [Javascript](bzl/js)     | [js_proto_compile][js] |             |          |
 | [Objective-C](bzl/objc)  |              |             |          |
 | [Python](bzl/python)     | [py_proto_compile][python]  |             |          |
 | [Ruby](bzl/ruby)         | [ruby_proto_compile][ruby]  |             |          |
@@ -303,6 +303,7 @@ Contributions welcome; please create Issues or GitHub pull requests.
 [go]: bzl/go
 [java]: bzl/java
 [javanano]: bzl/javanano
+[js]: bzl/js
 [python]: bzl/python
 [ruby]: bzl/ruby
 [grpc_gateway]: bzl/grpc_gateway
