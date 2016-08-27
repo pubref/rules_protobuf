@@ -4,6 +4,7 @@ load("//bzl:cpp/rules.bzl", "cc_proto_library")
 load("//bzl:go/rules.bzl", "go_proto_library")
 load("//bzl:python/rules.bzl", "py_proto_library")
 load("//bzl:java/rules.bzl", "java_proto_library")
+load("//bzl:js/rules.bzl", "js_proto_compile")
 
 filegroup(
     name = "protos",
@@ -47,4 +48,14 @@ java_proto_library(
     ],
     protos = [":protos"],
     with_grpc = True,
+)
+
+
+js_proto_compile(
+    name = "js",
+    protos = [":protos"],
+    proto_deps = [
+        "//examples/proto:js",
+    ],
+    verbose = 1,
 )

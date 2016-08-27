@@ -5,7 +5,7 @@ load("//bzl:csharp/rules.bzl", "csharp_proto_library")
 load("//bzl:go/rules.bzl", "go_proto_library")
 load("//bzl:java/rules.bzl", "java_proto_library")
 load("//bzl:ruby/rules.bzl", "ruby_proto_library")
-load("//bzl:js/rules.bzl", "js_proto_compile", "js_proto_library")
+load("//bzl:js/rules.bzl", "js_proto_compile")
 
 
 filegroup(
@@ -46,7 +46,6 @@ js_proto_compile(
     name = "js",
     protos = [":protos"],
     verbose = 0,
-    import_style = "closure",
 )
 
 # Work-in-progress. This must be called with ':cs.pb' due to lack of
