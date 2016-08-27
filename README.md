@@ -12,7 +12,7 @@ Bazel | rules_protobuf | gRPC |
 ---
 
 | Language                 | Compile (1) | Build (2) | gRPC (3) |
-| ------------------------ | ------------ | ----------- | -------- |
+| -----------------------: | -----------: | ----------: | -------- |
 | [C++][cpp]               | [cc_proto_compile][cpp] | [cc_proto_library][cpp] | yes |
 | [C#](bzl/csharp)         | [csharp_proto_compile][csharp] (4) |             |          |
 | [Go][go]                 | [go_proto_compile][go] | [go_proto_library][go] | yes |
