@@ -59,6 +59,9 @@ def _protoc(ctx, pkg):
   protoc_cmd = [protoc] + list(pkg.args) + imports + srcs
   manifest = ["//" + f.short_path for f in pkg.outputs]
 
+  inputs = list(pkg.inputs)
+  outputs = list(pkg.outputs)
+
   cmds = [" ".join(protoc_cmd)]
   if execdir != ".":
     cmds.insert(0, "cd %s" % execdir)
@@ -94,11 +97,19 @@ cd $(bazel info execution_root)%s && \
   "\n".join(manifest))
     )
 
+  if ctx.attr.verbose > 2:
+    for i in range(len(protoc_cmd)):
+      print(" > cmd%s: %s" % (i, protoc_cmd[i]))
+    for i in range(len(inputs)):
+      print(" > input%s: %s" % (i, inputs[i]))
+    for i in range(len(outputs)):
+      print(" > output%s: %s" % (i, outputs[i]))
+
   ctx.action(
     mnemonic = "ProtoCompile",
     command = " && ".join(cmds),
-    inputs = list(pkg.inputs),
-    outputs = list(pkg.outputs),
+    inputs = inputs,
+    outputs = outputs,
   )
 
 
@@ -130,6 +141,7 @@ def _protoc_rule_impl(ctx):
   self = {
     "args": [], # list of string
     "ctx": ctx, # ctx
+    "exts": [], # list of string
     "prefix": ":".join([ctx.label.package, ctx.label.name]),
     "imports": [], # list of string
     "inputs": [], # list of string
@@ -154,6 +166,7 @@ def _protoc_rule_impl(ctx):
   # Prepreprocessing for all requested languages.
   for lang in spec:
     invoke("build_prefix", lang, self)
+    invoke("build_generated_filename_extensions", lang, self)
     invoke("build_generated_files", lang, self)
     invoke("build_imports", lang, self)
     invoke("build_protobuf_invocation", lang, self)

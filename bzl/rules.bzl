@@ -12,6 +12,7 @@ def protobuf_repositories(
     with_go=False,
     with_java=False,
     with_javanano=False,
+    with_js=False,
     with_python=False,
     with_ruby=False,
     with_grpc_gateway=False,
@@ -57,6 +58,8 @@ def protobuf_repositories(
     classes += ["go"]
   if with_java:
     classes += ["java"]
+  if with_js:
+    classes += ["js"]
   if with_javanano:
     classes += ["javanano"]
   if with_grpc_gateway:

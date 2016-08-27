@@ -30,6 +30,7 @@ protobuf_repositories(
     with_grpc_gateway = True,
     with_java = True,
     with_javanano = True,
+    with_js = True,
     # with_python = True,
     # with_ruby = True,
 )

@@ -5,6 +5,8 @@ load("//bzl:csharp/rules.bzl", "csharp_proto_library")
 load("//bzl:go/rules.bzl", "go_proto_library")
 load("//bzl:java/rules.bzl", "java_proto_library")
 load("//bzl:ruby/rules.bzl", "ruby_proto_library")
+load("//bzl:js/rules.bzl", "js_proto_compile", "js_proto_library")
+
 
 filegroup(
     name = "protos",
@@ -31,13 +33,20 @@ cc_proto_library(
 ruby_proto_library(
     name = "rb",
     protos = [":protos"],
-    verbose = 1,
+    verbose = 3,
 )
 
 java_proto_library(
     name = "java",
     protos = [":protos"],
     verbose = 1,
+)
+
+js_proto_library(
+    name = "js",
+    protos = [":protos"],
+    verbose = 3,
+    #import_style = "commonjs",
 )
 
 # Work-in-progress. This must be called with ':cs.pb' due to lack of

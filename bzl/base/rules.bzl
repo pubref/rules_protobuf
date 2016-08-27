@@ -65,7 +65,7 @@ def proto_library(
   deps = list(set(deps + proto_deps))
   srcs = list(set(srcs + generated_srcs))
 
-  if verbose > 1:
+  if verbose > 2:
     print("final set of library deps: %s" % (deps))
 
   # Part 4: compile generated code.

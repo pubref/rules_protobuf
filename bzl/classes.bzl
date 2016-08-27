@@ -6,6 +6,7 @@ load("//bzl:python/class.bzl", PYTHON = "CLASS")
 load("//bzl:ruby/class.bzl", RUBY = "CLASS")
 load("//bzl:java/class.bzl", JAVA = "CLASS")
 load("//bzl:javanano/class.bzl", JAVANANO = "CLASS")
+load("//bzl:js/class.bzl", JS = "CLASS")
 load("//bzl:grpc_gateway/class.bzl", GATEWAY = "CLASS")
 
 CLASSES = {
@@ -15,6 +16,7 @@ CLASSES = {
     GATEWAY.name: GATEWAY,
     JAVA.name: JAVA,
     JAVANANO.name: JAVANANO,
+    JS.name: JS,
     GO.name: GO,
     PYTHON.name: PYTHON,
     RUBY.name: RUBY,
