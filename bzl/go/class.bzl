@@ -28,11 +28,17 @@ def build_package_prefix(lang, self):
     self["prefix"] = ctx.attr.go_prefix.go_prefix
     print("PREFIX: " + self["prefix"])
 
+
 def get_mappings_for(files, label, prefix):
     """For a set of files that belong the the given context label, create a mapping to the given prefix."""
     mappings = {}
     for file in files:
-        src = file.short_path # TODO: what about external protos?
+        src = file.short_path
+        # File in an external repo looks like:
+        # '../WORKSPACE/SHORT_PATH'.  We want just the SHORT_PATH.
+        if src.startswith("../"):
+            parts = src.split("/")
+            src = "/".join(parts[2:])
         dst = [prefix, label.package]
         name_parts = label.name.split(".")
         # special case to elide last part if the name is

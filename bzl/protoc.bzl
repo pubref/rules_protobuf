@@ -37,6 +37,7 @@ Note that it is OK to *import* across multiple workspaces, but not compile them 
   # If all protos are in an external workspace, set the proto_root to
   # this dir (the location we'll cd into when calling protoc)
   if (len(roots)) == 1:
+    pass
     root = list(roots)[0]
 
   # User can augment with the proto_root.
@@ -53,11 +54,12 @@ Note that it is OK to *import* across multiple workspaces, but not compile them 
 def _protoc(ctx, pkg):
 
   execdir = pkg.execdir
+
   protoc = get_offset_path(execdir, ctx.executable.protoc.path)
   imports = ["--proto_path=" + get_offset_path(execdir, i) for i in pkg.imports]
   srcs = [get_offset_path(execdir, p.path) for p in pkg.protos]
   protoc_cmd = [protoc] + list(pkg.args) + imports + srcs
-  manifest = ["//" + f.short_path for f in pkg.outputs]
+  manifest = [f.short_path for f in pkg.outputs]
 
   inputs = list(pkg.inputs)
   outputs = list(pkg.outputs)
@@ -119,8 +121,8 @@ def _protoc_rule_impl(ctx):
     print("proto_compile %s:%s"  % (ctx.build_file_path, ctx.label.name))
 
   # Get proto root.  This is usually "."
-  execdir = get_execdir(ctx)
-
+  rootdir = get_execdir(ctx)
+  execdir = "."
   outdir = get_offset_path(execdir, get_outdir(ctx))
 
   # Configure global outdir to execution root if we want to place them
@@ -143,12 +145,13 @@ def _protoc_rule_impl(ctx):
     "ctx": ctx, # ctx
     "exts": [], # list of string
     "prefix": ":".join([ctx.label.package, ctx.label.name]),
-    "imports": [], # list of string
+    "imports": [rootdir], # list of string
     "inputs": [], # list of string
     "outdir": outdir, # string
     "pkgs": pkgs, # set(struct)
     "protos": ctx.files.protos, # list of File
     "execdir": execdir, # string
+    "rootdir": rootdir, # string
     "outputs": [], # list of File
     "with_grpc": getattr(ctx.attr, "with_grpc", False), # boolean
   }
