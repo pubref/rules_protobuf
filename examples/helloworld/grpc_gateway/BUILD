@@ -5,11 +5,19 @@ load(
     "//bzl:go/class.bzl",
     GO = "CLASS",
 )
+
 load(
     "//bzl:grpc_gateway/class.bzl",
     GRPC_GATEWAY = "CLASS",
+    GRPC_SWAGGER = "SWAGGER",
 )
-load("//bzl:grpc_gateway/rules.bzl", "grpc_gateway_proto_library", "grpc_gateway_binary")
+
+load(
+    "//bzl:grpc_gateway/rules.bzl",
+    "grpc_gateway_swagger_compile",
+    "grpc_gateway_proto_library",
+    "grpc_gateway_binary",
+)
 
 go_test(
     name = "greeter_test",
@@ -26,10 +34,15 @@ go_test(
     ] + GRPC_GATEWAY.grpc.compile_deps,
 )
 
-# Alternate form to grpc_gateway_binary
-#
 grpc_gateway_proto_library(
     name = "gateway",
+    output_to_workspace = False,
+    protos = ["helloworld.proto"],
+    verbose = 1,
+)
+
+grpc_gateway_swagger_compile(
+    name = "swagger",
     output_to_workspace = False,
     protos = ["helloworld.proto"],
     verbose = 1,

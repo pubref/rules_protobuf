@@ -149,3 +149,36 @@ go_library(
         "@com_github_golang_protobuf//:protoc-gen-go/plugin",
     ],
 )
+
+go_binary(
+    name = "protoc-gen-swagger_bin",
+    srcs = [
+        "protoc-gen-swagger/main.go",
+    ],
+    deps = [
+        "protoc-gen-grpc-gateway/descriptor",
+        "protoc-gen-swagger/genswagger",
+        "@com_github_golang_glog//:go_default_library",
+        "@com_github_golang_protobuf//:proto",
+        "@com_github_golang_protobuf//:protoc-gen-go/plugin",
+    ],
+)
+
+
+go_library(
+    name = "protoc-gen-swagger/genswagger",
+    srcs = [
+        "protoc-gen-swagger/genswagger/doc.go",
+        "protoc-gen-swagger/genswagger/generator.go",
+        "protoc-gen-swagger/genswagger/template.go",
+        "protoc-gen-swagger/genswagger/types.go",
+    ],
+    deps = [
+        "protoc-gen-grpc-gateway/descriptor",
+        "protoc-gen-grpc-gateway/generator",
+        "@com_github_golang_glog//:go_default_library",
+        "@com_github_golang_protobuf//:proto",
+        "@com_github_golang_protobuf//:protoc-gen-go/plugin",
+        "@com_github_golang_protobuf//:protoc-gen-go/descriptor",
+    ],
+)

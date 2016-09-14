@@ -7,13 +7,14 @@ load("//bzl:ruby/class.bzl", RUBY = "CLASS")
 load("//bzl:java/class.bzl", JAVA = "CLASS")
 load("//bzl:javanano/class.bzl", JAVANANO = "CLASS")
 load("//bzl:js/class.bzl", JS = "CLASS")
-load("//bzl:grpc_gateway/class.bzl", GATEWAY = "CLASS")
+load("//bzl:grpc_gateway/class.bzl", GATEWAY = "CLASS", "SWAGGER")
 
 CLASSES = {
     BASE.name: BASE,
     CPP.name: CPP,
     CSHARP.name: CSHARP,
     GATEWAY.name: GATEWAY,
+    SWAGGER.name: SWAGGER,
     JAVA.name: JAVA,
     JAVANANO.name: JAVANANO,
     JS.name: JS,

@@ -1,12 +1,13 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_binary")
 load("//bzl:base/rules.bzl", "proto_library")
 load("//bzl:go/class.bzl", GO = "CLASS")
-load("//bzl:grpc_gateway/class.bzl", GATEWAY = "CLASS")
+load("//bzl:grpc_gateway/class.bzl", GATEWAY = "CLASS", "SWAGGER")
 load("//bzl:protoc.bzl", "PROTOC", "implement")
 
 SPEC = [GO, GATEWAY]
 
 grpc_gateway_proto_compile = implement(SPEC)
+grpc_gateway_swagger_compile = implement([SWAGGER])
 
 def grpc_gateway_proto_library(
     name,

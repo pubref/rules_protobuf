@@ -31,6 +31,7 @@ def implement_compile_attributes(lang, self):
     )
 
 
+
 def build_imports(lang, self):
     invokesuper("build_imports", lang, self)
     ctx = self["ctx"]
@@ -105,10 +106,41 @@ CLASS = struct(
         ],
     ),
 
+    swagger = struct(
+        name = 'protoc-gen-swagger',
+        file_extensions = [".pb.gw.json"],
+        executable = "@com_github_grpc_ecosystem_grpc_gateway//:protoc-gen-swagger",
+        default_options = GO.grpc.default_options,
+        requires = [
+            "com_github_grpc_ecosystem_grpc_gateway",
+        ],
+    ),
+
     implement_compile_attributes = implement_compile_attributes,
     build_protobuf_out = build_protobuf_out,
     build_grpc_out = build_grpc_out,
     build_imports = build_imports,
     build_inputs = build_inputs,
     library = GO.library,
+)
+
+SWAGGER = struct(
+    parent = BASE,
+    name = "swagger",
+
+    default_go_import_map = CLASS.default_go_import_map,
+    default_imports = CLASS.default_imports,
+
+    protobuf = struct(
+        name = 'protoc-gen-swagger',
+        file_extensions = [".swagger.json"],
+        executable = "@com_github_grpc_ecosystem_grpc_gateway//:protoc-gen-swagger_bin",
+        requires = [
+            "com_github_grpc_ecosystem_grpc_gateway",
+        ],
+    ),
+
+    implement_compile_attributes = implement_compile_attributes,
+    build_imports = build_imports,
+    build_inputs = build_inputs,
 )

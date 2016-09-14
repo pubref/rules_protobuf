@@ -5,6 +5,7 @@
 | `grpc_gateway_proto_compile` | Generates protobuf source files. |
 | `grpc_gateway_proto_library` | Generates and compiles protobuf source files. |
 | `grpc_gateway_binary` | Generates everything into a gateway binary. |
+| `grpc_gateway_swagger_compile` | Generates swagger json files. |
 
 ## Installation
 

@@ -50,12 +50,11 @@ java_proto_library(
     with_grpc = True,
 )
 
-
 js_proto_compile(
     name = "js",
-    protos = [":protos"],
     proto_deps = [
         "//examples/proto:js",
     ],
+    protos = [":protos"],
     verbose = 1,
 )

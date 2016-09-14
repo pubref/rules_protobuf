@@ -7,7 +7,6 @@ load("//bzl:java/rules.bzl", "java_proto_library")
 load("//bzl:ruby/rules.bzl", "ruby_proto_library")
 load("//bzl:js/rules.bzl", "js_proto_compile")
 
-
 filegroup(
     name = "protos",
     srcs = [
