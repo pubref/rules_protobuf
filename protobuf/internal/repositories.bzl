@@ -150,36 +150,32 @@ REPOSITORIES = {
     # ****************************************************************
 
     "com_github_golang_glog": {
-        "kind": "new_git_repository",
+        "kind": "new_go_repository",
         "name": "com_github_golang_glog",
-        "remote": "https://github.com/golang/glog.git",
+        "importpath": "github.com/golang/glog",
         "commit": "23def4e6c14b4da8ac2ed8007337bc5eb5007998", # Jan 25, 2016
-        "build_file": str(Label("//protobuf:build_file/com_github_golang_glog.BUILD")),
     },
 
     "com_github_golang_protobuf": {
-        "kind": "new_git_repository",
+        "kind": "new_go_repository",
         "name": "com_github_golang_protobuf",
-        "remote": "https://github.com/golang/protobuf.git",
+        "importpath": "github.com/golang/protobuf",
         "commit": "c3cefd437628a0b7d31b34fe44b3a7a540e98527", # Jul 27, 2016
-        "build_file": str(Label("//protobuf:build_file/com_github_golang_protobuf.BUILD")),
     },
 
     "org_golang_google_grpc": {
-        "kind": "new_git_repository",
+        "kind": "new_go_repository",
         "name": "org_golang_google_grpc",
-        "remote": "https://github.com/grpc/grpc-go.git",
+        "importpath": "github.com/grpc/grpc-go",
         #"commit": "13edeeffdea7a41d5aad96c28deb4c7bd01a9397", #v1.0.0
         "tag": "v1.0.0",
-        "build_file": str(Label("//protobuf:build_file/org_golang_google_grpc.BUILD")),
     },
 
     "org_golang_x_net": {
-        "kind": "new_git_repository",
+        "kind": "new_go_repository",
         "name": "org_golang_x_net",
-        "remote": "https://github.com/golang/net.git",
+        "importpath": "github.com/golang/net",
         "commit": "2a35e686583654a1b89ca79c4ac78cb3d6529ca3",
-        "build_file": str(Label("//protobuf:build_file/org_golang_x_net.BUILD")),
     },
 
     # ****************************************************************
@@ -187,11 +183,10 @@ REPOSITORIES = {
     # ****************************************************************
 
     "com_github_grpc_ecosystem_grpc_gateway": {
-        "kind": "new_git_repository",
+        "kind": "new_go_repository",
         "name": "com_github_grpc_ecosystem_grpc_gateway",
-        "remote": "https://github.com/grpc-ecosystem/grpc-gateway.git",
+        "importpath": "github.com/grpc-ecosystem/grpc-gateway",
         "commit": "ccd4e6b091a44f9f6b32848ffc63b3e8f8e26092",
-        "build_file": str(Label("//protobuf:build_file/com_github_grpc_ecosystem_grpc_gateway.BUILD")),
     },
 
     # ****************************************************************

@@ -37,7 +37,7 @@ import (
 	"log"
 	"os"
 
-	"golang.org/x/net/context"
+	//"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
 	pb "github.com/pubref/rules_protobuf/examples/helloworld/proto/go"
@@ -46,7 +46,6 @@ import (
 	// A: go_prefix("github.com/pubref/rules_protobuf")
 	// B: path to proto file directory "//examples/helloworld/proto"
 	// C: name of BUILD target that generated the protobufs: ":go" (elide if target name is the magic "go_default_library")
-
 )
 
 const (
