@@ -41,7 +41,7 @@ git_repository(
 
 load("@io_bazel_rules_dotnet//dotnet:csharp.bzl", "csharp_repositories")
 
-csharp_repositories(use_local_mono = True)
+csharp_repositories(use_local_mono = False)
 
 # ================================================================
 # Specific Languages Support
