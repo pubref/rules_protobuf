@@ -5,14 +5,6 @@ os:
   - linux
  # - osx
 
-# addons:
-#   apt:
-#     sources:
-#       - ubuntu-toolchain-r-test
-#     packages:
-#       - gcc-4.8
-#       - g++-4.8
-
 env:
   - V=HEAD URL=http://ci.bazel.io/job/Bazel/JAVA_VERSION=1.8,PLATFORM_NAME=linux-x86_64/lastSuccessfulBuild/artifact/output/ci/bazel--installer.sh FLAGS='--worker_verbose --strategy=Javac=worker --strategy=JsChecker=worker'
   - V=0.3.1 URL=https://github.com/bazelbuild/bazel/releases/download/0.3.1/bazel-0.3.1-installer-linux-x86_64.sh FLAGS=''
@@ -43,7 +35,9 @@ script:
       --spawn_strategy=standalone \
       --genrule_strategy=standalone \
       --local_resources=400,1,1.0 \
-      examples/... \
+      examples/helloworld/cpp/... \
+      examples/helloworld/go/... \
+      examples/helloworld/java/... \
       $FLAGS
 
 notifications:
