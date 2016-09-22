@@ -4,9 +4,9 @@ import "google/api/annotations.proto";
 
 package helloworld;
 
-// The greeting service definition.  We repeat the definition here
-// rather than using examples/helloworld/proto/helloworld.proto so the
-// other implementations / tests don't have to account for the
+// The greeting service definition.  The definition is repeated here
+// rather than re-using examples/helloworld/proto/helloworld.proto so
+// the other implementations / tests don't have to account for the
 // annotations import.
 
 service Greeter {

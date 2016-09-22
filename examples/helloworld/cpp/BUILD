@@ -1,10 +1,5 @@
 package(default_visibility = ["//visibility:public"])
 
-load(
-    "//bzl:cpp/class.bzl",
-    CPP = "CLASS",
-)
-
 cc_test(
     name = "test",
     size = "small",

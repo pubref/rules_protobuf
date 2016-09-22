@@ -47,8 +47,6 @@ import (
 	// B: path to proto file directory "//examples/helloworld/proto"
 	// C: name of BUILD target that generated the protobufs: ":go" (elide if target name is the magic "go_default_library")
 
-	//pb "github.com/pubref/rules_protobuf/examples/helloworld/go/client/protolib"
-
 )
 
 const (

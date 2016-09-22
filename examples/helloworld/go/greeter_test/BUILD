@@ -1,10 +1,7 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
-load(
-    "//bzl:go/class.bzl",
-    GO = "CLASS",
-)
+load("//go:rules.bzl", "GRPC_COMPILE_DEPS")
 
 go_test(
     name = "greeter_test",
@@ -13,5 +10,5 @@ go_test(
     deps = [
         "//examples/helloworld/proto:go",
         "//examples/helloworld/go/server:greeter",
-    ] + GO.grpc.compile_deps,
+    ] + GRPC_COMPILE_DEPS,
 )

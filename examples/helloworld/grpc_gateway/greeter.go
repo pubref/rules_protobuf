@@ -12,7 +12,11 @@ import (
 )
 
 var (
-	endpoint = flag.String("endpoint", "localhost:50051", "gRPC service endpoint (default: localhost:50051)")
+	endpoint = flag.String(
+		"endpoint",
+		"localhost:50051",
+		"gRPC service endpoint (default: localhost:50051)",
+	)
 )
 
 func run() error {

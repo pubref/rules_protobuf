@@ -1,111 +1,131 @@
-# `rules_protobuf` (αlpha) [![Build Status](https://travis-ci.org/pubref/rules_protobuf.svg?branch=master)](https://travis-ci.org/pubref/rules_protobuf)
-
----
+# `rules_protobuf` [![Build Status](https://travis-ci.org/pubref/rules_protobuf.svg?branch=master)](https://travis-ci.org/pubref/rules_protobuf)
 
 Bazel skylark rules for building [protocol buffers][protobuf-home]
-with +/- gRPC support on (osx, linux).
+with +/- gRPC support on (osx, linux) :sparkles:.
 
-| ![Bazel][bazel_image] | ![Protobuf][wtfcat_image] | ![gRPC][grpc_image] |
-| --- | --- | --- |
-Bazel | rules_protobuf | gRPC |
+[bazel_image]: https://github.com/pubref/rules_protobuf/blob/master/images/bazel.png
+[wtfcat_image]: https://github.com/pubref/rules_protobuf/blob/master/images/wtfcat.png
+[grpc_image]: https://github.com/pubref/rules_protobuf/blob/master/images/gRPC.png
 
----
+<table><tr>
+<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/bazel.png" width="360"/></td>
+<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/wtfcat.png" width="360"/></td>
+<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/gRPC.png" width="360"/></td>
+</tr><tr>
+<td>Bazel</td>
+<td>rules_protobuf</td>
+<td>gRPC</td>
+</tr></table>
 
-| Language                 | Compile (1) | Build (2) | gRPC (3) |
-| -----------------------: | -----------: | ----------: | -------- |
-| [C++][cpp]               | [cc_proto_compile][cpp] | [cc_proto_library][cpp] | yes |
-| [C#](bzl/csharp)         | [csharp_proto_compile][csharp] (4) |             |          |
-| [Go][go]                 | [go_proto_compile][go] | [go_proto_library][go] | yes |
-| [Java][java]             | [java_proto_compile][java] | [java_proto_library][java] | yes |
-| [JavaNano][javanano]     | [android_proto_compile][javanano] | [android_proto_library][javanano] | yes |
-| [Javascript](bzl/js)     | [js_proto_compile][js] |             |          |
-| [Objective-C](bzl/objc)  |              |             |          |
-| [Python](bzl/python)     | [py_proto_compile][python]  |             |          |
-| [Ruby](bzl/ruby)         | [ruby_proto_compile][ruby]  |             |          |
-| [gRPC gateway][grpc-gateway-home] | [grpc_gateway_proto_compile][grpc_gateway] | [grpc_gateway_proto_library][grpc_gateway] | yes |
+### How is this related to the proto\_library rules within bazel itself?
 
-1. Support for generation of protobuf classes via the `protoc` tool.
+These rules sprung out of a need to have protobuf support when there
+was limited exposed and documented proto generation capabilities in
+the main bazel repository.  This is a moving target.  The main goals
+of this project are to:
+
+1. Provide `protoc`, the protocol buffer compiler.
+
+2. Provide the language-specific plugins.
+
+3. Provide the necessary libraries and dependencies for gRPC support,
+   when possible.
+
+4. Provide an extensible `proto_language` abstraction (used in
+   conjunction with the `proto_compile` rule) to generate outputs for
+   current and future custom protoc plugins not explicitly provided
+   here.
+
+### Rules
+
+| Language                     | Compile <sup>1</sup>  | Build <sup>2</sup> | gRPC <sup>3</sup> |
+| ---------------------------: | -----------: | --------: | -------- |
+| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) | yes |
+| [C#](csharp)                 | [csharp_proto_compile](csharp#csharp_proto_compile) | [csharp_proto_library](csharp#csharp_proto_library) | yes |
+| [Closure](closure)           | [closure_proto_compile](js#closure_proto_compile) | [closure_proto_library](js#closure_proto_library)          |  |
+| [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | yes |
+| [Go (gogo)](gogo)            | [gogo_proto_compile](gogo#gogo_proto_compile) | [gogo_proto_library](gogo#gogo_proto_library) | yes |
+| [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | yes |
+| [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | yes |
+| [Node](node)                 | [node_proto_compile](js#node_proto_compile) |           |  |
+| [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>4</sup> |  |
+| [Python](python)             | [py_proto_compile](python#py_proto_compile)         |           |  |
+| [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           |  |
+| Custom [proto_language](protobuf#proto_language) | [proto_compile](protobuf#proto_compile) | |  |
+
+1. Support for generation of protoc outputs via `proto_compile()` rule.
+
 2. Support for generation + compilation of outputs with protobuf dependencies.
+
 3. gRPC support.
-4. Highly experimental.
 
----
+4. Highly experimental (probably not functional yet). A
+   work-in-progress for those interested in contributing further work.
 
-# Requirements
+# Usage
+
+## 1. Install Bazel
 
 These are build rules for [bazel][bazel-home].  If you have not already
 installed `bazel` on your workstation, follow the
-[bazel instructions][bazel-install].  Here's one way (osx):
+[bazel instructions][bazel-install].
 
+**Bazel 0.3.1 or above is required for go support.**
 
 > Note about protoc and related tools: bazel and rules_protobuf will
 > download or build-from-source all required dependencies, including
 > the `protoc` tool and required plugins.  If you do already have
-> these tools installed, bazel will not use them.
-
-```sh
-$ curl -O -J -L https://github.com/bazelbuild/bazel/releases/download/0.3.1/bazel-0.3.1-installer-darwin-x86_64.sh
-$ shasum -a256 bazel-0.3.1-installer-darwin-x86_64.sh
-8d035de9c137bde4f709e3666271af01d1ef6bed6921e1a676d6a6dc0186395c  bazel-0.3.1-installer-darwin-x86_64.sh
-$ chmod +x bazel-0.3.1-installer-darwin-x86_64.sh
-$ ./bazel-0.3.1-installer-darwin-x86_64.sh
-$ bazel version
-Build label: 0.3.1
-...
-```
-
-# Quick Start
-
-## 1. Add rules_go to your WORKSPACE
-
-Note about golang: this project uses [rules-go][rules_go] for
-`go_library`, `go_binary`, and `go_test`.  **Even if you're not >
-using go support in rules_protobuf, it is a current requirement for >
-your WORKSPACE file** (see issue >
-https://github.com/pubref/rules_protobuf/issues/10).
-
-```python
-git_repository(
-    name = "io_bazel_rules_go",
-    tag = "0.0.4",
-    remote = "https://github.com/bazelbuild/rules_go.git",
-)
-
-load("@io_bazel_rules_go//go:def.bzl", "go_repositories")
-
-go_repositories()
-```
+> these tools installed on your workstation, bazel will *not* use them.
 
 ## 2. Add rules_protobuf your WORKSPACE
 
-Specify the language(s) you'd like support for:
+Specify the language(s) you'd like use by loading the
+language-specific `*_proto_repositories` rule(s):
 
 ```python
 git_repository(
   name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
-  tag = "v0.5.1",
+  tag = "v0.6.0",
 )
 
-load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protobuf_repositories")
+load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_repositories")
+java_proto_repositories()
 
-protobuf_repositories(
-   with_go = True,
-   with_java = True,
-   with_cpp = True,
-)
+load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cpp_proto_repositories")
+cpp_proto_repositories()
+
+load("@org_pubref_rules_protobuf//java:rules.bzl", "go_proto_repositories")
+go_proto_repositories()
 ```
 
-> Refer to [bzl/repositories.bzl][repositories.bzl] file for
-> the set of external dependencies that will be available to your
-> project.
+Several languages have other `rules_*` dependencies that you'll need
+to load before the `*_proto_repositories()` function is invoked:
 
-## 3. Add protobuf rules to your BUILD file
+| Language | Requires |
+| ---:     | :---     |
+| go_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
+| gogo_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
+| grpc_gateway_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
+| closure_proto_repositories | [rules_closure](https://github.com/bazelbuild/rules_closure) |
+| csharp_proto_repositories | [rules_dotnet](https://github.com/bazelbuild/rules_dotnet) |
 
-TO build a java-based gRPC library:
+If you're only interested in the `proto_compile` rule and not any
+language-specific rules, just load the generic `proto_repositories`
+rule.  This provides the minimal set of dependencies (only the
+`protoc` tool).
 
 ```python
-load("@org_pubref_rules_protobuf//bzl:java/rules.bzl", "java_proto_library")
+load("@org_pubref_rules_protobuf//protobuf:rules.bzl", "proto_repositories")
+proto_repositories()
+```
+
+## 3. Add \*\_proto\_\* rules to your BUILD files
+
+To build a java-based gRPC library:
+
+```python
+load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_library")
 
 java_proto_library(
   name = "protolib",
@@ -117,7 +137,7 @@ java_proto_library(
 )
 ```
 
-# Examples
+## Examples
 
 To run the examples & tests in this repository, clone it to your
 workstation.
@@ -144,8 +164,7 @@ $ bazel run cpp/client
 $ bazel run java/org/pubref/rules_closure/examples/helloworld/client:netty
 ```
 
-
-# Overriding Dependencies
+# Overriding or excluding WORKSPACE dependencies
 
 To load alternate versions of dependencies, pass in a
 [dict][skylark-dict] having the same overall structure of the
@@ -154,47 +173,52 @@ key will override those found in the file.  For example, to load a
 different version of https://github.com/golang/protobuf, provide a
 different commit ID:
 
+```python
+load("@org_pubref_rules_protobuf//go:rules.bzl", "go_proto_repositories")
+go_proto_repositories(
+  overrides = {
+    "com_github_golang_protobuf": {
+      "commit": "2c1988e8c18d14b142c0b472624f71647cf39adb", # Aug 8, 2016
+    }
+  },
+)
 ```
-load("@org_pubref_rules_protobuf//bzl:rules.bzl", "protobuf_repositories")
-protobuf_repositories(
-   with_go = True,
-   overrides = {
-     "com_github_golang_protobuf": {
-       "commit": "2c1988e8c18d14b142c0b472624f71647cf39adb", # Aug 8, 2016
-     }
-   },
+
+You may already have some external dependencies already present in
+your workspace that rules_protobuf will attempt to load, causing a
+collision.  To prevent rules_protobuf from loading specific external
+workspaces, name them in the `excludes` list:
+
+```python
+go_proto_repositories(
+  excludes = [
+    "com_github_golang_glog",
+  ]
 )
 ```
 
 # Proto B --> Proto A dependencies
 
-Use the `proto_deps` attribute to name proto rule dependencies. The
-implementation of the dependent rule `B` should match that of the
-dependee `A`.  This relationship is shown in the examples folder of
-this repo.  Use of `proto_deps` implies you're using imports, so read
-on...
+Use the `proto_deps` attribute to name proto rule dependencies. Use of
+`proto_deps` implies you're using imports, so read on...
 
 ## Imports
 
-In all cases, these rules will include a `--proto_path=.` argument.
-This is functionally equivalent to `--proto_path=$(bazel info
-execution_root)`.  Therefore, when the protoc tool is invoked, it will
-'see' whatever directory struture exists at the bazel execution root
-for your workspace.  To better learn what this looks like, `cd $(bazel
-info execution_root)` and look around.  In general, it contains all
-your sourcefiles as they appear in your workspace, with an additional
-`external/WORKSPACE_NAME` directory for all dependencies used.
+In all cases, these rules will include a `--proto_path=.` (`-I.`)
+argument.  This is functionally equivalent to `--proto_path=$(bazel
+info execution_root)`.  Therefore, when the protoc tool is invoked, it
+will 'see' whatever directory structure exists at the bazel execution
+root for your workspace.  To better learn what this looks like, `cd
+$(bazel info execution_root)` and look around.  In general, it
+contains all your sourcefiles as they appear in your workspace with an
+additional `external/WORKSPACE_NAME` directory for all dependencies
+used.
 
 This has implications for import statements in your protobuf
 sourcefiles, if you use them.  The two cases to consider are imports
 *within* your workspace (referred to here as *'internal' imports*),
 and imports of other protobuf files in an external workspace
 (*external imports*).
-
-If you need them (see below), use the `imports` attribute (a
-[string_list][skylark-string_list]).  This passes arguments directly
-to protoc (normalized to the rootdir where the protoc command runs).
-
 
 ### Internal Imports
 
@@ -215,22 +239,21 @@ somewhere that can be used as a dependency some other library rule*
 Rather than using `imports`, it often make more sense to declare a
 dependency on another proto_library rule via the `proto_deps`
 attribute.  This makes the import available to the calling rule and
-performs code generation.  For example, the `cc_proto_library` rule in
-`examples/helloworld/proto:cpp` names the `//examples/proto:cpp`'s
-`cc_proto_library` rule in its `proto_deps` attribute to accomplish
-both code generation and compilation of object files for the proto
-chain.
+performs the code generation step.  For example, the
+`cc_proto_library` rule in `examples/helloworld/proto:cpp` names the
+`//examples/proto:cpp`'s `cc_proto_library` rule in its `proto_deps`
+attribute to accomplish both code generation and compilation of object
+files for the proto chain.
 
 ### External Imports
 
-The same logic applied to external imports.  The two questions to
-answer are:
+The same logic applies to external imports.  The two questions to ask
+yourself when setting up your rules are:
 
-1. *Can protoc "see" the imported file?* In order to satisfy this
-   requirement, pass in the full path of the required file(s) relative
-   to the execution root where protoc will be run.  For example, the
-   the well-known descriptor proto could be made visible to protoc via
-   something like...
+[Question 1]: *Can protoc "see" the imported file?* In order to satisfy this
+requirement, pass in the full path of the required file(s) relative to
+the execution root where protoc will be run.  For example, the the
+well-known `descriptor.proto` could be made visible to protoc via:
 
 ```python
 java_proto_library(
@@ -242,29 +265,32 @@ java_proto_library(
 )
 ```
 
-...if imported as `import "google/protobuf/descriptor.proto"` given
-that the file
+This would be imported as `import "google/protobuf/descriptor.proto"`
+given that the file
 `@com_github_google_protobuf/src/google/protobuf/descriptor.proto` is
 in the package `google.protobuf`.
 
-2. *Can the `cc_proto_library` rule "see" the generated protobuf
-   files*? (in this case `descriptor.pb.{h,cc}`.  Just because the
-   file was imported does not imply that protoc will generate outputs
-   for it, so somewhere in the `cc_library` rule dependency chain
-   these files must be present.  This could be via another
-   `cc_proto_library` rule defined elswhere, or a some other filegroup
-   or label list.  If the source is another `cc_proto_library` rule,
-   specify that in the `proto_deps` attribute to the calling
-   `cc_proto_library` rule.  Otherwise, pass a label that includes the
-   (pregenerated) protobuf files to the `deps` attribute, just as you
-   would any typical `cc_library` rule.  Hopefully that made sense.
-   It's a bit tricky.
+[Question 2]: *Can the `cc_proto_library` rule "see" the generated protobuf files*?
+(in this case `descriptor.pb.{h,cc}`.  Just because the file was
+imported does not imply that protoc will generate outputs for it, so
+somewhere in the `cc_library` rule dependency chain these files must
+be present.  This could be via another `cc_proto_library` rule defined
+elswhere, or a some other filegroup or label list.  If the source is
+another `cc_proto_library` rule, specify that in the `proto_deps`
+attribute to the calling `cc_proto_library` rule.  Otherwise, pass a
+label that includes the (pregenerated) protobuf files to the `deps`
+attribute, just as you would any typical `cc_library` rule.
 
+Hopefully that made sense.  It's a bit tricky.
+
+> Note: bazel will likely a breaking change to the way external
+> repositories are laid out in the execution root in future versions
+> of bazel.  This will likely affect the naming of import paths when
+> this change occurs.
 
 # Contributing
 
 Contributions welcome; please create Issues or GitHub pull requests.
-
 
 # Credits
 
@@ -279,8 +305,6 @@ Contributions welcome; please create Issues or GitHub pull requests.
 * [@korfuri][korfuri]: Prior research on travis-ci integration.
 
 * Much thanks to all the members of the bazel, protobuf, and gRPC teams.
-
----
 
 [yugui]: http://github.com/yugui "Yuki Yugui Sonoda"
 [jart]: http://github.com/jart "Justine Tunney"
@@ -298,16 +322,7 @@ Contributions welcome; please create Issues or GitHub pull requests.
 [wtfcat_image]: https://github.com/pubref/rules_protobuf/blob/master/images/wtfcat.png
 [grpc_image]: https://github.com/pubref/rules_protobuf/blob/master/images/gRPC.png
 
-[cpp]: bzl/cpp
-[csharp]: bzl/csharp
-[go]: bzl/go
-[java]: bzl/java
-[javanano]: bzl/javanano
-[js]: bzl/js
-[python]: bzl/python
-[ruby]: bzl/ruby
-[grpc_gateway]: bzl/grpc_gateway
-[repositories.bzl]: bzl/repositories.bzl
+[repositories.bzl]: protobuf/internal/repositories.bzl
 
 [skylark-dict]: https://www.bazel.io/docs/skylark/lib/dict.html "Skylark Documentation for dict"
 [skylark-string]: https://www.bazel.io/docs/skylark/lib/attr.html#string "Skylark string attribute"
