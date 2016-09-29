@@ -46,7 +46,7 @@ of this project are to:
 | [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.0.0](https://github.com/grpc/grpc-go/releases/tag/v1.0.0) |
 | [Go (gogo)](gogo)            | [gogo_proto_compile](gogo#gogo_proto_compile) | [gogo_proto_library](gogo#gogo_proto_library) | [v1.0.0](https://github.com/grpc/grpc-go/releases/tag/v1.0.0) |
 | [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | [v1.0.0](https://github.com/grpc/grpc-go/releases/tag/v1.0.0) |
-| [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [1.0.0-pre1](https://github.com/grpc/grpc-java/releases/tag/v1.0.0-pre1) |
+| [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [v1.0.1](https://github.com/grpc/grpc-java/releases/tag/v1.0.1) |
 | [Node](node)                 | [node_proto_compile](js#node_proto_compile) |           | <sup>4</sup> |
 | [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>5</sup> | <sup>4</sup> |
 | [Python](python)             | [py_proto_compile](python#py_proto_compile)         |           | <sup>4</sup> |

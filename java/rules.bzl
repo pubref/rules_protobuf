@@ -21,23 +21,25 @@ def java_proto_repositories(lang_requires = [
     "io_grpc_grpc_protobuf",
     "io_grpc_grpc_protobuf_lite",
 
-    # "com_squareup_okhttp_okhttp",
-    # "com_squareup_okio_okio",
-    # "io_grpc_grpc_auth",
-    # "io_grpc_grpc_netty",
-    # "io_grpc_grpc_okhttp",
-    # "io_grpc_grpc_protobuf_lite",
-    # "io_netty_netty_buffer",
-    # "io_netty_netty_codec",
-    # "io_netty_netty_codec_http",
-    # "io_netty_netty_codec_http2",
-    # "io_netty_netty_common",
-    # "io_netty_netty_handler",
-    # "io_netty_netty_resolver",
-    # "io_netty_netty_transport",
-    # "com_google_auth_google_auth_library_credentials",
+    "io_grpc_grpc_netty",
+    "io_netty_netty_buffer",
+    "io_netty_netty_codec",
+    "io_netty_netty_codec_http",
+    "io_netty_netty_codec_http2",
+    "io_netty_netty_common",
+    "io_netty_netty_handler",
+    "io_netty_netty_resolver",
+    "io_netty_netty_transport",
+
+    "com_google_auth_google_auth_library_credentials",
+    "io_grpc_grpc_auth",
+
+    "com_squareup_okhttp_okhttp",
+    "com_squareup_okio_okio",
+    "io_grpc_grpc_okhttp",
   ], **kwargs):
   proto_repositories(lang_requires = lang_requires, **kwargs)
+
 
 def nano_proto_repositories(
     lang_requires = [
