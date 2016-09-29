@@ -7,10 +7,10 @@ with +/- gRPC support on (osx, linux) :sparkles:.
 [wtfcat_image]: https://github.com/pubref/rules_protobuf/blob/master/images/wtfcat.png
 [grpc_image]: https://github.com/pubref/rules_protobuf/blob/master/images/gRPC.png
 
-<table><tr>
-<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/bazel.png" width="360"/></td>
-<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/wtfcat.png" width="360"/></td>
-<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/gRPC.png" width="360"/></td>
+<table border="0"><tr>
+<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/bazel.png" width="280"/></td>
+<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/wtfcat.png" width="280"/></td>
+<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/gRPC.png" width="280"/></td>
 </tr><tr>
 <td>Bazel</td>
 <td>rules_protobuf</td>
@@ -24,7 +24,7 @@ was limited exposed and documented proto generation capabilities in
 the main bazel repository.  This is a moving target.  The main goals
 of this project are to:
 
-1. Provide `protoc`, the protocol buffer compiler.
+1. Provide `protoc`, the protocol buffer compiler ([v3.0.0](https://github.com/google/protobuf/releases/tag/v3.0.0)).
 
 2. Provide the language-specific plugins.
 
@@ -40,17 +40,17 @@ of this project are to:
 
 | Language                     | Compile <sup>1</sup>  | Build <sup>2</sup> | gRPC <sup>3</sup> |
 | ---------------------------: | -----------: | --------: | -------- |
-| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) | yes |
-| [C#](csharp)                 | [csharp_proto_compile](csharp#csharp_proto_compile) | [csharp_proto_library](csharp#csharp_proto_library) | yes |
+| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) | [v0.15.2](https://github.com/grpc/grpc/releases/tag/v0.15.2) |
+| [C#](csharp)                 | [csharp_proto_compile](csharp#csharp_proto_compile) | [csharp_proto_library](csharp#csharp_proto_library) | [1.0.0](https://www.nuget.org/packages/Grpc/) |
 | [Closure](closure)           | [closure_proto_compile](js#closure_proto_compile) | [closure_proto_library](js#closure_proto_library)          |  |
-| [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | yes |
-| [Go (gogo)](gogo)            | [gogo_proto_compile](gogo#gogo_proto_compile) | [gogo_proto_library](gogo#gogo_proto_library) | yes |
-| [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | yes |
-| [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | yes |
-| [Node](node)                 | [node_proto_compile](js#node_proto_compile) |           |  |
-| [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>4</sup> |  |
-| [Python](python)             | [py_proto_compile](python#py_proto_compile)         |           |  |
-| [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           |  |
+| [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.0.0](https://github.com/grpc/grpc-go/releases/tag/v1.0.0) |
+| [Go (gogo)](gogo)            | [gogo_proto_compile](gogo#gogo_proto_compile) | [gogo_proto_library](gogo#gogo_proto_library) | [v1.0.0](https://github.com/grpc/grpc-go/releases/tag/v1.0.0) |
+| [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | [v1.0.0](https://github.com/grpc/grpc-go/releases/tag/v1.0.0) |
+| [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [1.0.0-pre1](https://github.com/grpc/grpc-java/releases/tag/v1.0.0-pre1) |
+| [Node](node)                 | [node_proto_compile](js#node_proto_compile) |           | <sup>4</sup> |
+| [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>5</sup> | <sup>4</sup> |
+| [Python](python)             | [py_proto_compile](python#py_proto_compile)         |           | <sup>4</sup> |
+| [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           | <sup>4</sup> |
 | Custom [proto_language](protobuf#proto_language) | [proto_compile](protobuf#proto_compile) | |  |
 
 1. Support for generation of protoc outputs via `proto_compile()` rule.
@@ -59,8 +59,11 @@ of this project are to:
 
 3. gRPC support.
 
-4. Highly experimental (probably not functional yet). A
+4. gRPC *is* supported in this language, but not currently within rules_protobuf)
+
+5. Highly experimental (probably not functional yet). A
    work-in-progress for those interested in contributing further work.
+
 
 # Usage
 

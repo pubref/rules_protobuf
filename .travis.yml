@@ -15,11 +15,6 @@ before_install:
   - ./install.sh --user
   - rm -f install.sh
 
-branches:
-  only:
-  - travis
-  - master
-
 script:
   - |
     bazel \
