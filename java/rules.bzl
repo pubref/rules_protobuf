@@ -5,33 +5,38 @@ load("//protobuf:rules.bzl",
      "proto_repositories")
 
 def java_proto_repositories(lang_requires = [
-  "com_google_protobuf_protobuf_java",
-  "com_google_code_gson_gson",
-  "com_google_guava_guava",
-  "junit_junit_4", # TODO: separate test requirements
+    "com_google_protobuf_protobuf_java",
+    "com_google_protobuf_protobuf_java_util",
+    "com_google_code_gson_gson",
+    "com_google_guava_guava",
+    "junit_junit_4", # TODO: separate test requirements
+    "com_google_code_findbugs_jsr305",
 
-  "protoc_gen_grpc_java_linux_x86_64",
-  "protoc_gen_grpc_java_macosx",
-  "com_squareup_okhttp_okhttp",
-  "com_squareup_okio_okio",
-  "io_grpc_grpc_auth",
-  "io_grpc_grpc_core",
-  "io_grpc_grpc_netty",
-  "io_grpc_grpc_okhttp",
-  "io_grpc_grpc_protobuf",
-  "io_grpc_grpc_protobuf_lite",
-  "io_grpc_grpc_stub",
-  "io_netty_netty_buffer",
-  "io_netty_netty_codec",
-  "io_netty_netty_codec_http",
-  "io_netty_netty_codec_http2",
-  "io_netty_netty_common",
-  "io_netty_netty_handler",
-  "io_netty_netty_resolver",
-  "io_netty_netty_transport",
-  "com_google_protobuf_protobuf_java_util",
-  "com_google_auth_google_auth_library_credentials",
-  "com_google_code_findbugs_jsr305"], **kwargs):
+    "protoc_gen_grpc_java_linux_x86_64",
+    "protoc_gen_grpc_java_macosx",
+
+    "io_grpc_grpc_core",
+    "io_grpc_grpc_context",
+    "io_grpc_grpc_stub",
+    "io_grpc_grpc_protobuf",
+    "io_grpc_grpc_protobuf_lite",
+
+    # "com_squareup_okhttp_okhttp",
+    # "com_squareup_okio_okio",
+    # "io_grpc_grpc_auth",
+    # "io_grpc_grpc_netty",
+    # "io_grpc_grpc_okhttp",
+    # "io_grpc_grpc_protobuf_lite",
+    # "io_netty_netty_buffer",
+    # "io_netty_netty_codec",
+    # "io_netty_netty_codec_http",
+    # "io_netty_netty_codec_http2",
+    # "io_netty_netty_common",
+    # "io_netty_netty_handler",
+    # "io_netty_netty_resolver",
+    # "io_netty_netty_transport",
+    # "com_google_auth_google_auth_library_credentials",
+  ], **kwargs):
   proto_repositories(lang_requires = lang_requires, **kwargs)
 
 def nano_proto_repositories(
