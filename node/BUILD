@@ -8,7 +8,10 @@ proto_language(
     pb_file_extensions = ["_pb.js"],
     pb_options = [
         "import_style=commonjs",
-        "error_on_name_conflict",
         "binary",
     ],
+    supports_grpc = True,
+    grpc_file_extensions = ["_grpc_pb.js"],
+    grpc_plugin = "@com_github_grpc_grpc//:grpc_node_plugin",
+    grpc_plugin_name = "grpc_node",
 )

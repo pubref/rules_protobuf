@@ -6,7 +6,7 @@ load("//csharp:rules.bzl", "csharp_proto_compile", "csharp_proto_library")
 load("//go:rules.bzl", "go_proto_library")
 load("//java:rules.bzl", "java_proto_library")
 load("//closure:rules.bzl", "closure_proto_library")
-load("//node:rules.bzl", "node_proto_compile")
+load("//node:rules.bzl", "node_proto_compile", "node_proto_library")
 load("//objc:rules.bzl", "objc_proto_library")
 
 filegroup(
@@ -47,11 +47,18 @@ csharp_proto_library(
     verbose = 0,
 )
 
+node_proto_library(
+    name = "node",
+    protos = [":protos"],
+    with_grpc = False,
+    verbose = 0,
+)
+
 # This conflicts with outputs from other rules here but demonstrates
 # how to generate multiple language outputs simultaneously.
-
+#
 # proto_compile(
-#     name = "pluri",
+#     name = "pluriproto",
 #     protos = [":protos"],
 #     langs = [
 #         "//ruby",
@@ -61,6 +68,8 @@ csharp_proto_library(
 #         "//cpp",
 #         "//objc",
 #         "//closure",
+#         "//csharp",
+#         "//go",
 #         "//node",
 #     ],
 #     verbose = 2,

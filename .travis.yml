@@ -6,7 +6,7 @@ os:
  # - osx
 
 env:
-  - V=HEAD URL=http://ci.bazel.io/job/Bazel/JAVA_VERSION=1.8,PLATFORM_NAME=linux-x86_64/lastSuccessfulBuild/artifact/output/ci/bazel--installer.sh FLAGS='--worker_verbose --strategy=Javac=worker --strategy=JsChecker=worker'
+  - V=0.3.2rc3 URL=https://storage.googleapis.com/bazel/0.3.2/rc3/bazel-0.3.2rc3-installer-linux-x86_64.sh FLAGS=''
   - V=0.3.1 URL=https://github.com/bazelbuild/bazel/releases/download/0.3.1/bazel-0.3.1-installer-linux-x86_64.sh FLAGS=''
 
 before_install:

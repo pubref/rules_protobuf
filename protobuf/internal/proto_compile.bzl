@@ -46,6 +46,7 @@ def _get_offset_path(root, path):
   depth = root.count('/') + 1
   return "../" * depth + path
 
+
 def _get_import_mappings_for(files, prefix, label):
   """For a set of files that belong the the given context label, create a mapping to the given prefix."""
   # Go-specific code crept in here.
@@ -193,7 +194,6 @@ def _build_plugin_invocation(name, plugin, execdir, builder):
 def _build_protobuf_invocation(run, builder):
   """Build a --plugin option if required for basic protobuf generation.
   Args:
-    cls (struct): the class object.
     run (struct): the compilation run object.
     builder (dict): the compilation builder data.
   Built-in language don't need this.
@@ -211,7 +211,6 @@ def _build_protobuf_invocation(run, builder):
 def _build_grpc_invocation(run, builder):
   """Build a --plugin option if required for grpc service generation
   Args:
-    cls (struct): the class object.
     run (struct): the compilation run object.
     builder (dict): the compilation builder data.
   Built-in language don't need this.
@@ -246,8 +245,10 @@ def _get_mappings(files, label, prefix):
 
   return mappings
 
+
 def _build_base_namespace(run, builder):
   pass
+
 
 def _build_importmappings(run, builder):
   """Override behavior to add plugin options before building the --go_out option"""
@@ -439,6 +440,8 @@ def _proto_compile_impl(ctx):
     output_to_workspace = ctx.attr.output_to_workspace,
   )
 
+  #print("transitive_units: %s" % transitive_units)
+
   # Mutable global state to be populated by the classes.
   builder = {
     "args": [], # list of string
@@ -471,7 +474,7 @@ def _proto_compile_impl(ctx):
     builder["inputs"] += lang.pb_inputs + lang.grpc_inputs
     builder["imports"] += lang.pb_imports + lang.grpc_imports
     builder[lang.name + "_pb_options"] = lang.pb_options + data.pb_options
-    builder[lang.name + "_grpc_options"] = lang.pb_options + data.grpc_options
+    builder[lang.name + "_grpc_options"] = lang.grpc_options + data.grpc_options
 
     #print("grpc_inputs %s" % ctx.attr.grpc_inputs)
 

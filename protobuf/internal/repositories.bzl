@@ -112,8 +112,10 @@ REPOSITORIES = {
         "actual": "@com_github_nanopb_nanopb//:nanopb",
     },
 
-    # Bind the executable cc_binary grpc plugin into //external:protoc_gen_grpc_cpp.  Expects
-    # //external:protobuf_compiler.
+    # Bind the executable cc_binary grpc plugin into
+    # //external:protoc_gen_grpc_cpp.  Expects
+    # //external:protobuf_compiler. TODO: is it really necessary to
+    # bind it in external?
     "external_protoc_gen_grpc_cpp": {
         "kind": "bind",
         "name": "protoc_gen_grpc_cpp",

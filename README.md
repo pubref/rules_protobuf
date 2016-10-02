@@ -47,7 +47,7 @@ of this project are to:
 | [Go (gogo)](gogo)            | [gogo_proto_compile](gogo#gogo_proto_compile) | [gogo_proto_library](gogo#gogo_proto_library) | [v1.0.0](https://github.com/grpc/grpc-go/releases/tag/v1.0.0) |
 | [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | [v1.0.0](https://github.com/grpc/grpc-go/releases/tag/v1.0.0) |
 | [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [v1.0.1](https://github.com/grpc/grpc-java/releases/tag/v1.0.1) |
-| [Node](node)                 | [node_proto_compile](js#node_proto_compile) |           | <sup>4</sup> |
+| [Node](node)                 | [node_proto_compile](js#node_proto_compile) | [node_proto_library](js#node_proto_library)          | [1.0.0](https://www.npmjs.com/package/grpc) |
 | [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>5</sup> | <sup>4</sup> |
 | [Python](python)             | [py_proto_compile](python#py_proto_compile)         |           | <sup>4</sup> |
 | [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           | <sup>4</sup> |
@@ -112,6 +112,7 @@ to load before the `*_proto_repositories()` function is invoked:
 | grpc_gateway_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
 | closure_proto_repositories | [rules_closure](https://github.com/bazelbuild/rules_closure) |
 | csharp_proto_repositories | [rules_dotnet](https://github.com/bazelbuild/rules_dotnet) |
+| node_proto_repositories | [rules_node](https://github.com/pubref/rules_node) |
 
 If you're only interested in the `proto_compile` rule and not any
 language-specific rules, just load the generic `proto_repositories`

@@ -11,7 +11,7 @@ proto_language(
     supports_grpc = True,
     grpc_file_extensions = [".grpc.pb.h", ".grpc.pb.cc"],
     grpc_plugin = "//external:protoc_gen_grpc_cpp",
-    grpc_plugin_name = "grpc",
+    grpc_plugin_name = "grpc_cpp",
     grpc_compile_deps = [
         '@com_github_grpc_grpc//:grpc++',
     ],

@@ -30,7 +30,7 @@ load("@io_bazel_rules_closure//closure:defs.bzl", "closure_repositories")
 closure_repositories()
 
 # ================================================================
-# csharp_proto_library support requires rules_dotnet (fork)
+# csharp_proto_library support requires rules_dotnet (forked)
 # ================================================================
 
 git_repository(
@@ -40,8 +40,26 @@ git_repository(
 )
 
 load("@io_bazel_rules_dotnet//dotnet:csharp.bzl", "csharp_repositories")
-
 csharp_repositories(use_local_mono = False)
+
+
+# ================================================================
+# node_proto_library support requires rules_node
+# ================================================================
+
+# local_repository(
+#     name = "org_pubref_rules_node",
+#     path = "/Users/pcj/github/rules_node",
+# )
+
+git_repository(
+    name = "org_pubref_rules_node",
+    remote = "https://github.com/pubref/rules_node.git",
+    commit = "d93a80ac4920c52da8adccbca66a3118a27018fd", # Oct 2, 2016
+)
+
+load("@org_pubref_rules_node//node:rules.bzl", "node_repositories")
+node_repositories()
 
 # ================================================================
 # Specific Languages Support
@@ -53,6 +71,9 @@ proto_repositories()
 load("//cpp:rules.bzl", "cpp_proto_repositories")
 cpp_proto_repositories()
 
+load("//csharp:rules.bzl", "csharp_proto_repositories")
+csharp_proto_repositories()
+
 load("//java:rules.bzl", "java_proto_repositories", "nano_proto_repositories")
 java_proto_repositories()
 nano_proto_repositories()
@@ -63,11 +84,11 @@ go_proto_repositories()
 load("//gogo:rules.bzl", "gogo_proto_repositories")
 gogo_proto_repositories()
 
-load("//csharp:rules.bzl", "csharp_proto_repositories")
-csharp_proto_repositories()
+load("//grpc_gateway:rules.bzl", "grpc_gateway_proto_repositories")
+grpc_gateway_proto_repositories()
+
+load("//node:rules.bzl", "node_proto_repositories")
+node_proto_repositories()
 
 load("//objc:rules.bzl", "objc_proto_repositories")
 objc_proto_repositories()
-
-load("//grpc_gateway:rules.bzl", "grpc_gateway_proto_repositories")
-grpc_gateway_proto_repositories()
