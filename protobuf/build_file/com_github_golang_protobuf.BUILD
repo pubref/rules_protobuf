@@ -34,8 +34,8 @@ go_library(
     name = "protoc-gen-go/grpc",
     srcs = ["protoc-gen-go/grpc/grpc.go"],
     deps = [
-        "protoc-gen-go/descriptor",
-        "protoc-gen-go/generator",
+        ":protoc-gen-go/descriptor",
+        ":protoc-gen-go/generator",
     ],
 )
 
@@ -43,9 +43,9 @@ go_library(
     name = "protoc-gen-go/generator",
     srcs = ["protoc-gen-go/generator/generator.go"],
     deps = [
-        "proto",
-        "protoc-gen-go/descriptor",
-        "protoc-gen-go/plugin",
+        ":proto",
+        ":protoc-gen-go/descriptor",
+        ":protoc-gen-go/plugin",
     ],
 )
 
@@ -76,10 +76,12 @@ go_library(
 go_library(
     name = "ptypes",
     srcs = glob(
-        include = ["ptypes/go"],
-        exclude = ["ptypes/_test.go"],
+        include = ["ptypes/*.go"],
+        exclude = ["ptypes/*._test.go"],
     ),
     deps = [
+        ":proto",
+        ":protoc-gen-go/descriptor",
         ":ptypes/any",
         ":ptypes/duration",
         ":ptypes/empty",
