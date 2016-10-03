@@ -7,6 +7,7 @@ go_test(
     name = "greeter_test",
     size = "small",
     srcs = ["greeter_test.go"],
+    tags = ["exclusive"],
     deps = [
         "//examples/helloworld/proto:go",
         "//examples/helloworld/go/server:greeter",

@@ -7,11 +7,11 @@ csharp_binary(
         "Program.cs",
     ],
     deps = [
-          ":Helloworld",
-          "@nuget_google_protobuf//:libnet45",
-          "@nuget_grpc//:core",
-          "@nuget_grpc//:runtime_osx",
-          "@nuget_grpc//:system_interactive_async",
+        ":Helloworld",
+        "@nuget_google_protobuf//:libnet45",
+        "@nuget_grpc//:core",
+        "@nuget_grpc//:runtime_osx",
+        "@nuget_grpc//:system_interactive_async",
     ],
 )
 

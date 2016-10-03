@@ -1,13 +1,13 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_test")
-
-load("//grpc_gateway:rules.bzl",
-     "grpc_gateway_proto_compile",
-     "grpc_gateway_proto_library",
-     "grpc_gateway_swagger_compile",
-     "grpc_gateway_binary",
-     "GRPC_GATEWAY_DEPS",
+load(
+    "//grpc_gateway:rules.bzl",
+    "grpc_gateway_proto_compile",
+    "grpc_gateway_proto_library",
+    "grpc_gateway_swagger_compile",
+    "grpc_gateway_binary",
+    "GRPC_GATEWAY_DEPS",
 )
 
 # grpc_gateway_proto_library(
@@ -30,11 +30,11 @@ grpc_gateway_binary(
 go_test(
     name = "greeter_test",
     size = "small",
-    tags = ["exclusive"],
     srcs = [
         "greeter.go",
         "greeter_test.go",
     ],
+    tags = ["exclusive"],
     deps = [
         ":gateway",
         "//examples/helloworld/go/server:greeter",

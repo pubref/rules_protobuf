@@ -8,6 +8,6 @@ proto_language(
     output_file_style = "capitalize",
     supports_grpc = True,
     grpc_file_extensions = [".pbrpc.h", ".pbrpc.m"],
-    grpc_plugin = "//external:protoc_gen_grpc_ruby",
+    grpc_plugin = "//external:protoc_gen_grpc_objc",
     grpc_plugin_name = "grpc_objc",
 )

@@ -4,7 +4,7 @@ def objc_proto_repositories(
     lang_requires = [
       "grpc",
       "external_protobuf_compiler",
-      "external_protoc_gen_grpc_ruby",
+      "external_protoc_gen_grpc_objc",
     ], **kwargs):
   proto_repositories(lang_requires = lang_requires, **kwargs)
 

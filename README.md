@@ -24,7 +24,7 @@ was limited exposed and documented proto generation capabilities in
 the main bazel repository.  This is a moving target.  The main goals
 of this project are to:
 
-1. Provide `protoc`, the protocol buffer compiler ([v3.0.0](https://github.com/google/protobuf/releases/tag/v3.0.0)).
+1. Provide `protoc`, the protocol buffer compiler ([v3.1.0](https://github.com/google/protobuf/releases/tag/v3.1.0)).
 
 2. Provide the language-specific plugins.
 
@@ -40,7 +40,7 @@ of this project are to:
 
 | Language                     | Compile <sup>1</sup>  | Build <sup>2</sup> | gRPC <sup>3</sup> |
 | ---------------------------: | -----------: | --------: | -------- |
-| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) | [v0.15.2](https://github.com/grpc/grpc/releases/tag/v0.15.2) |
+| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) | [v1.0.0<sup>673f</sup>](https://github.com/grpc/grpc/commit/673fa6c88b8abd542ae50c4480de92880a1e4777) |
 | [C#](csharp)                 | [csharp_proto_compile](csharp#csharp_proto_compile) | [csharp_proto_library](csharp#csharp_proto_library) | [1.0.0](https://www.nuget.org/packages/Grpc/) |
 | [Closure](closure)           | [closure_proto_compile](js#closure_proto_compile) | [closure_proto_library](js#closure_proto_library)          |  |
 | [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.0.0](https://github.com/grpc/grpc-go/releases/tag/v1.0.0) |
@@ -48,9 +48,9 @@ of this project are to:
 | [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | [v1.0.0](https://github.com/grpc/grpc-go/releases/tag/v1.0.0) |
 | [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [v1.0.1](https://github.com/grpc/grpc-java/releases/tag/v1.0.1) |
 | [Node](node)                 | [node_proto_compile](js#node_proto_compile) | [node_proto_library](js#node_proto_library)          | [1.0.0](https://www.npmjs.com/package/grpc) |
-| [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>4</sup> | [v0.15.2](https://github.com/grpc/grpc/releases/tag/v0.15.2) |
-| [Python](python)             | [py_proto_compile](python#py_proto_compile)         |           | [v0.15.2](https://github.com/grpc/grpc/releases/tag/v0.15.2) |
-| [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           | [v0.15.2](https://github.com/grpc/grpc/releases/tag/v0.15.2) |
+| [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>4</sup> | [v1.0.0<sup>673f</sup>](https://github.com/grpc/grpc/commit/673fa6c88b8abd542ae50c4480de92880a1e4777) |
+| [Python](python)             | [py_proto_compile](python#py_proto_compile)         |           | [v1.0.0<sup>673f</sup>](https://github.com/grpc/grpc/commit/673fa6c88b8abd542ae50c4480de92880a1e4777) |
+| [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           | [v1.0.0<sup>673f</sup>](https://github.com/grpc/grpc/commit/673fa6c88b8abd542ae50c4480de92880a1e4777) |
 | Custom [proto_language](protobuf#proto_language) | [proto_compile](protobuf#proto_compile) | |  |
 
 1. Support for generation of protoc outputs via `proto_compile()`
@@ -89,7 +89,7 @@ language-specific `*_proto_repositories` rule(s):
 git_repository(
   name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
-  tag = "v0.6.1",
+  tag = "v0.6.2",
 )
 
 load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_repositories")

@@ -2,6 +2,7 @@ java_test(
     name = "netty_test",
     size = "small",
     srcs = ["HelloWorldClientTest.java"],
+    tags = ["exclusive"],
     test_class = "org.pubref.rules_protobuf.examples.helloworld.client.HelloWorldClientTest",
     runtime_deps = [
         "//java:netty_runtime_deps",

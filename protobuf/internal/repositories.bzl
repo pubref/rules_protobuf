@@ -30,8 +30,7 @@ REPOSITORIES = {
         "kind": "git_repository",
         "name": "com_github_google_protobuf",
         "remote": "https://github.com/google/protobuf.git",
-        #"tag": "v3.0.0",
-        "commit": "ff2a6600e5df21683b86aca7e30bbb80c0aed848",
+        "tag": "v3.1.0",
     },
 
     # This binds the cc_binary "protoc" into //external:protoc.  This
@@ -63,7 +62,8 @@ REPOSITORIES = {
         "name": "com_github_grpc_grpc",
         "remote": "https://github.com/grpc/grpc.git",
         "init_submodules": True,
-        "tag": "v0.15.2",
+        "commit": "673fa6c88b8abd542ae50c4480de92880a1e4777",
+        #"tag": "v0.15.2",
     },
 
     # libssl is required for c++ grpc where it is expected in
@@ -102,7 +102,7 @@ REPOSITORIES = {
         "kind": "git_repository",
         "name": "com_github_nanopb_nanopb",
         "remote": "https://github.com/nanopb/nanopb.git",
-        "commit": "0198210f2cc349e7bc5199e8db7f4afc8208d843", # Aug 2 2016
+        "commit": "91bb64a47b36b112c9b22391ef76fab29cf2cffc", # Sep 1 2016
     },
 
     # grpc++ expects //external:nanopb
@@ -224,7 +224,7 @@ REPOSITORIES = {
     "external_protoc_gen_grpc_objc": {
         "kind": "bind",
         "name": "protoc_gen_grpc_objc",
-        "actual": "@com_github_grpc_grpc//:grpc_objc_plugin",
+        "actual": "@com_github_grpc_grpc//:grpc_objective_c_plugin",
     },
 
     # ****************************************************************

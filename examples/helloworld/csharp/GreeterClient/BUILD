@@ -7,10 +7,10 @@ csharp_binary(
         "Program.cs",
     ],
     deps = [
-          ":Helloworld",
-          "@nuget_google_protobuf//:libnet45",
-          "@nuget_grpc//:core",
-          "@nuget_grpc//:runtime_osx",
+        ":Helloworld",
+        "@nuget_google_protobuf//:libnet45",
+        "@nuget_grpc//:core",
+        "@nuget_grpc//:runtime_osx",
     ],
 )
 
@@ -24,9 +24,9 @@ csharp_proto_library(
     with_grpc = True,
 )
 
-
 csharp_nunit_test(
     name = "GreeterClientTest",
+    size = "small",
     srcs = [
         "GreeterClientTest.cs",
     ],

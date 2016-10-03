@@ -35,13 +35,13 @@ closure_repositories()
 
 git_repository(
     name = "io_bazel_rules_dotnet",
-    remote = "https://github.com/pcj/rules_dotnet.git",
     commit = "b23e796dd0be27f35867590309d79ffe278d4eeb",
+    remote = "https://github.com/pcj/rules_dotnet.git",
 )
 
 load("@io_bazel_rules_dotnet//dotnet:csharp.bzl", "csharp_repositories")
-csharp_repositories(use_local_mono = False)
 
+csharp_repositories(use_local_mono = False)
 
 # ================================================================
 # node_proto_library support requires rules_node
@@ -54,11 +54,12 @@ csharp_repositories(use_local_mono = False)
 
 git_repository(
     name = "org_pubref_rules_node",
+    commit = "d93a80ac4920c52da8adccbca66a3118a27018fd",  # Oct 2, 2016
     remote = "https://github.com/pubref/rules_node.git",
-    commit = "d93a80ac4920c52da8adccbca66a3118a27018fd", # Oct 2, 2016
 )
 
 load("@org_pubref_rules_node//node:rules.bzl", "node_repositories")
+
 node_repositories()
 
 # ================================================================
@@ -66,29 +67,47 @@ node_repositories()
 # ================================================================
 
 load("//protobuf:rules.bzl", "proto_repositories")
+
 proto_repositories()
 
 load("//cpp:rules.bzl", "cpp_proto_repositories")
+
 cpp_proto_repositories()
 
 load("//csharp:rules.bzl", "csharp_proto_repositories")
+
 csharp_proto_repositories()
 
 load("//java:rules.bzl", "java_proto_repositories", "nano_proto_repositories")
+
 java_proto_repositories()
+
 nano_proto_repositories()
 
 load("//go:rules.bzl", "go_proto_repositories")
+
 go_proto_repositories()
 
 load("//gogo:rules.bzl", "gogo_proto_repositories")
+
 gogo_proto_repositories()
 
 load("//grpc_gateway:rules.bzl", "grpc_gateway_proto_repositories")
+
 grpc_gateway_proto_repositories()
 
 load("//node:rules.bzl", "node_proto_repositories")
+
 node_proto_repositories()
 
 load("//objc:rules.bzl", "objc_proto_repositories")
+
 objc_proto_repositories()
+
+load("//python:rules.bzl", "py_proto_repositories")
+
+py_proto_repositories()
+
+load("//ruby:rules.bzl", "ruby_proto_repositories")
+
+ruby_proto_repositories()
