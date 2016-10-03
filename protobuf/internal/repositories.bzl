@@ -192,7 +192,7 @@ REPOSITORIES = {
         "kind": "new_git_repository",
         "name": "com_github_grpc_ecosystem_grpc_gateway",
         "remote": "https://github.com/grpc-ecosystem/grpc-gateway.git",
-        "commit": "ccd4e6b091a44f9f6b32848ffc63b3e8f8e26092",
+        "commit": "acebe0f9ff5993e130b141ee60e83e592839ca22",
         "build_file": str(Label("//protobuf:build_file/com_github_grpc_ecosystem_grpc_gateway.BUILD")),
     },
 
