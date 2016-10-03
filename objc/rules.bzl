@@ -2,6 +2,9 @@ load("//protobuf:rules.bzl", "proto_compile", "proto_repositories")
 
 def objc_proto_repositories(
     lang_requires = [
+      "grpc",
+      "external_protobuf_compiler",
+      "external_protoc_gen_grpc_ruby",
     ], **kwargs):
   proto_repositories(lang_requires = lang_requires, **kwargs)
 
@@ -10,7 +13,7 @@ PB_COMPILE_DEPS = [
 ]
 
 GRPC_COMPILE_DEPS = PB_COMPILE_DEPS + [
-    #"@com_github_grpc_grpc//:grpc_objc",
+    "@com_github_grpc_grpc//:grpc_objc",
 ]
 
 def objc_proto_compile(langs = [str(Label("//objc"))], **kwargs):

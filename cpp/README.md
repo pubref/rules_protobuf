@@ -6,7 +6,7 @@
 | [cc_proto_compile](#cc_proto_compile) | Generate protobuf source files. |
 | [cc_proto_library](#cc_proto_library) | Generate and compiles protobuf source files. |
 
-## cpp\_proto\_repositores
+## cpp\_proto\_repositories
 
 Enable C++ support by loading the dependencies in your workspace.
 

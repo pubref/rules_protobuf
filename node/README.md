@@ -5,8 +5,7 @@
 | [node_proto_repositories](#node_proto_repositories) | Load workspace dependencies. |
 | [node_proto_compile](#node_proto_compile) | Generate node js protobuf source files. |
 
-
-## node\_proto\_repositores
+## node\_proto\_repositories
 
 Enable node support by loading the dependencies in your workspace.
 

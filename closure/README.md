@@ -6,7 +6,7 @@
 | [closure_proto_compile](#closure_proto_compile) | Generate closure js protobuf source files. |
 | [closure_proto_library](#closure_proto_library) | Generate and compiles closure js source files. |
 
-## closure\_proto\_repositores
+## closure\_proto\_repositories
 
 Enable closure support by loading the dependencies in your workspace.
 

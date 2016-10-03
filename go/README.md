@@ -6,7 +6,7 @@
 | [go_proto_compile](#go_proto_compile) | Generate protobuf source files. |
 | [go_proto_library](#go_proto_library) | Generate and compiles protobuf source files. |
 
-## go\_proto\_repositores
+## go\_proto\_repositories
 
 Enable go support by loading the dependencies in your workspace.
 

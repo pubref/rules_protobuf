@@ -11,8 +11,9 @@ proto_language(
         "@nuget_google_protobuf//:libnet45",
     ],
     supports_grpc = True,
-    grpc_plugin = "@nuget_grpc_tools//:protoc-gen-grpc-csharp_bin",
     grpc_file_extensions = ["Grpc.cs"],
+    grpc_plugin = "@com_github_grpc_grpc//:grpc_csharp_plugin",
+    grpc_plugin_name = "grpc_csharp",
     grpc_compile_deps = [
         "@nuget_grpc//:core",
     ],

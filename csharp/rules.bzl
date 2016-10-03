@@ -1,7 +1,6 @@
 load("@io_bazel_rules_dotnet//dotnet:csharp.bzl", "nuget_package", "new_nuget_package", "csharp_library", "dll_import")
 load("//protobuf:rules.bzl", "proto_compile", "proto_repositories", "proto_language_deps")
 
-
 def csharp_proto_repositories():
   proto_repositories()
 
@@ -43,36 +42,6 @@ dll_import(
   name = "core",
   srcs = glob(["Grpc.Core.1.0.0/lib/net45/**/*.dll"]),
   visibility = ["//visibility:public"],
-)
-"""
-  )
-
-  new_nuget_package(
-    name = "nuget_grpc_tools",
-    package = "Grpc.Tools",
-    version = "1.0.0",
-    build_file_content =
-"""
-load("@io_bazel_rules_dotnet//dotnet:csharp.bzl", "dll_import", "csharp_binary")
-genrule(
-  name = "protoc-gen-grpc-csharp_bin",
-  srcs = [":grpc_csharp_plugin"],
-  outs = ["protoc-gen-grpc-csharp"],
-  cmd = "cp $(location :grpc_csharp_plugin) $$(pwd)/$@",
-  executable = True,
-  visibility = ["//visibility:public"],
-)
-filegroup(
-  name = "grpc_csharp_plugin",
-  srcs = select({
-    ":darwin": ["Grpc.Tools.1.0.0/tools/macosx_x64/grpc_csharp_plugin"],
-    "//conditions:default": ["Grpc.Tools.1.0.0/tools/linux_x64/grpc_csharp_plugin"],
-  }),
-)
-config_setting(
-    name = "darwin",
-    values = {"cpu": "darwin"},
-    visibility = ["//visibility:private"],
 )
 """
   )

@@ -192,8 +192,39 @@ REPOSITORIES = {
         "kind": "new_git_repository",
         "name": "com_github_grpc_ecosystem_grpc_gateway",
         "remote": "https://github.com/grpc-ecosystem/grpc-gateway.git",
-        "commit": "acebe0f9ff5993e130b141ee60e83e592839ca22",
+        "commit": "ccd4e6b091a44f9f6b32848ffc63b3e8f8e26092",
         "build_file": str(Label("//protobuf:build_file/com_github_grpc_ecosystem_grpc_gateway.BUILD")),
+    },
+
+
+    # ****************************************************************
+    # PYTHON
+    # ****************************************************************
+
+    "external_protoc_gen_grpc_python": {
+        "kind": "bind",
+        "name": "protoc_gen_grpc_python",
+        "actual": "@com_github_grpc_grpc//:grpc_python_plugin",
+    },
+
+    # ****************************************************************
+    # RUBY
+    # ****************************************************************
+
+    "external_protoc_gen_grpc_ruby": {
+        "kind": "bind",
+        "name": "protoc_gen_grpc_ruby",
+        "actual": "@com_github_grpc_grpc//:grpc_ruby_plugin",
+    },
+
+    # ****************************************************************
+    # OBJC
+    # ****************************************************************
+
+    "external_protoc_gen_grpc_objc": {
+        "kind": "bind",
+        "name": "protoc_gen_grpc_objc",
+        "actual": "@com_github_grpc_grpc//:grpc_objc_plugin",
     },
 
     # ****************************************************************

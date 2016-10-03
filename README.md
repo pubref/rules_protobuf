@@ -48,20 +48,20 @@ of this project are to:
 | [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | [v1.0.0](https://github.com/grpc/grpc-go/releases/tag/v1.0.0) |
 | [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [v1.0.1](https://github.com/grpc/grpc-java/releases/tag/v1.0.1) |
 | [Node](node)                 | [node_proto_compile](js#node_proto_compile) | [node_proto_library](js#node_proto_library)          | [1.0.0](https://www.npmjs.com/package/grpc) |
-| [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>5</sup> | <sup>4</sup> |
-| [Python](python)             | [py_proto_compile](python#py_proto_compile)         |           | <sup>4</sup> |
-| [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           | <sup>4</sup> |
+| [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>4</sup> | [v0.15.2](https://github.com/grpc/grpc/releases/tag/v0.15.2) |
+| [Python](python)             | [py_proto_compile](python#py_proto_compile)         |           | [v0.15.2](https://github.com/grpc/grpc/releases/tag/v0.15.2) |
+| [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           | [v0.15.2](https://github.com/grpc/grpc/releases/tag/v0.15.2) |
 | Custom [proto_language](protobuf#proto_language) | [proto_compile](protobuf#proto_compile) | |  |
 
-1. Support for generation of protoc outputs via `proto_compile()` rule.
+1. Support for generation of protoc outputs via `proto_compile()`
+   rule.
 
-2. Support for generation + compilation of outputs with protobuf dependencies.
+2. Support for generation + compilation of outputs with protobuf
+   dependencies.
 
 3. gRPC support.
 
-4. gRPC *is* supported in this language, but not currently within rules_protobuf)
-
-5. Highly experimental (probably not functional yet). A
+4. Highly experimental (probably not functional yet). A
    work-in-progress for those interested in contributing further work.
 
 

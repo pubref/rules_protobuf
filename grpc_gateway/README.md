@@ -7,7 +7,7 @@
 | [grpc_gateway_proto_library](#grpc_gateway_proto_library) | Generate and compiles protobuf source files. |
 | [grpc_gateway_swagger_compile](#grpc_gateway_swagger_compile) | Generate swwagger.json source files. |
 
-## grpc_gateway\_proto\_repositores
+## grpc_gateway\_proto\_repositories
 
 Enable [grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway)
 support by loading the dependencies in your workspace.

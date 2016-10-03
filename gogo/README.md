@@ -6,7 +6,7 @@
 | [gogo_proto_compile](#gogo_proto_compile) | Generate protobuf source files. |
 | [gogo_proto_library](#gogo_proto_library) | Generate and compiles protobuf source files. |
 
-## gogo\_proto\_repositores
+## gogo\_proto\_repositories
 
 Enable C# support by loading the dependencies in your workspace.
 

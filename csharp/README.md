@@ -6,7 +6,7 @@
 | [csharp_proto_compile](#csharp_proto_compile) | Generate protobuf source files. |
 | [csharp_proto_library](#csharp_proto_library) | Generate and compiles protobuf source files. |
 
-## csharp\_proto\_repositores
+## csharp\_proto\_repositories
 
 Enable C# support by loading the dependencies in your workspace.
 

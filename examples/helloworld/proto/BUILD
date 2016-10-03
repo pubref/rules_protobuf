@@ -77,7 +77,14 @@ proto_compile(
     name = "ruby",
     langs = ["//ruby"],
     protos = [":protos"],
-    with_grpc = False,
+    with_grpc = True,
+)
+
+proto_compile(
+    name = "objc",
+    langs = ["//objc"],
+    protos = [":protos"],
+    with_grpc = True,
 )
 
 csharp_proto_library(

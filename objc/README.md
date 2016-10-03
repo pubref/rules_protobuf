@@ -9,7 +9,7 @@
 | [objc_proto_compile](#objc_proto_compile) | Generate protobuf source files. |
 | [objc_proto_library](#objc_proto_library) | Generate and compiles protobuf source files. |
 
-## objc\_proto\_repositores
+## objc\_proto\_repositories
 
 Enable support by loading the dependencies in your workspace.
 
