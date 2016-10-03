@@ -24,7 +24,7 @@ was limited exposed and documented proto generation capabilities in
 the main bazel repository.  This is a moving target.  The main goals
 of this project are to:
 
-1. Provide `protoc`, the protocol buffer compiler ([v3.1.0](https://github.com/google/protobuf/releases/tag/v3.1.0)).
+1. Provide `protoc`, the protocol buffer compiler ([v3.0.0](https://github.com/google/protobuf/releases/tag/v3.0.0)).
 
 2. Provide the language-specific plugins.
 
