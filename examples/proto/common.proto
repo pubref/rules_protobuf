@@ -5,18 +5,9 @@ option java_outer_classname = "CommonProto";
 
 package common;
 
-
 // A configuration object.  This is used to test the viability of
 // protobuf imports.
 message Config {
   bool verbose = 1;
-
-  // TODO(user): implement importing from external packages better.
-  // Currently this works by specifying (1) the location of the
-  // external protobuf file related to the bazel output_base as an
-  // import string and (2) 'deps' dependency on the corresponding
-  // import rule.
-  //
-  //google.protobuf.FileDescriptorProto = 2;
 }
 

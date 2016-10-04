@@ -39,7 +39,6 @@ go_proto_library(
 java_proto_library(
     name = "java",
     protos = [":protos"],
-    verbose = 0,
 )
 
 node_proto_library(
