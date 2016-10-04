@@ -24,7 +24,8 @@ was limited exposed and documented proto generation capabilities in
 the main bazel repository.  This is a moving target.  The main goals
 of this project are to:
 
-1. Provide `protoc`, the protocol buffer compiler ([v3.0.0](https://github.com/google/protobuf/releases/tag/v3.0.0)).
+1. Provide `protoc`, the protocol buffer compiler
+   ([v3.1.x^52ab^](https://github.com/google/protobuf/commit/52ab3b07ac9a6889ed0ac9bf21afd8dab8ef0014)).
 
 2. Provide the language-specific plugins.
 
@@ -89,7 +90,7 @@ language-specific `*_proto_repositories` rule(s):
 git_repository(
   name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
-  tag = "v0.6.2",
+  tag = "v0.6.4",
 )
 
 load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_repositories")

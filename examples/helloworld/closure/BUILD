@@ -31,7 +31,7 @@ closure_js_test(
     name = "greeter_test",
     srcs = ["greeter_test.js"],
     pedantic = True,
-    #compilation_level = "SIMPLE",
+    compilation_level = "SIMPLE",
     deps = [
         "greeter",
         "protolib",

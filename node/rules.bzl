@@ -18,11 +18,11 @@ def node_proto_repositories(
     name = "npm_protobuf_stack",
     deps = {
       "async": "1.5.2",
-      "google-protobuf": "3.0.0",
+      "google-protobuf": "3.1.1",
       "lodash": "4.6.1",
       "minimist": "1.2.0",
     },
-    sha256 = "f09ad8477f51409d8c818cc6cdbc819bb8524d3c3045687392592f67a8ec5aad",
+    sha256 = "96242be14d18d9f1e81603502893545c7ca0fbcabcb9e656656cbcdda2b52bbb",
   )
 
   npm_repository(

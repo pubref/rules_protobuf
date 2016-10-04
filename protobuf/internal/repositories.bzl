@@ -30,7 +30,8 @@ REPOSITORIES = {
         "kind": "git_repository",
         "name": "com_github_google_protobuf",
         "remote": "https://github.com/google/protobuf.git",
-        "tag": "v3.0.0",
+        "commit": "52ab3b07ac9a6889ed0ac9bf21afd8dab8ef0014", # Oct 4, 2016
+        #"tag": "v3.0.0",
     },
 
     # This binds the cc_binary "protoc" into //external:protoc.  This
