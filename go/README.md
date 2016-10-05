@@ -134,3 +134,56 @@ When this name is chosen, part 3 is not needed and should be omitted.
 Consult source files in the
 [examples/helloworld/go](../examples/helloworld/go) directory
 for additional information.
+
+---
+
+## Well-Known Protobuf Import Mappings
+
+This demonstrates one way to incorporate the so-called *well-known*
+protos in your proto definitions.  Protoc will look to find the proto
+file in the `google/protobuf/src` directory in the external workspace.
+The `protoc-gen-go` plugin then performs the importmapping according
+to the `importmap` attribute.  Pregenerated protobuf dependencies are
+provided by the `@com_github_golang_protobuf` workspace.  A minimally
+functional example is provided in
+[examples/wkt/go](https://github.com/pubref/rules_protobuf/tree/master/examples/wkt/go).
+
+```c
+// foo.proto
+syntax = "proto3";
+import "{A}";
+...
+```
+
+```python
+# BUILD
+go_proto_library(
+  name = "protolib",
+  protos = ["foo.proto"],
+  importmap = {
+    "{A}": "github.com/golang/protobuf/{B}",
+  },
+  imports = ["external/com_github_google_protobuf/src"],
+  deps = [
+    "@com_github_golang_protobuf//:{B}",
+  ],
+)
+```
+
+```go
+// foo.go
+import (
+	"github.com/golang/protobuf/{B}"
+)
+```
+
+| Proto Filename (A) | Import Name Suffix and Target Name (B) |
+| ---                | ---           | -----                  |
+| `google/protobuf/any.proto` |  `ptypes/any` |
+| `google/protobuf/duration.proto` |  `ptypes/duration` |
+| `google/protobuf/timestamp.proto` |  `ptypes/timestamp` |
+| `google/protobuf/empty.proto` |  `ptypes/empty` |
+| `google/protobuf/struct.proto` |  `ptypes/struct` |
+| `google/protobuf/wrappers.proto` |  `ptypes/wrappers` |
+| `google/protobuf/descriptor.proto` |  `protoc-gen-go/descriptor` |
+| `google/protobuf/compiler/plugin.proto` |  `protoc-gen-go/plugin` |

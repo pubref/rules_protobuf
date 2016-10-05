@@ -35,6 +35,7 @@ script:
       examples/helloworld/go/... \
       examples/helloworld/java/... \
       examples/helloworld/closure/... \
+      examples/wkt/... \
       $FLAGS
 
 notifications:
