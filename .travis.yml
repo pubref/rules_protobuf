@@ -36,6 +36,7 @@ script:
       examples/helloworld/java/... \
       examples/helloworld/closure/... \
       examples/wkt/... \
+      tests/... \
       $FLAGS
 
 notifications:
