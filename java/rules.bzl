@@ -1,10 +1,14 @@
+load("//java:deps.bzl", "DEPS")
+
 load("//protobuf:rules.bzl",
      "proto_compile",
      "proto_language",
      "proto_language_deps",
      "proto_repositories")
 
-def java_proto_repositories(lang_requires = [
+def java_proto_repositories(
+    lang_deps = DEPS,
+    lang_requires = [
     "com_google_protobuf_protobuf_java",
     "com_google_protobuf_protobuf_java_util",
     "com_google_code_gson_gson",
@@ -38,7 +42,10 @@ def java_proto_repositories(lang_requires = [
     "com_squareup_okio_okio",
     "io_grpc_grpc_okhttp",
   ], **kwargs):
-  proto_repositories(lang_requires = lang_requires, **kwargs)
+
+  proto_repositories(lang_deps = lang_deps,
+                     lang_requires = lang_requires,
+                     **kwargs)
 
 
 def nano_proto_repositories(
@@ -46,7 +53,9 @@ def nano_proto_repositories(
       "com_google_protobuf_nano_protobuf_javanano",
       "io_grpc_grpc_protobuf_nano",
     ], **kwargs):
-  proto_repositories(lang_requires = lang_requires, **kwargs)
+  proto_repositories(lang_requires = lang_requires,
+                     lang_deps = DEPS,
+                     **kwargs)
 
 
 def java_proto_compile(langs = [str(Label("//java"))], **kwargs):

@@ -1,16 +1,27 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "new_go_repository")
 load("//protobuf:rules.bzl", "proto_compile", "proto_repositories")
+load("//go:deps.bzl", "DEPS")
 
 def go_proto_repositories(
+    lang_deps = DEPS,
     lang_requires = [
-      "protobuf",
-      "external_protoc",
       "com_github_golang_protobuf",
       "com_github_golang_glog",
       "org_golang_google_grpc",
       "org_golang_x_net",
     ], **kwargs):
-  proto_repositories(lang_requires = lang_requires, **kwargs)
+
+  rem = proto_repositories(lang_deps = lang_deps,
+                           lang_requires = lang_requires,
+                           **kwargs)
+
+  # Load remaining (special) deps
+  for dep in rem:
+    rule = dep.pop("rule")
+    if "new_go_repository" == rule:
+      new_go_repository(**dep)
+    else:
+      fail("Unknown loading rule %s for %s" % (rule, dep))
 
 
 PB_COMPILE_DEPS = [

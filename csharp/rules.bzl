@@ -1,50 +1,30 @@
 load("@io_bazel_rules_dotnet//dotnet:csharp.bzl", "nuget_package", "new_nuget_package", "csharp_library", "dll_import")
 load("//protobuf:rules.bzl", "proto_compile", "proto_repositories", "proto_language_deps")
+load("//cpp:rules.bzl", "cpp_proto_repositories")
+load("//csharp:deps.bzl", "DEPS")
 
-def csharp_proto_repositories():
-  proto_repositories()
+def csharp_proto_repositories(
+    omit_cpp_repositories = False,
+    lang_deps = DEPS,
+    lang_requires = [
+      "nuget_google_protobuf",
+      "nuget_grpc",
+    ], **kwargs):
 
-  new_nuget_package(
-    name = "nuget_google_protobuf",
-    package = "Google.Protobuf",
-    version = "3.0.0",
-    build_file_content =
-"""
-load("@io_bazel_rules_dotnet//dotnet:csharp.bzl", "dll_import")
-dll_import(
-  name = "libnet45",
-  srcs = [
-    "Google.Protobuf.3.0.0/lib/net45/Google.Protobuf.dll",
-  ],
-  visibility = ["//visibility:public"],
-)
-"""
-  )
+  if not omit_cpp_repositories:
+    cpp_proto_repositories()
 
-  new_nuget_package(
-    name = "nuget_grpc",
-    package = "Grpc",
-    version = "1.0.0",
-    build_file_content =
-"""
-load("@io_bazel_rules_dotnet//dotnet:csharp.bzl", "dll_import")
-dll_import(
-  name = "runtime_osx",
-  srcs = glob(["Grpc.Core.1.0.0/runtimes/osx/**/*.dll"]),
-  visibility = ["//visibility:public"],
-)
-dll_import(
-  name = "system_interactive_async",
-  srcs = glob(["System.Interactive.Async.3.0.0/lib/net45/**/*.dll"]),
-  visibility = ["//visibility:public"],
-)
-dll_import(
-  name = "core",
-  srcs = glob(["Grpc.Core.1.0.0/lib/net45/**/*.dll"]),
-  visibility = ["//visibility:public"],
-)
-"""
-  )
+  rem = proto_repositories(lang_deps = lang_deps,
+                           lang_requires = lang_requires,
+                           **kwargs)
+
+  # Load remaining (nuget) deps
+  for dep in rem:
+    rule = dep.pop("rule")
+    if "new_nuget_package" == rule:
+      new_nuget_package(**dep)
+    else:
+      fail("Unknown loading rule %s for %s" % (rule, dep))
 
 PB_COMPILE_DEPS = [
   "@nuget_google_protobuf//:libnet45",

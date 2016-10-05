@@ -1,21 +1,25 @@
 load("//protobuf:rules.bzl", "proto_compile", "proto_repositories")
+load("//cpp:deps.bzl", "DEPS")
 
 def cpp_proto_repositories(
+    lang_deps = DEPS,
     lang_requires = [
-      "external_protobuf_clib",
+      "protobuf_clib",
       "gtest",
-      "grpc",
+      "com_github_grpc_grpc",
+      "com_github_madler_zlib",
       "zlib",
-      "external_zlib",
+      "com_github_nanopb_nanopb",
       "nanopb",
-      "external_nanopb",
       "boringssl",
       "libssl",
-      "external_protobuf_compiler",
-      "third_party_protoc",
-      "external_protoc_gen_grpc_cpp",
+      "protobuf_compiler",
+      "protoc_gen_grpc_cpp",
     ], **kwargs):
-  proto_repositories(lang_requires = lang_requires, **kwargs)
+
+  proto_repositories(lang_deps = lang_deps,
+                     lang_requires = lang_requires,
+                     **kwargs)
 
 PB_COMPILE_DEPS = [
     "//external:protobuf_clib",
@@ -24,7 +28,6 @@ PB_COMPILE_DEPS = [
 GRPC_COMPILE_DEPS = PB_COMPILE_DEPS + [
     "@com_github_grpc_grpc//:grpc++",
 ]
-
 
 def cpp_proto_compile(langs = [str(Label("//cpp"))], **kwargs):
   proto_compile(langs = langs, **kwargs)

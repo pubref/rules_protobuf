@@ -1,5 +1,6 @@
-load("//cpp:rules.bzl", "cpp_proto_repositories")
 load("@org_pubref_rules_node//node:rules.bzl", "node_library", "npm_repository")
+load("//cpp:rules.bzl", "cpp_proto_repositories")
+load("//node:deps.bzl", "DEPS")
 
 load("//protobuf:rules.bzl",
      "proto_compile",
@@ -7,36 +8,29 @@ load("//protobuf:rules.bzl",
      "proto_repositories")
 
 def node_proto_repositories(
+    omit_cpp_repositories = False,
+    lang_deps = DEPS,
     lang_requires = [
+      "npm_protobuf_stack",
+      "npm_grpc",
     ],
     **kwargs):
 
-  # Node requires cpp protoc_plugin, so we need all those deps too.
-  cpp_proto_repositories()
+  if not omit_cpp_repositories:
+    cpp_proto_repositories()
 
-  npm_repository(
-    name = "npm_protobuf_stack",
-    deps = {
-      "async": "1.5.2",
-      "google-protobuf": "3.1.1",
-      "lodash": "4.6.1",
-      "minimist": "1.2.0",
-    },
-    sha256 = "96242be14d18d9f1e81603502893545c7ca0fbcabcb9e656656cbcdda2b52bbb",
-  )
+  rem = proto_repositories(lang_deps = lang_deps,
+                           lang_requires = lang_requires,
+                           **kwargs)
 
-  npm_repository(
-    name = "npm_grpc",
-    deps = {
-      "grpc": "1.0.0",
-    },
+  # Load remaining (special) deps
+  for dep in rem:
+    rule = dep.pop("rule")
+    if "npm_repository" == rule:
+      npm_repository(**dep)
+    else:
+      fail("Unknown loading rule %s for %s" % (rule, dep))
 
-    # Disabiling sha for this one as it will likely fail since the sha256 is
-    # calculated after node-gyp runs and therefore platform dependent.
-    #sha256 = "dcbc0f43a7eb5c52529ba35a4d455d61fcef49d2ced3229e821d4b07c5aaef9d",
-  )
-
-  proto_repositories(lang_requires = lang_requires, **kwargs)
 
 def node_proto_compile(langs = [str(Label("//node"))], **kwargs):
   proto_compile(langs = langs, **kwargs)

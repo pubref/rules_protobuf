@@ -1,12 +1,17 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_binary")
 load("//protobuf:rules.bzl", "proto_compile", "proto_repositories")
-load("//go:rules.bzl", "PB_COMPILE_DEPS", "GRPC_COMPILE_DEPS")
+load("//go:rules.bzl", "PB_COMPILE_DEPS", "GRPC_COMPILE_DEPS", "go_proto_repositories")
+load("//grpc_gateway:deps.bzl", "DEPS")
 
 def grpc_gateway_proto_repositories(
+    lang_deps = DEPS,
     lang_requires = [
       "com_github_grpc_ecosystem_grpc_gateway",
     ], **kwargs):
-  proto_repositories(lang_requires = lang_requires, **kwargs)
+
+  go_proto_repositories(lang_deps = lang_deps,
+                        lang_requires = lang_requires,
+                        **kwargs)
 
 GRPC_GATEWAY_DEPS = [
   "@com_github_grpc_ecosystem_grpc_gateway//:runtime",

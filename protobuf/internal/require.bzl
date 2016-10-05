@@ -1,92 +1,77 @@
-load("//protobuf:internal/repositories.bzl", "REPOSITORIES")
-
-def _load(target, repos, verbose):
-    """Load external dependency during WORKSPACE loading.
-
-    Args:
-      context: The loading context
-
-    Returns:
-      the return value of the native repository rule.
-
-    """
-
-    dep = repos.get(target)
-
-    # Is the dep defined?
-    if not dep:
-        fail("Undefined dependency: " + target)
-
-    name = dep.get("name")
-    kind = dep.get("kind")
-    if not name:
-        fail("Dependency target %s is missing required attribute 'name': " % target)
-    if not kind:
-        fail("Dependency target %s is missing required attribute 'kind': " % target)
-
-    #print("dep: %s" % dep.items())
+def _needs_install(name, dep, hkeys=["sha256", "sha1", "tag"], verbose=0):
 
     # Does it already exist?
-    defined = native.existing_rule(dep.get("name"))
-    if defined:
-        hkeys = ["sha256", "sha1", "tag"]
-        # If it has already been defined and our dependency lists a
-        # hash, do these match? If a hash mismatch is encountered, has
-        # the user specifically granted permission to continue?
-        for hkey in hkeys:
-            expected = dep.get(hkey)
-            actual = defined.get(hkey)
-            if expected:
-                if expected != actual:
-                  fail("Namespace (%s) already exists in the "
-                       + "workspace but %s=%s did not match "
-                       + "the required value: %s.  Either remove it from your WORKSPACE or exclude=['%s'] it from loading."
-                       % (target, dep.name, hkey, actual, expected, target))
-                else:
-                    if verbose:
-                        print("Not reloading %s (@%s): %s matches %s" % (target, name, hkey, actual))
-                    return
+    existing_rule = native.existing_rule(name)
+    if not existing_rule:
+        return True
 
-        # No kheys for this rule
-        if verbose:
-            print("Skipping reload of target %s (no hash keys %s)" % (target, hkeys))
-        return
+    # If it has already been defined and our dependency lists a
+    # hash, do these match? If a hash mismatch is encountered, has
+    # the user specifically granted permission to continue?
+    for hkey in hkeys:
+        expected = dep.get(hkey)
+        actual = existing_rule.get(hkey)
+        if expected:
+            if expected != actual:
+                fail("Workspace %s exists but %s=%s did not match " +
+                     "the required value (%s).  Either remove it from " +
+                     "your WORKSPACE or exclude it from loading."
+                     % (name, hkey, actual, expected))
+            else:
+                if verbose > 1: print("Skip reload %s: %s = %s" % (name, hkey, actual))
+                return False
 
-    if not hasattr(native, kind):
-        fail("No native workspace rule named '%s' in dependency %s" % (kind, name))
-
-    rule = getattr(native, kind)
-    if not rule:
-        fail("During require (%s), kind '%s' has no matching native rule" % (target, dep.kind))
-
-    # Invoke the native rule with the unpacked arguments, without
-    # special entries (those that have no corresponding representation
-    # in the native struct)
-    args = dict(dep.items())
-    args.pop("kind")
-
-    if verbose:
-        #print("Load %s %s (@%s) with args %s" % (kind, target, name, args))
-        print("Load %s (@%s)" % (target, name))
-
-    return rule(**args)
+    # No kheys for this rule - in this case no reload; first one loaded wins.
+    if verbose > 1: print("Skipping reload of existing target %s" % name)
+    return False
 
 
-def require(repositories = REPOSITORIES,
+def _install(deps, verbose):
+    """Install a list if dependencies for matching native rules.
+    Return:
+      list of deps that have no matching native rule.
+    """
+    todo = []
+
+    for d in deps:
+        name = d.get("name")
+        rule = d.pop("rule", None)
+        if not rule:
+            fail("Missing attribute 'rule': %s" % name)
+        if hasattr(native, rule):
+            rule = getattr(native, rule)
+            if verbose: print("Loading %s)" % name)
+            rule(**d)
+        else:
+            d["rule"] = rule
+            todo.append(d)
+
+    return todo
+
+
+def require(keys,
+            deps = {},
             overrides = {},
             excludes = [],
-            requires = [],
             verbose = 0):
-  repos = {}
 
-  for k, v in repositories.items():
-    override = overrides.get(k)
-    if override:
-      # Merge override properties
-      repos[k] = v + override
-    else:
-      repos[k] = v
+    verbose = 1
 
-  for target in requires:
-    if not target in excludes:
-      _load(target, repos, verbose)
+    #
+    # Make a list of non-excluded required deps with merged data.
+    #
+    required = []
+
+    for key in keys:
+        dep = deps.get(key)
+        if not dep:
+            fail("Unknown workspace dependency: %s" % key)
+        d = dict(**dep) # copy the 'frozen' object.
+        if not key in excludes:
+            over = overrides.get(key)
+            data = d + over if over else d
+            if _needs_install(key, d, verbose=verbose):
+                data["name"] = key
+                required.append(d)
+
+    return _install(required, verbose)

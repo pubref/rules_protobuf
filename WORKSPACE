@@ -66,47 +66,35 @@ node_repositories()
 # ================================================================
 
 load("//protobuf:rules.bzl", "proto_repositories")
-
 proto_repositories()
 
 load("//cpp:rules.bzl", "cpp_proto_repositories")
-
 cpp_proto_repositories()
 
 load("//csharp:rules.bzl", "csharp_proto_repositories")
-
 csharp_proto_repositories()
 
 load("//java:rules.bzl", "java_proto_repositories", "nano_proto_repositories")
-
 java_proto_repositories()
-
 nano_proto_repositories()
 
 load("//go:rules.bzl", "go_proto_repositories")
-
 go_proto_repositories()
 
 load("//gogo:rules.bzl", "gogo_proto_repositories")
-
 gogo_proto_repositories()
 
 load("//grpc_gateway:rules.bzl", "grpc_gateway_proto_repositories")
-
 grpc_gateway_proto_repositories()
 
 load("//node:rules.bzl", "node_proto_repositories")
-
 node_proto_repositories()
 
 load("//objc:rules.bzl", "objc_proto_repositories")
-
 objc_proto_repositories()
 
 load("//python:rules.bzl", "py_proto_repositories")
-
 py_proto_repositories()
 
 load("//ruby:rules.bzl", "ruby_proto_repositories")
-
 ruby_proto_repositories()
