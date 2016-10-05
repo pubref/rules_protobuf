@@ -1,5 +1,12 @@
 load("//protobuf:internal/repositories.bzl", "REPOSITORIES")
 
+load("@io_bazel_rules_go//go:def.bzl", "new_go_repository")
+
+NON_NATIVE_RULE_KIND_WHITELIST = {
+    "new_go_repository": new_go_repository,
+}
+
+
 def _load(target, repos, verbose):
     """Load external dependency during WORKSPACE loading.
 
@@ -52,12 +59,15 @@ def _load(target, repos, verbose):
             print("Skipping reload of target %s (no hash keys %s)" % (target, hkeys))
         return
 
-    if not hasattr(native, kind):
-        fail("No native workspace rule named '%s' in dependency %s" % (kind, name))
+    if kind not in NON_NATIVE_RULE_KIND_WHITELIST:
+        if not hasattr(native, kind):
+            fail("No native workspace rule named '%s' in dependency %s" % (kind, name))
 
-    rule = getattr(native, kind)
-    if not rule:
-        fail("During require (%s), kind '%s' has no matching native rule" % (target, dep.kind))
+        rule = getattr(native, kind)
+        if not rule:
+            fail("During require (%s), kind '%s' has no matching native rule" % (target, dep.kind))
+    else:
+        rule = NON_NATIVE_RULE_KIND_WHITELIST[kind]
 
     # Invoke the native rule with the unpacked arguments, without
     # special entries (those that have no corresponding representation
