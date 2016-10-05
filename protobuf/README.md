@@ -1,6 +1,6 @@
 # proto\_repositories
 
-The `proto_repositores` macro loads the required external workspaces
+The `proto_repositories` macro loads the required external workspaces
 for a particular language.  This rule is used internally by the
 language-specific `*_proto_repositories` rules, but can be invoked
 directly to load the minimal set of deps to use `proto_compile`.

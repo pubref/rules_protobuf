@@ -25,7 +25,7 @@ the main bazel repository.  This is a moving target.  The main goals
 of this project are to:
 
 1. Provide `protoc`, the protocol buffer compiler
-   ([v3.1.x^52ab^](https://github.com/google/protobuf/commit/52ab3b07ac9a6889ed0ac9bf21afd8dab8ef0014)).
+   ([v3.1.x<sup>52ab</sup>](https://github.com/google/protobuf/commit/52ab3b07ac9a6889ed0ac9bf21afd8dab8ef0014)).
 
 2. Provide the language-specific plugins.
 
@@ -172,11 +172,11 @@ $ bazel run java/org/pubref/rules_closure/examples/helloworld/client:netty
 # Overriding or excluding WORKSPACE dependencies
 
 To load alternate versions of dependencies, pass in a
-[dict][skylark-dict] having the same overall structure of the
-[repositories.bzl][repositories.bzl] file.  Entries having a matching
-key will override those found in the file.  For example, to load a
-different version of https://github.com/golang/protobuf, provide a
-different commit ID:
+[dict][skylark-dict] having the same overall structure of a
+[deps.bzl][protobuf/deps.bzl] file.  Entries having a matching key will
+override those found in the file.  For example, to load a different
+version of https://github.com/golang/protobuf, provide a different
+commit ID:
 
 ```python
 load("@org_pubref_rules_protobuf//go:rules.bzl", "go_proto_repositories")
@@ -201,6 +201,27 @@ go_proto_repositories(
   ]
 )
 ```
+
+To completely replace the set of dependencies that will attempt to be
+loaded, you can pass in a full `dict` object to the `lang_deps`
+attribute.
+
+```python
+go_proto_repositories(
+  lang_deps = {
+    "com_github_golang_glog": {
+      ...
+    },
+  },
+)
+```
+
+There are several language --> language dependencies as well. For
+example, `python_proto_repositories` and `ruby_proto_repositories`
+(and more) internally call the `cpp_proto_repositories` rule to
+provide the grpc plugins.  To suppress this (and have better control
+in your workspace), you can use the `omit_cpp_repositories=True`
+option.
 
 # Proto B --> Proto A dependencies
 
@@ -287,6 +308,9 @@ label that includes the (pregenerated) protobuf files to the `deps`
 attribute, just as you would any typical `cc_library` rule.
 
 Hopefully that made sense.  It's a bit tricky.
+
+If you are having problems, put `verbose={1,2,3}` in your build rule
+and/or disable sandboxing with `--spawn_strategy=standalone`.
 
 > Note: bazel will likely a breaking change to the way external
 > repositories are laid out in the execution root in future versions
