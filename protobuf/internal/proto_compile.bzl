@@ -24,6 +24,26 @@ def _emit_params_file_action(ctx, path, mnemonic, cmds):
   return f
 
 
+def _get_relative_dirname(base, file):
+  """Return a dirname in the form of path segments relative to base.
+  If the file.short_path is not within base, return empty list.
+  Example: if base="foo/bar/baz.txt"
+           and file.short_path="bar/baz.txt",
+           return ["bar"].
+  Args:
+    base (string): the base dirname (ctx.label.package)
+    file (File): the file to calculate relative dirname.
+  Returns:
+    (list<string>): path
+  """
+  path = file.short_path
+  if not path.startswith(base):
+    return []
+  path = path[len(base)+1:] # remove trailing slash
+  parts = path.split("/")
+  return parts[:-1]
+
+
 def _get_offset_path(root, path):
   """Adjust path relative to offset"""
 
@@ -144,7 +164,6 @@ def _build_output_srcjar(run, builder):
   if run.data.verbose > 2:
     print("Copied jar %s srcjar to %s" % (protojar.path, srcjar.path))
 
-
 def _build_output_files(run, builder):
   """Build a list of files we expect to be generated."""
 
@@ -162,7 +181,9 @@ def _build_output_files(run, builder):
     if run.lang.output_file_style == 'capitalize':
       base = _capitalize(base)
     for ext in exts:
-      pbfile = ctx.new_file(base + ext)
+      path = _get_relative_dirname(ctx.label.package, file)
+      path.append(base + ext)
+      pbfile = ctx.new_file("/".join(path))
       builder["outputs"] += [pbfile]
 
 
