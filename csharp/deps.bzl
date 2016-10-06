@@ -1,7 +1,3 @@
-# ****************************************************************
-# List of external dependencies
-# ****************************************************************
-
 PROTOBUF_BUILD_FILE = """
 load("@io_bazel_rules_dotnet//dotnet:csharp.bzl", "dll_import")
 dll_import(
@@ -46,6 +42,11 @@ DEPS = {
         "package": "Grpc",
         "version": "1.0.0",
         "build_file_content": GRPC_BUILD_FILE,
+    },
+
+    "protoc_gen_grpc_csharp": {
+        "rule": "bind",
+        "actual": "@com_github_grpc_grpc//:grpc_csharp_plugin",
     },
 
 }

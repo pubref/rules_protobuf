@@ -31,12 +31,13 @@ script:
       --spawn_strategy=standalone \
       --genrule_strategy=standalone \
       --local_resources=400,1,1.0 \
-      examples/helloworld/cpp/... \
-      examples/helloworld/go/... \
-      examples/helloworld/java/... \
-      examples/helloworld/closure/... \
-      examples/wkt/... \
-      tests/... \
+      //examples/helloworld/closure/... \
+      //examples/helloworld/cpp/... \
+      //examples/helloworld/go/... \
+      //examples/helloworld/grpc_gateway/... \
+      //examples/helloworld/java/... \
+      //examples/wkt/... \
+      //tests/... \
       $FLAGS
 
 notifications:

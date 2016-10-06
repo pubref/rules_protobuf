@@ -13,7 +13,7 @@ proto_language(
     ],
     pb_runtime_deps = [],
     supports_grpc = True,
-    grpc_plugin = "//third_party/protoc_gen_grpc_java:protoc_gen_grpc_java_bin",
+    grpc_plugin = ":protoc_gen_grpc_java_bin",
     grpc_compile_deps = [
         "@io_grpc_grpc_core//jar",
         "@io_grpc_grpc_protobuf//jar",
@@ -61,7 +61,7 @@ proto_language(
         "ignore_services=true"
     ],
     pb_runtime_deps = [],
-    grpc_plugin = "//third_party/protoc_gen_grpc_java:protoc_gen_grpc_java_bin",
+    grpc_plugin = ":protoc_gen_grpc_java_bin",
     grpc_compile_deps = [
         "@io_grpc_grpc_core//jar",
         "@io_grpc_grpc_protobuf//jar",
@@ -80,4 +80,29 @@ proto_language(
         "@io_netty_netty_resolver//jar",
         "@io_netty_netty_transport//jar",
     ],
+)
+
+
+genrule(
+    name = "protoc_gen_grpc_java_bin",
+    srcs = select({
+        ":darwin": ["@protoc_gen_grpc_java_macosx//file"],
+        "//conditions:default": ["@protoc_gen_grpc_java_linux_x86_64//file"],
+    }),
+    outs = ["protoc_gen_grpc_java"],
+    cmd = " && ".join([
+        "IN=$$(pwd)/$(SRCS)",
+        "OUT=$$(pwd)/$@",
+        "TMP=$$(mktemp -d $${TMPDIR:-/tmp}/genrule.XXXXXXXXXX)",
+        "cd $$TMP",
+        "cp $$IN $$OUT",
+        "rm -rf $$TMP",
+    ]),
+    executable = True,
+)
+
+config_setting(
+    name = "darwin",
+    values = {"cpu": "darwin"},
+    visibility = ["//visibility:private"],
 )

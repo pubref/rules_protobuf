@@ -39,6 +39,6 @@ go_test(
         ":gateway",
         "//examples/helloworld/go/server:greeter",
         "//examples/helloworld/proto:go",
-        "@com_github_golang_protobuf//:jsonpb",
+        "@com_github_golang_protobuf//jsonpb:go_default_library",
     ] + GRPC_GATEWAY_DEPS,
 )

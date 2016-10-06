@@ -1,7 +1,3 @@
-# ****************************************************************
-# List of external dependencies
-# ****************************************************************
-
 DEPS = {
 
     # Grpc repo is required by multiple languages but we put it here.

@@ -16,5 +16,5 @@ cc_proto_library(
     protos = [
         "foo/bar/baz.proto",
     ],
-    verbose = 3,
+    verbose = 0,
 )

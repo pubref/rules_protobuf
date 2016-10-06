@@ -1,7 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_test")
-
 load("//go:rules.bzl", "go_proto_library")
 
 #
@@ -10,23 +9,23 @@ load("//go:rules.bzl", "go_proto_library")
 
 go_proto_library(
     name = "protolib",
-    protos = ["wkt.proto"],
-    imports = [
-        'external/com_github_google_protobuf/src',
-    ],
     importmap = {
-        'google/protobuf/descriptor.proto': 'github.com/golang/protobuf/protoc-gen-go/descriptor',
-        'google/protobuf/compiler/plugin.proto': 'github.com/golang/protobuf/protoc-gen-go/plugin',
+        "google/protobuf/descriptor.proto": "github.com/golang/protobuf/protoc-gen-go/descriptor",
+        "google/protobuf/compiler/plugin.proto": "github.com/golang/protobuf/protoc-gen-go/plugin",
     },
+    imports = [
+        "external/com_github_google_protobuf/src",
+    ],
+    protos = ["wkt.proto"],
     deps = [
-        "@com_github_golang_protobuf//:ptypes/any",
-        "@com_github_golang_protobuf//:ptypes/duration",
-        "@com_github_golang_protobuf//:ptypes/timestamp",
-        "@com_github_golang_protobuf//:ptypes/empty",
-        "@com_github_golang_protobuf//:ptypes/struct",
-        "@com_github_golang_protobuf//:ptypes/wrappers",
-        "@com_github_golang_protobuf//:protoc-gen-go/descriptor",
-        "@com_github_golang_protobuf//:protoc-gen-go/plugin",
+        "@com_github_golang_protobuf//protoc-gen-go/descriptor:go_default_library",
+        "@com_github_golang_protobuf//protoc-gen-go/plugin:go_default_library",
+        "@com_github_golang_protobuf//ptypes/any:go_default_library",
+        "@com_github_golang_protobuf//ptypes/duration:go_default_library",
+        "@com_github_golang_protobuf//ptypes/empty:go_default_library",
+        "@com_github_golang_protobuf//ptypes/struct:go_default_library",
+        "@com_github_golang_protobuf//ptypes/timestamp:go_default_library",
+        "@com_github_golang_protobuf//ptypes/wrappers:go_default_library",
     ],
 )
 
@@ -36,6 +35,6 @@ go_test(
     srcs = ["wkt_test.go"],
     deps = [
         "protolib",
-        "@com_github_golang_protobuf//:protoc-gen-go/descriptor",
+        "@com_github_golang_protobuf//protoc-gen-go/descriptor:go_default_library",
     ],
 )

@@ -5,7 +5,6 @@ load(
     "//go:rules.bzl",
     GO_GRPC_COMPILE_DEPS = "GRPC_COMPILE_DEPS",
 )
-#load("//gogo:rules.bzl", GOGO_GRPC_COMPILE_DEPS = "GRPC_COMPILE_DEPS")
 
 go_binary(
     name = "client",
@@ -13,6 +12,8 @@ go_binary(
     deps = ["//examples/helloworld/proto:go"] + GO_GRPC_COMPILE_DEPS,
 )
 
+#load("//gogo:rules.bzl", GOGO_GRPC_COMPILE_DEPS = "GRPC_COMPILE_DEPS")
+#
 # To enable this, uncomment and change the importpath to 'gogo' in
 # main.go.
 #

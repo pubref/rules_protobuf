@@ -25,13 +25,13 @@ def go_proto_repositories(
 
 
 PB_COMPILE_DEPS = [
-    "@com_github_golang_protobuf//:proto",
+    "@com_github_golang_protobuf//proto:go_default_library",
 ]
 
 GRPC_COMPILE_DEPS = PB_COMPILE_DEPS + [
     "@com_github_golang_glog//:go_default_library",
     "@org_golang_google_grpc//:go_default_library",
-    "@org_golang_x_net//:context",
+    "@org_golang_x_net//context:go_default_library",
 ]
 
 
@@ -41,6 +41,7 @@ def go_proto_compile(langs = [str(Label("//go"))], **kwargs):
 def go_proto_library(
     name,
     langs = [str(Label("//go"))],
+    prefix = Label("//:go_prefix", relative_to_caller_repository=True),
     protos = [],
     importmap = {},
     imports = [],
@@ -72,6 +73,7 @@ def go_proto_library(
   proto_compile_args += {
     "name": name + ".pb",
     "protos": protos,
+    "prefix": prefix,
     "deps": [dep + ".pb" for dep in proto_deps],
     "langs": langs,
     "importmap": importmap,

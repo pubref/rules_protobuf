@@ -55,8 +55,6 @@ def require(keys,
             excludes = [],
             verbose = 0):
 
-    verbose = 1
-
     #
     # Make a list of non-excluded required deps with merged data.
     #

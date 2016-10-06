@@ -1,14 +1,6 @@
-# ****************************************************************
-# External dependencies
-# ****************************************************************
-
 # MAINTAINERS
 #
-# 1. Please sort everything in this file.
-#
-# 2. Every external rule must have a SHA checksum or tag.
-#
-# 3. Use http:// URLs since we're relying on the checksum for security.
+# Every external rule must have a SHA checksum or tag.
 #
 # To update http_file(s) from maven servers, point your browser to
 # https://repo1.maven.org/maven2/com/google/protobuf/protoc, find the
@@ -18,6 +10,7 @@
 # $ curl -O -J -L https://repo1.maven.org/maven2/com/google/protobuf/protoc/3.0.0/protoc-3.0.0-linux-x86_64.exe
 # $ sha256sum protoc-3.0.0-linux-x86_64.exe #linux
 # $ shasum -a256 protoc-3.0.0-osx-x86_64.exe # macosx
+#
 
 DEPS = {
 
@@ -163,7 +156,7 @@ DEPS = {
     "io_grpc_grpc_protobuf_nano": {
         "rule": "maven_jar",
         "artifact": "io.grpc:grpc-protobuf-nano:jar:1.0.1",
-        "sha1": "c88ce3b66d21eadcdfecb8326ecd976b2aecbe9f",
+        "sha1": "a0881f36976030d2b5a573677e7dd4752cedf760",
     },
 
     # ###################

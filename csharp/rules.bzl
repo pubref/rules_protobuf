@@ -7,6 +7,7 @@ def csharp_proto_repositories(
     omit_cpp_repositories = False,
     lang_deps = DEPS,
     lang_requires = [
+      "protoc_gen_grpc_csharp",
       "nuget_google_protobuf",
       "nuget_grpc",
     ], **kwargs):

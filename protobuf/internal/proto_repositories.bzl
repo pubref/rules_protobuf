@@ -8,7 +8,6 @@ def proto_repositories(excludes = [],
                        protobuf_requires = [
                          "com_github_google_protobuf",
                          "protoc",
-                         #"protobuf_compiler", # cc_library
                        ],
                        overrides = {},
                        verbose = 0):

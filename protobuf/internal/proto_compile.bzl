@@ -36,12 +36,16 @@ def _get_relative_dirname(base, file):
   Returns:
     (list<string>): path
   """
-  path = file.short_path
+  path = file.dirname
   if not path.startswith(base):
     return []
-  path = path[len(base)+1:] # remove trailing slash
   parts = path.split("/")
-  return parts[:-1]
+  if parts[0] == "external":
+    # ignore off the first two items since we'll be cd'ing into
+    # this dir.
+    return parts[2:]
+  base_parts = base.split("/")
+  return parts[len(base_parts):]
 
 
 def _get_offset_path(root, path):
@@ -69,9 +73,6 @@ def _get_offset_path(root, path):
 
 def _get_import_mappings_for(files, prefix, label):
   """For a set of files that belong the the given context label, create a mapping to the given prefix."""
-  # Go-specific code crept in here.
-  # if run.lang.prefix and run.lang.prefix.go_prefix:
-  #     options += get_go_importmap_options(run, builder)
 
   mappings = {}
   for file in files:
@@ -90,31 +91,6 @@ def _get_import_mappings_for(files, prefix, label):
     mappings[src] = "/".join(dst)
 
   return mappings
-
-
-def _get_go_importmap_options(run, builder):
-  """Override behavior to add plugin options before building the --go_out option"""
-
-  lang = run.lang
-  go_prefix = lang.prefix.go_prefix
-  mappings = lang.import_map
-  mappings += _get_import_mappings_for(run.data.protos,go_prefix, run.data.label)
-
-  # Then add in the transitive set from dependent rules.
-  for unit in run.data.transitive_units:
-    # Map to this go_prefix if within same workspace, otherwise
-    # use theirs.
-    prefix = go_prefix
-    if unit.workspace_name != run.data.workspace_name:
-      prefix = unit.prefix
-    #print("protos %s, prefix %s, label: %s" % (unit.data.protos, prefix, unit.data.label))
-    mappings += _get_import_mappings_for(unit.data.protos, prefix, unit.data.label)
-
-  if run.data.verbose > 1:
-    print("go_import_map: %s" % mappings)
-
-  opts = ["M%s=%s" % (k, v) for k, v in mappings.items()]
-  return opts
 
 
 def _build_output_jar(run, builder):
@@ -193,14 +169,13 @@ def _build_output_libdir(run, builder):
   ctx = run.ctx
   execdir = run.data.execdir
   name = run.lang.name
-
   builder[name + "_outdir"] = _get_offset_path(execdir, run.data.descriptor_set.dirname)
   _build_output_files(run, builder)
 
 
 def _build_descriptor_set(data, builder):
   """Build a list of files we expect to be generated."""
-  builder["args"] += ["--descriptor_set_out=" + data.descriptor_set.path]
+  builder["args"] += ["--descriptor_set_out=" + _get_offset_path(data.execdir, data.descriptor_set.path)]
 
 
 def _build_plugin_invocation(name, plugin, execdir, builder):
@@ -251,19 +226,21 @@ def _get_mappings(files, label, prefix):
   mappings = {}
   for file in files:
     src = file.short_path
+    #print("mapping file short path: %s" % src)
     # File in an external repo looks like:
     # '../WORKSPACE/SHORT_PATH'.  We want just the SHORT_PATH.
     if src.startswith("../"):
       parts = src.split("/")
       src = "/".join(parts[2:])
-    dst = [prefix, label.package]
+    dst = [prefix]
+    if label.package:
+      dst.append(label.package)
     name_parts = label.name.split(".")
     # special case to elide last part if the name is
     # 'go_default_library.pb'
     if name_parts[0] != "go_default_library":
       dst.append(name_parts[0])
     mappings[src] = "/".join(dst)
-
   return mappings
 
 
@@ -274,8 +251,7 @@ def _build_base_namespace(run, builder):
 def _build_importmappings(run, builder):
   """Override behavior to add plugin options before building the --go_out option"""
   ctx = run.ctx
-  go_prefix = run.lang.prefix
-
+  go_prefix = run.data.prefix or run.lang.prefix
   opts = []
   # Add in the 'plugins=grpc' option to the protoc-gen-go plugin if
   # the user wants grpc.
@@ -287,18 +263,17 @@ def _build_importmappings(run, builder):
   mappings = run.lang.importmap + run.data.importmap
   mappings += _get_mappings(run.data.protos, run.data.label, go_prefix)
 
-  # Then add in the transitive set from dependent rules. TODO: just
-  # pass the import map transitively rather than recomputing it.
+  # Then add in the transitive set from dependent rules.
   for unit in run.data.transitive_units:
-    # Map to this go_prefix if within same workspace, otherwise use theirs.
-    prefix = go_prefix if unit.data.workspace_name == run.data.workspace_name else unit.data.prefix
-    mappings += _get_mappings(unit.data.protos, unit.data.label, prefix)
+    mappings += unit.transitive_mappings
 
   if run.data.verbose > 1:
     print("go_importmap: %s" % mappings)
 
   for k, v in mappings.items():
     opts += ["M%s=%s" % (k, v)]
+
+  builder["transitive_mappings"] = mappings
 
   builder[run.lang.name + "_pb_options"] += opts
 
@@ -336,10 +311,13 @@ def _get_outdir(ctx, lang, execdir):
     outdir = "."
   else:
     outdir = ctx.var["GENDIR"]
-  return _get_offset_path(execdir, outdir)
+  path = _get_offset_path(execdir, outdir)
+  if execdir != ".":
+    path += "/" + execdir
+  return path
 
 
-def _get_external_roots(ctx):
+def _get_external_root(ctx):
 
   # Compte set of "external workspace roots" that the proto
   # sourcefiles belong to.
@@ -352,16 +330,20 @@ def _get_external_roots(ctx):
   # This set size must be 0 or 1. (all source files must exist in this
   # workspace or the same external workspace).
   roots = set(external_roots)
-  if len(roots) > 1:
-    fail(
-"""
-You are attempting simultaneous compilation of protobuf source files that span multiple workspaces (%s).
-Decompose your library rules into smaller units having filesets that belong to only a single workspace at a time.
-Note that it is OK to *import* across multiple workspaces, but not compile them as file inputs to protoc.
-""" % roots
-    )
-
-  return list(roots)
+  n = len(roots)
+  if n:
+    if n > 1:
+      fail(
+        """
+        You are attempting simultaneous compilation of protobuf source files that span multiple workspaces (%s).
+        Decompose your library rules into smaller units having filesets that belong to only a single workspace at a time.
+        Note that it is OK to *import* across multiple workspaces, but not compile them as file inputs to protoc.
+        """ % roots
+      )
+    else:
+      return external_roots[0]
+  else:
+    return "."
 
 
 def _compile(ctx, unit):
@@ -369,7 +351,7 @@ def _compile(ctx, unit):
   execdir = unit.data.execdir
 
   protoc = _get_offset_path(execdir, unit.compiler.path)
-  imports = ["--proto_path=" + _get_offset_path(execdir, i) for i in unit.imports]
+  imports = ["--proto_path=" + i for i in unit.imports]
   srcs = [_get_offset_path(execdir, p.path) for p in unit.data.protos]
   protoc_cmd = [protoc] + list(unit.args) + imports + srcs
   manifest = [f.short_path for f in unit.outputs]
@@ -433,10 +415,10 @@ def _proto_compile_impl(ctx):
   if ctx.attr.verbose > 1:
     print("proto_compile %s:%s"  % (ctx.build_file_path, ctx.label.name))
 
-  # Get list of external roots.
-  external_roots = _get_external_roots(ctx)
-
-  execdir = "." # test this with/without
+  # Calculate list of external roots and return the base directory
+  # we'll use for the protoc invocation.  Usually this is '.', but if
+  # not, its 'external/WORKSPACE'
+  execdir = _get_external_root(ctx)
 
   # Propogate proto deps compilation units.
   transitive_units = []
@@ -444,11 +426,16 @@ def _proto_compile_impl(ctx):
     for unit in dep.proto_compile_result.transitive_units:
         transitive_units.append(unit)
 
+  if ctx.attr.prefix:
+    prefix = ctx.attr.prefix.go_prefix
+  else:
+    prefix = ""
+
   # Immutable global state for this compiler run.
   data = struct(
     label = ctx.label,
     workspace_name = ctx.workspace_name,
-    prefix = ":".join([ctx.label.package, ctx.label.name]),
+    prefix = prefix,
     execdir = execdir,
     protos = ctx.files.protos,
     descriptor_set = ctx.outputs.descriptor_set,
@@ -466,7 +453,7 @@ def _proto_compile_impl(ctx):
   # Mutable global state to be populated by the classes.
   builder = {
     "args": [], # list of string
-    "imports": ctx.attr.imports + [execdir] + external_roots,
+    "imports": ctx.attr.imports + ["."],
     "inputs": ctx.files.protos,
     "outputs": [],
   }
@@ -520,10 +507,12 @@ def _proto_compile_impl(ctx):
       _build_grpc_invocation(run, builder)
       _build_grpc_out(run, builder)
 
-  # Build final immutable for rule and transitive beyond
+
+  # Build final immutable compilation unit for rule and transitive beyond
   unit = struct(
     compiler = ctx.executable.protoc,
     data = data,
+    transitive_mappings = builder.get("transitive_mappings", {}),
     args = set(builder["args"]),
     imports = set(builder["imports"]),
     inputs = set(builder["inputs"]),
@@ -565,6 +554,9 @@ proto_compile = rule(
       default = Label("//external:protoc"),
       cfg = "host",
       executable = True,
+    ),
+    "prefix": attr.label(
+      providers = ["go_prefix"],
     ),
     "root": attr.string(),
     "imports": attr.string_list(),
