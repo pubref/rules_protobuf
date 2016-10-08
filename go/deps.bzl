@@ -26,7 +26,7 @@ DEPS = {
     "org_golang_google_grpc": {
         "rule": "new_go_repository",
         "importpath": "google.golang.org/grpc",
-        "tag": "v1.0.1-GA",
+        "tag": "v1.0.2",
     },
 
 }
