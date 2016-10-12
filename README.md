@@ -286,8 +286,11 @@ java_proto_library(
   name = 'fooprotos',
   protos = 'foo.proto`,
   imports = [
-    "external/com_github_google_protobuf/src/",
-  ],
+      "external/com_github_google_protobuf/src/",
+    ],
+    inputs = [
+      "@com_github_google_protobuf//:well_known_protos",
+    ],
 )
 ```
 
@@ -307,7 +310,15 @@ attribute to the calling `cc_proto_library` rule.  Otherwise, pass a
 label that includes the (pregenerated) protobuf files to the `deps`
 attribute, just as you would any typical `cc_library` rule.
 
-Hopefully that made sense.  It's a bit tricky.
+**Important note about sandboxing**: simply stating the path where
+  protoc should look for imports (via the `imports` attribute) is not
+  enough to work with the bazel sandbox.  Bazel is very particular
+  about needing to know *exactly* which inputs are required for a
+  rule, and *exactly* what output files it generates.  If an input is
+  not declared, it will not be exposed in the sandbox.  Therefore, we
+  have to provide both the import path *and* a label-generating rule
+  in the `inputs` attribute that names the files we want available in
+  the sandbox (given here by `:well_known_protos`).
 
 If you are having problems, put `verbose={1,2,3}` in your build rule
 and/or disable sandboxing with `--spawn_strategy=standalone`.
