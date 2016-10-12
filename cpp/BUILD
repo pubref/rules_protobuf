@@ -14,5 +14,6 @@ proto_language(
     grpc_plugin_name = "grpc_cpp",
     grpc_compile_deps = [
         '@com_github_grpc_grpc//:grpc++',
+        '@com_github_grpc_grpc//:grpc++_reflection',
     ],
 )

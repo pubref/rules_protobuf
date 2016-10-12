@@ -14,6 +14,7 @@ proto_language(
     grpc_file_extensions = [".pb.gw.go"],
     grpc_inputs = [
         "@com_github_grpc_ecosystem_grpc_gateway//third_party/googleapis/google/api:go_default_library_protos",
+        "@com_github_google_protobuf//:well_known_protos",
     ],
     grpc_imports = [
         "external/com_github_google_protobuf/src/",
@@ -33,6 +34,7 @@ proto_language(
     },
     pb_inputs = [
         "@com_github_grpc_ecosystem_grpc_gateway//third_party/googleapis/google/api:go_default_library_protos",
+        "@com_github_google_protobuf//:well_known_protos",
     ],
     pb_imports = [
         "external/com_github_google_protobuf/src/",
@@ -50,6 +52,7 @@ proto_language(
     },
     pb_inputs = [
         "@com_github_grpc_ecosystem_grpc_gateway//third_party/googleapis/google/api:go_default_library_protos",
+        "@com_github_google_protobuf//:well_known_protos",
     ],
     pb_imports = [
         "external/com_github_google_protobuf/src/",

@@ -9,7 +9,6 @@ def cpp_proto_repositories(
       "com_github_grpc_grpc",
       "com_github_madler_zlib",
       "zlib",
-      "com_github_nanopb_nanopb",
       "nanopb",
       "boringssl",
       "libssl",
@@ -27,6 +26,7 @@ PB_COMPILE_DEPS = [
 
 GRPC_COMPILE_DEPS = PB_COMPILE_DEPS + [
     "@com_github_grpc_grpc//:grpc++",
+    "@com_github_grpc_grpc//:grpc++_reflection",
 ]
 
 def cpp_proto_compile(langs = [str(Label("//cpp"))], **kwargs):
