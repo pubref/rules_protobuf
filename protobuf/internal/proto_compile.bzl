@@ -359,7 +359,7 @@ def _compile(ctx, unit):
   transitive_units = set()
   for u in unit.data.transitive_units:
     transitive_units = transitive_units | u.inputs
-  inputs = list(unit.inputs | transitive_units)
+  inputs = list(unit.inputs | transitive_units) + [unit.compiler]
   outputs = list(unit.outputs)
 
   cmds = [" ".join(protoc_cmd)]
