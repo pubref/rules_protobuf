@@ -356,7 +356,10 @@ def _compile(ctx, unit):
   protoc_cmd = [protoc] + list(unit.args) + imports + srcs
   manifest = [f.short_path for f in unit.outputs]
 
-  inputs = list(unit.inputs)
+  transitive_units = set()
+  for u in unit.data.transitive_units:
+    transitive_units = transitive_units | u.inputs
+  inputs = list(unit.inputs | transitive_units) + [unit.compiler]
   outputs = list(unit.outputs)
 
   cmds = [" ".join(protoc_cmd)]
@@ -454,7 +457,7 @@ def _proto_compile_impl(ctx):
   builder = {
     "args": [], # list of string
     "imports": ctx.attr.imports + ["."],
-    "inputs": ctx.files.protos,
+    "inputs": ctx.files.protos + ctx.files.inputs,
     "outputs": [],
   }
 

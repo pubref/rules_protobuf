@@ -34,7 +34,7 @@ closure_repositories()
 
 git_repository(
     name = "io_bazel_rules_dotnet",
-    commit = "9283e4596fbadd7fed237b5c462dfd687c15d301",
+    commit = "ebc7c1cb61d45bd57042c60b6bfabdfff4979466",
     remote = "https://github.com/bazelbuild/rules_dotnet.git",
 )
 

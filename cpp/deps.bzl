@@ -5,7 +5,7 @@ DEPS = {
         "rule": "git_repository",
         "remote": "https://github.com/grpc/grpc.git",
         "init_submodules": True,
-        "commit": "673fa6c88b8abd542ae50c4480de92880a1e4777",
+        "commit": "83f8bc5b807b717c2eb018fcb0874444843e25fb",
     },
 
     # Hooray! The boringssl team provides a "master-with-bazel" branch
@@ -44,17 +44,10 @@ DEPS = {
         "actual": "@com_github_google_protobuf//:protobuf",
     },
 
-    # grpc++ requires nanobp (and now has a BUILD file!)
-    "com_github_nanopb_nanopb": {
-        "rule": "git_repository",
-        "remote": "https://github.com/nanopb/nanopb.git",
-        "commit": "91bb64a47b36b112c9b22391ef76fab29cf2cffc", # Sep 1 2016
-    },
-
     # grpc++ expects //external:nanopb
     "nanopb": {
         "rule": "bind",
-        "actual": "@com_github_nanopb_nanopb//:nanopb",
+        "actual": "@com_github_grpc_grpc//third_party/nanopb",
     },
 
     # Bind the executable cc_binary grpc plugin into
