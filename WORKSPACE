@@ -48,7 +48,7 @@ csharp_repositories(use_local_mono = False)
 
 git_repository(
     name = "org_pubref_rules_node",
-    commit = "d93a80ac4920c52da8adccbca66a3118a27018fd",  # Oct 2, 2016
+    commit = "85b720f3d4299b0a1b9c7771c023352e9182045f",  # Oct 10, 2016
     remote = "https://github.com/pubref/rules_node.git",
 )
 
@@ -154,6 +154,6 @@ go_proto_library(
 new_git_repository(
     name = "com_github_googleapis_googleapis",
     build_file_content = GOOGLEAPIS_BUILD_FILE,
-    commit = "60c2f9c8d012db35a65539e30fb6364c36f2e96b",
+    commit = "13ac2436c5e3d568bd0e938f6ed58b77a48aba15",
     remote = "https://github.com/googleapis/googleapis.git",
 )

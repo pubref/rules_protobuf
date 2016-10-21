@@ -13,10 +13,12 @@ def _needs_install(name, dep, hkeys=["sha256", "sha1", "tag"], verbose=0):
         actual = existing_rule.get(hkey)
         if expected:
             if expected != actual:
-                fail("Workspace %s exists but %s=%s did not match " +
-                     "the required value (%s).  Either remove it from " +
-                     "your WORKSPACE or exclude it from loading."
-                     % (name, hkey, actual, expected))
+                msg = """
+An existing {0} rule '{1}' was already loaded with a {2} value of '{3}'.  Refusing to overwrite this with the requested value ('{4}').
+Either remove the pre-existing rule from your WORKSPACE or exclude it from loading by rules_protobuf.
+""".format(existing_rule["kind"], name, hkey, actual, expected)
+
+                fail(msg)
             else:
                 if verbose > 1: print("Skip reload %s: %s = %s" % (name, hkey, actual))
                 return False
