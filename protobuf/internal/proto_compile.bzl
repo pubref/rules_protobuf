@@ -253,10 +253,6 @@ def _build_importmappings(run, builder):
   ctx = run.ctx
   go_prefix = run.data.prefix or run.lang.prefix
   opts = []
-  # Add in the 'plugins=grpc' option to the protoc-gen-go plugin if
-  # the user wants grpc.
-  if run.data.with_grpc:
-    opts.append("plugins=grpc")
 
   # Build the list of import mappings.  Start with any configured on
   # the rule by attributes.
@@ -275,8 +271,16 @@ def _build_importmappings(run, builder):
 
   builder["transitive_mappings"] = mappings
 
-  builder[run.lang.name + "_pb_options"] += opts
-
+  # protoc-gen-go needs the importmapping in the protobuf options
+  # whereas protoc-gen-grpc-gateway requires them in the grpc_options.
+  if run.lang.pb_plugin_implements_grpc:
+    # Add in the 'plugins=grpc' option to the protoc-gen-go plugin if
+    # the user wants grpc.
+    if run.data.with_grpc:
+      opts.append("plugins=grpc")
+    builder[run.lang.name + "_pb_options"] += opts
+  else:
+    builder[run.lang.name + "_grpc_options"] += opts
 
 def _build_plugin_out(name, outdir, options, builder):
   """Build the --{lang}_out argument for a given plugin."""
@@ -500,12 +504,11 @@ def _proto_compile_impl(ctx):
       _build_output_libdir(run, builder)
     else:
       _build_output_files(run, builder)
-    if run.lang.prefix:
+    if run.lang.prefix: # golang-specific
       _build_importmappings(run, builder)
     if run.lang.supports_pb:
       _build_protobuf_invocation(run, builder)
       _build_protobuf_out(run, builder)
-
     if not run.lang.pb_plugin_implements_grpc and (data.with_grpc and run.lang.supports_grpc):
       _build_grpc_invocation(run, builder)
       _build_grpc_out(run, builder)
