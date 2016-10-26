@@ -33,7 +33,8 @@ from __future__ import print_function
 
 import grpc
 
-import helloworld_pb2
+#import helloworld_pb2
+from examples.helloworld.proto import helloworld_pb2
 
 def run():
   channel = grpc.insecure_channel('localhost:50051')
