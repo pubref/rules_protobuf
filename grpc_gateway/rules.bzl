@@ -105,6 +105,7 @@ def grpc_gateway_proto_library(
     "name": name + ".gw",
     "protos": protos,
     "deps": [dep + ".pb" for dep in proto_deps],
+    "prefix": prefix,
     "langs": langs,
     "imports": imports,
     "importmap": importmap,
