@@ -1,16 +1,31 @@
-# https://docs.travis-ci.com/user/trusty-ci-environment/
 dist: trusty
 sudo: required
+osx_image: xcode8
+language: java
+
 os:
   - linux
- # - osx
+  - osx
 
 env:
-  - V=HEAD URL_BASE=http://ci.bazel.io/job/Bazel/JAVA_VERSION=1.8,PLATFORM_NAME=linux-x86_64/lastSuccessfulBuild/artifact/output/ci/ URL="$URL_BASE`wget -qO- $URL_BASE | grep -oP 'bazel-.*?-installer.sh' | uniq`" FLAGS='--worker_verbose --strategy=Javac=worker --strategy=Closure=worker'
-  - V=0.3.2rc3 URL=https://storage.googleapis.com/bazel/0.3.2/rc3/bazel-0.3.2rc3-installer-linux-x86_64.sh FLAGS=''
-  - V=0.3.1 URL=https://github.com/bazelbuild/bazel/releases/download/0.3.1/bazel-0.3.1-installer-linux-x86_64.sh FLAGS=''
+  - V=HEAD
+  - V=0.4.0
+  - V=0.3.2
+  - V=0.3.1
 
 before_install:
+  - OS=linux
+  - ARCH=x86_64
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then OS=darwin; fi
+  - GH_BASE="https://github.com/bazelbuild/bazel/releases/download/$V"
+  - GH_ARTIFACT="bazel-$V-installer-$OS-$ARCH.sh"
+  - CI_BASE="http://ci.bazel.io/job/Bazel/JAVA_VERSION=1.8,PLATFORM_NAME=$OS-$ARCH/lastSuccessfulBuild/artifact/output/ci"
+  - CI_ARTIFACT="bazel--installer.sh"
+  - URL="$GH_BASE/$GH_ARTIFACT"
+  - if [[ "$V" == "HEAD" && "$OS" == "linux" ]]; then CI_ARTIFACT="`wget -qO- $CI_BASE | grep -oP 'bazel-.*?-installer.sh' | uniq`"; fi
+  - if [[ "$V" == "HEAD" && "$OS" == "osx" ]];   then CI_ARTIFACT="`wget -qO- $CI_BASE | pcregrep -o 'bazel-.*?-installer.sh' | uniq`"; fi
+  - if [[ "$V" == "HEAD" ]]; then URL="$CI_BASE/$CI_ARTIFACT"; fi
+  - echo $URL
   - wget -O install.sh $URL
   - chmod +x install.sh
   - ./install.sh --user
@@ -25,12 +40,14 @@ script:
       --host_jvm_args=-Xms500m \
       test \
       --verbose_failures \
-      --sandbox_debug \
       --test_output=errors \
       --test_strategy=standalone \
       --spawn_strategy=standalone \
       --genrule_strategy=standalone \
-      --local_resources=400,1,1.0 \
+      --local_resources=400,2,1.0 \
+      --worker_verbose \
+      --strategy=Javac=worker \
+      --strategy=Closure=worker \
       //examples/helloworld/closure/... \
       //examples/helloworld/cpp/... \
       //examples/helloworld/go/... \
