@@ -14,3 +14,12 @@ py_binary(
         "//examples/helloworld/proto:py",
     ],
 )
+
+py_binary(
+    name = "greeter_server",
+    srcs = [
+        "greeter_server.py",
+        "//examples/proto:py",
+        "//examples/helloworld/proto:py",
+    ],
+)

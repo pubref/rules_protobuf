@@ -27,21 +27,58 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""The Python implementation of the GRPC helloworld.Greeter client."""
+"""The Python implementation of the GRPC helloworld.Greeter server."""
 
 from __future__ import print_function
 
 import grpc
+import time
 
-import helloworld_pb2
+from concurrent import futures
+from examples.helloworld.proto import helloworld_pb2
+
+_ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
 
-def run():
-  channel = grpc.insecure_channel('localhost:50051')
-  stub = helloworld_pb2.GreeterStub(channel)
-  response = stub.SayHello(helloworld_pb2.HelloRequest(name='you'))
-  print("Greeter client received: " + response.message)
+class _GreeterServer(object):
 
+    def __init__(self, greeter_service, server_port):
+        self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+        helloworld_pb2.add_GreeterServicer_to_server(greeter_service, self.server)
+        self.server.add_insecure_port('[::]:{server_port}'.format(server_port=server_port))
+
+    def start(self):
+        self.server.start()
+
+    def stop(self):
+        self.server.stop(0)
+
+    def await_termination(self):
+        """
+        server.start() doesn't block so we explicitly block here unless someone keyboard-exits us.
+        :return:
+        """
+        try:
+            while True:
+                time.sleep(_ONE_DAY_IN_SECONDS)
+        except KeyboardInterrupt:
+            self.server.stop(0)
+        pass
+
+
+class _GreeterService(helloworld_pb2.GreeterServicer):
+
+    def SayHello(self, hello_request, context):
+        print("Greeter server received: " + hello_request.name)
+        hello_reply = helloworld_pb2.HelloReply()
+        hello_reply.message = 'Hello {name}'.format(name=hello_request.name)
+        return hello_reply
+
+
+def main():
+    greeter_server = _GreeterServer(_GreeterService(), 50051)
+    greeter_server.start()
+    greeter_server.await_termination()
 
 if __name__ == '__main__':
-  run()
+    main()
