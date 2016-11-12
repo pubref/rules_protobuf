@@ -5,7 +5,8 @@ DEPS = {
         "rule": "git_repository",
         "remote": "https://github.com/grpc/grpc.git",
         "init_submodules": True,
-        "commit": "83f8bc5b807b717c2eb018fcb0874444843e25fb",
+        "commit": "3808b6efe66b87269d43847bc113e94e2d3d28fb",
+        #"tag": "v1.0.1",
     },
 
     # Hooray! The boringssl team provides a "master-with-bazel" branch
@@ -14,7 +15,7 @@ DEPS = {
     "boringssl": {
         "rule": "git_repository",
         "remote":  "https://boringssl.googlesource.com/boringssl",
-        "commit": "36b3ab3e5d3a4892444a698f7989f2150824d804", # Aug 3 2016
+        "commit": "14443198abcfc48f0420011a636b220e58e18610", # Nov 11 2016
     },
 
     # libssl is required for c++ grpc where it is expected in

@@ -8,9 +8,9 @@ with +/- gRPC support on (osx, linux) :sparkles:.
 [grpc_image]: https://github.com/pubref/rules_protobuf/blob/master/images/gRPC.png
 
 <table border="0"><tr>
-<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/bazel.png" width="280"/></td>
-<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/wtfcat.png" width="280"/></td>
-<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/gRPC.png" width="280"/></td>
+<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/bazel.png" width="190"/></td>
+<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/wtfcat.png" width="190"/></td>
+<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/gRPC.png" width="190"/></td>
 </tr><tr>
 <td>Bazel</td>
 <td>rules_protobuf</td>
@@ -41,12 +41,12 @@ of this project are to:
 
 | Language                     | Compile <sup>1</sup>  | Build <sup>2</sup> | gRPC <sup>3</sup> |
 | ---------------------------: | -----------: | --------: | -------- |
-| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) | [v1.0.0<sup>673f</sup>](https://github.com/grpc/grpc/commit/673fa6c88b8abd542ae50c4480de92880a1e4777) |
+| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) | [v1.0.1](https://github.com/grpc/grpc/releases/tag/v1.0.1) |
 | [C#](csharp)                 | [csharp_proto_compile](csharp#csharp_proto_compile) | [csharp_proto_library](csharp#csharp_proto_library) | [1.0.0](https://www.nuget.org/packages/Grpc/) |
 | [Closure](closure)           | [closure_proto_compile](js#closure_proto_compile) | [closure_proto_library](js#closure_proto_library)          |  |
-| [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.0.0](https://github.com/grpc/grpc-go/releases/tag/v1.0.0) |
-| [Go (gogo)](gogo)            | [gogo_proto_compile](gogo#gogo_proto_compile) | [gogo_proto_library](gogo#gogo_proto_library) | [v1.0.0](https://github.com/grpc/grpc-go/releases/tag/v1.0.0) |
-| [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | [v1.0.0](https://github.com/grpc/grpc-go/releases/tag/v1.0.0) |
+| [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.0.4](https://github.com/grpc/grpc-go/releases/tag/v1.0.4) |
+| [Go (gogo)](gogo)            | [gogo_proto_compile](gogo#gogo_proto_compile) | [gogo_proto_library](gogo#gogo_proto_library) | [8d70fb](https://github.com/grpc/grpc-go/commit/8d70fb3182befc465c4a1eac8ad4d38ff49778e2) |
+| [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | [v1.0.4](https://github.com/grpc/grpc-go/releases/tag/v1.0.4) |
 | [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [v1.0.1](https://github.com/grpc/grpc-java/releases/tag/v1.0.1) |
 | [Node](node)                 | [node_proto_compile](js#node_proto_compile) | [node_proto_library](js#node_proto_library)          | [1.0.0](https://www.npmjs.com/package/grpc) |
 | [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>4</sup> | [v1.0.0<sup>673f</sup>](https://github.com/grpc/grpc/commit/673fa6c88b8abd542ae50c4480de92880a1e4777) |
@@ -90,7 +90,7 @@ language-specific `*_proto_repositories` rule(s):
 git_repository(
   name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
-  tag = "v0.7.0",
+  tag = "v0.7.1",
 )
 
 load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_repositories")

@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.pubref.rules_protobuf.examples.helloworld.server.HelloWorldServer;
 
 /**
- * A simple test that primarily checks that the client can compile.
+ * A simple integration test that runs the server at startup.
  */
 public class HelloWorldClientTest {
 
