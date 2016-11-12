@@ -22,8 +22,7 @@ before_install:
   - CI_BASE="http://ci.bazel.io/job/Bazel/JAVA_VERSION=1.8,PLATFORM_NAME=$OS-$ARCH/lastSuccessfulBuild/artifact/output/ci"
   - CI_ARTIFACT="bazel--installer.sh"
   - URL="$GH_BASE/$GH_ARTIFACT"
-  - if [[ "$V" == "HEAD" && "$OS" == "linux" ]]; then CI_ARTIFACT="`wget -qO- $CI_BASE | grep -oP 'bazel-.*?-installer.sh' | uniq`"; fi
-  - if [[ "$V" == "HEAD" && "$OS" == "osx" ]];   then CI_ARTIFACT="`wget -qO- $CI_BASE | pcregrep -o 'bazel-.*?-installer.sh' | uniq`"; fi
+  - if [[ "$V" == "HEAD" ]]; then CI_ARTIFACT="`wget -qO- $CI_BASE | grep -o 'bazel-[-_a-zA-Z0-9\.]*-installer.sh' | uniq`"; fi
   - if [[ "$V" == "HEAD" ]]; then URL="$CI_BASE/$CI_ARTIFACT"; fi
   - echo $URL
   - wget -O install.sh $URL
