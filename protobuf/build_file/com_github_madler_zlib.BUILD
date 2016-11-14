@@ -38,6 +38,9 @@ cc_library(
         "zlib.h",
         "zutil.h",
     ],
+    includes = [
+        ".",
+    ],
     copts = [
         "-Wno-unused-variable",
         "-Wno-implicit-function-declaration",
