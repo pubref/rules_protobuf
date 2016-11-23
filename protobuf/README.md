@@ -107,7 +107,7 @@ proto_compile(
 | `name` | `string` | The name of the rule (required) | `""` |
 | `langs` | `label_list` having provider `proto_language` | Required list of labels that refer to `proto_language` rules.  | `[]` |
 | `protos` | `label_list` of file type `.proto` | Required list of protobuf source files. Must not be empty.  | `[]` |
-| `proto_deps` | `label_list` having provider `proto_compile_result` | Optional list of `*_proto_library` that the calling rule is dependent upon. | `[]` |
+| `deps` | `label_list` having provider `proto_compile_result` | Optional list of `*_proto_library` that the calling rule is dependent upon. | `[]` |
 | `imports` | `string_list` | Optional paths to be passed as `-I` arguments to the protoc tool.  | `[]` |
 | `pb_options` | `string_list` | Optional options to be to the pb plugin.  | `[]` |
 | `grpc_options` | `string_list` | Optional options to be to the grpc plugin.  | `[]` |
