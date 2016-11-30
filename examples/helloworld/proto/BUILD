@@ -63,7 +63,7 @@ android_proto_library(
         "//examples/proto:android",
     ],
     protos = [":protos"],
-    verbose = 1,
+    verbose = 0,
     with_grpc = True,
 )
 
