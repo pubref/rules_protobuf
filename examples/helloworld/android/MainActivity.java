@@ -78,6 +78,10 @@ public class MainActivity extends Activity  {
     mResultText = (TextView) findViewById(R.id.grpc_response_text);
     mResultText.setMovementMethod(new ScrollingMovementMethod());
 
+    mHostEdit.setText("10.9.11.9");
+    mPortEdit.setText("50051");
+    mMessageEdit.setText("Google Developer Group Boulder!");
+
     Log.d(TAG, "Created: " + R.layout.activity_main);
   }
 
