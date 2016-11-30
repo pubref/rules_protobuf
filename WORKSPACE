@@ -1,5 +1,22 @@
 workspace(name = "org_pubref_rules_protobuf")
 
+
+android_sdk_repository(
+    name = "androidsdk",
+    # Replace with path to Android SDK on your system
+    path = "/Users/pcj/Library/Android/sdk",
+    # Replace with the Android SDK API level
+    api_level = 25,
+    # Replace with the version in sdk/build-tools/
+    build_tools_version="25.0.0"
+)
+
+# android_ndk_repository(
+#     name = "androidndk",
+#     path = "/Users/pcj/Library/Android/ndk",
+#     api_level = 21,
+# )
+
 # ================================================================
 # Go support requires rules_go
 # ================================================================
@@ -105,6 +122,10 @@ py_proto_repositories()
 load("//ruby:rules.bzl", "ruby_proto_repositories")
 
 ruby_proto_repositories()
+
+load("//android:rules.bzl", "android_proto_repositories")
+
+android_proto_repositories()
 
 # ================================================================
 # This is for testing

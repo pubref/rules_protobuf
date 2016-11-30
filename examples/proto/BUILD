@@ -1,5 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
+load("//android:rules.bzl", "android_proto_library")
 load("//closure:rules.bzl", "closure_proto_library")
 load("//cpp:rules.bzl", "cc_proto_library")
 load("//csharp:rules.bzl", "csharp_proto_compile", "csharp_proto_library")
@@ -38,6 +39,11 @@ go_proto_library(
 
 java_proto_library(
     name = "java",
+    protos = [":protos"],
+)
+
+java_proto_library(
+    name = "android",
     protos = [":protos"],
 )
 

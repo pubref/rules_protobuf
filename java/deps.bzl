@@ -176,7 +176,7 @@ DEPS = {
     },
 
     # ######################
-    # Auth?  Dependencies #
+    # Network Dependencies #
     # ######################
 
     "io_grpc_grpc_okhttp": {
@@ -211,6 +211,17 @@ DEPS = {
         "rule": "http_file",
         "url": "http://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.0.1/protoc-gen-grpc-java-1.0.1-osx-x86_64.exe",
         "sha256": "cb4762ee4bde80fee5a35409474d6f177a2005e76d41590066e09be180af7781",
+    },
+
+
+    # ###########################
+    # Lite/Android Dependencies #
+    # ###########################
+
+    "javax_annotation_jsr250_api": {
+        "rule": "maven_jar",
+        "artifact": "javax.annotation:jsr250-api:jar:1.0",
+        "sha1": "5025422767732a1ab45d93abfea846513d742dcf",
     },
 
 }
