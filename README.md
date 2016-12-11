@@ -44,7 +44,7 @@ of this project are to:
 | [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) | [v1.0.1](https://github.com/grpc/grpc/releases/tag/v1.0.1) |
 | [C#](csharp)                 | [csharp_proto_compile](csharp#csharp_proto_compile) | [csharp_proto_library](csharp#csharp_proto_library) | [1.0.0](https://www.nuget.org/packages/Grpc/) |
 | [Closure](closure)           | [closure_proto_compile](js#closure_proto_compile) | [closure_proto_library](js#closure_proto_library)          |  |
-| [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.0.4](https://github.com/grpc/grpc-go/releases/tag/v1.0.4) |
+| [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.0.5](https://github.com/grpc/grpc-go/releases/tag/v1.0.5) |
 | [Go (gogo)](gogo)            | [gogo_proto_compile](gogo#gogo_proto_compile) | [gogo_proto_library](gogo#gogo_proto_library) | [8d70fb](https://github.com/grpc/grpc-go/commit/8d70fb3182befc465c4a1eac8ad4d38ff49778e2) |
 | [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | [v1.0.4](https://github.com/grpc/grpc-go/releases/tag/v1.0.4) |
 | [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [v1.0.1](https://github.com/grpc/grpc-java/releases/tag/v1.0.1) |
@@ -91,6 +91,7 @@ git_repository(
   name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
   tag = "v0.7.1",
+  #commit = "..." # alternatively, latest commit on master
 )
 
 load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_repositories")

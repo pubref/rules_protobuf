@@ -19,14 +19,13 @@ DEPS = {
     "com_github_golang_protobuf": {
         "rule": "new_go_repository",
         "importpath": "github.com/golang/protobuf",
-        "commit": "c3cefd437628a0b7d31b34fe44b3a7a540e98527", # Jul 27, 2016
-        #"build_file": str(Label("//protobuf:build_file/com_github_golang_protobuf.BUILD")),
+        "commit": "8ee79997227bf9b34611aee7946ae64735e6fd93", # ~ Nov 16, 2016
     },
 
     "org_golang_google_grpc": {
         "rule": "new_go_repository",
         "importpath": "google.golang.org/grpc",
-        "tag": "v1.0.2",
+        "tag": "v1.0.5",
     },
 
 }
