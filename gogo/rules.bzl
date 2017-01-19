@@ -77,6 +77,7 @@ def gogo_proto_library(
     "grpc_options": grpc_options,
     "output_to_workspace": output_to_workspace,
     "verbose": verbose,
+    "with_grpc": with_grpc,
   }
 
   if protoc:
