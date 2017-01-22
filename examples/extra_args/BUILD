@@ -5,7 +5,6 @@ package(default_visibility = ["//visibility:public"])
 load("@org_pubref_rules_protobuf//protobuf:rules.bzl", "proto_compile")
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 
-
 filegroup(
     name = "protos",
     srcs = ["person.proto"],
@@ -19,6 +18,10 @@ proto_compile(
         "--include_source_info",
     ],
     verbose = 0,
+
+    # For well-known protos, if needed
+    imports = ["external/com_github_google_protobuf/src"],
+    inputs = ["@com_github_google_protobuf//:well_known_protos"],
 )
 
 # pkg_tar rule is used in this example to provide a sink for the
