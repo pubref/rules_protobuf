@@ -93,7 +93,7 @@ This rule includes all common `_library` attributes in addition to:
 | `stderrthreshold` | `boolean` | Emit logging to stderr rather than a file. | `True` |
 | `stderrthreshold` | `int` | See grpc_gateway docs. | `0` |
 | `log_backtrace_at` | `int` | See grpc_gateway docs. | `0` |
-| `request_context` | `boolean` | See grpc_gateway docs. | `True` |
+| `request_context` | `boolean` | See grpc_gateway docs. | `False` |
 
 ## grpc_gateway_binary
 

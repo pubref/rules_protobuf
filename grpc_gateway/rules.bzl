@@ -55,7 +55,7 @@ def grpc_gateway_proto_library(
     log_dir = None,
     log_level = None,
     import_prefix = None,
-    request_context = True,
+    request_context = False,
 
     **kwargs):
 
