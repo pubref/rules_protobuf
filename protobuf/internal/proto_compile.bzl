@@ -491,8 +491,6 @@ def _proto_compile_impl(ctx):
     builder[lang.name + "_pb_options"] = lang.pb_options + data.pb_options
     builder[lang.name + "_grpc_options"] = lang.grpc_options + data.grpc_options
 
-    #print("grpc_inputs %s" % ctx.attr.grpc_inputs)
-
   _build_descriptor_set(data, builder)
 
   for run in runs:
