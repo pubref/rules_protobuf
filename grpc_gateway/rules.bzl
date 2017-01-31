@@ -55,6 +55,7 @@ def grpc_gateway_proto_library(
     log_dir = None,
     log_level = None,
     import_prefix = None,
+    request_context = True,
 
     **kwargs):
 
@@ -100,6 +101,8 @@ def grpc_gateway_proto_library(
     pbgw_opts += ["v=%s" % log_level]
   if import_prefix:
     pbgw_opts += ["import_prefix=%s" % import_prefix]
+  if request_context:
+    pbgw_opts += ["request_context=true"]
 
   pbgw_args += {
     "name": name + ".gw",
@@ -110,8 +113,8 @@ def grpc_gateway_proto_library(
     "imports": imports,
     "importmap": importmap,
     "inputs": inputs,
-    "pb_options": pb_options + pbgw_opts,
-    "grpc_options": grpc_options,
+    "pb_options": pb_options,
+    "grpc_options": grpc_options + pbgw_opts,
     "output_to_workspace": output_to_workspace,
     "verbose": verbose,
   }

@@ -25,6 +25,7 @@ grpc_gateway_binary(
     srcs = ["greeter.go"],
     proto_label = "gateway",
     protos = ["helloworld.proto"],
+    #request_context = False, # if you require go < 1.7
 )
 
 go_test(
