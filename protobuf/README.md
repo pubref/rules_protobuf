@@ -115,6 +115,7 @@ proto_compile(
 | `importmap` | `string_dict` | (golang specific) Optional mappings for the protoc-gen-go plugin.  | `{}` |
 | `root` | `string` | An optional path that shifts the directory scope of the computed execution root  | `""` |
 | `protoc` | executable `label` | Optional override to the default protoc binary tool. | `//external:protoc` |
+| `args` | `string_list` | Optional extra arguments for the protoc command, such as `--include_source_info`. | `[]` |
 | `output_to_workspace` | `boolean` | Optional flag.  Under normal operation, generated code is placed in the bazel sandbox and does not need to be checked in into version control.  However, your requirements may be such that is necessary to check these generated files in.  Setting this flag to `True` will emit generated `*.pb.*` files into in your workspace alongside the `*.proto` source files.  Please make sure you're sure you want to do this as it has the potential for unwanted overwrite of source files.  | `False` |
 
 ---

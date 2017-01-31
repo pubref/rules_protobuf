@@ -519,7 +519,7 @@ def _proto_compile_impl(ctx):
     compiler = ctx.executable.protoc,
     data = data,
     transitive_mappings = builder.get("transitive_mappings", {}),
-    args = set(builder["args"]),
+    args = set(builder["args"] + ctx.attr.args),
     imports = set(builder["imports"]),
     inputs = set(builder["inputs"]),
     outputs = set(builder["outputs"] + [ctx.outputs.descriptor_set]),
@@ -545,10 +545,11 @@ def _proto_compile_impl(ctx):
 proto_compile = rule(
   implementation = _proto_compile_impl,
   attrs = {
+    "args": attr.string_list(),
     "langs": attr.label_list(
       providers = ["proto_language"],
       allow_files = False,
-      mandatory = True,
+      mandatory = False,
     ),
     "protos": attr.label_list(
       allow_files = FileType([".proto"]),
