@@ -51,7 +51,7 @@ DEPS = {
     "com_google_protobuf_protobuf_java_util": {
         "rule": "maven_jar",
         "artifact": "com.google.protobuf:protobuf-java-util:jar:3.1.0",
-        "sha1": "5c39485775c197fc1938e594dc358bfec1c188a0",
+        "sha1": "5085a47f398f229ef2f07fb496099461e8f4c56c",
     },
 
     "io_grpc_grpc_protobuf_lite": {

@@ -95,6 +95,7 @@ def java_proto_library(
     "grpc_options": grpc_options,
     "output_to_workspace": output_to_workspace,
     "verbose": verbose,
+    "with_grpc": with_grpc,
   }
 
   if protoc:
@@ -118,9 +119,14 @@ def java_proto_library(
     jars = [name + "_compile_deps"],
   )
 
+  java_exports = []
+  if with_grpc:
+    java_exports.append(str(Label("//java:grpc_compiletime_deps")))
+
   native.java_library(
     name = name,
     srcs = srcs + [name + ".pb"],
+    exports = java_exports,
     deps = list(set(deps + proto_deps + [name + "_compile_imports"])),
     **kwargs)
 

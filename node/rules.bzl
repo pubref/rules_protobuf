@@ -74,8 +74,8 @@ def node_proto_library(
     "inputs": inputs,
     "pb_options": pb_options + special_pb_options,
     "output_to_workspace": output_to_workspace,
-    "with_grpc": with_grpc,
     "verbose": verbose,
+    "with_grpc": with_grpc,
   }
 
   if protoc:

@@ -28,7 +28,7 @@ java_library(
     name = "server",
     srcs = ["HelloWorldServer.java"],
     deps = [
+        # This rule automatically exports //java:grpc_compiletime_deps.
         "//examples/helloworld/proto:java",
-        "//java:grpc_compiletime_deps",
     ],
 )
