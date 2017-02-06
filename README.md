@@ -45,7 +45,7 @@ of this project are to:
 | [C#](csharp)                 | [csharp_proto_compile](csharp#csharp_proto_compile) | [csharp_proto_library](csharp#csharp_proto_library) | [1.0.0](https://www.nuget.org/packages/Grpc/) |
 | [Closure](closure)           | [closure_proto_compile](js#closure_proto_compile) | [closure_proto_library](js#closure_proto_library)          |  |
 | [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.0.5](https://github.com/grpc/grpc-go/releases/tag/v1.0.5) |
-| [Go (gogo)](gogo)            | [gogo_proto_compile](gogo#gogo_proto_compile) | [gogo_proto_library](gogo#gogo_proto_library) | [fb8a35](https://github.com/grpc/grpc-go/commit/fb8a359905af6e2b6517cccda0ba25915322ee88) |
+| [Go (gogo)](gogo)            | [gogo_proto_compile](gogo#gogo_proto_compile) | [gogo_proto_library](gogo#gogo_proto_library) | [fb8a35](https://github.com/gogo/protobuf/commit/fb8a359905af6e2b6517cccda0ba25915322ee88) |
 | [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | [v1.0.4](https://github.com/grpc/grpc-go/releases/tag/v1.0.4) |
 | [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [v1.0.1](https://github.com/grpc/grpc-java/releases/tag/v1.0.1) |
 | [Node](node)                 | [node_proto_compile](js#node_proto_compile) | [node_proto_library](js#node_proto_library)          | [1.0.0](https://www.npmjs.com/package/grpc) |
