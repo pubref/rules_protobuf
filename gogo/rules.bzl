@@ -32,6 +32,96 @@ GRPC_COMPILE_DEPS = PB_COMPILE_DEPS + [
 def gogo_proto_compile(langs = [str(Label("//gogo"))], **kwargs):
   proto_compile(langs = langs, **kwargs)
 
+def gogofast_proto_compile(langs = [str(Label("//gogofast"))], **kwargs):
+  proto_compile(langs = langs, **kwargs)
+
+def gogofaster_proto_compile(langs = [str(Label("//gogofaster"))], **kwargs):
+  proto_compile(langs = langs, **kwargs)
+
+def gogoslick_proto_compile(langs = [str(Label("//gogoslick"))], **kwargs):
+  proto_compile(langs = langs, **kwargs)
+
+def gogofast_proto_library(
+    name,
+    langs = [str(Label("//gogo:gogofast"))],
+    prefix = Label("//:go_prefix", relative_to_caller_repository=True),
+    protos = [],
+    importmap = {},
+    imports = [],
+    inputs = [],
+    proto_deps = [],
+    output_to_workspace = False,
+    protoc = None,
+
+    pb_plugin = None,
+    pb_options = [],
+
+    grpc_plugin = None,
+    grpc_options = [],
+
+    proto_compile_args = {},
+    with_grpc = True,
+    srcs = [],
+    deps = [],
+    go_proto_deps = [],
+    verbose = 0,
+    **kwargs):
+  gogo_proto_library(name, langs, prefix, protos, importmap, imports, inputs, proto_deps, output_to_workspace, protoc, pb_plugin, pb_options, grpc_plugin, grpc_options, proto_compile_args, with_grpc, srcs, deps, go_proto_deps, verbose, **kwargs)
+
+def gogofaster_proto_library(
+    name,
+    langs = [str(Label("//gogo:gogofaster"))],
+    prefix = Label("//:go_prefix", relative_to_caller_repository=True),
+    protos = [],
+    importmap = {},
+    imports = [],
+    inputs = [],
+    proto_deps = [],
+    output_to_workspace = False,
+    protoc = None,
+
+    pb_plugin = None,
+    pb_options = [],
+
+    grpc_plugin = None,
+    grpc_options = [],
+
+    proto_compile_args = {},
+    with_grpc = True,
+    srcs = [],
+    deps = [],
+    go_proto_deps = [],
+    verbose = 0,
+    **kwargs):
+  gogo_proto_library(name, langs, prefix, protos, importmap, imports, inputs, proto_deps, output_to_workspace, protoc, pb_plugin, pb_options, grpc_plugin, grpc_options, proto_compile_args, with_grpc, srcs, deps, go_proto_deps, verbose, **kwargs)
+
+def gogoslick_proto_library(
+    name,
+    langs = [str(Label("//gogo:gogoslick"))],
+    prefix = Label("//:go_prefix", relative_to_caller_repository=True),
+    protos = [],
+    importmap = {},
+    imports = [],
+    inputs = [],
+    proto_deps = [],
+    output_to_workspace = False,
+    protoc = None,
+
+    pb_plugin = None,
+    pb_options = [],
+
+    grpc_plugin = None,
+    grpc_options = [],
+
+    proto_compile_args = {},
+    with_grpc = True,
+    srcs = [],
+    deps = [],
+    go_proto_deps = [],
+    verbose = 0,
+    **kwargs):
+  gogo_proto_library(name, langs, prefix, protos, importmap, imports, inputs, proto_deps, output_to_workspace, protoc, pb_plugin, pb_options, grpc_plugin, grpc_options, proto_compile_args, with_grpc, srcs, deps, go_proto_deps, verbose, **kwargs)
+
 def gogo_proto_library(
     name,
     langs = [str(Label("//gogo"))],
