@@ -27,7 +27,7 @@ This is a thin wrapper over the
 `@org_pubref_rules_protobuf//grpc_gateway`.
 
 ```python
-load("@org_pubref_rules_protobuf//go:rules.bzl", "grpc_gateway_proto_compile")
+load("@org_pubref_rules_protobuf//grpc_gateway:rules.bzl", "grpc_gateway_proto_compile")
 
 grpc_gateway_proto_compile(
   name = "protos",
@@ -47,7 +47,7 @@ Target //:protos up-to-date:
 Pass the set of protobuf source files to the `protos` attribute.
 
 ```python
-load("@org_pubref_rules_protobuf//go:rules.bzl", "grpc_gateway_proto_library")
+load("@org_pubref_rules_protobuf//grpc_gateway:rules.bzl", "grpc_gateway_proto_library")
 
 grpc_gateway_proto_library(
   name = "protolib",
