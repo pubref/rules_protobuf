@@ -10,8 +10,8 @@ py_binary(
     name = "greeter_client",
     srcs = [
         "greeter_client.py",
-        "//examples/proto:py",
         "//examples/helloworld/proto:py",
+        "//examples/proto:py",
     ],
 )
 
@@ -23,7 +23,7 @@ py_binary(
 py_test(
     name = "test_greeter_server",
     srcs = ["test_greeter_server.py"],
-    deps = [":grpc_server"]
+    deps = [":grpc_server"],
 )
 
 # This library is necessary for creating py_test cases o/w if we explicitly add
@@ -34,7 +34,7 @@ py_library(
     name = "grpc_server",
     srcs = [
         "greeter_server.py",
-        "//examples/proto:py",
         "//examples/helloworld/proto:py",
-    ]
+        "//examples/proto:py",
+    ],
 )

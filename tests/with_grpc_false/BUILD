@@ -12,26 +12,26 @@ filegroup(
 
 cc_proto_library(
     name = "cpp",
+    imports = [
+        "external/com_github_google_protobuf/src/",
+    ],
+    inputs = [
+        "@com_github_google_protobuf//:well_known_protos",
+    ],
     protos = [":protos"],
     verbose = 0,
     with_grpc = False,
-    imports = [
-      "external/com_github_google_protobuf/src/",
-    ],
-    inputs = [
-      "@com_github_google_protobuf//:well_known_protos",
-    ],
 )
 
 java_proto_library(
     name = "java",
+    imports = [
+        "external/com_github_google_protobuf/src/",
+    ],
+    inputs = [
+        "@com_github_google_protobuf//:well_known_protos",
+    ],
     protos = [":protos"],
     verbose = 0,
     with_grpc = False,
-    imports = [
-      "external/com_github_google_protobuf/src/",
-    ],
-    inputs = [
-      "@com_github_google_protobuf//:well_known_protos",
-    ],
 )

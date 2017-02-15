@@ -12,16 +12,16 @@ filegroup(
 
 proto_compile(
     name = "person_proto",
-    protos = ["person.proto"],
     args = [
         "--include_imports",
         "--include_source_info",
     ],
-    verbose = 0,
 
     # For well-known protos, if needed
     imports = ["external/com_github_google_protobuf/src"],
     inputs = ["@com_github_google_protobuf//:well_known_protos"],
+    protos = ["person.proto"],
+    verbose = 0,
 )
 
 # pkg_tar rule is used in this example to provide a sink for the
@@ -31,5 +31,5 @@ pkg_tar(
     name = "person_tar",
     files = [
         ":person_proto.descriptor_set",
-    ]
+    ],
 )

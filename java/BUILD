@@ -5,15 +5,6 @@ load("//java:rules.bzl", "java_proto_language_import")
 
 proto_language(
     name = "java",
-    output_to_jar = True,
-    pb_file_extensions = [],
-    pb_compile_deps = [
-        "@com_google_guava_guava//jar",
-        "@com_google_protobuf_protobuf_java//jar",
-    ],
-    pb_runtime_deps = [],
-    supports_grpc = True,
-    grpc_plugin = ":protoc_gen_grpc_java_bin",
     grpc_compile_deps = [
         "@io_grpc_grpc_core//jar",
         "@io_grpc_grpc_protobuf//jar",
@@ -21,6 +12,7 @@ proto_language(
         "@io_grpc_grpc_auth//jar",
         "@com_google_auth_google_auth_library_credentials//jar",
     ],
+    grpc_plugin = ":protoc_gen_grpc_java_bin",
     grpc_runtime_deps = [
         "@io_grpc_grpc_netty//jar",
         "@io_grpc_grpc_context//jar",
@@ -33,6 +25,14 @@ proto_language(
         "@io_netty_netty_transport//jar",
         "@io_grpc_grpc_protobuf_lite//jar",
     ],
+    output_to_jar = True,
+    pb_compile_deps = [
+        "@com_google_guava_guava//jar",
+        "@com_google_protobuf_protobuf_java//jar",
+    ],
+    pb_file_extensions = [],
+    pb_runtime_deps = [],
+    supports_grpc = True,
 )
 
 java_proto_language_import(
@@ -48,20 +48,6 @@ java_proto_language_import(
 
 proto_language(
     name = "nano",
-    output_to_jar = True,
-    pb_plugin_name = "javanano",
-    pb_file_extensions = [],
-    supports_grpc = True,
-    pb_compile_deps = [
-        "@com_google_guava_guava//jar",
-        "@com_google_protobuf_protobuf_java//jar",
-        "@com_google_protobuf_nano_protobuf_javanano//jar",
-    ],
-    pb_options = [
-        "ignore_services=true"
-    ],
-    pb_runtime_deps = [],
-    grpc_plugin = ":protoc_gen_grpc_java_bin",
     grpc_compile_deps = [
         "@io_grpc_grpc_core//jar",
         "@io_grpc_grpc_protobuf//jar",
@@ -69,6 +55,7 @@ proto_language(
         "@com_google_protobuf_nano_protobuf_javanano//jar",
         "@io_grpc_grpc_protobuf_nano//jar",
     ],
+    grpc_plugin = ":protoc_gen_grpc_java_bin",
     grpc_runtime_deps = [
         "@io_grpc_grpc_netty//jar",
         "@io_grpc_grpc_protobuf_lite//jar",
@@ -80,8 +67,20 @@ proto_language(
         "@io_netty_netty_resolver//jar",
         "@io_netty_netty_transport//jar",
     ],
+    output_to_jar = True,
+    pb_compile_deps = [
+        "@com_google_guava_guava//jar",
+        "@com_google_protobuf_protobuf_java//jar",
+        "@com_google_protobuf_nano_protobuf_javanano//jar",
+    ],
+    pb_file_extensions = [],
+    pb_options = [
+        "ignore_services=true",
+    ],
+    pb_plugin_name = "javanano",
+    pb_runtime_deps = [],
+    supports_grpc = True,
 )
-
 
 genrule(
     name = "protoc_gen_grpc_java_bin",

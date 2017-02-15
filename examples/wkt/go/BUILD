@@ -20,6 +20,7 @@ go_proto_library(
         "@com_github_google_protobuf//:well_known_protos",
     ],
     protos = ["wkt.proto"],
+    verbose = 3,
     deps = [
         "@com_github_golang_protobuf//protoc-gen-go/descriptor:go_default_library",
         "@com_github_golang_protobuf//protoc-gen-go/plugin:go_default_library",
@@ -30,7 +31,6 @@ go_proto_library(
         "@com_github_golang_protobuf//ptypes/timestamp:go_default_library",
         "@com_github_golang_protobuf//ptypes/wrappers:go_default_library",
     ],
-    verbose = 3,
 )
 
 go_test(
