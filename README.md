@@ -167,7 +167,7 @@ $ $(bazel info bazel-bin)/examples/helloworld/cpp/server
 # Run a client
 $ bazel run go/client
 $ bazel run cpp/client
-$ bazel run java/org/pubref/rules_closure/examples/helloworld/client:netty
+$ bazel run java/org/pubref/rules_protobuf/examples/helloworld/client:netty
 ```
 
 # Overriding or excluding WORKSPACE dependencies
