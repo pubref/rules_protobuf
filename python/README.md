@@ -10,8 +10,8 @@
 Enable python support by loading the dependencies in your workspace.
 
 ```python
-load("@org_pubref_rules_protobuf//python:rules.bzl", "python_proto_repositories")
-python_proto_repositories()
+load("@org_pubref_rules_protobuf//python:rules.bzl", "py_proto_repositories")
+py_proto_repositories()
 ```
 
 ## py\_proto\_compile
@@ -21,7 +21,7 @@ This is a thin wrapper over the
 `@org_pubref_rules_protobuf//python`.
 
 ```python
-load("@org_pubref_rules_protobuf//python:rules.bzl", "python_proto_compile")
+load("@org_pubref_rules_protobuf//python:rules.bzl", "py_proto_compile")
 
 py_proto_compile(
   name = "protos",
