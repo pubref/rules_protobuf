@@ -3,7 +3,7 @@ DEPS = {
   "com_github_gogo_protobuf": {
       "rule": "new_go_repository",
       "importpath": "github.com/gogo/protobuf",
-      "commit": "fb8a359905af6e2b6517cccda0ba25915322ee88", # Jan 25, 2017
+      "commit": "100ba4e885062801d56799d78530b73b178a78f3", # Mar 7, 2017
   },
 
 }
