@@ -1,7 +1,7 @@
 def _proto_language_impl(ctx):
-    prefix = None
-    if hasattr(ctx.attr.prefix, "go_prefix"):
-        prefix = ctx.attr.prefix.go_prefix
+    go_prefix = None
+    if hasattr(ctx.attr.go_prefix, "go_prefix"):
+        go_prefix = ctx.attr.go_prefix.go_prefix
     #print("pb_compile_deps %s" % ctx.attr.pb_compile_deps)
     #print("pb_compile_deps files %s" % ctx.files.pb_compile_deps)
     return struct(
@@ -31,7 +31,8 @@ def _proto_language_impl(ctx):
             grpc_plugin = ctx.executable.grpc_plugin,
             grpc_compile_deps = ctx.files.grpc_compile_deps,
             grpc_runtime_deps = ctx.files.grpc_runtime_deps,
-            prefix = prefix,
+            go_prefix = go_prefix,
+            go_package = ctx.attr.go_package,
             importmap = ctx.attr.importmap,
         ),
     )
@@ -69,9 +70,10 @@ proto_language_attrs = {
     ),
     "grpc_compile_deps": attr.label_list(),
     "grpc_runtime_deps": attr.label_list(),
-    "prefix": attr.label(
+    "go_prefix": attr.label(
         providers = ["go_prefix"],
     ),
+    "go_package": attr.string(),
     "importmap": attr.string_dict(),
 }
 

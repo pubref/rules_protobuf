@@ -8,11 +8,10 @@ os:
   - osx
 
 env:
+  - V=0.4.5
+  - V=0.4.4
   - V=0.4.3
-  - V=0.4.2
   - V=0.4.1
-  - V=0.4.0
-  - V=0.3.2
   - V=0.3.1
 
 before_install:
@@ -49,14 +48,31 @@ script:
       --worker_verbose \
       --strategy=Javac=worker \
       --strategy=Closure=worker \
+      --deleted_packages=tests/external_proto_library \
       //examples/helloworld/closure/... \
       //examples/helloworld/cpp/... \
       //examples/helloworld/go/... \
       //examples/helloworld/grpc_gateway/... \
       //examples/helloworld/java/... \
       //examples/wkt/... \
-      //tests/... \
-      $FLAGS
+      $FLAGS \
+    && \
+    (cd tests/external_proto_library && bazel \
+      --output_base=$HOME/.cache/bazel \
+      --batch \
+      --host_jvm_args=-Xmx500m \
+      --host_jvm_args=-Xms500m \
+      build \
+      --verbose_failures \
+      --test_output=errors \
+      --test_strategy=standalone \
+      --spawn_strategy=standalone \
+      --genrule_strategy=standalone \
+      --local_resources=400,2,1.0 \
+      --worker_verbose \
+      --strategy=Javac=worker \
+      --strategy=Closure=worker \
+      //:*)
 
 notifications:
   email: false
