@@ -1,8 +1,34 @@
+def _file_endswith(file, suffix_list):
+  """Test if a file ends with one of a list of suffixes
+  Args:
+    file (File): The file object.
+    suffix_list(list<string>): a list of suffix token to test
+  Returns:
+    (boolean)
+  """
+  for suffix in suffix_list:
+    if file.path.endswith(suffix):
+      return True
+  return False
+
+
 def _capitalize(s):
+  """Capitalize a string
+  Args:
+    s (string): The input string to be capitalized.
+  Returns:
+    (string): The capitalized string.
+  """
   return s[0:1].upper() + s[1:]
 
 
 def _pascal_case(s):
+  """Convert pascal_case -> PascalCase
+  Args:
+    s (string): The input string to be capitalized.
+  Returns:
+    (string): The capitalized string.
+  """
   return "".join([_capitalize(part) for part in s.split("_")])
 
 
@@ -24,28 +50,51 @@ def _emit_params_file_action(ctx, path, mnemonic, cmds):
   return f
 
 
-def _get_relative_dirname(base, file):
+def _get_relative_dirname(run, base, file):
   """Return a dirname in the form of path segments relative to base.
   If the file.short_path is not within base, return empty list.
   Example: if base="foo/bar/baz.txt"
            and file.short_path="bar/baz.txt",
            return ["bar"].
   Args:
+    run (struct): the compilation run object.
     base (string): the base dirname (ctx.label.package)
     file (File): the file to calculate relative dirname.
   Returns:
     (list<string>): path
   """
   path = file.dirname
+
+  # golang specific: If 'option go_package' is defined in the proto
+  # file, protoc will output to that directory name rather than the
+  # one based on the file path.  Since we cannot read/parse the file
+  # as part of the bazel analysis phase, the user will have to put
+  # this in manually.
+  if run.data.go_package:
+    path = run.data.go_package
+    if path.endswith("/"):
+      path = path[-1]
+    parts = path.split("/")
+    return parts
+
   if not path.startswith(base):
     return []
+
   parts = path.split("/")
+
   if parts[0] == "external":
-    # ignore off the first two items since we'll be cd'ing into
+    # ignore the first two items since we'll be cd'ing into
     # this dir.
-    return parts[2:]
+    components = parts[2:]
+    # If "go_package" is defined, the generated file will be created in
+    # this subdirectory of the external dir.
+    if run.data.go_package:
+      components += run.data.go_package.split("/")
+    return components
+
   base_parts = base.split("/")
-  return parts[len(base_parts):]
+  components = parts[len(base_parts):]
+  return components
 
 
 def _get_offset_path(root, path):
@@ -69,28 +118,6 @@ def _get_offset_path(root, path):
 
   depth = root.count('/') + 1
   return "../" * depth + path
-
-
-def _get_import_mappings_for(files, prefix, label):
-  """For a set of files that belong the the given context label, create a mapping to the given prefix."""
-
-  mappings = {}
-  for file in files:
-    src = file.short_path
-    # File in an external repo looks like:
-    # '../WORKSPACE/SHORT_PATH'.  We want just the SHORT_PATH.
-    if src.startswith("../"):
-      parts = src.split("/")
-      src = "/".join(parts[2:])
-    dst = [prefix, label.package]
-    name_parts = label.name.split(".")
-    # special case to elide last part if the name is
-    # 'go_default_library.pb'
-    if name_parts[0] != "go_default_library":
-      dst.append(name_parts[0])
-    mappings[src] = "/".join(dst)
-
-  return mappings
 
 
 def _build_output_jar(run, builder):
@@ -157,7 +184,7 @@ def _build_output_files(run, builder):
     if run.lang.output_file_style == 'capitalize':
       base = _capitalize(base)
     for ext in exts:
-      path = _get_relative_dirname(ctx.label.package, file)
+      path = _get_relative_dirname(run, ctx.label.package, file)
       path.append(base + ext)
       pbfile = ctx.new_file("/".join(path))
       builder["outputs"] += [pbfile]
@@ -221,7 +248,7 @@ def _build_grpc_invocation(run, builder):
                            builder)
 
 
-def _get_mappings(files, label, prefix):
+def _get_mappings(files, label, go_prefix):
   """For a set of files that belong the the given context label, create a mapping to the given prefix."""
   mappings = {}
   for file in files:
@@ -232,7 +259,7 @@ def _get_mappings(files, label, prefix):
     if src.startswith("../"):
       parts = src.split("/")
       src = "/".join(parts[2:])
-    dst = [prefix]
+    dst = [go_prefix]
     if label.package:
       dst.append(label.package)
     name_parts = label.name.split(".")
@@ -251,7 +278,7 @@ def _build_base_namespace(run, builder):
 def _build_importmappings(run, builder):
   """Override behavior to add plugin options before building the --go_out option"""
   ctx = run.ctx
-  go_prefix = run.data.prefix or run.lang.prefix
+  go_prefix = run.data.go_prefix or run.lang.go_prefix
   opts = []
 
   # Build the list of import mappings.  Start with any configured on
@@ -282,9 +309,19 @@ def _build_importmappings(run, builder):
   else:
     builder[run.lang.name + "_grpc_options"] += opts
 
+
 def _build_plugin_out(name, outdir, options, builder):
   """Build the --{lang}_out argument for a given plugin."""
   arg = outdir
+
+  # If the outdir is external, such as when building
+  # :well_known_protos, the protoc command may fail as the directory
+  # bazel-out/local-fastbuild/genfiles/external/com_github_google_protobuf
+  # won't necessarily exist.  Add this to the queue of
+  # pre-execution commands to create it.
+  if outdir.startswith("../..") and not outdir.endswith(".jar"):
+    builder["commands"] += ["mkdir -p " + outdir]
+
   if options:
     arg = ",".join(options) + ":" + arg
   builder["args"] += ["--%s_out=%s" % (name, arg)]
@@ -334,6 +371,8 @@ def _get_external_root(ctx):
   # This set size must be 0 or 1. (all source files must exist in this
   # workspace or the same external workspace).
   roots = set(external_roots)
+  if (ctx.attr.verbose > 2):
+    print("external roots: %r" % roots)
   n = len(roots)
   if n:
     if n > 1:
@@ -366,7 +405,7 @@ def _compile(ctx, unit):
   inputs = list(unit.inputs | transitive_units) + [unit.compiler]
   outputs = list(unit.outputs)
 
-  cmds = [" ".join(protoc_cmd)]
+  cmds = [cmd for cmd in unit.commands] + [" ".join(protoc_cmd)]
   if execdir != ".":
     cmds.insert(0, "cd %s" % execdir)
 
@@ -433,18 +472,44 @@ def _proto_compile_impl(ctx):
     for unit in dep.proto_compile_result.transitive_units:
         transitive_units.append(unit)
 
-  if ctx.attr.prefix:
-    prefix = ctx.attr.prefix.go_prefix
+  if ctx.attr.go_prefix:
+    go_prefix = ctx.attr.go_prefix.go_prefix
   else:
-    prefix = ""
+    go_prefix = ""
+
+
+  # Make the proto list.
+  # First include any protos that match cts.attr.includes.
+  # Then exclude any protos that match ctx.attr.excludes.
+  includes = []
+  protos = []
+
+  if ctx.attr.includes:
+    for file in ctx.files.protos:
+      if _file_endswith(file, ctx.attr.includes):
+        includes.append(file)
+      else:
+        continue
+  else:
+    includes = ctx.files.protos
+
+  if ctx.attr.excludes:
+    for file in includes:
+      if _file_endswith(file, ctx.attr.excludes):
+        continue
+      else:
+        protos.append(file)
+  else:
+    protos = includes
 
   # Immutable global state for this compiler run.
   data = struct(
     label = ctx.label,
     workspace_name = ctx.workspace_name,
-    prefix = prefix,
+    go_prefix = go_prefix,
+    go_package = ctx.attr.go_package,
     execdir = execdir,
-    protos = ctx.files.protos,
+    protos = protos,
     descriptor_set = ctx.outputs.descriptor_set,
     importmap = ctx.attr.importmap,
     pb_options = ctx.attr.pb_options,
@@ -463,6 +528,7 @@ def _proto_compile_impl(ctx):
     "imports": ctx.attr.imports + ["."],
     "inputs": ctx.files.protos + ctx.files.inputs,
     "outputs": [],
+    "commands": [], # optional miscellaneous pre-protoc commands
   }
 
   # Build a list of structs that will be processed in this compiler
@@ -502,7 +568,7 @@ def _proto_compile_impl(ctx):
       _build_output_libdir(run, builder)
     else:
       _build_output_files(run, builder)
-    if run.lang.prefix: # golang-specific
+    if run.lang.go_prefix: # golang-specific
       _build_importmappings(run, builder)
     if run.lang.supports_pb:
       _build_protobuf_invocation(run, builder)
@@ -521,6 +587,7 @@ def _proto_compile_impl(ctx):
     imports = set(builder["imports"]),
     inputs = set(builder["inputs"]),
     outputs = set(builder["outputs"] + [ctx.outputs.descriptor_set]),
+    commands = set(builder["commands"]),
   )
 
   # Run protoc
@@ -552,6 +619,8 @@ proto_compile = rule(
     "protos": attr.label_list(
       allow_files = FileType([".proto"]),
     ),
+    "includes": attr.string_list(),
+    "excludes": attr.string_list(),
     "deps": attr.label_list(
       providers = ["proto_compile_result"]
     ),
@@ -560,9 +629,10 @@ proto_compile = rule(
       cfg = "host",
       executable = True,
     ),
-    "prefix": attr.label(
+    "go_prefix": attr.label(
       providers = ["go_prefix"],
     ),
+    "go_package": attr.string(),
     "root": attr.string(),
     "imports": attr.string_list(),
     "importmap": attr.string_dict(),

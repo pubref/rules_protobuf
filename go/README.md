@@ -177,13 +177,51 @@ import (
 )
 ```
 
-| Proto Filename (A) | Import Name Suffix and Target Name (B) |
-| ---                | ---           | -----                  |
-| `google/protobuf/any.proto` |  `ptypes/any` |
-| `google/protobuf/duration.proto` |  `ptypes/duration` |
-| `google/protobuf/timestamp.proto` |  `ptypes/timestamp` |
-| `google/protobuf/empty.proto` |  `ptypes/empty` |
-| `google/protobuf/struct.proto` |  `ptypes/struct` |
-| `google/protobuf/wrappers.proto` |  `ptypes/wrappers` |
-| `google/protobuf/descriptor.proto` |  `protoc-gen-go/descriptor` |
-| `google/protobuf/compiler/plugin.proto` |  `protoc-gen-go/plugin` |
+| Proto Filename (A)                      | Import Name Suffix and Target Name (B) |
+| ---                                     | ---                                    |
+| `google/protobuf/any.proto`             |  `ptypes/any`                          |
+| `google/protobuf/duration.proto`        |  `ptypes/duration`                     |
+| `google/protobuf/timestamp.proto`       |  `ptypes/timestamp`                    |
+| `google/protobuf/empty.proto`           |  `ptypes/empty`                        |
+| `google/protobuf/struct.proto`          |  `ptypes/struct`                       |
+| `google/protobuf/wrappers.proto`        |  `ptypes/wrappers`                     |
+| `google/protobuf/descriptor.proto`      |  `protoc-gen-go/descriptor`            |
+| `google/protobuf/compiler/plugin.proto` |  `protoc-gen-go/plugin`                |
+
+
+## The `go_package` option
+
+Never versions of the `protoc-gen-go` plugin have direct support for
+the `go_package` option
+(https://github.com/golang/protobuf/issues/139).  If you have proto
+files that declare the `go_package` option, you'll need to explicitly
+declare that in the generating rule.  For example,
+[google/api/label.proto](https://github.com/googleapis/googleapis/blob/master/google/api/label.proto) appears as follows:
+
+```protobuf
+syntax = "proto3";
+
+package google.api;
+
+option go_package = "google.golang.org/genproto/googleapis/api/label;label";
+
+
+// A description of a label.
+message LabelDescriptor {
+  ...
+}
+...
+```
+
+See the [tests/external_proto_library](tests/external_proto_library) example wherein the `go_proto_library` defines this:
+
+```python
+go_proto_library(
+    name = "go_label_proto",
+    protos = [
+        "google/api/label.proto",
+    ],
+    go_package = "google.golang.org/genproto/googleapis/api/label",
+    verbose = 0,
+)
+```

@@ -18,7 +18,7 @@ proto_language(
     importmap = {
         "google/api/annotations.proto": "github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis/google/api",
     },
-    prefix = "//:go_prefix",
+    go_prefix = "//:go_prefix",
     supports_grpc = True,
     supports_pb = False,
 )
@@ -40,7 +40,7 @@ proto_language(
     pb_plugin = "@com_github_golang_protobuf//protoc-gen-go",
     pb_plugin_implements_grpc = True,
     pb_plugin_name = "go",
-    prefix = "//:go_prefix",
+    go_prefix = "//:go_prefix",
 )
 
 proto_language(
@@ -58,6 +58,6 @@ proto_language(
         "@com_github_google_protobuf//:well_known_protos",
     ],
     pb_plugin = "@com_github_grpc_ecosystem_grpc_gateway//protoc-gen-swagger",
-    prefix = "//:go_prefix",
+    go_prefix = "//:go_prefix",
     supports_grpc = True,
 )

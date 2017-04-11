@@ -1,0 +1,76 @@
+load("//:parent_repository.bzl", "parent_repository")
+
+git_repository(
+    name = "io_bazel_rules_go",
+    remote = "https://github.com/bazelbuild/rules_go.git",
+    tag = "0.4.2", # Apr 7, 2017
+)
+
+load("@io_bazel_rules_go//go:def.bzl", "go_repositories", "new_go_repository")
+
+go_repositories()
+
+parent_repository(
+    name = "org_pubref_rules_protobuf",
+    exposed_dirs = [
+        "cpp",
+        "go",
+        "java",
+        "protobuf",
+        "BUILD",
+    ]
+)
+
+load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cpp_proto_repositories")
+cpp_proto_repositories()
+
+load("@org_pubref_rules_protobuf//go:rules.bzl", "go_proto_repositories")
+go_proto_repositories()
+
+load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_repositories", "nano_proto_repositories")
+java_proto_repositories()
+
+GOOGLEAPIS_BUILD_FILE = """
+package(default_visibility = ["//visibility:public"])
+exports_files(["google/api/label.proto"])
+
+load("@io_bazel_rules_go//go:def.bzl", "go_prefix")
+go_prefix("google.golang.org/genproto/googleapis")
+
+load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cc_proto_library")
+load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_library")
+load("@org_pubref_rules_protobuf//go:rules.bzl", "go_proto_library")
+
+cc_proto_library(
+    name = "cc_label_proto",
+    protos = [
+        "google/api/label.proto",
+    ],
+    verbose = 0,
+)
+
+java_proto_library(
+    name = "java_label_proto",
+    protos = [
+        "google/api/label.proto",
+    ],
+    verbose = 0,
+)
+
+go_proto_library(
+    name = "go_label_proto",
+    protos = [
+        "google/api/label.proto",
+    ],
+    go_package = "google.golang.org/genproto/googleapis/api/label",
+    verbose = 0,
+)
+"""
+
+new_http_archive(
+    name = "com_github_googleapis_googleapis",
+    sha256 = "63555639d21dd0041a2e7e02d0af57b60da0b8dfccbf638fba8a930ceb555176",
+    url = "https://github.com/googleapis/googleapis/archive/6277786c1352a6d7be1e5a5d697394e1802f6608.zip",
+    strip_prefix = "googleapis-6277786c1352a6d7be1e5a5d697394e1802f6608",
+    build_file_content = GOOGLEAPIS_BUILD_FILE,
+)

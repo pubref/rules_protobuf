@@ -41,7 +41,8 @@ def go_proto_compile(langs = [str(Label("//go"))], **kwargs):
 def go_proto_library(
     name,
     langs = [str(Label("//go"))],
-    prefix = Label("//:go_prefix", relative_to_caller_repository=True),
+    go_prefix = Label("//:go_prefix", relative_to_caller_repository=True),
+    go_package = None,
     protos = [],
     importmap = {},
     imports = [],
@@ -73,7 +74,8 @@ def go_proto_library(
   proto_compile_args += {
     "name": name + ".pb",
     "protos": protos,
-    "prefix": prefix,
+    "go_prefix": go_prefix,
+    "go_package": go_package,
     "deps": [dep + ".pb" for dep in proto_deps],
     "langs": langs,
     "importmap": importmap,
