@@ -77,3 +77,9 @@ fmt:
 	find third_party/ -name BUILD | xargs buildifier
 	find examples/ -name BUILD | xargs buildifier
 	find tests/ -name BUILD | xargs buildifier
+
+replace:
+	rpl -vvR -x'.md' -x'.bzl' -x'BUILD' -x'WORKSPACE' \
+	'com_github_google_protobuf' \
+	'com_google_protobuf' \
+	protobuf/ objc/ grpc_gateway/ go/ examples/ cpp/

@@ -163,7 +163,7 @@ go_proto_library(
   importmap = {
     "{A}": "github.com/golang/protobuf/{B}",
   },
-  imports = ["external/com_github_google_protobuf/src"],
+  imports = ["external/com_google_protobuf/src"],
   deps = [
     "@com_github_golang_protobuf//:{B}",
   ],

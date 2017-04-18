@@ -1,13 +1,13 @@
 DEPS = {
 
     # Grpc repo is required by multiple languages but we put it here.
-    "com_github_grpc_grpc": {
-        "rule": "git_repository",
-        "remote": "https://github.com/grpc/grpc.git",
-        "init_submodules": True,
-        "commit": "3808b6efe66b87269d43847bc113e94e2d3d28fb",
-        #"tag": "v1.0.1",
-    },
+   #  "com_github_grpc_grpc": {
+   #      "rule": "git_repository",
+   #      "remote": "https://github.com/grpc/grpc.git",
+   #      "init_submodules": True,
+   #      #"commit": "e8a1a50465d944ef321481e9a10f17a5284a0fa4", # Feb 22
+   #      "commit": "f200f25d4dad5b74e7216a2b17fa2c2783ceb40e", # Apr 11
+   # },
 
     # Hooray! The boringssl team provides a "master-with-bazel" branch
     # with all BUILD files ready to go.  To update, pick the
@@ -42,13 +42,25 @@ DEPS = {
     # grpc++ expects "//external:protobuf_clib"
     "protobuf_clib": {
         "rule": "bind",
-        "actual": "@com_github_google_protobuf//:protobuf",
+        "actual": "@com_google_protobuf//:protobuf",
+    },
+
+    # grpc++ expects "//external:protobuf"
+    "protobuf": {
+        "rule": "bind",
+        "actual": "@com_google_protobuf//:protobuf",
     },
 
     # grpc++ expects //external:nanopb
     "nanopb": {
         "rule": "bind",
-        "actual": "@com_github_grpc_grpc//third_party/nanopb",
+        "actual": "@com_google_grpc//third_party/nanopb",
+    },
+
+    # grpc++ expects //external:cares
+    "cares": {
+        "rule": "bind",
+        "actual": "@com_google_grpc//third_party/cares:ares",
     },
 
     # Bind the executable cc_binary grpc plugin into
@@ -57,14 +69,14 @@ DEPS = {
     # bind it in external?
     "protoc_gen_grpc_cpp": {
         "rule": "bind",
-        "actual": "@com_github_grpc_grpc//:grpc_cpp_plugin",
+        "actual": "@com_google_grpc//:grpc_cpp_plugin",
     },
 
     # Bind the protobuf proto_lib into //external.  Required for
     # compiling the protoc_gen_grpc plugin
-    "protobuf_compiler": {
+    "protocol_compiler": {
         "rule": "bind",
-        "actual": "@com_github_google_protobuf//:protoc_lib",
+        "actual": "@com_google_protobuf//:protoc",
     },
 
     # GTest is for our own internal cc tests.

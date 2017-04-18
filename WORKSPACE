@@ -105,3 +105,36 @@ py_proto_repositories()
 load("//ruby:rules.bzl", "ruby_proto_repositories")
 
 ruby_proto_repositories()
+
+
+# ================================================================
+# Specific Languages Support
+# ================================================================
+
+# http_archive(
+#     name = "com_github_grpc_grpc2",
+#     url = "https://github.com/grpc/grpc/archive/f200f25d4dad5b74e7216a2b17fa2c2783ceb40e.zip",
+#     sha256 = "1772e056ff1a9fabb84d8528a87c73166264454cd1f0a37426cc7778f8bc39a7",
+#     strip_prefix = "grpc-f200f25d4dad5b74e7216a2b17fa2c2783ceb40e",
+# )
+
+http_archive(
+    name = "com_github_grpc_grpc2",
+    url = "https://github.com/grpc/grpc/archive/dc607c4ce2f476862746239a8009e048b110c9db.zip", #v1.2.3
+    sha256 = "4d36d100ae0177ce406d5bfb32bee703532b2aace3513a80077ad5ca4cd76a35",
+    strip_prefix = "grpc-dc607c4ce2f476862746239a8009e048b110c9db",
+)
+
+new_http_archive(
+    name = "com_github_c_ares_c_ares",
+    url = "https://github.com/c-ares/c-ares/archive/7691f773af79bf75a62d1863fd0f13ebf9dc51b1.zip",
+    sha256 = "ddce8def076a0a8cfa3f56595e391cf9e13a39fd4a7882822ed98cafd4079862",
+    strip_prefix = "c-ares-7691f773af79bf75a62d1863fd0f13ebf9dc51b1",
+    build_file_content = "",
+)
+
+load("//cpp:grpc_repository.bzl", "grpc_repository")
+
+grpc_repository(
+    name = "com_google_grpc",
+)
