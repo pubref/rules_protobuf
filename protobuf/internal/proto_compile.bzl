@@ -394,7 +394,18 @@ def _compile(ctx, unit):
   execdir = unit.data.execdir
 
   protoc = _get_offset_path(execdir, unit.compiler.path)
-  imports = ["--proto_path=" + i for i in unit.imports]
+
+  imports = []
+  for i in unit.imports:
+    final_i = i
+    # Check for imports from external
+    path = i.split("/")
+    if path[0] == 'external':
+      # Ensure that external imports start from root, as external/ does not exist when rule is being
+      # built in an external project.
+      final_i = _get_offset_path(execdir, i)
+    imports.append("--proto_path=" + final_i)
+
   srcs = [_get_offset_path(execdir, p.path) for p in unit.data.protos]
   protoc_cmd = [protoc] + list(unit.args) + imports + srcs
   manifest = [f.short_path for f in unit.outputs]
