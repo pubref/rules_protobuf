@@ -152,7 +152,7 @@ def _build_output_srcjar(run, builder):
   protojar = builder[name + "_jar"]
   srcjar_name = "%s_%s.srcjar" % (run.data.label.name, name)
   srcjar = ctx.new_file("%s_%s.srcjar" % (run.data.label.name, name))
-  run.ctx.action(
+  ctx.action(
     mnemonic = "CpJarToSrcJar",
     inputs = [protojar],
     outputs = [srcjar],
@@ -249,7 +249,7 @@ def _build_grpc_invocation(run, builder):
 
 
 def _get_mappings(files, label, go_prefix):
-  """For a set of files that belong the the given context label, create a mapping to the given prefix."""
+  """For a set of files that belong to the given context label, create a mapping to the given prefix."""
   mappings = {}
   for file in files:
     src = file.short_path
@@ -360,7 +360,7 @@ def _get_outdir(ctx, lang, execdir):
 
 def _get_external_root(ctx):
 
-  # Compte set of "external workspace roots" that the proto
+  # Complete set of "external workspace roots" that the proto
   # sourcefiles belong to.
   external_roots = []
   for file in ctx.files.protos:
@@ -459,14 +459,14 @@ cd $(bazel info execution_root)%s && \
 def _proto_compile_impl(ctx):
 
   if ctx.attr.verbose > 1:
-    print("proto_compile %s:%s"  % (ctx.build_file_path, ctx.label.name))
+    print("proto_compile %s:%s" % (ctx.build_file_path, ctx.label.name))
 
   # Calculate list of external roots and return the base directory
   # we'll use for the protoc invocation.  Usually this is '.', but if
   # not, its 'external/WORKSPACE'
   execdir = _get_external_root(ctx)
 
-  # Propogate proto deps compilation units.
+  # Propagate proto deps compilation units.
   transitive_units = []
   for dep in ctx.attr.deps:
     for unit in dep.proto_compile_result.transitive_units:

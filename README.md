@@ -279,7 +279,7 @@ yourself when setting up your rules are:
 
 [Question 1]: *Can protoc "see" the imported file?* In order to satisfy this
 requirement, pass in the full path of the required file(s) relative to
-the execution root where protoc will be run.  For example, the the
+the execution root where protoc will be run.  For example, the
 well-known `descriptor.proto` could be made visible to protoc via:
 
 ```python

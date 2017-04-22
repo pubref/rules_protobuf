@@ -62,7 +62,7 @@ Target //:protolib up-to-date:
 
 ## java\_proto\_language\_import
 
-When using the compiled library in other rules, you'll may need the
+When using the compiled library in other rules, you may need the
 compile-time or runtime dependencies.  You can access these using the
 `java_proto_language_import` rule.  There are several pre-defined ones
 in the BUILD file in this directory.
