@@ -2,7 +2,7 @@ package(default_visibility = ["//visibility:public"])
 
 # https://github.com/pubref/rules_protobuf/issues/57
 
-load("@org_pubref_rules_protobuf//protobuf:rules.bzl", "proto_compile")
+load("//protobuf:rules.bzl", "proto_compile")
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 
 filegroup(
@@ -18,7 +18,6 @@ proto_compile(
     ],
 
     # For well-known protos, if needed
-    imports = ["external/com_github_google_protobuf/src"],
     inputs = ["@com_github_google_protobuf//:well_known_protos"],
     protos = ["person.proto"],
     verbose = 0,

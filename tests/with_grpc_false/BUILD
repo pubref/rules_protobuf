@@ -2,8 +2,8 @@ package(default_visibility = ["//visibility:public"])
 
 # See https://github.com/pubref/rules_protobuf/issues/48
 
-load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cc_proto_library")
-load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_library")
+load("//cpp:rules.bzl", "cc_proto_library")
+load("//java:rules.bzl", "java_proto_library")
 
 filegroup(
     name = "protos",
