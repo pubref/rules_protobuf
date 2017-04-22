@@ -31,10 +31,10 @@ proto_language(
         "@com_google_protobuf_protobuf_java//jar",
     ],
     pb_inputs = [
-        "@com_github_google_protobuf//:well_known_protos",
+        "@com_google_protobuf//:well_known_protos",
     ],
     pb_imports = [
-        "external/com_github_google_protobuf/src",
+        "external/com_google_protobuf/src",
         #"src",
     ],
     pb_file_extensions = [],

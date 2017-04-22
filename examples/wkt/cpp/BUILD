@@ -7,7 +7,7 @@ cc_proto_library(
     includes = [
         "empty.proto",
     ],
-    protos = ["@com_github_google_protobuf//:well_known_protos"],
+    protos = ["@com_google_protobuf//:well_known_protos"],
     verbose = 0,
     with_grpc = False,
 )
@@ -20,12 +20,12 @@ cc_proto_library(
 #     srcs = ["wkt_test.cc"],
 #     copts = [
 #         "-Iexternal/gtest/include",
-#         "-Iexternal/com_github_google_protobuf/google/protobuf",
+#         "-Iexternal/com_google_protobuf/google/protobuf",
 #     ],
 #     deps = [
 #         ":google_well_known_protos",
-#         #"@com_github_google_protobuf//:protobuf",
-#         #"@com_github_google_protobuf//:cc_wkt_protos",
+#         #"@com_google_protobuf//:protobuf",
+#         #"@com_google_protobuf//:cc_wkt_protos",
 #         "@gtest//:gtest",
 #     ],
 # )

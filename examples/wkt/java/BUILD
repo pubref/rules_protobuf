@@ -4,7 +4,7 @@ load("//java:rules.bzl", "java_proto_library")
 
 java_proto_library(
     name = "google_well_known_protos",
-    protos = ["@com_github_google_protobuf//:well_known_protos"],
+    protos = ["@com_google_protobuf//:well_known_protos"],
 )
 
 java_test(

@@ -29,13 +29,14 @@ load("@io_bazel_rules_closure//closure:defs.bzl", "closure_repositories")
 closure_repositories()
 
 # ================================================================
-# csharp_proto_library support requires rules_dotnet (forked)
+# csharp_proto_library support requires rules_dotnet
 # ================================================================
 
-git_repository(
+http_archive(
     name = "io_bazel_rules_dotnet",
-    commit = "ebc7c1cb61d45bd57042c60b6bfabdfff4979466",
-    remote = "https://github.com/bazelbuild/rules_dotnet.git",
+    url = "https://github.com/bazelbuild/rules_dotnet/archive/64b7a46cb41654aea39eb8e6c9fdf7447fe74cb1.zip",
+    strip_prefix = "rules_dotnet-64b7a46cb41654aea39eb8e6c9fdf7447fe74cb1",
+    sha256 = "eb340e2345d4a9ce4dac95e3d7de6c01515d64f67d14841a4319793bf6dba91a",
 )
 
 load("@io_bazel_rules_dotnet//dotnet:csharp.bzl", "csharp_repositories")

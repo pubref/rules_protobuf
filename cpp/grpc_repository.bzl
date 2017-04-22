@@ -7,11 +7,13 @@ def _execute(rtx, cmds, print_result = False, keep_going = True):
         print("$ %r\n%s" % (cmds, result.stdout))
     return result
 
+
 def _get_external_path(workspace_file, path):
     workspace_file_path = workspace_file.split('/')
     workspace_path = workspace_file_path[0:-1]
     #return "/" + "/".join(workspace_path + [path])
     return "/".join(workspace_path + [path])
+
 
 def _mount_external_workspace_path(rtx,
                                    source_workspace_file,
@@ -26,15 +28,20 @@ def _mount_external_workspace_path(rtx,
     if target_workspace_file:
         target = _get_external_path(target_workspace_file, target_path)
     rtx.symlink(source, target)
-    print("mounted %r --> %r" % (source, target))
+    #print("mounted %r --> %r" % (source, target))
+
 
 def _setup_submodule_cares(rtx):
     cares_workspace = "%s" % rtx.path(rtx.attr._cares_workspace)
     cares_workspace_dir = _get_external_path(cares_workspace, "")
 
-    # Remove the cares directory if it exists
+    # Remove the cares directory if it exists in this repository if it exists
+    # from prior runs or as a git submodule.
     _execute(rtx, ["rm", "-rf", "third_party/cares/cares"], keep_going = True)
-    # Copy directory
+
+    # Copy the entire contents of external/com_github_c_ares_c_ares to third_party/cares/cares.
+    # This is sort of a manual equivalent of git submodule init (but we dont want to use
+    # git submodules or the git_repository rule... too slow for grpc repo!)
     _execute(rtx, [
         "cp",
         "-rp",
@@ -42,13 +49,23 @@ def _setup_submodule_cares(rtx):
         "third_party/cares/cares",
     ], print_result = True)
 
+    # @grpc//:WORKSPACE uses a bind rule to map '//external:cares' --> '@submodules_cares//:ares'.
+    # @submodules_cares is defined as a new_local_repository using the third_party/cares/cares.BUILD
+    # file.
+    #
+    # In this repo, we want to copy over all
+    # Need to bind //external:cares to @com_google_grpc//third_party/cares:ares, so there should
+    # be a build file in
+    _execute(rtx, ["cat", "third_party/cares/cares.BUILD"], print_result = True)
+
     # Remove the original BUILD files from new_http_archive to avoid package boundary errors
+    _execute(rtx, ["rm", "third_party/cares/cares/WORKSPACE"])
     _execute(rtx, ["rm", "third_party/cares/cares/BUILD"])
     _execute(rtx, ["rm", "third_party/cares/cares/BUILD.bazel"])
-    # Remove existing BUILD file
-    _execute(rtx, ["rm", "third_party/cares/BUILD"])
-    # Link to the one defined in this repo (works for both linux and darwin)
-    rtx.symlink(rtx.path(rtx.attr._cares_build_file), "third_party/cares/BUILD")
+
+    # Rename the cares.BUILD file to BUILD. This has the :ares target and we're done!
+    _execute(rtx, ["cp", "third_party/cares/cares.BUILD", "third_party/cares/BUILD"])
+
 
 def _setup_submodule_nanopb(rtx):
     pass
@@ -75,10 +92,9 @@ def _grpc_repository_impl(rtx):
     ###
     # Phase 2: Setup the submodules
     ##
-    print("SETUP SUBMODULES")
-    #_setup_submodule_cares(rtx)
+    _setup_submodule_cares(rtx)
     _setup_submodule_nanopb(rtx)
-    print("DONE")
+
 
 grpc_repository = repository_rule(
     implementation = _grpc_repository_impl,
@@ -92,8 +108,8 @@ grpc_repository = repository_rule(
             default = Label("@com_github_c_ares_c_ares//:WORKSPACE")
         ),
         # The cares BUILD file
-        "_cares_build_file": attr.label(
-            default = Label("//protobuf:build_file/cares.BUILD")
-        ),
+        # "_cares_build_file": attr.label(
+        #     default = Label("//protobuf:build_file/cares.BUILD")
+        # ),
     },
 )

@@ -584,8 +584,8 @@ cd $(bazel info execution_root)%s && \
 
 def _add_well_known_proto_imports(data, builder):
   imports = builder["imports"]
-  wkt_import = "external/com_github_google_protobuf/src"
-  if data.execdir == "external/com_github_google_protobuf":
+  wkt_import = "external/com_google_protobuf/src"
+  if data.execdir == "external/com_google_protobuf":
     if wkt_import in imports:
       imports.remove(wkt_import)
       imports.insert(0, "src")
