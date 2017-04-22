@@ -47,6 +47,7 @@ def grpc_gateway_proto_library(
     go_proto_deps = [],
     grpc_gateway_deps = GRPC_GATEWAY_DEPS,
     verbose = 0,
+    with_grpc = True,
 
     logtostderr = False,
     alsologtostderr = False,
@@ -75,6 +76,7 @@ def grpc_gateway_proto_library(
     "grpc_options": grpc_options,
     "output_to_workspace": output_to_workspace,
     "verbose": verbose,
+    "with_grpc": with_grpc,
   }
 
   if protoc:

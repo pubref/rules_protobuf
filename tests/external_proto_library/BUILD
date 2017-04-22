@@ -13,7 +13,7 @@ cc_proto_library(
         "external/com_github_googleapis_googleapis",
     ],
     proto_deps = [
-        "@com_github_googleapis_googleapis//:cc_label_proto",
+        "@com_github_googleapis_googleapis//:label_cc_proto",
     ],
     protos = ["message.proto"],
     verbose = 0,
@@ -25,7 +25,7 @@ java_proto_library(
         "external/com_github_googleapis_googleapis",
     ],
     proto_deps = [
-        "@com_github_googleapis_googleapis//:java_label_proto",
+        "@com_github_googleapis_googleapis//:label_java_proto",
     ],
     protos = ["message.proto"],
     verbose = 0,
@@ -37,8 +37,33 @@ go_proto_library(
         "external/com_github_googleapis_googleapis",
     ],
     proto_deps = [
-        "@com_github_googleapis_googleapis//:go_label_proto",
+        "@com_github_googleapis_googleapis//:label_go_proto",
     ],
     protos = ["message.proto"],
     verbose = 0,
+)
+
+# Another (probably easier) way of getting the label.proto compiled.
+# Commented out here as both the go_gapi and go_gapi_alternate
+# generate the same message.pb.go (conflicting actions).
+# go_proto_library(
+#     name = "go_gapi_alternate",
+#     imports = [
+#         "external/com_github_googleapis_googleapis",
+#     ],
+#     proto_deps = [
+#         ":label_go_proto",
+#     ],
+#     protos = ["message.proto"],
+#     verbose = 0,
+# )
+
+# This is an example of cherry picking  go protos in external workspaces as well.  In this case it has the
+# go_package option.
+go_proto_library(
+    name = "label_go_proto",
+    go_package = "google.golang.org/genproto/googleapis/api/label",
+    protos = [
+        "@com_github_googleapis_googleapis//:google/api/label.proto",
+    ],
 )

@@ -6,12 +6,12 @@ proto_language(
     name = "grpc_gateway",
     grpc_file_extensions = [".pb.gw.go"],
     grpc_imports = [
-        "external/com_github_google_protobuf/src/",
+        "external/com_google_protobuf/src/",
         "external/com_github_grpc_ecosystem_grpc_gateway/third_party/googleapis/",
     ],
     grpc_inputs = [
         "@com_github_grpc_ecosystem_grpc_gateway//third_party/googleapis/google/api:go_default_library_protos",
-        "@com_github_google_protobuf//:well_known_protos",
+        "@com_google_protobuf//:well_known_protos",
     ],
     grpc_plugin = "@com_github_grpc_ecosystem_grpc_gateway//protoc-gen-grpc-gateway",
     grpc_plugin_name = "grpc-gateway",
@@ -30,12 +30,12 @@ proto_language(
     },
     pb_file_extensions = [".pb.go"],
     pb_imports = [
-        "external/com_github_google_protobuf/src/",
+        "external/com_google_protobuf/src/",
         "external/com_github_grpc_ecosystem_grpc_gateway/third_party/googleapis/",
     ],
     pb_inputs = [
         "@com_github_grpc_ecosystem_grpc_gateway//third_party/googleapis/google/api:go_default_library_protos",
-        "@com_github_google_protobuf//:well_known_protos",
+        "@com_google_protobuf//:well_known_protos",
     ],
     pb_plugin = "@com_github_golang_protobuf//protoc-gen-go",
     pb_plugin_implements_grpc = True,
@@ -50,12 +50,12 @@ proto_language(
     },
     pb_file_extensions = [".swagger.json"],
     pb_imports = [
-        "external/com_github_google_protobuf/src/",
+        "external/com_google_protobuf/src/",
         "external/com_github_grpc_ecosystem_grpc_gateway/third_party/googleapis/",
     ],
     pb_inputs = [
         "@com_github_grpc_ecosystem_grpc_gateway//third_party/googleapis/google/api:go_default_library_protos",
-        "@com_github_google_protobuf//:well_known_protos",
+        "@com_google_protobuf//:well_known_protos",
     ],
     pb_plugin = "@com_github_grpc_ecosystem_grpc_gateway//protoc-gen-swagger",
     go_prefix = "//:go_prefix",

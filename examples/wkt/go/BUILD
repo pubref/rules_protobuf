@@ -14,13 +14,13 @@ go_proto_library(
         "google/protobuf/compiler/plugin.proto": "github.com/golang/protobuf/protoc-gen-go/plugin",
     },
     imports = [
-        "external/com_github_google_protobuf/src",
+        "external/com_google_protobuf/src",
     ],
     inputs = [
-        "@com_github_google_protobuf//:well_known_protos",
+        "@com_google_protobuf//:well_known_protos",
     ],
     protos = ["wkt.proto"],
-    verbose = 3,
+    verbose = 0,
     deps = [
         "@com_github_golang_protobuf//protoc-gen-go/descriptor:go_default_library",
         "@com_github_golang_protobuf//protoc-gen-go/plugin:go_default_library",

@@ -28,6 +28,7 @@ closure_js_library(
 
 closure_js_test(
     name = "greeter_test",
+    size = "small",
     srcs = ["greeter_test.js"],
     compilation_level = "SIMPLE",
     pedantic = True,

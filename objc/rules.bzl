@@ -17,7 +17,7 @@ def objc_proto_repositories(
                      **kwargs)
 
 PB_COMPILE_DEPS = [
-    "@com_github_google_protobuf//:protobuf_objc",
+    "@com_google_protobuf//:protobuf_objc",
 ]
 
 GRPC_COMPILE_DEPS = PB_COMPILE_DEPS + [

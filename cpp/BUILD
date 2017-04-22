@@ -5,8 +5,8 @@ load("//protobuf:rules.bzl", "proto_language")
 proto_language(
     name = "cpp",
     grpc_compile_deps = [
-        "@com_github_grpc_grpc//:grpc++",
-        "@com_github_grpc_grpc//:grpc++_reflection",
+        "@com_google_grpc//:grpc++",
+        "@com_google_grpc//:grpc++_reflection",
     ],
     grpc_file_extensions = [
         ".grpc.pb.h",
@@ -20,6 +20,12 @@ proto_language(
     pb_file_extensions = [
         ".pb.h",
         ".pb.cc",
+    ],
+    pb_inputs = [
+        "@com_google_protobuf//:well_known_protos",
+    ],
+    pb_imports = [
+        "external/com_google_protobuf/src",
     ],
     supports_grpc = True,
 )

@@ -8,4 +8,18 @@ proto_language(
     pb_plugin = "@com_github_golang_protobuf//protoc-gen-go",
     pb_plugin_implements_grpc = True,
     go_prefix = "//:go_prefix",
+    pb_imports = [
+        "external/com_google_protobuf/src",
+    ],
+    pb_inputs = [
+        "@com_google_protobuf//:well_known_protos",
+    ],
+)
+
+proto_language(
+    name = "go_without_wkt",
+    pb_file_extensions = [".pb.go"],
+    pb_plugin = "@com_github_golang_protobuf//protoc-gen-go",
+    pb_plugin_implements_grpc = True,
+    go_prefix = "//:go_prefix",
 )
