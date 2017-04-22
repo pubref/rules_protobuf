@@ -32,7 +32,6 @@ load("@org_pubref_rules_protobuf//grpc_gateway:rules.bzl", "grpc_gateway_proto_c
 grpc_gateway_proto_compile(
   name = "protos",
   protos = ["message.proto"],
-  with_grpc = True,
 )
 ```
 
@@ -52,7 +51,6 @@ load("@org_pubref_rules_protobuf//grpc_gateway:rules.bzl", "grpc_gateway_proto_l
 grpc_gateway_proto_library(
   name = "protolib",
   protos = ["message.proto"],
-  with_grpc = True,
 )
 ```
 

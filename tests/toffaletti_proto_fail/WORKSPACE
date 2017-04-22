@@ -1,0 +1,14 @@
+load("//:parent_repository.bzl", "parent_repository")
+
+parent_repository(
+    name = "org_pubref_rules_protobuf",
+    exposed_dirs = [
+        "BUILD",
+        "cpp",
+        "protobuf",
+        "python",
+    ]
+)
+
+load("@org_pubref_rules_protobuf//python:rules.bzl", "py_proto_repositories")
+py_proto_repositories()

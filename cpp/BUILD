@@ -21,5 +21,11 @@ proto_language(
         ".pb.h",
         ".pb.cc",
     ],
+    pb_inputs = [
+        "@com_github_google_protobuf//:well_known_protos",
+    ],
+    pb_imports = [
+        "external/com_github_google_protobuf/src",
+    ],
     supports_grpc = True,
 )

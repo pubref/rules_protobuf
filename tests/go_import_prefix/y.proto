@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package A;
+
+import "tests/go_import_prefix/x.proto";
+
+message Y {
+  string name = 1;
+  X x = 2;
+}

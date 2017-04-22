@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+option go_package = "pubref.org/test/message";
+
+message Config {
+  string label = 1;
+}
+

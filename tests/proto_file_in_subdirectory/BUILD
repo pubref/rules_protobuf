@@ -1,4 +1,5 @@
 load("//cpp:rules.bzl", "cc_proto_library")
+load("//python:rules.bzl", "py_proto_compile")
 
 cc_test(
     name = "test",
@@ -6,15 +7,24 @@ cc_test(
     srcs = ["qux_test.cc"],
     copts = ["-Iexternal/gtest/include"],
     deps = [
-        ":protolib",
+        ":baz_cc_proto",
         "@gtest//:gtest",
     ],
 )
 
 cc_proto_library(
-    name = "protolib",
+    name = "baz_cc_proto",
     protos = [
         "foo/bar/baz.proto",
+    ],
+    verbose = 0,
+)
+
+py_proto_compile(
+    name = "baz_py_proto",
+    protos = [
+        "foo/bar/baz.proto",
+        "foo/bar/options.proto",
     ],
     verbose = 0,
 )

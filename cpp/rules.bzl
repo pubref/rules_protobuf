@@ -36,25 +36,26 @@ cc_proto_compile = cpp_proto_compile
 
 def cpp_proto_library(
     name,
-    langs = [str(Label("//cpp"))],
-    protos = [],
-    imports = [],
-    inputs = [],
-    proto_deps = [],
-    output_to_workspace = False,
-    protoc = None,
-
-    pb_plugin = None,
-    pb_options = [],
-
+    deps = [],
+    excludes = None,
     grpc_plugin = None,
     grpc_options = [],
-
+    langs = [str(Label("//cpp"))],
+    imports = [],
+    inputs = [],
+    includes = [],
+    pb_plugin = None,
+    pb_options = [],
+    pre_commands = None,
     proto_compile_args = {},
-    with_grpc = True,
+    proto_deps = [],
+    protoc = None,
+    protos = [],
+    root = None,
     srcs = [],
-    deps = [],
+    output_to_workspace = False,
     verbose = 0,
+    with_grpc = True,
     **kwargs):
 
   if with_grpc:
@@ -64,13 +65,17 @@ def cpp_proto_library(
 
   proto_compile_args += {
     "name": name + ".pb",
-    "protos": protos,
+    "pre_commands": pre_commands,
     "deps": [dep + ".pb" for dep in proto_deps],
-    "langs": langs,
-    "imports": imports,
-    "inputs": inputs,
-    "pb_options": pb_options,
+    "excludes": excludes,
     "grpc_options": grpc_options,
+    "imports": imports,
+    "includes": includes,
+    "inputs": inputs,
+    "langs": langs,
+    "pb_options": pb_options,
+    "protos": protos,
+    "root": root,
     "output_to_workspace": output_to_workspace,
     "verbose": verbose,
     "with_grpc": with_grpc,
