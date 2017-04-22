@@ -7,13 +7,12 @@ workspace(name = "org_pubref_rules_protobuf")
 git_repository(
     name = "io_bazel_rules_go",
     remote = "https://github.com/bazelbuild/rules_go.git",
-    tag = "0.4.2", # Apr 7, 2017
+    tag = "0.4.2",  # Apr 7, 2017
 )
 
 load("@io_bazel_rules_go//go:def.bzl", "go_repositories")
 
 go_repositories()
-
 
 # ================================================================
 # closure js_proto_library support requires rules_closure
@@ -29,7 +28,6 @@ load("@io_bazel_rules_closure//closure:defs.bzl", "closure_repositories")
 
 closure_repositories()
 
-
 # ================================================================
 # csharp_proto_library support requires rules_dotnet (forked)
 # ================================================================
@@ -44,21 +42,19 @@ load("@io_bazel_rules_dotnet//dotnet:csharp.bzl", "csharp_repositories")
 
 csharp_repositories(use_local_mono = False)
 
-
 # ================================================================
 # node_proto_library support requires rules_node
 # ================================================================
 
 git_repository(
     name = "org_pubref_rules_node",
-    commit = "85b720f3d4299b0a1b9c7771c023352e9182045f",  # Oct 10, 2016
+    commit = "a5bd476899cf526893e090a7ccfb8dcf91965780",  # Apr 15, 2017
     remote = "https://github.com/pubref/rules_node.git",
 )
 
 load("@org_pubref_rules_node//node:rules.bzl", "node_repositories")
 
 node_repositories()
-
 
 # ================================================================
 # Specific Languages Support

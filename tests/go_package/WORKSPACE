@@ -42,7 +42,7 @@ load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_library")
 load("@org_pubref_rules_protobuf//go:rules.bzl", "go_proto_library")
 
 cc_proto_library(
-    name = "label_cc_proto",
+    name = "cc_label_proto",
     protos = [
         "google/api/label.proto",
     ],
@@ -50,7 +50,7 @@ cc_proto_library(
 )
 
 java_proto_library(
-    name = "label_java_proto",
+    name = "java_label_proto",
     protos = [
         "google/api/label.proto",
     ],
@@ -58,7 +58,7 @@ java_proto_library(
 )
 
 go_proto_library(
-    name = "label_go_proto",
+    name = "go_label_proto",
     protos = [
         "google/api/label.proto",
     ],
