@@ -75,8 +75,10 @@ def _grpc_repository_impl(rtx):
     ###
     # Phase 2: Setup the submodules
     ##
+    print("SETUP SUBMODULES")
     #_setup_submodule_cares(rtx)
     _setup_submodule_nanopb(rtx)
+    print("DONE")
 
 grpc_repository = repository_rule(
     implementation = _grpc_repository_impl,

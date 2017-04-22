@@ -120,9 +120,9 @@ ruby_proto_repositories()
 
 http_archive(
     name = "com_github_grpc_grpc2",
-    url = "https://github.com/grpc/grpc/archive/dc607c4ce2f476862746239a8009e048b110c9db.zip", #v1.2.3
-    sha256 = "4d36d100ae0177ce406d5bfb32bee703532b2aace3513a80077ad5ca4cd76a35",
-    strip_prefix = "grpc-dc607c4ce2f476862746239a8009e048b110c9db",
+    url = "https://github.com/grpc/grpc/archive/7e0e18d21e996c1bed242bca8eacb559527f95e3.zip", # Apr 22, 2017
+    sha256 = "37b103adc7eeaf63062d4643358cc64cb6cc31bd5c4e5c7c448b8d0d663b52d7",
+    strip_prefix = "grpc-7e0e18d21e996c1bed242bca8eacb559527f95e3",
 )
 
 new_http_archive(
