@@ -389,14 +389,11 @@ def _get_external_root(ctx):
     return "."
 
 
-def _compile(ctx, unit):
-
-  execdir = unit.data.execdir
-
-  protoc = _get_offset_path(execdir, unit.compiler.path)
-
-  imports = []
-  for i in unit.imports:
+def _update_import_paths(ctx, builder):
+  """Updates import paths beginning with 'external' so that they point to external/."""
+  execdir = _get_external_root(ctx)
+  final_imports = []
+  for i in builder["imports"]:
     final_i = i
     # Check for imports from external
     path = i.split("/")
@@ -404,8 +401,18 @@ def _compile(ctx, unit):
       # Ensure that external imports start from root, as external/ does not exist when rule is being
       # built in an external project.
       final_i = _get_offset_path(execdir, i)
-    imports.append("--proto_path=" + final_i)
+    final_imports.append(final_i)
 
+  builder["imports"] = final_imports
+
+
+def _compile(ctx, unit):
+
+  execdir = unit.data.execdir
+
+  protoc = _get_offset_path(execdir, unit.compiler.path)
+
+  imports = ["--proto_path=" + i for i in unit.imports]
   srcs = [_get_offset_path(execdir, p.path) for p in unit.data.protos]
   protoc_cmd = [protoc] + list(unit.args) + imports + srcs
   manifest = [f.short_path for f in unit.outputs]
@@ -588,6 +595,7 @@ def _proto_compile_impl(ctx):
       _build_grpc_invocation(run, builder)
       _build_grpc_out(run, builder)
 
+  _update_import_paths(ctx, builder)
 
   # Build final immutable compilation unit for rule and transitive beyond
   unit = struct(
