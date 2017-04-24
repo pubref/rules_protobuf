@@ -411,7 +411,6 @@ def _compile(ctx, unit):
   execdir = unit.data.execdir
 
   protoc = _get_offset_path(execdir, unit.compiler.path)
-
   imports = ["--proto_path=" + i for i in unit.imports]
   srcs = [_get_offset_path(execdir, p.path) for p in unit.data.protos]
   protoc_cmd = [protoc] + list(unit.args) + imports + srcs
