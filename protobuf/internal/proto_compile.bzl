@@ -389,12 +389,73 @@ def _get_external_root(ctx):
     return "."
 
 
+def _generate_dependency_link_script(ctx, unit):
+  # Create a directory of links to the proto file dependencies that is structured
+  # for protoc include paths.
+
+  # This assumes that BUILD files for protos are at the top of the proto package directory
+  # structure. E.g. for example/proto/common.proto the BUILD file would be defined at .
+  # and not under the example/proto directory.
+  # If the BUILD file is defined as a sibling to the proto file then we assume the proto
+  # is in the toplevel package
+  target_identifier = "%s/%s" % (unit.data.label.package, unit.data.label.name)
+  if target_identifier.startswith("/"):
+    target_identifier = target_identifier[1:]
+  target_identifier = target_identifier.replace("/", "_").replace(".", "_").replace("-", "_")
+  PROTO_DEP_DIR = "_transitive_proto_deps/%s" % target_identifier
+  dependency_links_cmds = {} # Use dictionary keys to simulate a set
+  dependency_imports = []
+  for transitive_unit in unit.data.transitive_units:
+    # Adding the import paths allows for BUILD files that are defined above the top of the proto package
+    # directory structure.  E.g. the google_well_known protos are in src/com/google/protobuf/*.protos relative to the
+    # BUILD file so we need to add src as an import root for the protos in the com.google.protobuf package.
+    for import_dir in transitive_unit.imports:
+      # Skip default directories for proto BUILD files that are in sub-directories of the workspace
+      if import_dir != transitive_unit.data.label.package:
+        dependency_imports.append("%s/%s" % (PROTO_DEP_DIR, import_dir))
+
+    for proto_dep in transitive_unit.inputs:
+      # For bazel 3.x compatibility. for bazel 4+ just use proto_dep.extension
+      proto_dep_extension = proto_dep.path.split(".")[-1] if "." in proto_dep.path else ""
+      proto_dep_is_directory = proto_dep.is_directory if hasattr(proto_dep, "is_directory") else False
+      if proto_dep_extension != "proto" or proto_dep_is_directory:
+        continue
+
+      proto_dep_link_target = "%s/%s" % (PROTO_DEP_DIR, proto_dep.owner.name)
+      proto_dep_link_target_dir = proto_dep_link_target.rsplit("/", 1)[0]
+      proto_dep_link_source = "%s/%s" % (_get_offset_path(proto_dep_link_target_dir, unit.data.execdir), proto_dep.path)
+      dependency_links_cmds[
+        "mkdir -p %s && ln -sf %s %s" % (proto_dep_link_target_dir, proto_dep_link_source, proto_dep_link_target)
+        ] = None
+
+  dependency_links_cmds = dependency_links_cmds.keys()
+  if ctx.attr.verbose > 1:
+    print("Generating %s proto file links for transitive proto depedencies" % (len(dependency_links_cmds)))
+
+  dependency_links_cmds = ["#!/bin/bash", "rm -rf %s" % PROTO_DEP_DIR] + dependency_links_cmds + [""]
+  genfiles_dir = ctx.genfiles_dir if hasattr(ctx, "genfiles_dir") else ctx.configuration.genfiles_dir
+  dependency_links_script = ctx.new_file(genfiles_dir, "%s.create_proto_dependency_links" % target_identifier)
+  if ctx.attr.verbose > 2:
+    print("%s\n%s" % (dependency_links_script.path, "\n".join(dependency_links_cmds)))
+  ctx.file_action(
+     output = dependency_links_script,
+     content = "\n".join(dependency_links_cmds),
+     executable = True,
+  )
+
+  dependency_imports = set(dependency_imports)
+  return dependency_links_script, dependency_imports
+
+
 def _compile(ctx, unit):
 
   execdir = unit.data.execdir
 
   protoc = _get_offset_path(execdir, unit.compiler.path)
-  imports = ["--proto_path=" + i for i in unit.imports]
+
+  dependency_links_script, dependency_imports = _generate_dependency_link_script(ctx, unit)
+  imports = ["--proto_path=" + i for i in (unit.imports + dependency_imports)]
+
   srcs = [_get_offset_path(execdir, p.path) for p in unit.data.protos]
   protoc_cmd = [protoc] + list(unit.args) + imports + srcs
   manifest = [f.short_path for f in unit.outputs]
@@ -402,12 +463,13 @@ def _compile(ctx, unit):
   transitive_units = set()
   for u in unit.data.transitive_units:
     transitive_units = transitive_units | u.inputs
-  inputs = list(unit.inputs | transitive_units) + [unit.compiler]
+  inputs = list(unit.inputs | transitive_units) + [unit.compiler] + [dependency_links_script]
   outputs = list(unit.outputs)
 
   cmds = [cmd for cmd in unit.commands] + [" ".join(protoc_cmd)]
   if execdir != ".":
     cmds.insert(0, "cd %s" % execdir)
+  cmds.insert(0, dependency_links_script.path)
 
   if unit.data.output_to_workspace:
     print(
@@ -531,8 +593,7 @@ def _proto_compile_impl(ctx):
     "commands": [], # optional miscellaneous pre-protoc commands
   }
 
-  # Build a list of structs that will be processed in this compiler
-  # run.
+  # Build a list of structs that will be processed in this compiler run.
   runs = []
   for l in ctx.attr.langs:
     lang = l.proto_language

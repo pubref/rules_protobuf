@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "examples.proto";
+option java_outer_classname = "MiddleProto";
+
+package middle;
+
+import "examples/proto/bottom.proto";
+
+message MiddleMessage {
+  bool verbose = 1;
+}
+
+service Middle {
+  rpc InTheMiddle (bottom.BottomMessage) returns (bottom.BottomMessage) {}
+}

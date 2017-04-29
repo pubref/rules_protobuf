@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "examples.proto";
+option java_outer_classname = "ErrorProto";
+
+package error;
+
+# This proto has an intentional compilation error and should not be included
+# in protoc builds if the proto path imports are working correctly
+message DoesNotCompile {
+  string name =;
+}

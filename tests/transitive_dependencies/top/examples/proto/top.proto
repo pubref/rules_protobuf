@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "examples.proto";
+option java_outer_classname = "TopProto";
+
+package top;
+
+import "examples/proto/middle.proto";
+
+message TopMessage {
+  bool verbose = 1;
+}
+
+service Top {
+  rpc OnTop (middle.MiddleMessage) returns (middle.MiddleMessage) {}
+}

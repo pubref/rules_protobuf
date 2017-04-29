@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_package = "examples.proto";
+option java_outer_classname = "BottomProto";
+
+package bottom;
+
+import "google/protobuf/descriptor.proto";
+
+message BottomMessage {
+  bool verbose = 1;
+  google.protobuf.FileDescriptorProto file = 2;
+}
+
+extend google.protobuf.MessageOptions {
+  string my_option = 10001;
+}
