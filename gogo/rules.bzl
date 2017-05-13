@@ -32,13 +32,13 @@ GRPC_COMPILE_DEPS = PB_COMPILE_DEPS + [
 def gogo_proto_compile(langs = [str(Label("//gogo"))], **kwargs):
   proto_compile(langs = langs, **kwargs)
 
-def gogofast_proto_compile(langs = [str(Label("//gogofast"))], **kwargs):
+def gogofast_proto_compile(langs = [str(Label("//gogo:gogofast"))], **kwargs):
   proto_compile(langs = langs, **kwargs)
 
-def gogofaster_proto_compile(langs = [str(Label("//gogofaster"))], **kwargs):
+def gogofaster_proto_compile(langs = [str(Label("//gogo:gogofaster"))], **kwargs):
   proto_compile(langs = langs, **kwargs)
 
-def gogoslick_proto_compile(langs = [str(Label("//gogoslick"))], **kwargs):
+def gogoslick_proto_compile(langs = [str(Label("//gogo:gogoslick"))], **kwargs):
   proto_compile(langs = langs, **kwargs)
 
 def gogofast_proto_library(
