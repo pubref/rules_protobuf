@@ -32,14 +32,20 @@ DEPS = {
 
     "io_grpc_grpc_core": {
         "rule": "maven_jar",
-        "artifact": "io.grpc:grpc-core:jar:1.0.1",
-        "sha1": "dce1c939c2c6110ac571d99f8d2a29b19bdad4db",
+        "artifact": "io.grpc:grpc-core:jar:1.4.0",
+        "sha1": "2f7ce5529115969119bff4962ac08df6700cf5d8",
+    },
+
+    "com_google_instrumentation": {
+        "rule": "maven_jar",
+        "artifact": "com.google.instrumentation:instrumentation-api:jar:0.4.2",
+        "sha1": "3b548639e14ca8d8af5075acac82926266479ebf",
     },
 
     "io_grpc_grpc_protobuf": {
         "rule": "maven_jar",
-        "artifact": "io.grpc:grpc-protobuf:jar:1.0.1",
-        "sha1": "17222b03c64a65eb05de5ab266c920fca8c90fab",
+        "artifact": "io.grpc:grpc-protobuf:jar:1.4.0",
+        "sha1": "8f99da3d840cb96cd655d610f771aeca4561d52d",
     },
 
     "com_google_protobuf_protobuf_java": {
@@ -56,8 +62,8 @@ DEPS = {
 
     "io_grpc_grpc_protobuf_lite": {
         "rule": "maven_jar",
-        "artifact": "io.grpc:grpc-protobuf-lite:jar:1.0.1",
-        "sha1": "b28a07b56ed2e66088221cbaf1228fa4e9669166",
+        "artifact": "io.grpc:grpc-protobuf-lite:jar:1.4.0",
+        "sha1": "33e08cf571fcb2bbddc0c8176f18a43703c35763",
     },
 
     "com_google_code_gson_gson": {
@@ -68,8 +74,8 @@ DEPS = {
 
     "io_grpc_grpc_stub": {
         "rule": "maven_jar",
-        "artifact": "io.grpc:grpc-stub:jar:1.0.1",
-        "sha1": "a875969bf700b0d25dc8b7febe42bfb253ca5b3b",
+        "artifact": "io.grpc:grpc-stub:jar:1.4.0",
+        "sha1": "840a1a94c9f6a91511644fed6b1116914acfdb90",
     },
 
     "junit_junit_4": {
@@ -84,14 +90,14 @@ DEPS = {
 
     "io_grpc_grpc_context": {
         "rule": "maven_jar",
-        "artifact": "io.grpc:grpc-context:jar:1.0.1",
-        "sha1": "9d308f2b616044ddd380866b4e6c23b5b4020963",
+        "artifact": "io.grpc:grpc-context:jar:1.4.0",
+        "sha1": "8cbaa53c647ecee7077d4cdaa6855f6a18a03e9d",
     },
 
     "io_grpc_grpc_netty": {
         "rule": "maven_jar",
-        "artifact": "io.grpc:grpc-netty:jar:1.0.1",
-        "sha1": "1e4628b96434fcd6fbe519e7a3dbcc1ec5ac2c14",
+        "artifact": "io.grpc:grpc-netty:jar:1.4.0",
+        "sha1": "4c463ab9f4487e11417ea15187813d082eab02ea",
     },
 
     "io_netty_netty_buffer": {
@@ -155,8 +161,8 @@ DEPS = {
 
     "io_grpc_grpc_protobuf_nano": {
         "rule": "maven_jar",
-        "artifact": "io.grpc:grpc-protobuf-nano:jar:1.0.1",
-        "sha1": "a0881f36976030d2b5a573677e7dd4752cedf760",
+        "artifact": "io.grpc:grpc-protobuf-nano:jar:1.4.0",
+        "sha1": "10bc6047f5add8a1f15bea890cc94ebb3352915a",
     },
 
     # ###################
@@ -171,8 +177,8 @@ DEPS = {
 
     "io_grpc_grpc_auth": {
         "rule": "maven_jar",
-        "artifact": "io.grpc:grpc-auth:jar:1.0.1",
-        "sha1": "5e1d053277e113ed7b7c71b5c1cbc32a8b4d3a83",
+        "artifact": "io.grpc:grpc-auth:jar:1.4.0",
+        "sha1": "f68be9363f43a5d7d55aea4c1a43c840e6d6a253",
     },
 
     # ######################
@@ -181,8 +187,8 @@ DEPS = {
 
     "io_grpc_grpc_okhttp": {
         "rule": "maven_jar",
-        "artifact": "io.grpc:grpc-okhttp:jar:1.0.1",
-        "sha1": "3cd4e41931268eef7c1ce00a2baecba6e53cb1da",
+        "artifact": "io.grpc:grpc-okhttp:jar:1.4.0",
+        "sha1": "0e6c8f1caa1f618ca4285f55a7c680e5236c4ed4",
     },
 
     "com_squareup_okhttp_okhttp": {
@@ -203,14 +209,14 @@ DEPS = {
 
     "protoc_gen_grpc_java_linux_x86_64": {
         "rule": "http_file",
-        "url": "http://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.0.1/protoc-gen-grpc-java-1.0.1-linux-x86_64.exe",
-        "sha256": "00497e9da3b8a068470bdf39b43f25084d9662e1419b01c2b3d9c29292fe0303",
+        "url": "http://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.4.0/protoc-gen-grpc-java-1.4.0-linux-x86_64.exe",
+        "sha256": "7c868902ea5c177216d8240b2b68215b3d0efd044c3be27414099f8d40a3b083",
     },
 
     "protoc_gen_grpc_java_macosx": {
         "rule": "http_file",
-        "url": "http://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.0.1/protoc-gen-grpc-java-1.0.1-osx-x86_64.exe",
-        "sha256": "cb4762ee4bde80fee5a35409474d6f177a2005e76d41590066e09be180af7781",
+        "url": "http://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.4.0/protoc-gen-grpc-java-1.4.0-osx-x86_64.exe",
+        "sha256": "8d672fe412e0ababeebbff3db01820b59d986bf2b7e5e6987b14df532c045378",
     },
 
 }
