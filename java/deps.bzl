@@ -115,7 +115,7 @@ DEPS = {
     "io_netty_netty_codec_http": {
         "rule": "maven_jar",
         "artifact": "io.netty:netty-codec-http:jar:4.1.12.Final",
-        "sha1": "62fdf3c43f2674a61ad761b3d164b34dbe76e6cc",
+        "sha1": "df1561ac7c455faf57c83a45af78771c3d3d0621",
     },
 
     "io_netty_netty_codec_http2": {

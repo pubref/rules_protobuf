@@ -18,6 +18,7 @@ proto_language(
         "@io_grpc_grpc_context//jar",
         "@io_netty_netty_buffer//jar",
         "@io_netty_netty_codec//jar",
+        "@io_netty_netty_codec_http//jar",
         "@io_netty_netty_codec_http2//jar",
         "@io_netty_netty_common//jar",
         "@io_netty_netty_handler//jar",
