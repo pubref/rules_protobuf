@@ -9,6 +9,7 @@ load("//protobuf:rules.bzl",
 def java_proto_repositories(
     lang_deps = DEPS,
     lang_requires = [
+    "com_google_instrumentation",
     "com_google_protobuf_protobuf_java",
     "com_google_protobuf_protobuf_java_util",
     "com_google_code_gson_gson",

@@ -24,6 +24,7 @@ proto_language(
         "@io_netty_netty_resolver//jar",
         "@io_netty_netty_transport//jar",
         "@io_grpc_grpc_protobuf_lite//jar",
+        "@com_google_instrumentation//jar",
     ],
     output_to_jar = True,
     pb_compile_deps = [
