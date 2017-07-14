@@ -9,13 +9,14 @@ DEPS = {
         #"tag": "v1.0.1",
     },
 
-    # Hooray! The boringssl team provides a "master-with-bazel" branch
-    # with all BUILD files ready to go.  To update, pick the
-    # newest-ish commit-id off that branch.
+    # Hooray! The boringssl team provides "master-with-bazel" and
+    # "chromium-stable-with-bazel" branches with the BUILD files ready
+    # to go.  To update, pick the newest-ish commit-id off that
+    # branch.
     "boringssl": {
         "rule": "git_repository",
         "remote":  "https://boringssl.googlesource.com/boringssl",
-        "commit": "14443198abcfc48f0420011a636b220e58e18610", # Nov 11 2016
+        "commit": "8d8d1ca8e1f1a34a2167f59e2b0ca09c623b160f", # Jun 07 2017
     },
 
     # libssl is required for c++ grpc where it is expected in
