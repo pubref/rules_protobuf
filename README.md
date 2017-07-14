@@ -44,7 +44,7 @@ of this project are to:
 | [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) | [v1.0.1](https://github.com/grpc/grpc/releases/tag/v1.0.1) |
 | [C#](csharp)                 | [csharp_proto_compile](csharp#csharp_proto_compile) | [csharp_proto_library](csharp#csharp_proto_library) | [1.0.0](https://www.nuget.org/packages/Grpc/) |
 | [Closure](closure)           | [closure_proto_compile](closure#closure_proto_compile) | [closure_proto_library](closure#closure_proto_library)          |  |
-| [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.0.5](https://github.com/grpc/grpc-go/releases/tag/v1.0.5) |
+| [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.2.0](https://github.com/grpc/grpc-go/releases/tag/v1.2.0) |
 | [Go (gogo)](gogo)            | [gogo_proto_compile](gogo#gogo_proto_compile) | [gogo_proto_library](gogo#gogo_proto_library) | [fb8a35](https://github.com/gogo/protobuf/commit/fb8a359905af6e2b6517cccda0ba25915322ee88) |
 | [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | [v1.0.4](https://github.com/grpc/grpc-go/releases/tag/v1.0.4) |
 | [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [v1.4.0](https://github.com/grpc/grpc-java/releases/tag/v1.4.0) |
@@ -90,8 +90,8 @@ language-specific `*_proto_repositories` rule(s):
 git_repository(
   name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
-  tag = "v0.7.1",
-  #commit = "..." # alternatively, latest commit on master
+  tag = "v0.7.2",
+  #commit = "..." # or choose latest commit on master
 )
 
 load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_repositories")
@@ -335,22 +335,7 @@ Contributions welcome; please create Issues or GitHub pull requests.
 
 # Credits
 
-* [@yugui][yugui]: Primary source for the go support from [grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway/blob/e958c5db30f7b99e1870db42dd5624322f112d0c/examples/bzl/BUILD).
-
-* [@mzhaom][mzhaom]: Primary source for the skylark rule (from
-  <https://github.com/mzhaom/trunk/blob/master/third_party/grpc/grpc_proto.bzl>).
-
-* [@jart][jart]: Overall repository structure and bazel code layout
-  (based on [rules_closure]).
-
-* [@korfuri][korfuri]: Prior research on travis-ci integration.
-
-* Much thanks to all the members of the bazel, protobuf, and gRPC teams.
-
-[yugui]: http://github.com/yugui "Yuki Yugui Sonoda"
-[jart]: http://github.com/jart "Justine Tunney"
-[mzhaom]: http://github.com/mzhaom "Ming Zhao"
-[korfuri]: http://github.com/korfuri "Uriel Korfa"
+* Much thanks to all [contributors](https://github.com/pubref/rules_protobuf/graphs/contributors) and the members of the bazel, protobuf, and gRPC teams.
 
 [protobuf-home]: https://developers.google.com/protocol-buffers/ "Protocol Buffers Developer Documentation"
 [bazel-home]: http://bazel.io "Bazel Homepage"
