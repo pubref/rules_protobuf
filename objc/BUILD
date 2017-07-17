@@ -10,7 +10,7 @@ proto_language(
     ],
     grpc_plugin = "//external:protoc_gen_grpc_objc",
     grpc_plugin_name = "grpc_objc",
-    output_file_style = "capitalize",
+    output_file_style = "pascal",
     pb_file_extensions = [
         ".pbobjc.h",
         ".pbobjc.m",
