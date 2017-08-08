@@ -1,5 +1,6 @@
 workspace(name = "org_pubref_rules_protobuf")
 
+
 # ================================================================
 # Go support requires rules_go
 # ================================================================
@@ -109,3 +110,30 @@ py_proto_repositories()
 load("//ruby:rules.bzl", "ruby_proto_repositories")
 
 ruby_proto_repositories()
+
+
+# ================================================================
+# EXPERIMENTAL
+# ================================================================
+
+
+http_archive(
+    name = "com_google_grpc",
+    url = "https://github.com/grpc/grpc/archive/e48bff9ba03bfa76eba5f1e63949f89a60f32a77.zip", # July 13, 2017
+    sha256 = "8ccf2ffc7efa972ab67de7a8c42dcdfb65fc3e70cbc88ccc0feb13cd8cef56a8",
+    strip_prefix = "grpc-e48bff9ba03bfa76eba5f1e63949f89a60f32a77",
+)
+
+new_http_archive(
+    name = "com_github_c_ares_c_ares",
+    url = "https://github.com/c-ares/c-ares/archive/7691f773af79bf75a62d1863fd0f13ebf9dc51b1.zip",
+    sha256 = "ddce8def076a0a8cfa3f56595e391cf9e13a39fd4a7882822ed98cafd4079862",
+    strip_prefix = "c-ares-7691f773af79bf75a62d1863fd0f13ebf9dc51b1",
+    build_file_content = "",
+)
+
+load("//cpp:grpc_repository.bzl", "grpc_repository")
+
+grpc_repository(
+    name = "com_github_grpc_grpc",
+)

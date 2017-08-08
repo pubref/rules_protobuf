@@ -4,15 +4,17 @@ load("//cpp:deps.bzl", "DEPS")
 def cpp_proto_repositories(
     lang_deps = DEPS,
     lang_requires = [
+      "protobuf",
       "protobuf_clib",
       "gtest",
-      "com_github_grpc_grpc",
+      "cares",
+      #"com_github_grpc_grpc",
       "com_github_madler_zlib",
       "zlib",
       "nanopb",
       "boringssl",
       "libssl",
-      "protobuf_compiler",
+      "protocol_compiler",
       "protoc_gen_grpc_cpp",
     ], **kwargs):
 

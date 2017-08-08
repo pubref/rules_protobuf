@@ -1,7 +1,7 @@
 DEPS = {
 
     # Grpc repo is required by multiple languages but we put it here.
-    "com_github_grpc_grpc": {
+    "com_github_grpc_grpc_OLD": {
         "rule": "git_repository",
         "remote": "https://github.com/grpc/grpc.git",
         "init_submodules": True,
@@ -34,10 +34,22 @@ DEPS = {
         "build_file": str(Label("//protobuf:build_file/com_github_madler_zlib.BUILD")),
     },
 
+    # grpc++ expects //external:cares
+    "cares": {
+        "rule": "bind",
+        "actual": "@com_github_grpc_grpc//third_party/cares:ares",
+    },
+
     # grpc++ expects //external:zlib
     "zlib": {
         "rule": "bind",
         "actual": "@com_github_madler_zlib//:zlib",
+    },
+
+    # grpc++ expects "//external:protobuf"
+    "protobuf": {
+        "rule": "bind",
+        "actual": "@com_github_google_protobuf//:protobuf",
     },
 
     # grpc++ expects "//external:protobuf_clib"
@@ -63,9 +75,9 @@ DEPS = {
 
     # Bind the protobuf proto_lib into //external.  Required for
     # compiling the protoc_gen_grpc plugin
-    "protobuf_compiler": {
+    "protocol_compiler": {
         "rule": "bind",
-        "actual": "@com_github_google_protobuf//:protoc_lib",
+        "actual": "@com_github_google_protobuf//:protoc",
     },
 
     # GTest is for our own internal cc tests.
