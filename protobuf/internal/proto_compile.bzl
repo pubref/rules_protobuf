@@ -331,8 +331,12 @@ def _build_protobuf_out(run, builder):
   """Build the --{lang}_out option"""
   lang = run.lang
   name = lang.pb_plugin_name or lang.name
-  outdir = builder.get(lang.name + "_outdir", run.outdir)
   options = builder.get(lang.name + "_pb_options", [])
+
+  if run.data.protos[0].path.startswith(run.ctx.var["GENDIR"]):
+    outdir = "."
+  else:
+    outdir = builder.get(lang.name + "_outdir", run.outdir)
 
   _build_plugin_out(name, outdir, options, builder)
 
@@ -341,7 +345,12 @@ def _build_grpc_out(run, builder):
   """Build the --{lang}_out grpc option"""
   lang = run.lang
   name = lang.grpc_plugin_name or "grpc-" + lang.name
-  outdir = builder.get(lang.name + "_outdir", run.outdir)
+
+  if run.data.protos[0].path.startswith(run.ctx.var["GENDIR"]):
+    outdir = "."
+  else:
+    outdir = builder.get(lang.name + "_outdir", run.outdir)
+
   options = builder.get(lang.name + "_grpc_options", [])
 
   _build_plugin_out(name, outdir, options, builder)
