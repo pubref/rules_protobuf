@@ -7,7 +7,7 @@ workspace(name = "org_pubref_rules_protobuf")
 git_repository(
     name = "io_bazel_rules_go",
     remote = "https://github.com/bazelbuild/rules_go.git",
-    tag = "0.4.2", # Apr 7, 2017
+    tag = "0.5.2", # July 17, 2017
 )
 
 load("@io_bazel_rules_go//go:def.bzl", "go_repositories")
