@@ -316,7 +316,7 @@ def _build_plugin_out(name, outdir, options, builder):
 
   # If the outdir is external, such as when building
   # :well_known_protos, the protoc command may fail as the directory
-  # bazel-out/local-fastbuild/genfiles/external/com_github_google_protobuf
+  # bazel-out/local-fastbuild/genfiles/external/com_google_protobuf
   # won't necessarily exist.  Add this to the queue of
   # pre-execution commands to create it.
   if outdir.startswith("../..") and not outdir.endswith(".jar"):
