@@ -7,7 +7,9 @@ def proto_repositories(excludes = [],
                        protobuf_deps = DEPS,
                        protobuf_requires = [
                          "com_google_protobuf",
-                         "protoc",
+                         "protobuf",
+                         "protobuf_clib",
+                         "protocol_compiler",
                        ],
                        overrides = {},
                        verbose = 0):

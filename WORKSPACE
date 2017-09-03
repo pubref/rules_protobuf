@@ -81,7 +81,7 @@ load("//java:rules.bzl", "java_proto_repositories", "nano_proto_repositories")
 
 java_proto_repositories()
 
-nano_proto_repositories()
+#nano_proto_repositories()
 
 load("//go:rules.bzl", "go_proto_repositories")
 

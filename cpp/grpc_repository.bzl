@@ -69,23 +69,23 @@ def _grpc_repository_impl(rtx):
     # Phase 1: Setup the grpc workspace
     ##
     rules_protobuf_workspace = "%s" % rtx.path(rtx.attr._rules_protobuf_workspace)
-    grpc_workspace = "%s" % rtx.path(rtx.attr._grpc_workspace)
+    base_workspace = "%s" % rtx.path(rtx.attr.base_workspace)
 
     # Mount (symlink) these files & directories from the grpc repo as-is.
     _symlink_external_workspace_path(rtx,
-                                    grpc_workspace,
+                                    base_workspace,
                                      "BUILD")
     _symlink_external_workspace_path(rtx,
-                                     grpc_workspace,
+                                     base_workspace,
                                      "src/")
     _symlink_external_workspace_path(rtx,
-                                     grpc_workspace,
+                                     base_workspace,
                                      "include/")
     _symlink_external_workspace_path(rtx,
-                                     grpc_workspace,
+                                     base_workspace,
                                      "third_party/")
     _symlink_external_workspace_path(rtx,
-                                     grpc_workspace,
+                                     base_workspace,
                                      "bazel/")
 
     # Remove the bazel/generate_cc.bzl file (we're about to replace it).
@@ -108,11 +108,12 @@ grpc_repository = repository_rule(
     attrs = {
         # The WORKSPACE file for the rules_protobuf repository.
         "_rules_protobuf_workspace": attr.label(
-            default = Label("//:WORKSPACE", relative_to_caller_repository=True)
+            default = Label("@org_pubref_rules_protobuf//:WORKSPACE", relative_to_caller_repository=True)
         ),
-        # The WORKSPACE file for the grpc repository.
-        "_grpc_workspace": attr.label(
-            default = Label("@com_google_grpc//:WORKSPACE")
+        # The WORKSPACE file for the original grpc repository that
+        # we'll use to build off of.
+        "base_workspace": attr.label(
+            default = Label("@com_google_grpc_base//:WORKSPACE")
         ),
         # The WORKSPACE file for the c-ares repository.
         "_cares_workspace": attr.label(

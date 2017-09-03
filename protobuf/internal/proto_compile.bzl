@@ -634,7 +634,7 @@ proto_compile = rule(
       providers = ["proto_compile_result"]
     ),
     "protoc": attr.label(
-      default = Label("//external:protoc"),
+      default = Label("//external:protocol_compiler"),
       cfg = "host",
       executable = True,
     ),

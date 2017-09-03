@@ -5,9 +5,9 @@ DEPS = {
     # Building grpc requires it to be called thusly.
     "com_google_protobuf": {
         "rule": "http_archive",
-        "url": "https://github.com/google/protobuf/archive/80a37e0782d2d702d52234b62dd4b9ec74fd2c95.zip", # 3.4.0
-        "strip_prefix": "protobuf-80a37e0782d2d702d52234b62dd4b9ec74fd2c95",
-        "sha256": "0b2e13f4c9e333d73e5cbc23c43ee87ce877f6c6adb6974aa526d5014318e4f7",
+        "url": "https://github.com/google/protobuf/archive/2807436cd828a526c5c38dd235c0d0d9cdc67b1f.zip", # 3.4.0
+        "strip_prefix": "protobuf-2807436cd828a526c5c38dd235c0d0d9cdc67b1f",
+        "sha256": "e83ee63eccfb47f07f263fbcdea0a2d838dab4a750c53867013539b5e536dd8a",
     },
 
     # This binds the cc_binary "protoc" into
@@ -15,6 +15,25 @@ DEPS = {
     "protoc": {
         "rule": "bind",
         "actual": "@com_google_protobuf//:protoc",
+    },
+
+    # Bind the protobuf proto_lib into //external.  Required for
+    # compiling the protoc_gen_grpc plugin
+    "protocol_compiler": {
+        "rule": "bind",
+        "actual": "@com_google_protobuf//:protoc",
+    },
+
+    # grpc++ expects "//external:protobuf"
+    "protobuf": {
+        "rule": "bind",
+        "actual": "@com_google_protobuf//:protobuf",
+    },
+
+    # grpc++ expects "//external:protobuf_clib"
+    "protobuf_clib": {
+        "rule": "bind",
+        "actual": "@com_google_protobuf//:protoc_lib",
     },
 
 }

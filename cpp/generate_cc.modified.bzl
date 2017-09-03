@@ -23,7 +23,7 @@ two lengths.
 The second change is that we need protoc to evaluate within the
 context of the workspace_root rather than the execroot.  To do this,
 we shift into the external workspace with a 'cd
-external/com_github_grpc_grpc', and adjust dir_out, plugin_out,
+external/com_google_grpc', and adjust dir_out, plugin_out,
 cpp_out etc to be relative to the forward shifted position.
 
 """
