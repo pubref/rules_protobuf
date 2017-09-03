@@ -28,8 +28,12 @@ def _mount_external_workspace_path(rtx,
     if target_workspace_file:
         target = _get_external_path(target_workspace_file, target_path)
     rtx.symlink(source, target)
-    #print("mounted %r --> %r" % (source, target))
+    print("mounted %r --> %r" % (source, target))
 
+def _relink_grpc_proto_library_build_file(rtx, source_workspace_file, source_path, target_path, target_workspace_file):
+    source = _get_external_path(source_workspace_file, source_path)
+    target = _get_external_path(target_workspace_file, target_path)
+    print("source_build_file %r --> %r" % (source, target))
 
 def _setup_submodule_cares(rtx):
     cares_workspace = "%s" % rtx.path(rtx.attr._cares_workspace)
@@ -56,7 +60,7 @@ def _setup_submodule_cares(rtx):
     # In this repo, we want to copy over all
     # Need to bind //external:cares to @com_google_grpc//third_party/cares:ares, so there should
     # be a build file in
-    _execute(rtx, ["cat", "third_party/cares/cares.BUILD"], print_result = True)
+    #_execute(rtx, ["cat", "third_party/cares/cares.BUILD"], print_result = True)
 
     # Remove the original BUILD files from new_http_archive to avoid package boundary errors
     _execute(rtx, ["rm", "third_party/cares/cares/WORKSPACE"])
@@ -88,6 +92,11 @@ def _grpc_repository_impl(rtx):
     _mount_external_workspace_path(rtx, grpc_workspace, "include/")
     _mount_external_workspace_path(rtx, grpc_workspace, "bazel/")
     _mount_external_workspace_path(rtx, grpc_workspace, "third_party/")
+
+    # Replace (symlink) BUILD files we need to override in the target
+    # grpc workspace (due to custom grpc bzl rules that don't work
+    # when used like this)
+    #_mount_external_workspace_path(rtx, grpc_workspace, "third_party/")
 
     ###
     # Phase 2: Setup the submodules

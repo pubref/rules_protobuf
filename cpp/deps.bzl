@@ -30,7 +30,7 @@ DEPS = {
     "com_github_madler_zlib": {
         "rule": "new_git_repository",
         "remote": "https://github.com/madler/zlib",
-        "tag": "v1.2.8",
+        "tag": "v1.2.11",
         "build_file": str(Label("//protobuf:build_file/com_github_madler_zlib.BUILD")),
     },
 
@@ -55,7 +55,7 @@ DEPS = {
     # grpc++ expects "//external:protobuf_clib"
     "protobuf_clib": {
         "rule": "bind",
-        "actual": "@com_github_google_protobuf//:protobuf",
+        "actual": "@com_github_google_protobuf//:protoc_lib",
     },
 
     # grpc++ expects //external:nanopb
