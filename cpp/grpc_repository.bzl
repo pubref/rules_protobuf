@@ -14,7 +14,7 @@ def _get_external_path(workspace_file, path):
     return "/".join(workspace_path + [path])
 
 
-def _mount_external_workspace_path(rtx,
+def _symlink_external_workspace_path(rtx,
                                    source_workspace_file,
                                    source_path,
                                    target_path = None,
@@ -33,31 +33,29 @@ def _setup_submodule_cares(rtx):
     cares_workspace = "%s" % rtx.path(rtx.attr._cares_workspace)
     cares_workspace_dir = _get_external_path(cares_workspace, "")
 
-    # Remove the cares directory if it exists in this repository if it exists
-    # from prior runs or as a git submodule.
+    # Remove the cares directory if it exists in this repository if it
+    # exists from prior runs or as a git submodule.
     _execute(rtx, ["rm", "-rf", "third_party/cares/cares"], keep_going = True)
 
-    # Copy the entire contents of external/com_github_c_ares_c_ares to third_party/cares/cares.
-    # This is sort of a manual equivalent of git submodule init (but we dont want to use
-    # git submodules or the git_repository rule... too slow for grpc repo!)
+    # Copy the entire contents of external/com_github_c_ares_c_ares to
+    # third_party/cares/cares.  This is sort of a manual equivalent of
+    # git submodule init (but we dont want to use git submodules or
+    # the git_repository rule... too slow for grpc repo!)
     _execute(rtx, ["cp", "-rp", cares_workspace_dir, "third_party/cares/cares",])
 
     # @grpc//:WORKSPACE uses a bind rule to map '//external:cares' -->
     # '@submodules_cares//:ares'.  @submodules_cares is defined as a
     # new_local_repository using the third_party/cares/cares.BUILD
     # file.
-    #
-    # In this repo, we want to copy over all
-    # Need to bind //external:cares to @com_google_grpc//third_party/cares:ares, so there should
-    # be a build file in
-    #_execute(rtx, ["cat", "third_party/cares/cares.BUILD"], print_result = True)
 
-    # Remove the original BUILD files from new_http_archive to avoid package boundary errors
+    # Remove the original BUILD files from new_http_archive to avoid
+    # package boundary errors
     _execute(rtx, ["rm", "third_party/cares/cares/WORKSPACE"])
     _execute(rtx, ["rm", "third_party/cares/cares/BUILD"])
     _execute(rtx, ["rm", "third_party/cares/cares/BUILD.bazel"])
 
-    # Rename the cares.BUILD file to BUILD. This has the :ares target and we're done!
+    # Rename the cares.BUILD file to BUILD. This has the :ares target
+    # and we're done!
     _execute(rtx, ["cp", "third_party/cares/cares.BUILD", "third_party/cares/BUILD"])
 
 
@@ -74,29 +72,30 @@ def _grpc_repository_impl(rtx):
     grpc_workspace = "%s" % rtx.path(rtx.attr._grpc_workspace)
 
     # Mount (symlink) these files & directories from the grpc repo as-is.
-    _mount_external_workspace_path(rtx,
-                                   grpc_workspace,
-                                   "BUILD")
-    _mount_external_workspace_path(rtx,
-                                   grpc_workspace,
-                                   "src/")
-    _mount_external_workspace_path(rtx,
-                                   grpc_workspace,
-                                   "include/")
-    _mount_external_workspace_path(rtx,
-                                   grpc_workspace,
-                                   "third_party/")
-    _mount_external_workspace_path(rtx,
-                                   grpc_workspace,
-                                   "bazel/")
+    _symlink_external_workspace_path(rtx,
+                                    grpc_workspace,
+                                     "BUILD")
+    _symlink_external_workspace_path(rtx,
+                                     grpc_workspace,
+                                     "src/")
+    _symlink_external_workspace_path(rtx,
+                                     grpc_workspace,
+                                     "include/")
+    _symlink_external_workspace_path(rtx,
+                                     grpc_workspace,
+                                     "third_party/")
+    _symlink_external_workspace_path(rtx,
+                                     grpc_workspace,
+                                     "bazel/")
 
     # Remove the bazel/generate_cc.bzl file (we're about to replace it).
     _execute(rtx, ["rm", "-rf", "bazel/generate_cc.bzl"], keep_going = True)
 
-    _mount_external_workspace_path(rtx,
-                                   rules_protobuf_workspace,
-                                   "cpp/generate_cc.modified.bzl",
-                                   "bazel/generate_cc.bzl")
+    # Link the modded file into position
+    _symlink_external_workspace_path(rtx,
+                                     rules_protobuf_workspace,
+                                     "cpp/generate_cc.modified.bzl",
+                                     "bazel/generate_cc.bzl")
 
     ###
     # Phase 2: Setup the submodules
@@ -118,10 +117,6 @@ grpc_repository = repository_rule(
         # The WORKSPACE file for the c-ares repository.
         "_cares_workspace": attr.label(
             default = Label("@com_github_c_ares_c_ares//:WORKSPACE")
-        ),
-        # The cares BUILD file
-        "_cares_build_file": attr.label(
-            default = Label("//protobuf:build_file/cares.BUILD")
         ),
     },
 )
