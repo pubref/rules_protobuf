@@ -10,6 +10,13 @@ DEPS = {
         "sha256": "e83ee63eccfb47f07f263fbcdea0a2d838dab4a750c53867013539b5e536dd8a",
     },
 
+    "com_google_protobuf_3_2_0": {
+        "rule": "http_archive",
+        "url": "https://github.com/google/protobuf/archive/593e917c176b5bc5aafa57bf9f6030d749d91cd5.zip", # 3.2.0
+        "strip_prefix": "protobuf-593e917c176b5bc5aafa57bf9f6030d749d91cd5",
+        "sha256": "73719860b639b79f84a3563c82815884ff74f1cd001900080e1b598d2594d450",
+    },
+
     # This binds the cc_binary "protoc" into
     # //external:protoc. Required by grpc++.
     "protoc": {

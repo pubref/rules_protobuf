@@ -17,7 +17,8 @@ with +/- gRPC support on (osx, linux) :sparkles:.
 <td>gRPC</td>
 </tr></table>
 
-### How is this related to the proto\_library rules within bazel itself?
+### How is this related to the proto\_library rules within bazel
+    itself?
 
 These rules sprung out of a need to have protobuf support when there
 was limited exposed and documented proto generation capabilities in
@@ -25,7 +26,7 @@ the main bazel repository.  This is a moving target.  The main goals
 of this project are to:
 
 1. Provide `protoc`, the protocol buffer compiler
-   ([v3.1.x<sup>52ab</sup>](https://github.com/google/protobuf/commit/52ab3b07ac9a6889ed0ac9bf21afd8dab8ef0014)).
+   ([v3.4.0](https://github.com/google/protobuf/commit/2807436cd828a526c5c38dd235c0d0d9cdc67b1f)).
 
 2. Provide the language-specific plugins.
 
@@ -41,17 +42,17 @@ of this project are to:
 
 | Language                     | Compile <sup>1</sup>  | Build <sup>2</sup> | gRPC <sup>3</sup> |
 | ---------------------------: | -----------: | --------: | -------- |
-| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) | [v1.0.1](https://github.com/grpc/grpc/releases/tag/v1.0.1) |
+| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) | [v1.6.1](https://github.com/grpc/grpc/releases/tag/v1.6.1) |
 | [C#](csharp)                 | [csharp_proto_compile](csharp#csharp_proto_compile) | [csharp_proto_library](csharp#csharp_proto_library) | [1.0.0](https://www.nuget.org/packages/Grpc/) |
 | [Closure](closure)           | [closure_proto_compile](closure#closure_proto_compile) | [closure_proto_library](closure#closure_proto_library)          |  |
-| [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.2.0](https://github.com/grpc/grpc-go/releases/tag/v1.2.0) |
+| [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.6.0](https://github.com/grpc/grpc-go/releases/tag/v1.6.0) |
 | [Go (gogo)](gogo)            | [gogo_proto_compile](gogo#gogo_proto_compile) | [gogo_proto_library](gogo#gogo_proto_library) | [fb8a35](https://github.com/gogo/protobuf/commit/fb8a359905af6e2b6517cccda0ba25915322ee88) |
 | [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | [v1.0.4](https://github.com/grpc/grpc-go/releases/tag/v1.0.4) |
-| [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [v1.4.0](https://github.com/grpc/grpc-java/releases/tag/v1.4.0) |
+| [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [v1.6.1](https://github.com/grpc/grpc-java/releases/tag/v1.6.1) |
 | [Node](node)                 | [node_proto_compile](js#node_proto_compile) | [node_proto_library](js#node_proto_library)          | [1.0.0](https://www.npmjs.com/package/grpc) |
-| [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>4</sup> | [v1.0.0<sup>673f</sup>](https://github.com/grpc/grpc/commit/673fa6c88b8abd542ae50c4480de92880a1e4777) |
-| [Python](python)             | [py_proto_compile](python#py_proto_compile)         |           | [v1.0.0<sup>673f</sup>](https://github.com/grpc/grpc/commit/673fa6c88b8abd542ae50c4480de92880a1e4777) |
-| [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           | [v1.0.0<sup>673f</sup>](https://github.com/grpc/grpc/commit/673fa6c88b8abd542ae50c4480de92880a1e4777) |
+| [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>4</sup> | [v1.6.1<sup>673f</sup>](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
+| [Python](python)             | [py_proto_compile](python#py_proto_compile)         |           | [v1.6.1<sup>673f</sup>](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
+| [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           | [v1.6.1<sup>673f</sup>](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
 | Custom [proto_language](protobuf#proto_language) | [proto_compile](protobuf#proto_compile) | |  |
 
 1. Support for generation of protoc outputs via `proto_compile()`
@@ -70,16 +71,19 @@ of this project are to:
 
 ## 1. Install Bazel
 
-These are build rules for [bazel][bazel-home].  If you have not already
-installed `bazel` on your workstation, follow the
+These are build rules for [bazel][bazel-home].  If you have not
+already installed `bazel` on your workstation, follow the
 [bazel instructions][bazel-install].
 
-**Bazel 0.3.1 or above is required for go support.**
+**Bazel 0.5.2 or above is required for go support.  Bazel 0.5.3 is
+  [incompatible](https://github.com/bazelbuild/bazel/issues/3622), but
+  0.5.4 should work.**
 
 > Note about protoc and related tools: bazel and rules_protobuf will
 > download or build-from-source all required dependencies, including
 > the `protoc` tool and required plugins.  If you do already have
-> these tools installed on your workstation, bazel will *not* use them.
+> these tools installed on your workstation, bazel will *not* use
+> them.
 
 ## 2. Add rules_protobuf your WORKSPACE
 
@@ -90,8 +94,13 @@ language-specific `*_proto_repositories` rule(s):
 git_repository(
   name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
+<<<<<<< HEAD
   tag = "v0.7.2",
   #commit = "..." # or choose latest commit on master
+=======
+  tag = "v0.8.0",
+  #commit = "..." # alternatively, latest commit on master
+>>>>>>> Update all to latest
 )
 
 load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_repositories")

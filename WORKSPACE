@@ -1,14 +1,17 @@
 workspace(name = "org_pubref_rules_protobuf")
 
+load("//protobuf:rules.bzl", "github_archive")
 
 # ================================================================
 # Go support requires rules_go
 # ================================================================
 
-git_repository(
+github_archive(
     name = "io_bazel_rules_go",
-    remote = "https://github.com/bazelbuild/rules_go.git",
-    tag = "0.4.2", # Apr 7, 2017
+    org = "bazelbuild",
+    repo = "rules_go",
+    commit = "ae70411645c171b2056d38a6a959e491949f9afe", # v0.5.4
+    sha256 = "ae91c1dfe9b943500f7486f2bb94b9887f881c7709474f3e170c95d414f79698",
 )
 
 load("@io_bazel_rules_go//go:def.bzl", "go_repositories")
@@ -43,17 +46,19 @@ git_repository(
 
 load("@io_bazel_rules_dotnet//dotnet:csharp.bzl", "csharp_repositories")
 
-csharp_repositories(use_local_mono = False)
+csharp_repositories(use_local_mono = True)
 
 
 # ================================================================
 # node_proto_library support requires rules_node
 # ================================================================
 
-git_repository(
+github_archive(
     name = "org_pubref_rules_node",
-    commit = "85b720f3d4299b0a1b9c7771c023352e9182045f",  # Oct 10, 2016
-    remote = "https://github.com/pubref/rules_node.git",
+    org = "pubref",
+    repo = "rules_node",
+    commit = "f6fff71fe8b1bee8d3a22e50eca0f76427ab939e",
+    sha256 = "94c22db354edc9c21541c713f8d8ace381c8fb7b2c232a2b623c393abe9cb8e6",
 )
 
 load("@org_pubref_rules_node//node:rules.bzl", "node_repositories")

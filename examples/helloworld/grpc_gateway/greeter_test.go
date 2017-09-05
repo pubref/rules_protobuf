@@ -15,7 +15,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	greeter "github.com/pubref/rules_protobuf/examples/helloworld/go/server/greeter"
 	pb "github.com/pubref/rules_protobuf/examples/helloworld/proto/go"
-	gateway "github.com/pubref/rules_protobuf/examples/helloworld/grpc_gateway/gateway"
+	gateway "github.com/pubref/rules_protobuf/examples/helloworld/grpc_gateway"
 )
 
 const (
@@ -82,7 +82,7 @@ func startGateway() error {
 
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-	err := gateway.RegisterGreeterHandlerFromEndpoint(ctx, mux, *endpoint, opts)
+	err := gateway.RegisterGreeterHandlerFromEndpoint(ctx, mux, "localhost:50051", opts)
 	if err != nil {
 		return err
 	}

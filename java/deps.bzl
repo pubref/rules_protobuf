@@ -21,7 +21,7 @@ DEPS = {
     "protoc_gen_grpc_java_linux_x86_64": {
         "rule": "http_file",
         "url": "http://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.6.1/protoc-gen-grpc-java-1.6.1-linux-x86_64.exe",
-        "sha256": "9e3515e22e23a82927f37f6939990f2c668f5dfb9948853ec6a95ff14102a3bc",
+        "sha256": "4229579f6e2b09fbcbee7fbe5b7a7c06e800da5759032a39bac2f22e570cbdc0",
     },
 
     "protoc_gen_grpc_java_macosx": {
@@ -40,6 +40,12 @@ DEPS = {
         "sha1": "2973d150c0dc1fefe998f834810d68f278ea58ec",
     },
 
+    # To recompute these one can do the following:
+    # $ cd grpc-java-maven-deps/
+    # $ bazel build :hello
+    # $ cat $(bazel info output_base)/external/maven_grpc/rules.bzl >> ../deps.bzl
+    # $ manually fix up this file with the new deps.
+    #
     'com_google_api_grpc_proto_google_common_protos': {
         'rule': 'maven_jar',
         'artifact': 'com.google.api.grpc:proto-google-common-protos:0.1.9',
