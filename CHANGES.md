@@ -1,4 +1,4 @@
-v0.8.0 (Tues Sep 5 2017)
+## v0.8.0 (Wed Sep 6 2017)
 
 This is a significant (possibly overreaching) update that brings grpc
 support up to latest.  rules_protobuf should also load much faster
@@ -25,7 +25,7 @@ as 'external/com_github_google_protobuf/src' should be migrated to
 * Migrated all git_repository repository_rules to http_archive
   (faster).
 
-v0.7.2 (Fri Jul 14 2017)
+## v0.7.2 (Fri Jul 14 2017)
 
 * Updated boringssl to latest chromium-stable (@pcj)
 * Updated grpc-java to 1.4.0 (@zhexuany)

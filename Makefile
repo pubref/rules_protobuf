@@ -19,16 +19,20 @@ TEST_FLAGS += --test_output=errors
 TEST_FLAGS += --test_strategy=standalone
 
 BAZEL_BUILD := $(BAZEL) $(STARTFLAGS) $(BAZELFLAGS) build $(BUILDFLAGS)
-#BAZEL_BUILD := $(BAZEL) build
 BAZEL_TEST := $(BAZEL) $(STARTFLAGS) $(BAZELFLAGS) test $(TEST_FLAGS)
+#BAZEL_BUILD := $(BAZEL) build
 #BAZEL_TEST := $(BAZEL) test
 
 test_not_working_targets:
 	$(BAZEL) test \
-	//examples/helloworld/csharp/GreeterClient:GreeterClientTest \ # fails with # Nuget command failed: Unable to load the service index for source https://api.nuget.org/v3/index.json
-	//examples/helloworld/csharp/GreeterServer:GreeterServerTest \
-	//examples/helloworld/node:client
-	//examples/helloworld/node:server
+	//examples/helloworld/node:client \
+	//examples/helloworld/node:server \
+	//examples/helloworld/csharp/GreeterClient:GreeterClientTest \
+
+test_not_working_in_travis_targets:
+	$(BAZEL) test \
+	//examples/helloworld/csharp/GreeterClient:GreeterClientTest \
+	//examples/helloworld/grpc_gateway:greeter_test \
 
 # Python targets are not working (pip grpcio only compatible with 3.1.x)
 test_pip_dependent_targets:
@@ -56,7 +60,6 @@ test: test_pip_dependent_targets
 	//examples/wkt/go:wkt_test \
 	//tests/proto_file_in_subdirectory:test \
 	//examples/helloworld/closure:greeter_test \
-	//examples/helloworld/grpc_gateway:greeter_test \
 
 external_proto_library_build:
 	cd tests/external_proto_library && $(BAZEL_BUILD) :cc_gapi :go_gapi :java_gapi
@@ -77,10 +80,3 @@ fmt:
 	find python/ -name BUILD | xargs buildifier
 	find ruby/ -name BUILD | xargs buildifier
 	find tests/ -name BUILD | xargs buildifier
-
-rpl:
-	rpl -vvRs \
-	-x'.bzl' -x'.md' -x'BUILD' \
-	'com_github_grpc_grpc' 'com_google_grpc' \
-	closure examples go gogo grpc_gateway objc python \
-	ruby tests java cpp protobuf csharp node README.md

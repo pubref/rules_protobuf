@@ -48,7 +48,7 @@ github_archive(
 
 load("@io_bazel_rules_dotnet//dotnet:csharp.bzl", "csharp_repositories")
 
-csharp_repositories(use_local_mono = True)
+csharp_repositories()
 
 # ================================================================
 # node_proto_library support requires rules_node

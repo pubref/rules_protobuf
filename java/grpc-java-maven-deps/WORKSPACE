@@ -1,9 +1,11 @@
 # Note: This is a utility workspace (probably does not belong in
 # tests) to help compute the transitive deps of grpc-java.
 
-local_repository(
+http_archive(
     name = "org_pubref_rules_maven",
-    path = "/Users/pcj/github/rules_maven",
+    url = "https://github.com/pubref/rules_maven/archive/43d56ae584ffdf1cd79307728bfd2436c475d35e.zip",
+    sha256 = "33053be697be119582ae294504d8857b76e6ffa6ebadffc76d644854a504af43",
+    strip_prefix = "rules_maven-43d56ae584ffdf1cd79307728bfd2436c475d35e",
 )
 
 load("@org_pubref_rules_maven//maven:rules.bzl", "maven_repositories", "maven_repository")

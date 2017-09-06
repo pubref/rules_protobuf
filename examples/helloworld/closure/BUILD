@@ -20,7 +20,7 @@ closure_js_library(
         #"protolib.pb",
     ],
     deps = [
-        "protolib",
+        ":protolib",
         "@io_bazel_rules_closure//closure/library",
         "@io_bazel_rules_closure//closure/protobuf:jspb",
     ],
@@ -31,9 +31,10 @@ closure_js_test(
     srcs = ["greeter_test.js"],
     compilation_level = "SIMPLE",
     pedantic = True,
+    size = "small",
     deps = [
-        "greeter",
-        "protolib",
+        ":greeter",
+        ":protolib",
         "@io_bazel_rules_closure//closure/library:testing",
         "@io_bazel_rules_closure//closure/protobuf:jspb",
     ],

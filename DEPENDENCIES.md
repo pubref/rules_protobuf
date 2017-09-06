@@ -1,5 +1,5 @@
 # Language dependencies for rules_protobuf
-To update this list, `bazel build @org_pubref_rules_protobuf//protobuf:deps` and `cp bazel-bin/protobuf/DEPENDENCIES.md .`
+To update this list, `bazel build @org_pubref_rules_protobuf//:deps && cp bazel-bin/DEPENDENCIES.md .`
 
 ## Protobuf
 
@@ -31,8 +31,8 @@ To update this list, `bazel build @org_pubref_rules_protobuf//protobuf:deps` and
 
 | Rule | Workspace | Detail |
 | ---: | :--- | :--- |
-| [http_file](https://docs.bazel.build/versions/master/be/workspace.html#http_file) | **`@protoc_gen_grpc_java_linux_x86_64`** | [sha256:4229579f6e2b](http://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.6.1/protoc-gen-grpc-java-1.6.1-linux-x86_64.exe) |
-| [http_file](https://docs.bazel.build/versions/master/be/workspace.html#http_file) | **`@protoc_gen_grpc_java_macosx`** | [sha256:9e3515e22e23](http://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.6.1/protoc-gen-grpc-java-1.6.1-osx-x86_64.exe) |
+| [http_file](https://docs.bazel.build/versions/master/be/workspace.html#http_file) | **`@protoc_gen_grpc_java_linux_x86_64`** | [sha256:4229579f6e2b](https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.6.1/protoc-gen-grpc-java-1.6.1-linux-x86_64.exe) |
+| [http_file](https://docs.bazel.build/versions/master/be/workspace.html#http_file) | **`@protoc_gen_grpc_java_macosx`** | [sha256:9e3515e22e23](https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.6.1/protoc-gen-grpc-java-1.6.1-osx-x86_64.exe) |
 | [maven_jar](https://docs.bazel.build/versions/master/be/workspace.html#maven_jar) | **`@junit_junit_4`** | [junit:junit:jar:4.12](http:repo1.maven.org/maven2/junit/junit/jar) (2973d1) |
 | [maven_jar](https://docs.bazel.build/versions/master/be/workspace.html#maven_jar) | **`@com_google_api_grpc_proto_google_common_protos`** | [com.google.api.grpc:proto-google-common-protos:0.1.9](http:repo1.maven.org/maven2/com/google/api/grpc/proto-google-common-protos/0.1.9) (3760f6) |
 | [maven_jar](https://docs.bazel.build/versions/master/be/workspace.html#maven_jar) | **`@com_google_code_findbugs_jsr305`** | [com.google.code.findbugs:jsr305:3.0.0](http:repo1.maven.org/maven2/com/google/code/findbugs/jsr305/3.0.0) (5871fb) |
@@ -90,7 +90,7 @@ To update this list, `bazel build @org_pubref_rules_protobuf//protobuf:deps` and
 | Rule | Workspace | Detail |
 | ---: | :--- | :--- |
 | [go_repository](https://github.com/bazelbuild/rules_go#go_repository) | **`@com_github_grpc_ecosystem_grpc_gateway`** | [github.com/grpc-ecosystem/grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway/) |
-| [new_http_archive](https://docs.bazel.build/versions/master/be/workspace.html#new_http_archive) | **`@com_github_grpc_ecosystem_grpc_gateway_googleapis`** | [sha256:b8426c25492e](http://github.com/grpc-ecosystem/grpc-gateway/archive/f2862b476edcef83412c7af8687c9cd8e4097c0f.zip) |
+| [new_http_archive](https://docs.bazel.build/versions/master/be/workspace.html#new_http_archive) | **`@com_github_grpc_ecosystem_grpc_gateway_googleapis`** | [sha256:b8426c25492e](https://github.com/grpc-ecosystem/grpc-gateway/archive/f2862b476edcef83412c7af8687c9cd8e4097c0f.zip) |
 | [go_repository](https://github.com/bazelbuild/rules_go#go_repository) | **`@org_golang_google_genproto`** | [google.golang.org/genproto](https://google.golang.org/genproto/) |
 
 ## Node

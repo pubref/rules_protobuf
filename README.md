@@ -94,13 +94,8 @@ language-specific `*_proto_repositories` rule(s):
 git_repository(
   name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
-<<<<<<< HEAD
-  tag = "v0.7.2",
-  #commit = "..." # or choose latest commit on master
-=======
   tag = "v0.8.0",
-  #commit = "..." # alternatively, latest commit on master
->>>>>>> Update all to latest
+  #commit = "..." # alternatively, use latest commit on master
 )
 
 load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_repositories")

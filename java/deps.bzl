@@ -20,13 +20,13 @@ DEPS = {
 
     "protoc_gen_grpc_java_linux_x86_64": {
         "rule": "http_file",
-        "url": "http://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.6.1/protoc-gen-grpc-java-1.6.1-linux-x86_64.exe",
+        "url": "https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.6.1/protoc-gen-grpc-java-1.6.1-linux-x86_64.exe",
         "sha256": "4229579f6e2b09fbcbee7fbe5b7a7c06e800da5759032a39bac2f22e570cbdc0",
     },
 
     "protoc_gen_grpc_java_macosx": {
         "rule": "http_file",
-        "url": "http://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.6.1/protoc-gen-grpc-java-1.6.1-osx-x86_64.exe",
+        "url": "https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.6.1/protoc-gen-grpc-java-1.6.1-osx-x86_64.exe",
         "sha256": "9e3515e22e23a82927f37f6939990f2c668f5dfb9948853ec6a95ff14102a3bc",
     },
 

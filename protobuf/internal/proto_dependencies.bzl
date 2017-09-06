@@ -128,7 +128,7 @@ def _md_section(ctx, label, deps):
 def _md(ctx):
     lines = []
     lines.append("# Language dependencies for rules_protobuf")
-    lines.append("To update this list, `bazel build @org_pubref_rules_protobuf//protobuf:deps` and `cp bazel-bin/protobuf/DEPENDENCIES.md .`")
+    lines.append("To update this list, `bazel build @org_pubref_rules_protobuf//:deps && cp bazel-bin/DEPENDENCIES.md .`")
     lines.append("")
     lines += _md_section(ctx, "Protobuf", PROTOBUF_DEPS)
     lines += _md_section(ctx, "C++", CPP_DEPS)
@@ -159,17 +159,8 @@ def _proto_dependencies_impl(ctx):
 proto_dependencies = rule(
     implementation = _proto_dependencies_impl,
     attrs = {
-        "languages": attr.string_list(
-            mandatory = True,
-        ),
         "format": attr.string(
             default = "markdown",
         ),
     }
 )
-
-# trunc sha1/256
-# bold the names
-#mavejar needs to show artifact
-# go_repo needs a key labl
-# section links
