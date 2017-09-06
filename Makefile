@@ -63,10 +63,25 @@ external_proto_library_build:
 
 fmt:
 	buildifier WORKSPACE
-	find bzl/build_file/ -name '*.BUILD' | xargs buildifier
-	find third_party/ -name BUILD | xargs buildifier
+	buildifier BUILD
+	find closure/ -name BUILD | xargs buildifier
+	find cpp/ -name BUILD | xargs buildifier
+	find csharp/ -name BUILD | xargs buildifier
 	find examples/ -name BUILD | xargs buildifier
+	find go/ -name BUILD | xargs buildifier
+	find gogo/ -name BUILD | xargs buildifier
+	find grpc_gateway/ -name BUILD | xargs buildifier
+	find node/ -name BUILD | xargs buildifier
+	find objc/ -name BUILD | xargs buildifier
+	find protobuf/ -name BUILD | xargs buildifier
+	find python/ -name BUILD | xargs buildifier
+	find ruby/ -name BUILD | xargs buildifier
 	find tests/ -name BUILD | xargs buildifier
+
+fmt2:
+	buildifier WORKSPACE
+	buildifier BUILD
+	find java/ -name BUILD | xargs buildifier
 
 rpl:
 	rpl -vvRs \

@@ -32,7 +32,7 @@ go_binary(
     name = "greeter_bin",
     srcs = ["greeter.go"],
     deps = [
-        ":gateway"
+        ":gateway",
     ] + GRPC_GATEWAY_DEPS,
 )
 

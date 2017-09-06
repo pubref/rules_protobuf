@@ -3,7 +3,7 @@ java_library(
     name = "hello",
     srcs = ["Hello.java"],
     deps = [
-        "@maven_protobuf//:compile",
         "@maven_grpc//:compile",
-    ]
+        "@maven_protobuf//:compile",
+    ],
 )

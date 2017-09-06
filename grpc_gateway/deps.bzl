@@ -11,18 +11,10 @@ filegroup(
 
 DEPS = {
 
-    "com_github_grpc_ecosystem_grpc_gateway_OLD": {
-        "rule": "go_repository",
-        "importpath": "github.com/grpc-ecosystem/grpc-gateway",
-        "commit": "2ad234c172af14e85f3be9546f6c64c768d4eccd", # Apr 4, 2017
-        #"commit": "597c8c358cb7475bc9fc495af32f94065aa6b6e1", # Apr 24, 2017
-        # TODO: figure out why newest commit fails with `context.go:99: undefined: metadata.NewOutgoingContext`
-    },
-
     "com_github_grpc_ecosystem_grpc_gateway": {
         "rule": "go_repository",
         "importpath": "github.com/grpc-ecosystem/grpc-gateway",
-        "commit": "f2862b476edcef83412c7af8687c9cd8e4097c0f",
+        "commit": "f2862b476edcef83412c7af8687c9cd8e4097c0f", # Jul 23, 2017
     },
 
     "com_github_grpc_ecosystem_grpc_gateway_googleapis": {
