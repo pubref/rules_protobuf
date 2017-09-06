@@ -5,8 +5,8 @@ load("//cpp:grpc_repository.bzl", "grpc_repository")
 def cpp_proto_repositories(
     lang_deps = DEPS,
     lang_requires = [
-      "gtest",
       "cares",
+      "com_google_googletest",
       "com_google_grpc_base",
       "com_google_grpc",
       "com_github_c_ares_c_ares",

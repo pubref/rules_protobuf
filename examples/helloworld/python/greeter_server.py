@@ -36,6 +36,7 @@ import time
 
 from concurrent import futures
 from examples.helloworld.proto import helloworld_pb2
+from examples.helloworld.proto import helloworld_pb2_grpc
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
@@ -44,7 +45,7 @@ class _GreeterServer(object):
 
     def __init__(self, greeter_service, server_port):
         self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-        helloworld_pb2.add_GreeterServicer_to_server(greeter_service, self.server)
+        helloworld_pb2_grpc.add_GreeterServicer_to_server(greeter_service, self.server)
         self.server.add_insecure_port('[::]:{server_port}'.format(server_port=server_port))
 
     def start(self):
@@ -66,7 +67,7 @@ class _GreeterServer(object):
         pass
 
 
-class _GreeterService(helloworld_pb2.GreeterServicer):
+class _GreeterService(helloworld_pb2_grpc.GreeterServicer):
 
     def SayHello(self, hello_request, context):
         print("Greeter server received: " + hello_request.name)

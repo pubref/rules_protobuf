@@ -29,16 +29,15 @@
 
 """The Python implementation of the GRPC helloworld.Greeter client."""
 
-from __future__ import print_function
-
 import grpc
 
 from examples.helloworld.proto import helloworld_pb2
+from examples.helloworld.proto import helloworld_pb2_grpc
 
 
 def run():
     channel = grpc.insecure_channel('localhost:50051')
-    stub = helloworld_pb2.GreeterStub(channel)
+    stub = helloworld_pb2_grpc.GreeterStub(channel)
     response = stub.SayHello(helloworld_pb2.HelloRequest(name='you'))
     print("Greeter client received: " + response.message)
 

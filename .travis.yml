@@ -27,6 +27,7 @@ before_install:
   - chmod +x install.sh
   - ./install.sh --user
   - rm -f install.sh
+  - pip install grpcio==1.6.0
 
 script:
   - make all

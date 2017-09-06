@@ -84,7 +84,7 @@ DEPS = {
     },
 
     # GTest is for our own internal cc tests.
-    "gtest": {
+    "com_google_googletest": {
         "rule": "http_archive",
         "url": "https://github.com/google/googletest/archive/7c6353d29a147cad1c904bf2957fd4ca2befe135.zip", # master Sept 1 2017
         "sha256": "f87029f647276734ef076785f76652347993b6d13ac1cbb2d2e976e16d2f8137",

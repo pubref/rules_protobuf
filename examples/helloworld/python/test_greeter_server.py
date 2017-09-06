@@ -4,6 +4,7 @@ import grpc
 import greeter_server
 
 from examples.helloworld.proto import helloworld_pb2
+from examples.helloworld.proto import helloworld_pb2_grpc
 
 
 def _get_random_port():
@@ -26,7 +27,7 @@ class GreeterServerTest(unittest.TestCase):
         self._server = greeter_server._GreeterServer(greeter_server._GreeterService(), TEST_PORT)
         self._server.start()
         channel = grpc.insecure_channel('localhost:{port}'.format(port=TEST_PORT))
-        self._client = helloworld_pb2.GreeterStub(channel)
+        self._client = helloworld_pb2_grpc.GreeterStub(channel)
 
     def tearDown(self):
         self._server.stop()

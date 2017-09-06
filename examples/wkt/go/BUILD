@@ -20,7 +20,7 @@ go_proto_library(
         "@com_google_protobuf//:well_known_protos",
     ],
     protos = ["wkt.proto"],
-    verbose = 3,
+    #verbose = 3,
     deps = [
         "@com_github_golang_protobuf//protoc-gen-go/descriptor:go_default_library",
         "@com_github_golang_protobuf//protoc-gen-go/plugin:go_default_library",

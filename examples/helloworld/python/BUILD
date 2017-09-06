@@ -24,6 +24,7 @@ py_test(
     name = "test_greeter_server",
     srcs = ["test_greeter_server.py"],
     deps = [":grpc_server"],
+    size = "small",
 )
 
 # This library is necessary for creating py_test cases o/w if we explicitly add

@@ -48,7 +48,7 @@ build: external_proto_library_build
 	//tests/with_grpc_false:cpp \
 	//tests/with_grpc_false:java \
 
-test:
+test: test_pip_dependent_targets
 	$(BAZEL_TEST) \
 	//examples/helloworld/cpp:test \
 	//examples/helloworld/java/org/pubref/rules_protobuf/examples/helloworld/client:netty_test \
@@ -77,11 +77,6 @@ fmt:
 	find python/ -name BUILD | xargs buildifier
 	find ruby/ -name BUILD | xargs buildifier
 	find tests/ -name BUILD | xargs buildifier
-
-fmt2:
-	buildifier WORKSPACE
-	buildifier BUILD
-	find java/ -name BUILD | xargs buildifier
 
 rpl:
 	rpl -vvRs \

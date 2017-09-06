@@ -40,9 +40,9 @@ of this project are to:
 
 ### Rules
 
-| Language                     | Compile <sup>1</sup>  | Build <sup>2</sup> | gRPC <sup>3</sup> |
+| Language                     | Compile <sup>1</sup>  | Build <sup>2</sup> | Protobuf | gRPC <sup>3</sup> |
 | ---------------------------: | -----------: | --------: | -------- |
-| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) | [v1.6.1](https://github.com/grpc/grpc/releases/tag/v1.6.1) |
+| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) | [v3.4.0](https://github.com/grpc/grpc/releases/tag/v1.6.1) | [v1.6.1](https://github.com/grpc/grpc/releases/tag/v1.6.1) |
 | [C#](csharp)                 | [csharp_proto_compile](csharp#csharp_proto_compile) | [csharp_proto_library](csharp#csharp_proto_library) | [1.0.0](https://www.nuget.org/packages/Grpc/) |
 | [Closure](closure)           | [closure_proto_compile](closure#closure_proto_compile) | [closure_proto_library](closure#closure_proto_library)          |  |
 | [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.6.0](https://github.com/grpc/grpc-go/releases/tag/v1.6.0) |
