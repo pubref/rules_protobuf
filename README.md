@@ -3,22 +3,17 @@
 Bazel skylark rules for building [protocol buffers][protobuf-home]
 with +/- gRPC support on (osx, linux) :sparkles:.
 
-[bazel_image]: https://github.com/pubref/rules_protobuf/blob/master/images/bazel.png
-[wtfcat_image]: https://github.com/pubref/rules_protobuf/blob/master/images/wtfcat.png
-[grpc_image]: https://github.com/pubref/rules_protobuf/blob/master/images/gRPC.png
-
 <table border="0"><tr>
-<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/bazel.png" width="190"/></td>
-<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/wtfcat.png" width="190"/></td>
-<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/gRPC.png" width="190"/></td>
+<td><img src="https://bazel.build/images/bazel-icon.svg" height="180"/></td>
+<td><img src="https://github.com/pubref/rules_protobuf/blob/master/images/wtfcat.png" height="180"/></td>
+<td><img src="https://avatars2.githubusercontent.com/u/7802525?v=4&s=400" height="180"/></td>
 </tr><tr>
 <td>Bazel</td>
 <td>rules_protobuf</td>
 <td>gRPC</td>
 </tr></table>
 
-### How is this related to the proto\_library rules within bazel
-    itself?
+### How is this related to the proto\_library rules within Bazel itself?
 
 These rules sprung out of a need to have protobuf support when there
 was limited exposed and documented proto generation capabilities in
@@ -38,11 +33,12 @@ of this project are to:
    current and future custom protoc plugins not explicitly provided
    here.
 
+
 ### Rules
 
-| Language                     | Compile <sup>1</sup>  | Build <sup>2</sup> | Protobuf | gRPC <sup>3</sup> |
+| Language                     | Compile <sup>1</sup>  | Build <sup>2</sup> | gRPC <sup>3</sup> |
 | ---------------------------: | -----------: | --------: | -------- |
-| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) | [v3.4.0](https://github.com/grpc/grpc/releases/tag/v1.6.1) | [v1.6.1](https://github.com/grpc/grpc/releases/tag/v1.6.1) |
+| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) [v3.4.0](https://github.com/grpc/grpc/releases/tag/v1.6.1) | [v1.6.1](https://github.com/grpc/grpc/releases/tag/v1.6.1) |
 | [C#](csharp)                 | [csharp_proto_compile](csharp#csharp_proto_compile) | [csharp_proto_library](csharp#csharp_proto_library) | [1.0.0](https://www.nuget.org/packages/Grpc/) |
 | [Closure](closure)           | [closure_proto_compile](closure#closure_proto_compile) | [closure_proto_library](closure#closure_proto_library)          |  |
 | [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.6.0](https://github.com/grpc/grpc-go/releases/tag/v1.6.0) |
@@ -50,10 +46,13 @@ of this project are to:
 | [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | [v1.2.2+ (f2862b)](https://github.com/grpc-ecosystem/grpc-gateway/commit/f2862b476edcef83412c7af8687c9cd8e4097c0f) |
 | [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [v1.6.1](https://github.com/grpc/grpc-java/releases/tag/v1.6.1) |
 | [Node](node)                 | [node_proto_compile](js#node_proto_compile) | [node_proto_library](js#node_proto_library)          | [1.0.0](https://www.npmjs.com/package/grpc) |
-| [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>4</sup> | [v1.6.1<sup>673f</sup>](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
-| [Python](python)             | [py_proto_compile](python#py_proto_compile)         |           | [v1.6.1<sup>673f</sup>](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
-| [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           | [v1.6.1<sup>673f</sup>](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
+| [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>4</sup> | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
+| [Python](python)             | [py_proto_compile](python#py_proto_compile)         |           | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
+| [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
 | Custom [proto_language](protobuf#proto_language) | [proto_compile](protobuf#proto_compile) | |  |
+
+> Refer to [`DEPENDENCIES.md`](DEPENDENCIES.md) for a more detailed
+> summary of workspace dependencies / versions.
 
 1. Support for generation of protoc outputs via `proto_compile()`
    rule.
@@ -71,13 +70,12 @@ of this project are to:
 
 ## 1. Install Bazel
 
-These are build rules for [bazel][bazel-home].  If you have not
-already installed `bazel` on your workstation, follow the
-[bazel instructions][bazel-install].
+If you have not already installed `bazel` on your workstation, follow
+the [bazel instructions][bazel-install].
 
 **Bazel 0.5.2 or above is required for go support.  Bazel 0.5.3 is
-  [incompatible](https://github.com/bazelbuild/bazel/issues/3622), but
-  0.5.4 should work.**
+  [incompatible](https://github.com/bazelbuild/bazel/issues/3622) (but
+  0.5.4 should work).**
 
 > Note about protoc and related tools: bazel and rules_protobuf will
 > download or build-from-source all required dependencies, including
@@ -119,16 +117,6 @@ to load before the `*_proto_repositories()` function is invoked:
 | closure_proto_repositories | [rules_closure](https://github.com/bazelbuild/rules_closure) |
 | csharp_proto_repositories | [rules_dotnet](https://github.com/bazelbuild/rules_dotnet) |
 | node_proto_repositories | [rules_node](https://github.com/pubref/rules_node) |
-
-If you're only interested in the `proto_compile` rule and not any
-language-specific rules, just load the generic `proto_repositories`
-rule.  This provides the minimal set of dependencies (only the
-`protoc` tool).
-
-```python
-load("@org_pubref_rules_protobuf//protobuf:rules.bzl", "proto_repositories")
-proto_repositories()
-```
 
 ## 3. Add \*\_proto\_\* rules to your BUILD files
 
@@ -188,7 +176,8 @@ load("@org_pubref_rules_protobuf//go:rules.bzl", "go_proto_repositories")
 go_proto_repositories(
   overrides = {
     "com_github_golang_protobuf": {
-      "commit": "2c1988e8c18d14b142c0b472624f71647cf39adb", # Aug 8, 2016
+      # Override golang with a different commit
+      "commit": "2c1988e8c18d14b142c0b472624f71647cf39adb",
     }
   },
 )
@@ -291,17 +280,17 @@ java_proto_library(
   name = 'fooprotos',
   protos = 'foo.proto`,
   imports = [
-      "external/com_github_google_protobuf/src/",
+      "external/com_google_protobuf/src/",
     ],
     inputs = [
-      "@com_github_google_protobuf//:well_known_protos",
+      "@com_google_protobuf//:well_known_protos",
     ],
 )
 ```
 
 This would be imported as `import "google/protobuf/descriptor.proto"`
 given that the file
-`@com_github_google_protobuf/src/google/protobuf/descriptor.proto` is
+`@com_google_protobuf/src/google/protobuf/descriptor.proto` is
 in the package `google.protobuf`.
 
 [Question 2]: *Can the `cc_proto_library` rule "see" the generated protobuf files*?
@@ -328,18 +317,15 @@ attribute, just as you would any typical `cc_library` rule.
 If you are having problems, put `verbose={1,2,3}` in your build rule
 and/or disable sandboxing with `--spawn_strategy=standalone`.
 
-> Note: bazel will likely a breaking change to the way external
-> repositories are laid out in the execution root in future versions
-> of bazel.  This will likely affect the naming of import paths when
-> this change occurs.
-
 # Contributing
 
 Contributions welcome; please create Issues or GitHub pull requests.
 
 # Credits
 
-* Much thanks to all [contributors](https://github.com/pubref/rules_protobuf/graphs/contributors) and the members of the bazel, protobuf, and gRPC teams.
+* Much thanks to all
+  [contributors](https://github.com/pubref/rules_protobuf/graphs/contributors)
+  and the members of the bazel, protobuf, and gRPC teams.
 
 [protobuf-home]: https://developers.google.com/protocol-buffers/ "Protocol Buffers Developer Documentation"
 [bazel-home]: http://bazel.io "Bazel Homepage"
@@ -348,13 +334,4 @@ Contributions welcome; please create Issues or GitHub pull requests.
 [rules_go]: http://github.com/bazelbuild/rules_go "Rules Go"
 [grpc-gateway-home]:https://github.com/grpc-ecosystem/grpc-gateway
 
-[bazel_image]: https://github.com/pubref/rules_protobuf/blob/master/images/bazel.png
-[wtfcat_image]: https://github.com/pubref/rules_protobuf/blob/master/images/wtfcat.png
-[grpc_image]: https://github.com/pubref/rules_protobuf/blob/master/images/gRPC.png
-
-[repositories.bzl]: protobuf/internal/repositories.bzl
-
 [skylark-dict]: https://www.bazel.io/docs/skylark/lib/dict.html "Skylark Documentation for dict"
-[skylark-string]: https://www.bazel.io/docs/skylark/lib/attr.html#string "Skylark string attribute"
-[skylark-string_list]: https://www.bazel.io/docs/skylark/lib/attr.html#string_list "Skylark string_list attribute"
-[skylark-string_list_dict]: https://www.bazel.io/docs/skylark/lib/attr.html#string_list_dict "Skylark string_list_dict attribute"
