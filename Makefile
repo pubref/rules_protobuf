@@ -51,6 +51,7 @@ build: external_proto_library_build
 	//tests/with_grpc_false:protos \
 	//tests/with_grpc_false:cpp \
 	//tests/with_grpc_false:java \
+	//tests/generated_proto_file:* \
 
 test: test_pip_dependent_targets
 	$(BAZEL_TEST) \
