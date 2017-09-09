@@ -1,24 +1,16 @@
-load("//:parent_repository.bzl", "parent_repository")
-
 git_repository(
     name = "io_bazel_rules_go",
     remote = "https://github.com/bazelbuild/rules_go.git",
-    tag = "0.4.2", # Apr 7, 2017
+    tag = "0.5.4",
 )
 
-load("@io_bazel_rules_go//go:def.bzl", "go_repositories", "new_go_repository")
+load("@io_bazel_rules_go//go:def.bzl", "go_repositories")
 
 go_repositories()
 
-parent_repository(
+local_repository(
     name = "org_pubref_rules_protobuf",
-    exposed_dirs = [
-        "cpp",
-        "go",
-        "java",
-        "protobuf",
-        "BUILD",
-    ]
+    path = "../..",
 )
 
 load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cpp_proto_repositories")

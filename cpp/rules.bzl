@@ -1,32 +1,41 @@
 load("//protobuf:rules.bzl", "proto_compile", "proto_repositories")
 load("//cpp:deps.bzl", "DEPS")
+load("//cpp:grpc_repository.bzl", "grpc_repository")
 
 def cpp_proto_repositories(
     lang_deps = DEPS,
     lang_requires = [
-      "protobuf_clib",
-      "gtest",
-      "com_github_grpc_grpc",
+      "cares",
+      "com_google_googletest",
+      "com_google_grpc_base",
+      "com_google_grpc",
+      "com_github_c_ares_c_ares",
       "com_github_madler_zlib",
       "zlib",
       "nanopb",
       "boringssl",
       "libssl",
-      "protobuf_compiler",
       "protoc_gen_grpc_cpp",
     ], **kwargs):
 
-  proto_repositories(lang_deps = lang_deps,
-                     lang_requires = lang_requires,
-                     **kwargs)
+  rem = proto_repositories(lang_deps = lang_deps,
+                           lang_requires = lang_requires,
+                           **kwargs)
+
+  for dep in rem:
+    rule = dep.pop("rule")
+    if "grpc_repository" == rule:
+      grpc_repository(**dep)
+    else:
+      fail("Unknown loading rule %s for %s" % (rule, dep))
 
 PB_COMPILE_DEPS = [
     "//external:protobuf_clib",
 ]
 
 GRPC_COMPILE_DEPS = PB_COMPILE_DEPS + [
-    "@com_github_grpc_grpc//:grpc++",
-    "@com_github_grpc_grpc//:grpc++_reflection",
+    "@com_google_grpc//:grpc++",
+    "@com_google_grpc//:grpc++_reflection",
 ]
 
 def cpp_proto_compile(langs = [str(Label("//cpp"))], **kwargs):

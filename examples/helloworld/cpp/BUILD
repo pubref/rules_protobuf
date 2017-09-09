@@ -8,7 +8,7 @@ cc_test(
     tags = ["exclusive"],
     deps = [
         ":clientlib",
-        "@gtest//:gtest",
+        "@com_google_googletest//:gtest",
     ],
 )
 

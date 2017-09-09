@@ -40,3 +40,12 @@ Target //:protos up-to-date:
 
 Support for a library rule would be dependent on loading of pip
 dependencies (this does not exist in bazel ecosystem at the moment).
+Currently you will have to install grpcio outside of bazel:
+
+```
+# Install grpcio
+$ pip install grpcio
+
+# Or update if needed
+$ pip install --update grpcio
+```

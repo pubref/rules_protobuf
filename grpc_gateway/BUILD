@@ -4,13 +4,14 @@ load("//protobuf:rules.bzl", "proto_language")
 
 proto_language(
     name = "grpc_gateway",
+    go_prefix = "//:go_prefix",
     grpc_file_extensions = [".pb.gw.go"],
     grpc_imports = [
-        "external/com_github_google_protobuf/src/",
+        "external/com_google_protobuf/src/",
         "external/com_github_grpc_ecosystem_grpc_gateway_googleapis/",
     ],
     grpc_inputs = [
-        "@com_github_google_protobuf//:well_known_protos",
+        "@com_google_protobuf//:well_known_protos",
         "@com_github_grpc_ecosystem_grpc_gateway_googleapis//:annotations_protos",
         "@org_golang_google_genproto//googleapis/api/annotations:go_default_library",
     ],
@@ -19,48 +20,47 @@ proto_language(
     importmap = {
         "google/api/annotations.proto": "google.golang.org/genproto/googleapis/api/annotations",
     },
-    go_prefix = "//:go_prefix",
     supports_grpc = True,
     supports_pb = False,
 )
 
 proto_language(
     name = "pb_gateway",
+    go_prefix = "//:go_prefix",
     importmap = {
         "google/api/annotations.proto": "google.golang.org/genproto/googleapis/api/annotations",
     },
     pb_file_extensions = [".pb.go"],
     pb_imports = [
-        "external/com_github_google_protobuf/src/",
+        "external/com_google_protobuf/src/",
         "external/com_github_grpc_ecosystem_grpc_gateway_googleapis/",
     ],
     pb_inputs = [
-        "@com_github_google_protobuf//:well_known_protos",
+        "@com_google_protobuf//:well_known_protos",
         "@com_github_grpc_ecosystem_grpc_gateway_googleapis//:annotations_protos",
         "@org_golang_google_genproto//googleapis/api/annotations:go_default_library",
     ],
     pb_plugin = "@com_github_golang_protobuf//protoc-gen-go",
     pb_plugin_implements_grpc = True,
     pb_plugin_name = "go",
-    go_prefix = "//:go_prefix",
 )
 
 proto_language(
     name = "swagger",
+    go_prefix = "//:go_prefix",
     importmap = {
         "google/api/annotations.proto": "google.golang.org/genproto/googleapis/api/annotations",
     },
     pb_file_extensions = [".swagger.json"],
     pb_imports = [
-        "external/com_github_google_protobuf/src/",
+        "external/com_google_protobuf/src/",
         "external/com_github_grpc_ecosystem_grpc_gateway_googleapis/",
     ],
     pb_inputs = [
-        "@com_github_google_protobuf//:well_known_protos",
+        "@com_google_protobuf//:well_known_protos",
         "@com_github_grpc_ecosystem_grpc_gateway_googleapis//:annotations_protos",
         "@org_golang_google_genproto//googleapis/api/annotations:go_default_library",
     ],
     pb_plugin = "@com_github_grpc_ecosystem_grpc_gateway//protoc-gen-swagger",
-    go_prefix = "//:go_prefix",
     supports_grpc = True,
 )
