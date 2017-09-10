@@ -47,7 +47,7 @@ of this project are to:
 | [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [v1.6.1](https://github.com/grpc/grpc-java/releases/tag/v1.6.1) |
 | [Node](node)                 | [node_proto_compile](js#node_proto_compile) | [node_proto_library](js#node_proto_library)          | [1.0.0](https://www.npmjs.com/package/grpc) |
 | [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>4</sup> | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
-| [Python](python)             | [py_proto_compile](python#py_proto_compile)         |           | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
+| [Python](python)             | [py_proto_compile](python#py_proto_compile)         | [py_proto_library](python#py_proto_library)          | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
 | [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
 | Custom [proto_language](protobuf#proto_language) | [proto_compile](protobuf#proto_compile) | |  |
 
@@ -111,12 +111,15 @@ to load before the `*_proto_repositories()` function is invoked:
 
 | Language | Requires |
 | ---:     | :---     |
+| closure_proto_repositories | [rules_closure](https://github.com/bazelbuild/rules_closure) |
+| csharp_proto_repositories | [rules_dotnet](https://github.com/bazelbuild/rules_dotnet) |
 | go_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
 | gogo_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
 | grpc_gateway_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
-| closure_proto_repositories | [rules_closure](https://github.com/bazelbuild/rules_closure) |
-| csharp_proto_repositories | [rules_dotnet](https://github.com/bazelbuild/rules_dotnet) |
 | node_proto_repositories | [rules_node](https://github.com/pubref/rules_node) |
+| py_proto_repositories <sup>1</sup> | [rules_python](https://github.com/bazelbuild/rules_python) |
+
+> <sup>1</sup> Only needed for python grpc support.
 
 ## 3. Add \*\_proto\_\* rules to your BUILD files
 
