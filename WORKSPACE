@@ -66,6 +66,32 @@ load("@org_pubref_rules_node//node:rules.bzl", "node_repositories")
 
 node_repositories()
 
+
+# ================================================================
+# Python GRPC support requires rules_python
+# ================================================================
+
+github_archive(
+    name = "io_bazel_rules_python",
+    commit = "07fba0f91bb5898d19daeaabf635d08059f7eacd",
+    org = "bazelbuild",
+    repo = "rules_python",
+    sha256 = "53fecb9ddc5d3780006511c9904ed09c15a8aed0644914960db89f56b1e875bd",
+)
+
+load("@io_bazel_rules_python//python:pip.bzl", "pip_repositories", "pip_import")
+
+pip_repositories()
+
+pip_import(
+   name = "pip_grpcio",
+   requirements = "//python:requirements.txt",
+)
+
+load("@pip_grpcio//:requirements.bzl", pip_grpcio_install = "pip_install")
+
+pip_grpcio_install()
+
 # ================================================================
 # Specific Languages Support
 # ================================================================

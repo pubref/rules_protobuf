@@ -7,7 +7,7 @@ load("//go:rules.bzl", "go_proto_library")
 load("//java:rules.bzl", "java_proto_library")
 load("//node:rules.bzl", "node_proto_compile", "node_proto_library")
 load("//objc:rules.bzl", "objc_proto_compile")
-load("//python:rules.bzl", "py_proto_compile")
+load("//python:rules.bzl", "py_proto_library")
 load("//protobuf:rules.bzl", "proto_compile")
 load("//ruby:rules.bzl", "ruby_proto_compile")
 
@@ -48,15 +48,15 @@ node_proto_library(
     with_grpc = False,
 )
 
-objc_proto_compile(
-    name = "objc",
+py_proto_library(
+    name = "py",
     protos = [":protos"],
     verbose = 0,
     with_grpc = False,
 )
 
-py_proto_compile(
-    name = "py",
+objc_proto_compile(
+    name = "objc",
     protos = [":protos"],
     verbose = 0,
     with_grpc = False,

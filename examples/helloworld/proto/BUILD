@@ -8,7 +8,7 @@ load("//java:rules.bzl", "java_proto_library")
 load("//node:rules.bzl", "node_proto_library")
 load("//objc:rules.bzl", "objc_proto_compile")
 load("//protobuf:rules.bzl", "proto_compile")
-load("//python:rules.bzl", "py_proto_compile")
+load("//python:rules.bzl", "py_proto_library")
 load("//ruby:rules.bzl", "ruby_proto_compile")
 
 filegroup(
@@ -87,13 +87,15 @@ objc_proto_compile(
     ],
 )
 
-py_proto_compile(
+py_proto_library(
     name = "py",
-    protos = [":protos"],
-    with_grpc = True,
-    deps = [
+    proto_deps = [
         "//examples/proto:py",
     ],
+    protos = [
+        ":protos",
+    ],
+    with_grpc = True,
 )
 
 ruby_proto_compile(
