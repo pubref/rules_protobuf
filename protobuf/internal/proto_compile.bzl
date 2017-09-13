@@ -483,6 +483,8 @@ def _proto_compile_impl(ctx):
 
   if ctx.attr.go_prefix:
     go_prefix = ctx.attr.go_prefix.go_prefix
+  elif ctx.attr.go_importpath:
+    go_prefix = ctx.attr.go_importpath
   else:
     go_prefix = ""
 
@@ -577,7 +579,7 @@ def _proto_compile_impl(ctx):
       _build_output_libdir(run, builder)
     else:
       _build_output_files(run, builder)
-    if run.lang.go_prefix: # golang-specific
+    if run.lang.go_prefix or ctx.attr.go_importpath: # golang-specific
       _build_importmappings(run, builder)
     if run.lang.supports_pb:
       _build_protobuf_invocation(run, builder)
@@ -641,6 +643,7 @@ proto_compile = rule(
     "go_prefix": attr.label(
       providers = ["go_prefix"],
     ),
+    "go_importpath": attr.string(),
     "go_package": attr.string(),
     "root": attr.string(),
     "imports": attr.string_list(),
