@@ -54,12 +54,17 @@ csharp_repositories()
 # node_proto_library support requires rules_node
 # ================================================================
 
-github_archive(
+# github_archive(
+#     name = "org_pubref_rules_node",
+#     commit = "f6fff71fe8b1bee8d3a22e50eca0f76427ab939e",
+#     org = "pubref",
+#     repo = "rules_node",
+#     sha256 = "94c22db354edc9c21541c713f8d8ace381c8fb7b2c232a2b623c393abe9cb8e6",
+# )
+
+local_repository(
     name = "org_pubref_rules_node",
-    commit = "f6fff71fe8b1bee8d3a22e50eca0f76427ab939e",
-    org = "pubref",
-    repo = "rules_node",
-    sha256 = "94c22db354edc9c21541c713f8d8ace381c8fb7b2c232a2b623c393abe9cb8e6",
+    path = "/Users/pcj/github/rules_node",
 )
 
 load("@org_pubref_rules_node//node:rules.bzl", "node_repositories")

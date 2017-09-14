@@ -85,15 +85,6 @@ def node_proto_library(
 
   proto_compile(**proto_compile_args)
 
-  proto_language_deps(
-    name = name + "_compile_deps",
-    langs = langs,
-    file_extensions = [".js"],
-  )
-
-  # How to pass along the set of files that the pb file imported?
-  # Hmm.  Or should node_library not really exist?
-
   node_library(
     name = name,
     srcs = srcs + [name + ".pb"],

@@ -1,16 +1,21 @@
-const fs = require('fs')
-const path = require('path')
-const jspb = require('google-protobuf');
-const grpc = require('grpc');
-const messages = require('examples-helloworld-proto-node');
-const services_path = path.dirname(require.resolve('examples-helloworld-proto-node'));
-const services = require(services_path + '/helloworld_grpc_pb');
+console.log(require);
+
+const fs = require('fs');
+const path = require('path');
+//const jspb = require('google-protobuf');
+//const grpc = require('grpc');
+const messages = require('examples-helloworld-node-api_proto_js');
+const services = require('examples-helloworld-proto-node-api_proto_js/api_grpc_pb');
+//const services_path = path.dirname(require.resolve('examples-helloworld-proto-node'));
+//const services = require(services_path + '/helloworld_grpc_pb');
+
+console.log("Hello world");
 
 function main() {
   console.log("Running main");
-  var cred = grpc.credentials.createInsecure()
-  console.log(cred.constructor.classname)
-  console.log("grpc.credentials: " + cred)
+  var cred = grpc.credentials.createInsecure();
+  console.log(cred.constructor.classname);
+  console.log("grpc.credentials: " + cred);
   var client = new services.GreeterClient('localhost:50051', cred);
   var user;
   if (process.argv.length >= 3) {
