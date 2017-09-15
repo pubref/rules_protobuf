@@ -73,10 +73,10 @@ node_repositories()
 
 github_archive(
     name = "io_bazel_rules_python",
-    commit = "07fba0f91bb5898d19daeaabf635d08059f7eacd",
+    commit = "7f4cc9244dac7637d514e4f86364507681dda37e",
     org = "bazelbuild",
     repo = "rules_python",
-    sha256 = "53fecb9ddc5d3780006511c9904ed09c15a8aed0644914960db89f56b1e875bd",
+    sha256 = "ad11daa2e991309eb672b9f18cdc650893e30610fbcccac539bd9c7ca5a5f7ca",
 )
 
 load("@io_bazel_rules_python//python:pip.bzl", "pip_repositories", "pip_import")
