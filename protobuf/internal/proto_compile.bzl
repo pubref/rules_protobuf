@@ -185,6 +185,12 @@ def _build_output_files(run, builder):
       base = _capitalize(base)
     for ext in exts:
       path = _get_relative_dirname(run, ctx.label.package, file)
+
+      if ctx.var["GENDIR"].endswith("/".join(path)):
+         # if the path context is the genfiles directory, ignore relative
+         # path name calculation
+         path = []
+
       path.append(base + ext)
       pbfile = ctx.new_file("/".join(path))
       builder["outputs"] += [pbfile]
