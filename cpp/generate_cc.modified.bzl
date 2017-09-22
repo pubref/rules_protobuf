@@ -92,7 +92,7 @@ def generate_cc_impl(ctx):
       command = " && ".join(cmds),
   )
 
-  return struct(files=set(out_files))
+  return struct(files=depset(out_files))
 
 _generate_cc = rule(
     attrs = {

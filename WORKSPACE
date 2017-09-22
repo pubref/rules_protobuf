@@ -24,10 +24,10 @@ go_repositories()
 
 github_archive(
     name = "io_bazel_rules_closure",
-    commit = "a6b65d5c5c9db8968fb8e03115d5e4f6976de8f7",
+    commit = "4af89ef1db659eb41f110df189b67d4cf14073e1",
     org = "bazelbuild",
     repo = "rules_closure",
-    sha256 = "1bccdc7ed05fb74ef18aba39e51c059777cd843dc5d0758303deb9745a93c45e",
+    sha256 = "f73b1b3974e7639183e1646737d446d73a966ff57f853a896e19bcccc40e9b7b",
 )
 
 load("@io_bazel_rules_closure//closure:defs.bzl", "closure_repositories")
@@ -73,10 +73,10 @@ node_repositories()
 
 github_archive(
     name = "io_bazel_rules_python",
-    commit = "d6fbb0fb2a5c8e318dd4de5104dc41358cefaa90",
+    commit = "fa77c9c1118380e066c88b955c90fb3c7353429e",
     org = "bazelbuild",
     repo = "rules_python",
-    sha256 = "43dceb1be46d1c6c1a08d510931982664f1115a399a3bce1a419e63143e5b6c1",
+    sha256 = "7d06126d0d10ea8e63cc7eaf774d9ecebcd9583094ee8e93b0035da659eab5c1",
 )
 
 load("@io_bazel_rules_python//python:pip.bzl", "pip_repositories", "pip_import")
@@ -110,7 +110,13 @@ csharp_proto_repositories()
 
 load("//java:rules.bzl", "java_proto_repositories", "nano_proto_repositories")
 
-java_proto_repositories()
+java_proto_repositories(
+    # Already picking these up from rules_closure
+    excludes = [
+        "com_google_code_findbugs_jsr305",
+        "com_google_errorprone_error_prone_annotations",
+    ],
+)
 #nano_proto_repositories()
 
 load("//go:rules.bzl", "go_proto_repositories")

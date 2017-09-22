@@ -105,6 +105,6 @@ def csharp_proto_library(
   csharp_library(
     name = name,
     srcs = srcs + [name + ".pb"],
-    #deps = list(set(deps + proto_deps + [name + "_imports"])),
-    deps = list(set(deps + proto_deps + compile_deps)),
+    #deps = depset(deps + proto_deps + [name + "_imports"]).to_list(),
+    deps = depset(deps + proto_deps + compile_deps).to_list(),
     **kwargs)

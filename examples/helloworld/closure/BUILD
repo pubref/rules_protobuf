@@ -30,7 +30,6 @@ closure_js_test(
     name = "greeter_test",
     srcs = ["greeter_test.js"],
     compilation_level = "SIMPLE",
-    pedantic = True,
     size = "small",
     deps = [
         ":greeter",

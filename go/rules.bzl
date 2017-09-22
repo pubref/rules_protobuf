@@ -107,6 +107,6 @@ def go_proto_library(
   go_library(
     name = name,
     srcs = srcs + [name + ".pb"],
-    deps = list(set(deps + proto_deps + go_proto_deps)),
+    deps = depset(deps + proto_deps + go_proto_deps).to_list(),
     importpath = importpath,
     **kwargs)
