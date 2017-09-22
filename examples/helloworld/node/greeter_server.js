@@ -1,9 +1,6 @@
-const path = require('path')
-const messages = require('examples-helloworld-proto-node');
-const services_path = path.dirname(require.resolve('examples-helloworld-proto-node'));
-const services = require(services_path + '/helloworld_grpc_pb');
-
-var grpc = require('grpc');
+const grpc = require('grpc');
+const messages = require('examples/helloworld/node/api_proto_js').api_pb;
+const services = require('examples/helloworld/node/api_proto_js').api_grpc_pb;
 
 /**
  * Implements the SayHello RPC method.
@@ -20,7 +17,7 @@ function sayHello(call, callback) {
  */
 function main() {
   var server = new grpc.Server();
-  server.addService(services.GreeterService, {sayHello: sayHello});
+  server.addService(services.GreeterService, { sayHello: sayHello });
   server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure());
   server.start();
 }
