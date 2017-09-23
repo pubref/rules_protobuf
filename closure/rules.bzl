@@ -55,4 +55,7 @@ def closure_proto_library(
     deps = depset(deps + proto_deps + [
       "@io_bazel_rules_closure//closure/protobuf:jspb",
     ]).to_list(),
+    suppress = [
+      "JSC_IMPLICITLY_NULLABLE_JSDOC",
+    ],
     **kwargs)
