@@ -54,18 +54,24 @@ csharp_repositories()
 # node_proto_library support requires rules_node
 # ================================================================
 
+
 github_archive(
     name = "org_pubref_rules_node",
-    commit = "f6fff71fe8b1bee8d3a22e50eca0f76427ab939e",
+    # This commit is *not* on master but rather https://github.com/pubref/rules_node/pull/35.
+    commit = "2b4b38dcb76eba98419c932c98bd22fe6e322c9f",
     org = "pubref",
     repo = "rules_node",
-    sha256 = "94c22db354edc9c21541c713f8d8ace381c8fb7b2c232a2b623c393abe9cb8e6",
+    sha256 = "64e30037b931fb01c5c5f2e38477bdd234ba95b51138153c13bec8d156982978",
 )
 
-load("@org_pubref_rules_node//node:rules.bzl", "node_repositories")
+load("@org_pubref_rules_node//node:rules.bzl", "node_repositories", "yarn_modules")
 
 node_repositories()
 
+yarn_modules(
+    name = "yarn_modules",
+    package_json = "//node:package.json",
+)
 
 # ================================================================
 # Python GRPC support requires rules_python
@@ -91,6 +97,7 @@ pip_import(
 load("@pip_grpcio//:requirements.bzl", pip_grpcio_install = "pip_install")
 
 pip_grpcio_install()
+
 
 # ================================================================
 # Specific Languages Support
