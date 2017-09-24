@@ -57,10 +57,10 @@ csharp_repositories()
 
 github_archive(
     name = "org_pubref_rules_node",
-    commit = "bee6ced5e3fc1a1430ee8da971d240b91ce92301",
+    commit = "2b4b38dcb76eba98419c932c98bd22fe6e322c9f",
     org = "pubref",
     repo = "rules_node",
-    sha256 = "3f5a2dfcb65c8800164396913521fbd79b7972758aa49dac5c453eb8fdf8c1c8",
+    sha256 = "64e30037b931fb01c5c5f2e38477bdd234ba95b51138153c13bec8d156982978",
 )
 
 load("@org_pubref_rules_node//node:rules.bzl", "node_repositories", "yarn_modules")
