@@ -129,6 +129,21 @@ func main() {
 The preferred strategy is to use the magic token `go_default_library`.
 When this name is chosen, part 3 is not needed and should be omitted.
 
+## Using the `importpath` attribute in `go_proto_library`
+
+The preferred approach is now done explicitly via the `importpath`
+attribute provided by `rules_go`.  See example below (details in
+[tests/custom_go_importpath](tests/custom_go_importpath)).
+
+```
+go_proto_library(
+    name = "api_proto",
+    importpath = "github.com/my/custom/import/path",
+    protos = ["api.proto"],
+    with_grpc = True,
+)
+```
+
 ---
 
 Consult source files in the
