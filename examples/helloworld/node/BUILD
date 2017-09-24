@@ -1,13 +1,4 @@
-load("@org_pubref_rules_node//node:rules.bzl", "node_binary", "node_module")
-load("//node:rules.bzl", "node_proto_library")
-
-# node_proto_library(
-#     name = "api_proto_js",
-#     protos = ["api.proto"],
-#     with_grpc = True,
-#     output_to_workspace = False,
-# )
-
+load("@org_pubref_rules_node//node:rules.bzl", "node_binary")
 
 node_binary(
     name = "client",

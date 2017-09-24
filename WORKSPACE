@@ -57,6 +57,7 @@ csharp_repositories()
 
 github_archive(
     name = "org_pubref_rules_node",
+    # This commit is *not* on master but rather https://github.com/pubref/rules_node/pull/35.
     commit = "2b4b38dcb76eba98419c932c98bd22fe6e322c9f",
     org = "pubref",
     repo = "rules_node",
