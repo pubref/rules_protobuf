@@ -98,5 +98,5 @@ def node_proto_library(
     name = name,
     srcs = srcs + [name + ".pb"],
     data = data + [dep + ".pb" for dep in proto_deps],
-    deps = list(set(deps + proto_deps)),
+    deps = depset(deps + proto_deps).to_list(),
     **kwargs)

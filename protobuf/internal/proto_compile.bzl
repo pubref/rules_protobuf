@@ -385,7 +385,7 @@ def _get_external_root(ctx):
 
   # This set size must be 0 or 1. (all source files must exist in this
   # workspace or the same external workspace).
-  roots = set(external_roots)
+  roots = depset(external_roots)
   if (ctx.attr.verbose > 2):
     print("external roots: %r" % roots)
   n = len(roots)
@@ -414,7 +414,7 @@ def _compile(ctx, unit):
   protoc_cmd = [protoc] + list(unit.args) + imports + srcs
   manifest = [f.short_path for f in unit.outputs]
 
-  transitive_units = set()
+  transitive_units = depset()
   for u in unit.data.transitive_units:
     transitive_units = transitive_units | u.inputs
   inputs = list(unit.inputs | transitive_units) + [unit.compiler]
@@ -600,11 +600,11 @@ def _proto_compile_impl(ctx):
     compiler = ctx.executable.protoc,
     data = data,
     transitive_mappings = builder.get("transitive_mappings", {}),
-    args = set(builder["args"] + ctx.attr.args),
-    imports = set(builder["imports"]),
-    inputs = set(builder["inputs"]),
-    outputs = set(builder["outputs"] + [ctx.outputs.descriptor_set]),
-    commands = set(builder["commands"]),
+    args = depset(builder["args"] + ctx.attr.args),
+    imports = depset(builder["imports"]),
+    inputs = depset(builder["inputs"]),
+    outputs = depset(builder["outputs"] + [ctx.outputs.descriptor_set]),
+    commands = depset(builder["commands"]),
   )
 
   # Run protoc
@@ -614,7 +614,7 @@ def _proto_compile_impl(ctx):
     if run.lang.output_to_jar:
       _build_output_srcjar(run, builder)
 
-  files = set(builder["outputs"])
+  files = depset(builder["outputs"])
 
   return struct(
     files = files,

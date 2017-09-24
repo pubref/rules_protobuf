@@ -97,7 +97,7 @@ def cpp_proto_library(
   native.cc_library(
     name = name,
     srcs = srcs + [name + ".pb"],
-    deps = list(set(deps + proto_deps + compile_deps)),
+    deps = depset(deps + proto_deps + compile_deps).to_list(),
     **kwargs)
 
 # Alias for cpp_proto_library

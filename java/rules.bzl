@@ -129,7 +129,7 @@ def java_proto_library(
     name = name,
     srcs = srcs + [name + ".pb"],
     exports = java_exports,
-    deps = list(set(deps + proto_deps + [name + "_compile_imports"])),
+    deps = depset(deps + proto_deps + [name + "_compile_imports"]).to_list(),
     **kwargs)
 
 

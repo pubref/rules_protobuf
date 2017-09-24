@@ -69,5 +69,5 @@ def py_proto_library(
   native.py_library(
     name = name,
     srcs = srcs + [name + ".pb"],
-    deps = list(set(deps + proto_deps)),
+    deps = depset(deps + proto_deps).to_list(),
     **kwargs)
