@@ -92,7 +92,7 @@ language-specific `*_proto_repositories` rule(s):
 git_repository(
   name = "org_pubref_rules_protobuf",
   remote = "https://github.com/pubref/rules_protobuf",
-  tag = "v0.8.0",
+  tag = "v0.8.1",
   #commit = "..." # alternatively, use latest commit on master
 )
 
