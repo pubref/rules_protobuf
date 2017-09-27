@@ -70,9 +70,9 @@ def go_proto_library(
 
   if not go_proto_deps:
     if with_grpc:
-      go_proto_deps += GRPC_COMPILE_DEPS
+      go_proto_deps = GRPC_COMPILE_DEPS
     else:
-      go_proto_deps += PB_COMPILE_DEPS
+      go_proto_deps = PB_COMPILE_DEPS
 
   if importpath:
     go_prefix = None
