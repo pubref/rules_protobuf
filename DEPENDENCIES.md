@@ -5,7 +5,7 @@ To update this list, `bazel build @org_pubref_rules_protobuf//:deps && cp bazel-
 
 | Rule | Workspace | Detail |
 | ---: | :--- | :--- |
-| [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@com_google_protobuf`** | [sha256:e83ee63eccfb](https://github.com/google/protobuf/archive/2807436cd828a526c5c38dd235c0d0d9cdc67b1f.zip) |
+| [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@com_google_protobuf`** | [sha256:542703acadc3](https://github.com/google/protobuf/archive/v3.4.0.zip) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protoc`** | `//external:protoc` (`@com_google_protobuf//:protoc`) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protocol_compiler`** | `//external:protocol_compiler` (`@com_google_protobuf//:protoc`) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protobuf`** | `//external:protobuf` (`@com_google_protobuf//:protobuf`) |
