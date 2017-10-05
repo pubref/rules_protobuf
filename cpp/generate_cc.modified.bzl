@@ -26,6 +26,8 @@ we shift into the external workspace with a 'cd
 external/com_google_grpc', and adjust dir_out, plugin_out,
 cpp_out etc to be relative to the forward shifted position.
 
+Third change: Windows compatibility by not including : when unnecessary.
+
 """
 
 def generate_cc_impl(ctx):
@@ -55,10 +57,16 @@ def generate_cc_impl(ctx):
     flags = list(ctx.attr.flags)
     if ctx.attr.generate_mock:
       flags.append("generate_mock_code=true")
-    arguments += ["--PLUGIN_out=" + ",".join(flags) + ":" + dir_out]
+    if flags:
+      arguments += ["--PLUGIN_out=" + ",".join(flags) + ":" + dir_out]
+    else:
+      arguments += ["--PLUGIN_out=" + dir_out]
     additional_input = [ctx.executable.plugin]
   else:
-    arguments += ["--cpp_out=" + ",".join(ctx.attr.flags) + ":" + dir_out]
+    if ctx.attr.flags:
+      arguments += ["--cpp_out=" + ",".join(ctx.attr.flags) + ":" + dir_out]
+    else:
+      arguments += ["--cpp_out=" + dir_out]
     additional_input = []
 
   #arguments += ["-I{0}={0}".format(include.path) for include in includes]
