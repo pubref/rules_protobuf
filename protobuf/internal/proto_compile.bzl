@@ -559,7 +559,7 @@ def _proto_compile_impl(ctx):
   # Mutable global state to be populated by the classes.
   builder = {
     "args": [], # list of string
-    "imports": ctx.attr.imports + ["."],
+    "imports": [i.replace("$(GENDIR)", ctx.genfiles_dir.path) for i in ctx.attr.imports] + ["."],
     "inputs": ctx.files.protos + ctx.files.inputs,
     "outputs": [],
     "commands": [], # optional miscellaneous pre-protoc commands
