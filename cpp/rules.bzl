@@ -14,7 +14,7 @@ def cpp_proto_repositories(
       "zlib",
       "nanopb",
       "boringssl",
-      "libssl",
+      "libboringssl",
       "protoc_gen_grpc_cpp",
     ], **kwargs):
 
