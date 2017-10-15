@@ -35,7 +35,7 @@ DEPS = {
     "boringssl": {
         "rule": "http_archive",
         # master-with-bazel Fri Sep 01 15:09:13 2017 +0000
-        "url": "https://boringssl.googlesource.com/boringssl/+archive/74ffd81aa7ec3d0aa3d3d820dbeda934958ca81a.tar.gz",
+        "url": "https://boringssl.googlesource.com/boringssl/+archive/75a1f23684e6f776d6081b1565f0cb1f04b0e288.tar.gz",
         # Shockingly, tar.gz from googlesource has a different sha256 each time.  WTF?
         #"sha256": "7deda1bac8f10be6dca78b54b8b2886a215f6c62270afdd2ed43bc10920925c7",
     },
