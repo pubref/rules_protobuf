@@ -1,0 +1,8 @@
+local_repository(
+    name = "org_pubref_rules_protobuf",
+    path = "../..",
+)
+
+load("@org_pubref_rules_protobuf//python:rules.bzl", "py_proto_repositories")
+
+py_proto_repositories()

@@ -1,0 +1,30 @@
+load("@org_pubref_rules_protobuf//python:rules.bzl", "py_proto_library")
+
+filegroup(
+    name = "protos2",
+    srcs = ["google/api/http.proto"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "protos",
+    srcs = glob(["**/*.proto"]),
+    visibility = ["//visibility:public"],
+)
+
+PROTO_IMPORTS = [
+    "a17/api/third_party/googleapis/",
+    "external/com_google_protobuf/src/",
+]
+
+PROTO_INPUTS = ["@com_google_protobuf//:well_known_protos"]
+
+py_proto_library(
+    name = "py_proto",
+    imports = PROTO_IMPORTS,
+    inputs = PROTO_INPUTS,
+    protos = [":protos"],
+    visibility = ["//visibility:public"],
+    verbose = 3,
+    with_grpc = False, # Why is this necessary?
+)

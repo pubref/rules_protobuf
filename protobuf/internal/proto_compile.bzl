@@ -316,7 +316,7 @@ def _build_importmappings(run, builder):
     builder[run.lang.name + "_grpc_options"] += opts
 
 
-def _build_plugin_out(name, outdir, options, builder):
+def _build_plugin_out(run, name, outdir, options, builder):
   """Build the --{lang}_out argument for a given plugin."""
   arg = outdir
 
@@ -330,7 +330,7 @@ def _build_plugin_out(name, outdir, options, builder):
 
   if options:
     arg = ",".join(options) + ":" + arg
-  builder["args"] += ["--%s_out=%s" % (name, arg)]
+  builder["args"] += ["--%s_out=%s/%s" % (name, arg, run.ctx.label.package)]
 
 
 def _build_protobuf_out(run, builder):
@@ -344,7 +344,7 @@ def _build_protobuf_out(run, builder):
   else:
     outdir = builder.get(lang.name + "_outdir", run.outdir)
 
-  _build_plugin_out(name, outdir, options, builder)
+  _build_plugin_out(run, name, outdir, options, builder)
 
 
 def _build_grpc_out(run, builder):
@@ -359,7 +359,7 @@ def _build_grpc_out(run, builder):
 
   options = builder.get(lang.name + "_grpc_options", [])
 
-  _build_plugin_out(name, outdir, options, builder)
+  _build_plugin_out(run, name, outdir, options, builder)
 
 
 def _get_outdir(ctx, lang, execdir):
