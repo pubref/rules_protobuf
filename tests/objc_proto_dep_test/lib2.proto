@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package lib2;
+
+import "tests/objc_proto_dep_test/lib1.proto";
+
+message Message2 {
+  lib1.Message1 message1 = 1;
+  string test2 = 2;
+}
+
