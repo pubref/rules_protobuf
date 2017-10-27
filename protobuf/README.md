@@ -72,7 +72,7 @@ to generate custom library outputs.
 | `grpc_compile_deps` | `label_list` | Optional list of dependencies for a library rule. Currently only supported for java-based rules. | `[]` |
 | `grpc_runtime_deps` | `label_list` | Optional list of dependencies for a binary rule. Currently only supported for java-based rules. | `[]` |
 | `pb_plugin_implements_grpc` | `bool` | Optional flag if the plugin generates both grpc and non-grpc related outputs. | `[]` |
-| `prefix` | `label` providing `go_prefix` | Optional label to the go_prefix rule (go specific). | `""` |
+| `go_prefix` | `label` providing `go_prefix` | Optional label to the go_prefix rule (go specific). | `""` |
 | `importmap` | `string_dict`  | Optional mappings (go specific). | `{}` |
 
 ---
