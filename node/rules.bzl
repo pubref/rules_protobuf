@@ -34,39 +34,43 @@ def node_proto_repositories(
 
 
 def _get_js_variable_name(file):
-  name = file.basename.rstrip(".js")
-  # Deal with special characters here?
-  return name
+  return file.basename.rstrip(".js")
 
 
 def _node_proto_module_impl(ctx):
+  """Build a node_module containing all transitive pb files and an index
+
+  The index.js file makes it more palatable to require the files within it.
+  It is a mapping such that the proto message "foo.proto" will export it's
+  """
   compilation = ctx.attr.compilation.proto_compile_result
-  index_js = ctx.new_file("%s/index.js" % ctx.label.name)
-
+  index = ctx.new_file("%s/index.js" % ctx.label.name)
+  srcs = []
   exports = {}
+  
+  for file in compilation.unit.outputs:
+    if file.path.endswith("_pb.js") or file.path.endswith("_grpc_pb.js"):
+      exports[_get_js_variable_name(file)] = file.short_path
+      srcs.append(file)
 
-  for unit in compilation.transitive_units:
-    for file in unit.outputs:
-      if file.path.endswith("_pb.js"):
-        name = _get_js_variable_name(file)
-        exports[name] = file.short_path
-      elif file.path.endswith("_grpc_pb.js"):
-        name = _get_js_variable_name(file)
-        exports[name] = file.short_path
-
-  content = []
-  content.append("module.exports = {")
+  content = [
+    "module.exports = {",
+  ]
   for name, path in exports.items():
     content.append("    '%s': require('./%s')," % (name, path))
   content.append("}")
 
   ctx.file_action(
-    output = index_js,
+    output = index,
     content = "\n".join(content)
   )
 
   return struct(
-    files = depset([index_js]),
+    files = depset([index] + srcs),
+    node_proto_module = struct(
+      index = index,
+      srcs = srcs
+    )
   )
 
 
@@ -75,6 +79,23 @@ _node_proto_module = rule(
   attrs = {
     "compilation": attr.label(
       providers = ["proto_compile_result"],
+      mandatory = True,
+    )
+  }
+)
+
+
+def _node_proto_module_index_impl(ctx):
+  """Export the index file built by the node_proto_module rule"""
+  return struct(
+    files = depset([ctx.attr.node_proto_module.node_proto_module.index]),
+  )
+
+_node_proto_module_index = rule(
+  implementation = _node_proto_module_index_impl,
+  attrs = {
+    "node_proto_module": attr.label(
+      providers = ["node_proto_module"],
       mandatory = True,
     )
   }
@@ -98,7 +119,6 @@ def node_proto_library(
     pb_plugin = None,
     pb_options = [],
     proto_compile_args = {},
-    srcs = [],
     deps = [
       "@yarn_modules//:google-protobuf",
     ],
@@ -126,18 +146,26 @@ def node_proto_library(
   if pb_plugin:
     proto_compile_args["pb_plugin"] = pb_plugin
 
+  # Run protocol compiler
   proto_compile(**proto_compile_args)
 
+  # Gather up the generated outputs 
   _node_proto_module(
-    name = name + "_index",
+    name = name + "_proto_module",
     compilation = name + ".pb",
   )
 
+  # Gather the generated index.js for the above module
+  _node_proto_module_index(
+    name = name + "_proto_module_index",
+    node_proto_module = name + "_proto_module",
+  )
+
+  # Package up all generated outputs into a standlone node_module
   node_module(
     name = name,
-    index = name + "_index",
+    index = name + "_proto_module_index",
     layout = "workspace",
-    srcs = srcs + [name + ".pb"],
-    data = data + [dep + ".pb" for dep in proto_deps],
+    srcs = [name + "_proto_module"],
     deps = depset(deps + proto_deps).to_list(),
     **kwargs)

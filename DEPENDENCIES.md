@@ -33,7 +33,7 @@ To update this list, `bazel build @org_pubref_rules_protobuf//:deps && cp bazel-
 | Rule | Workspace | Detail |
 | ---: | :--- | :--- |
 | [http_file](https://docs.bazel.build/versions/master/be/workspace.html#http_file) | **`@protoc_gen_grpc_java_linux_x86_64`** | [sha256:a1e0035248b1](https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.7.0/protoc-gen-grpc-java-1.7.0-linux-x86_64.exe) |
-| [http_file](https://docs.bazel.build/versions/master/be/workspace.html#http_file) | **`@protoc_gen_grpc_java_macosx`** | [sha256:9e3515e22e23](https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.7.0/protoc-gen-grpc-java-1.7.0-osx-x86_64.exe) |
+| [http_file](https://docs.bazel.build/versions/master/be/workspace.html#http_file) | **`@protoc_gen_grpc_java_macosx`** | [sha256:a9fdb363d057](https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.7.0/protoc-gen-grpc-java-1.7.0-osx-x86_64.exe) |
 | [maven_jar](https://docs.bazel.build/versions/master/be/workspace.html#maven_jar) | **`@junit_junit_4`** | [junit:junit:jar:4.12](http:repo1.maven.org/maven2/junit/junit/jar) (2973d1) |
 | [maven_jar](https://docs.bazel.build/versions/master/be/workspace.html#maven_jar) | **`@com_google_api_grpc_proto_google_common_protos`** | [com.google.api.grpc:proto-google-common-protos:0.1.9](http:repo1.maven.org/maven2/com/google/api/grpc/proto-google-common-protos/0.1.9) (3760f6) |
 | [maven_jar](https://docs.bazel.build/versions/master/be/workspace.html#maven_jar) | **`@com_google_auth_google_auth_library_credentials`** | [com.google.auth:google-auth-library-credentials:0.4.0](http:repo1.maven.org/maven2/com/google/auth/google-auth-library-credentials/0.4.0) (171da9) |

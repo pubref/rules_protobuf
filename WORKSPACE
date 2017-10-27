@@ -54,14 +54,12 @@ csharp_repositories()
 # node_proto_library support requires rules_node
 # ================================================================
 
-
 github_archive(
     name = "org_pubref_rules_node",
-    # This commit is *not* on master but rather https://github.com/pubref/rules_node/pull/35.
-    commit = "2b4b38dcb76eba98419c932c98bd22fe6e322c9f",
+    commit = "993a258096aaf3d4b295c18856e3405011cad99c", # v.0.4.1 
     org = "pubref",
     repo = "rules_node",
-    sha256 = "64e30037b931fb01c5c5f2e38477bdd234ba95b51138153c13bec8d156982978",
+    sha256 = "a64fa88814acee49be70bc5e78b238154f49435af0de8b52d75af236d2c71364",
 )
 
 load("@org_pubref_rules_node//node:rules.bzl", "node_repositories", "yarn_modules")
