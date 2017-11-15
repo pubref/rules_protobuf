@@ -8,15 +8,17 @@ load("//protobuf:rules.bzl", "github_archive")
 
 github_archive(
     name = "io_bazel_rules_go",
-    commit = "ae70411645c171b2056d38a6a959e491949f9afe",  # v0.5.4
+    commit = "6d900bc95ae678bec5c91031b8e987957d2a7f93",  # post-0.7.0 (includes important cross-compile fixes)
     org = "bazelbuild",
     repo = "rules_go",
-    sha256 = "ae91c1dfe9b943500f7486f2bb94b9887f881c7709474f3e170c95d414f79698",
+    sha256 = "d36baba631b29151434726eb204fa93ce8793b5f8ef96da452f382d77bd95c93",
 )
 
-load("@io_bazel_rules_go//go:def.bzl", "go_repositories")
+load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains")
 
-go_repositories()
+go_rules_dependencies()
+
+go_register_toolchains()
 
 # ================================================================
 # closure js_proto_library support requires rules_closure
