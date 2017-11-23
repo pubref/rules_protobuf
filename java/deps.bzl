@@ -30,6 +30,12 @@ DEPS = {
         "sha256": "a9fdb363d05786c00541f83893cd34566bdc92e8d5355d6123d93c2b2885795d",
     },
 
+    "protoc_gen_grpc_java_windows_x86_64": {
+        "rule": "http_file",
+        "url": "https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.7.0/protoc-gen-grpc-java-1.7.0-windows-x86_64.exe",
+        "sha256": "e579866c7ec42dd27838960abedb32bfc41debfa9ae0b9d45a286f1011ce5c43",
+    },
+
     # ######################
     # Maven Dependencies #
     # ######################
