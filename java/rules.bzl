@@ -14,6 +14,7 @@ def java_proto_repositories(
 
     "protoc_gen_grpc_java_linux_x86_64",
     "protoc_gen_grpc_java_macosx",
+    "protoc_gen_grpc_java_windows_x86_64",
 
     'com_google_api_grpc_proto_google_common_protos',
     'com_google_code_findbugs_jsr305',
