@@ -156,8 +156,7 @@ def _build_output_srcjar(run, builder):
     mnemonic = "CpJarToSrcJar",
     inputs = [protojar],
     outputs = [srcjar],
-    arguments = [protojar.path, srcjar.path],
-    command = "cp $1 $2",
+    command = "cp %s %s" % (protojar.path, srcjar.path),
   )
 
   # Remove protojar from the list of provided outputs
