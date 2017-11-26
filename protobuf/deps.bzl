@@ -5,9 +5,12 @@ DEPS = {
     # Building grpc requires it to be called thusly.
     "com_google_protobuf": {
         "rule": "http_archive",
-        "url": "https://github.com/google/protobuf/archive/2807436cd828a526c5c38dd235c0d0d9cdc67b1f.zip", # 3.4.0
-        "strip_prefix": "protobuf-2807436cd828a526c5c38dd235c0d0d9cdc67b1f",
-        "sha256": "e83ee63eccfb47f07f263fbcdea0a2d838dab4a750c53867013539b5e536dd8a",
+        "urls" : [
+            "https://mirror.bazel.build/github.com/google/protobuf/archive/b04e5cba356212e4e8c66c61bbe0c3a20537c5b9.tar.gz",
+            "https://github.com/google/protobuf/archive/b04e5cba356212e4e8c66c61bbe0c3a20537c5b9.tar.gz",
+        ],
+        "sha256": "e178a25c52efcb6b05988bdbeace4c0d3f2d2fe5b46696d1d9898875c3803d6a",
+        "strip_prefix":  "protobuf-b04e5cba356212e4e8c66c61bbe0c3a20537c5b9",
     },
 
     # This binds the cc_binary "protoc" into
