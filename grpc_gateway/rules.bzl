@@ -62,8 +62,10 @@ def grpc_gateway_proto_library(
 
     **kwargs):
 
+  _go_proto_deps = [] + go_proto_deps
+  
   if not go_proto_deps:
-    go_proto_deps += GRPC_COMPILE_DEPS
+    _go_proto_deps += GRPC_COMPILE_DEPS
 
   pb_args += {
     "name": name + ".pb",
@@ -127,7 +129,7 @@ def grpc_gateway_proto_library(
   go_library(
     name = name,
     srcs = srcs + [name + ".pb"] + [name + ".gw"],
-    deps = depset(deps + proto_deps + go_proto_deps + grpc_gateway_deps).to_list(),
+    deps = depset(deps + proto_deps + _go_proto_deps + grpc_gateway_deps).to_list(),
     **kwargs)
 
 

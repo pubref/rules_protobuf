@@ -39,6 +39,9 @@ test_pip_dependent_targets:
 	$(BAZEL_TEST) \
 	//examples/helloworld/python:test_greeter_server \
 
+test_gogo:
+	cd tests/gogo && $(BAZEL_TEST) :gogo_test
+
 all: build test
 
 build: external_proto_library_build
@@ -56,7 +59,7 @@ build: external_proto_library_build
 	//tests/generated_proto_file:* \
 	//tests/custom_go_importpath:* \
 
-test: test_pip_dependent_targets
+test: test_pip_dependent_targets test_gogo
 	$(BAZEL_TEST) \
 	//examples/helloworld/cpp:test \
 	//examples/helloworld/java/org/pubref/rules_protobuf/examples/helloworld/client:netty_test \
@@ -64,6 +67,7 @@ test: test_pip_dependent_targets
 	//examples/wkt/go:wkt_test \
 	//tests/proto_file_in_subdirectory:test \
 	//examples/helloworld/closure:greeter_test \
+
 
 external_proto_library_build:
 	cd tests/external_proto_library && $(BAZEL_BUILD) :cc_gapi :go_gapi :java_gapi

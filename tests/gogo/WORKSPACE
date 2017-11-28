@@ -1,0 +1,38 @@
+local_repository(
+    name = "org_pubref_rules_protobuf",
+    path = "../..",
+)
+
+load("@org_pubref_rules_protobuf//protobuf:rules.bzl", "github_archive")
+
+# ================================================================
+# Go support requires rules_go
+# ================================================================
+
+github_archive(
+    name = "io_bazel_rules_go",
+    commit = "6d900bc95ae678bec5c91031b8e987957d2a7f93",  # post-0.7.0 (includes important cross-compile fixes)
+    org = "bazelbuild",
+    repo = "rules_go",
+    sha256 = "d36baba631b29151434726eb204fa93ce8793b5f8ef96da452f382d77bd95c93",
+)
+
+load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains")
+
+go_rules_dependencies()
+
+go_register_toolchains()
+
+
+load("@io_bazel_rules_go//proto:def.bzl", "proto_register_toolchains")
+
+proto_register_toolchains()
+
+
+# ================================================================
+# Gogo Support
+# ================================================================
+
+load("@org_pubref_rules_protobuf//gogo:rules.bzl", "gogo_proto_repositories")
+
+gogo_proto_repositories()
