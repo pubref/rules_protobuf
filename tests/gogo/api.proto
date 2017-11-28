@@ -1,0 +1,17 @@
+
+syntax = "proto3";
+
+// The api service definition.
+service Api {
+  rpc Get(Request) returns (Response) {}
+}
+
+// The request message containing the user's name.
+message Request {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message Response {
+  string message = 1;
+}

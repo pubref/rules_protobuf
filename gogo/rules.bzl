@@ -148,11 +148,13 @@ def gogo_proto_library(
     verbose = 0,
     **kwargs):
 
+  gogo_proto_deps = [] + go_proto_deps
+  
   if not go_proto_deps:
     if with_grpc:
-      go_proto_deps += GRPC_COMPILE_DEPS
+      gogo_proto_deps += GRPC_COMPILE_DEPS
     else:
-      go_proto_deps += PB_COMPILE_DEPS
+      gogo_proto_deps += PB_COMPILE_DEPS
 
   proto_compile_args += {
     "name": name + ".pb",
@@ -182,5 +184,5 @@ def gogo_proto_library(
   go_library(
     name = name,
     srcs = srcs + [name + ".pb"],
-    deps = depset(deps + proto_deps + go_proto_deps).to_list(),
+    deps = depset(deps + proto_deps + gogo_proto_deps).to_list(),
     **kwargs)
