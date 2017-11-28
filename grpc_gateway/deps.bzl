@@ -15,6 +15,7 @@ DEPS = {
         "rule": "go_repository",
         "importpath": "github.com/grpc-ecosystem/grpc-gateway",
         "commit": "f2862b476edcef83412c7af8687c9cd8e4097c0f", # Jul 23, 2017
+        "build_file_proto_mode": "legacy",
     },
 
     "com_github_grpc_ecosystem_grpc_gateway_googleapis": {
