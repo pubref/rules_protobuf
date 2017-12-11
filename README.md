@@ -268,6 +268,15 @@ performs the code generation step.  For example, the
 attribute to accomplish both code generation and compilation of object
 files for the proto chain.
 
+### Generated Imports
+
+If the protobuf schema is not part of your workspace, but rather generated
+via a genrule or similar, you can interpolate the import path for that
+file by using the special `$(GENDIR)` variable.  For example, if there
+is a genrule in `//foo/bar:generated_proto`, you can add
+`$(GENDIR)/foo/bar` to the `imports` list to make the generated file
+visible to `protoc` for compilation.
+
 ### External Imports
 
 The same logic applies to external imports.  The two questions to ask
