@@ -49,7 +49,7 @@ DEPS = {
     # To recompute these one can do the following:
     # $ cd grpc-java-maven-deps/
     # $ bazel build :hello
-    # $ cat $(bazel info output_base)/external/maven_grpc/rules.bzl >> ../deps.bzl
+    # $ cat $(bazel info output_base)/external/maven_grpc/rules.bzl
     # $ manually fix up this file with the new deps.
     #
     'com_google_api_grpc_proto_google_common_protos': {
@@ -89,7 +89,7 @@ DEPS = {
     },
     'com_google_protobuf_nano_protobuf_javanano': {
         'rule': 'maven_jar',
-        'artifact': 'com.google.protobuf.nano:protobuf-javanano:3.0.0-alpha',
+        'artifact': 'com.google.protobuf.nano:protobuf-javanano:3.0.0-alpha-5',
         'sha1': '357e60f95cebb87c72151e49ba1f570d899734f8',
     },
     'com_google_protobuf_protobuf_java': {
@@ -114,53 +114,53 @@ DEPS = {
     },
     'io_grpc_grpc_all': {
         'rule': 'maven_jar',
-        'artifact': 'io.grpc:grpc-all:1.7.0',
-        'sha1': '59340bc5e354e2cd8a4e7e7b7d44bd27f876e62e',
+        'artifact': 'io.grpc:grpc-all:1.8.0',
+        'sha1': '088fdbdc68a3bcd06d47a77ecb9a771c22ba1de3',
     },
     'io_grpc_grpc_auth': {
         'rule': 'maven_jar',
-        'artifact': 'io.grpc:grpc-auth:1.7.0',
-        'sha1': '7c7f0b0f8816657cdcfd654f17b866fd77b1546d',
+        'artifact': 'io.grpc:grpc-auth:1.8.0',
+        'sha1': '5ae916c5000fed6eaa87faa6a1a684b2634b8600',
     },
     'io_grpc_grpc_context': {
         'rule': 'maven_jar',
-        'artifact': 'io.grpc:grpc-context:1.7.0',
-        'sha1': 'e004fa243a627a64e91712154b93c5611d5c3af3',
+        'artifact': 'io.grpc:grpc-context:1.8.0',
+        'sha1': '7fe8214b8d1141afadbe0bcad751df2b8fe2e078',
     },
     'io_grpc_grpc_core': {
         'rule': 'maven_jar',
-        'artifact': 'io.grpc:grpc-core:1.7.0',
-        'sha1': '307405121aac5a31fa9b45dd883a8b3607ba7ab6',
+        'artifact': 'io.grpc:grpc-core:1.8.0',
+        'sha1': '2e9753ad0cd44942937bd5c260a0f1e80ce7a463',
     },
     'io_grpc_grpc_netty': {
         'rule': 'maven_jar',
-        'artifact': 'io.grpc:grpc-netty:1.7.0',
-        'sha1': '2ceeca086ba8388293dea4a26f524815f7f905d1',
+        'artifact': 'io.grpc:grpc-netty:1.8.0',
+        'sha1': '085334a9da3902c15d87e8d879c147f9ee424145',
     },
     'io_grpc_grpc_okhttp': {
         'rule': 'maven_jar',
-        'artifact': 'io.grpc:grpc-okhttp:1.7.0',
-        'sha1': '5b10f46007ef76d30779203d9acef06a13fd9b0c',
+        'artifact': 'io.grpc:grpc-okhttp:1.8.0',
+        'sha1': 'eb42f934d9682164ab7295135149d4001fc97372',
     },
     'io_grpc_grpc_protobuf': {
         'rule': 'maven_jar',
-        'artifact': 'io.grpc:grpc-protobuf:1.7.0',
-        'sha1': '2ee434bb315f074f176913c4293dd3b3bb63bccc',
+        'artifact': 'io.grpc:grpc-protobuf:1.8.0',
+        'sha1': '749848c287ef01b110a8fe464965e5cff730a7ac',
     },
     'io_grpc_grpc_protobuf_lite': {
         'rule': 'maven_jar',
-        'artifact': 'io.grpc:grpc-protobuf-lite:1.7.0',
-        'sha1': 'a0e2a7b7498cdcdb4a37bbe2f781cd2259a6bdb2',
+        'artifact': 'io.grpc:grpc-protobuf-lite:1.8.0',
+        'sha1': '3c40cd351e4206fad95f8dd612e0b94be4d1d1dd',
     },
     'io_grpc_grpc_protobuf_nano': {
         'rule': 'maven_jar',
-        'artifact': 'io.grpc:grpc-protobuf-nano:1.7.0',
-        'sha1': 'a5e51c61ab47b149d43a59d673d50ef5dd5bc396',
+        'artifact': 'io.grpc:grpc-protobuf-nano:1.8.0',
+        'sha1': 'dc6738dffa4c806e35d98a806d1fc8629794a0f2',
     },
     'io_grpc_grpc_stub': {
         'rule': 'maven_jar',
-        'artifact': 'io.grpc:grpc-stub:1.7.0',
-        'sha1': '0b80ca6416e1433648de7af49e62b12bf3c4a500',
+        'artifact': 'io.grpc:grpc-stub:1.8.0',
+        'sha1': 'a9a213b2b23f0015d6820f715b51c4bdf9f45939',
     },
     'io_netty_netty_buffer': {
         'rule': 'maven_jar',
@@ -214,8 +214,12 @@ DEPS = {
     },
     'io_opencensus_opencensus_api': {
         'rule': 'maven_jar',
-        'artifact': 'io.opencensus:opencensus-api:0.6.0',
-        'sha1': '8e3cd27ac3634373aa4e7aba3c13fc5ac22cb6b7',
+        'artifact': 'io.opencensus:opencensus-api:0.8.0',
+        'sha1': 'f921cd399ff9a3084370969dca74ccea510ff91f',
     },
-
+    'io_opencensus_opencensus_contrib_grpc_metrics': {
+        'rule': 'maven_jar',
+        'artifact': 'io.opencensus:opencensus-contrib-grpc-metrics:0.8.0',
+        'sha1': '5e54d0e6dd946fe097e63ad68243e0006fbb1fbc',
+    },
 }
