@@ -289,7 +289,11 @@ def _build_importmappings(run, builder):
   # Build the list of import mappings.  Start with any configured on
   # the rule by attributes.
   mappings = run.lang.importmap + run.data.importmap
-  mappings += _get_mappings(run.data.protos, run.data.label, go_prefix)
+
+  # The grpc-gateway plugin interprets the importmapping in a way such
+  # that it outputs to an undesirable location directly under the execroot
+  if run.lang.name != "grpc_gateway":
+    mappings += _get_mappings(run.data.protos, run.data.label, go_prefix)
 
   # Then add in the transitive set from dependent rules.
   for unit in run.data.transitive_units:

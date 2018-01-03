@@ -7,13 +7,12 @@
 | [grpc_gateway_proto_library](#grpc_gateway_proto_library) | Generate and compiles protobuf source files. |
 | [grpc_gateway_swagger_compile](#grpc_gateway_swagger_compile) | Generate swwagger.json source files. |
 
+> TL;DR; See full example in [tests/grpc_gateway](../tests/grpc_gateway)
+
 ## grpc_gateway\_proto\_repositories
 
 Enable [grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway)
 support by loading the dependencies in your workspace.
-
-> IMPORTANT: This should occur after loading
-> [rules_go](https://github.com/bazelbuild/rules_go).
 
 ```python
 load("@org_pubref_rules_protobuf//grpc_gateway:rules.bzl", "grpc_gateway_proto_repositories")
@@ -93,18 +92,6 @@ This rule includes all common `_library` attributes in addition to:
 | `log_backtrace_at` | `int` | See grpc_gateway docs. | `0` |
 | `request_context` | `boolean` | See grpc_gateway docs. | `False` |
 
-## grpc_gateway_binary
-
-The shortcut rule for the above is the `grpc_gateway_binary` rule:
-
-```python
-grpc_gateway_binary(
-  name = "gateway",
-  srcs = ["main.go"],
-  protos = [message.proto],
-)
-```
-
 ## grpc_gateway_swagger_compile
 
 The `grpc_gateway_swagger_compile` rule can be used to generate
@@ -124,10 +111,6 @@ $ bazel build :swagger
 Target //:protos up-to-date:
   bazel-genfiles/message.swagger.json
 ```
-
-Consult source files in the
-[examples/helloworld/grpc_gateway](../examples/helloworld/grpc_gateway) directory for
-additional information.
 
 
 [grpc-gateway-home]:https://github.com/grpc-ecosystem/grpc-gateway

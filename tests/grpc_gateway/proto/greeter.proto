@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloReply {
+  string message = 1;
+}
+
+// The greeting service definition.  Note that the
+// protoc-gen-grpc-gateway plugin will skip and service/rpc
+// declarations that don't have an associated google.api.http option..
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {
+    option (google.api.http) = {
+      post: "/v1/api/greet"
+      body: "*"
+    };
+  }
+}

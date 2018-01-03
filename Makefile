@@ -32,7 +32,7 @@ test_not_working_targets:
 test_not_working_in_travis_targets:
 	$(BAZEL) test \
 	//examples/helloworld/csharp/GreeterClient:GreeterClientTest \
-	//examples/helloworld/grpc_gateway:greeter_test \
+
 
 # Python targets are not working (pip grpcio only compatible with 3.1.x)
 test_pip_dependent_targets:
@@ -51,7 +51,6 @@ build: external_proto_library_build
 	//examples/helloworld/node:server \
 	//examples/helloworld/go/client \
 	//examples/helloworld/go/server \
-	//examples/helloworld/grpc_gateway:swagger \
 	//tests/proto_file_in_subdirectory:protolib \
 	//tests/with_grpc_false:protos \
 	//tests/with_grpc_false:cpp \
@@ -59,7 +58,7 @@ build: external_proto_library_build
 	//tests/generated_proto_file:* \
 	//tests/custom_go_importpath:* \
 
-test: test_pip_dependent_targets test_gogo
+test: test_pip_dependent_targets test_gogo test_grpc_gateway
 	$(BAZEL_TEST) \
 	//examples/helloworld/cpp:test \
 	//examples/helloworld/java/org/pubref/rules_protobuf/examples/helloworld/client:netty_test \
@@ -81,10 +80,12 @@ fmt:
 	find examples/ -name BUILD | xargs buildifier
 	find go/ -name BUILD | xargs buildifier
 	find gogo/ -name BUILD | xargs buildifier
-	find grpc_gateway/ -name BUILD | xargs buildifier
 	find node/ -name BUILD | xargs buildifier
 	find objc/ -name BUILD | xargs buildifier
 	find protobuf/ -name BUILD | xargs buildifier
 	find python/ -name BUILD | xargs buildifier
 	find ruby/ -name BUILD | xargs buildifier
 	find tests/ -name BUILD | xargs buildifier
+
+test_grpc_gateway: 
+	cd tests/grpc_gateway && bazel test :integration	

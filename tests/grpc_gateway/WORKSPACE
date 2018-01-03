@@ -1,0 +1,24 @@
+
+http_archive(
+    name = "io_bazel_rules_go",
+    url = "https://github.com/bazelbuild/rules_go/archive/a2972afe2d3895e762afb7c2075b08dfbada6643.zip", # PR #1178
+    strip_prefix = "rules_go-a2972afe2d3895e762afb7c2075b08dfbada6643",
+    sha256 = "c7ee798b9b55d2256388e9321fa2a6d3aa7c616402eaf0a41f024eb5a5a9b298",
+)
+
+load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains", "go_repository")
+
+go_rules_dependencies()
+
+go_register_toolchains()
+
+# ================================================================
+
+local_repository(
+    name = "org_pubref_rules_protobuf",
+    path = "../..",
+)
+
+load("@org_pubref_rules_protobuf//grpc_gateway:rules.bzl", "grpc_gateway_proto_repositories")
+
+grpc_gateway_proto_repositories()

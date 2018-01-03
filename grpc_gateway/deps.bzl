@@ -14,22 +14,22 @@ DEPS = {
     "com_github_grpc_ecosystem_grpc_gateway": {
         "rule": "go_repository",
         "importpath": "github.com/grpc-ecosystem/grpc-gateway",
-        "commit": "f2862b476edcef83412c7af8687c9cd8e4097c0f", # Jul 23, 2017
+        "commit": "61c34cc7e0c7a0d85e4237d665e622640279ff3d", # Jan 2, 2018
         "build_file_proto_mode": "legacy",
     },
 
     "com_github_grpc_ecosystem_grpc_gateway_googleapis": {
         "rule": "new_http_archive",
-        "url": "https://github.com/grpc-ecosystem/grpc-gateway/archive/f2862b476edcef83412c7af8687c9cd8e4097c0f.zip",
-        "strip_prefix": "grpc-gateway-f2862b476edcef83412c7af8687c9cd8e4097c0f/third_party/googleapis",
-        "sha256": "b8426c25492e76dec187099fb8e9f582173df3d445cb8913ca5ce78f423779a9",
+        "url": "https://github.com/grpc-ecosystem/grpc-gateway/archive/61c34cc7e0c7a0d85e4237d665e622640279ff3d.zip",
+        "strip_prefix": "grpc-gateway-61c34cc7e0c7a0d85e4237d665e622640279ff3d/third_party/googleapis",
+        "sha256": "61845e0f6a8c44cad46e3c212fe1b6664cb2a49f235aa6e6da0be42fbedf8b96",
         "build_file_content": GOOGLEAPIS_BUILD_FILE,
     },
 
     "org_golang_google_genproto": {
         "rule": "go_repository",
         "importpath": "google.golang.org/genproto",
-        "commit": "411e09b969b1170a9f0c467558eb4c4c110d9c77", # Apr 4, 2017
+        "commit": "a8101f21cf983e773d0c1133ebc5424792003214", # Dec 2017
     },
 
 

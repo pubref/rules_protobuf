@@ -138,25 +138,3 @@ def grpc_gateway_proto_compile(langs = [str(Label("//grpc_gateway"))], **kwargs)
 
 def grpc_gateway_swagger_compile(langs = [str(Label("//grpc_gateway:swagger"))], **kwargs):
   proto_compile(langs = langs, with_grpc = False, **kwargs)
-
-def grpc_gateway_binary(name,
-                        srcs = [],
-                        deps = [],
-                        protos = [],
-                        proto_label = "go_default_library",
-                        proto_deps = [],
-                        grpc_gateway_deps = GRPC_GATEWAY_DEPS,
-                        **kwargs):
-
-  grpc_gateway_proto_library(
-    name = proto_label,
-    protos = protos,
-    proto_deps = proto_deps,
-     **kwargs
-  )
-
-  go_binary(
-     name = name,
-     srcs = srcs,
-     deps = deps + [proto_label] + grpc_gateway_deps,
-  )
