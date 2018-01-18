@@ -59,11 +59,11 @@ csharp_repositories()
 
 github_archive(
     name = "org_pubref_rules_node",
-    # This commit is *not* on master but rather https://github.com/pubref/rules_node/pull/35.
-    commit = "2b4b38dcb76eba98419c932c98bd22fe6e322c9f",
+    # This commit is *not* on master but rather https://github.com/pubref/rules_node/pull/41.
+    commit = "f990afc34168f81b034e642aa0dcb56320ed3988",
     org = "pubref",
     repo = "rules_node",
-    sha256 = "64e30037b931fb01c5c5f2e38477bdd234ba95b51138153c13bec8d156982978",
+    sha256 = "a367add895f201595b618611dcf7bdd7723ffeed88c4dc327e30668d19c9d1e2",
 )
 
 load("@org_pubref_rules_node//node:rules.bzl", "node_repositories", "yarn_modules")
