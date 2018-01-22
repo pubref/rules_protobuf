@@ -169,7 +169,7 @@ $ bazel run java/org/pubref/rules_protobuf/examples/helloworld/client:netty
 
 To load alternate versions of dependencies, pass in a
 [dict][skylark-dict] having the same overall structure of a
-[deps.bzl][protobuf/deps.bzl] file.  Entries having a matching key will
+[deps.bzl](protobuf/deps.bzl) file.  Entries having a matching key will
 override those found in the file.  For example, to load a different
 version of https://github.com/golang/protobuf, provide a different
 commit ID:
