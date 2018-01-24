@@ -48,6 +48,7 @@ def java_proto_repositories(
     'io_netty_netty_resolver',
     'io_netty_netty_transport',
     'io_opencensus_opencensus_api',
+    'io_opencensus_opencensus_contrib_grpc_metrics',
 
     "junit_junit_4", # TODO: separate test requirements
 
