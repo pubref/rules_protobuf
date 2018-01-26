@@ -14,6 +14,7 @@ proto_language(
         "@com_google_code_findbugs_jsr305//jar",
         "@com_google_instrumentation_instrumentation_api//jar",
         "@io_opencensus_opencensus_api//jar",
+        "@io_opencensus_opencensus_contrib_grpc_metrics//jar",
         "@io_netty_netty_codec_http2//jar",
         "@io_netty_netty_codec_http//jar",
         "@io_netty_netty_codec//jar",
