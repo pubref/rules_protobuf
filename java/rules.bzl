@@ -79,6 +79,7 @@ def java_proto_library(
     imports = [],
     inputs = [],
     output_to_workspace = False,
+    output_to_dir = None,
     proto_deps = [],
     protoc = None,
 
@@ -105,6 +106,7 @@ def java_proto_library(
     "pb_options": pb_options,
     "grpc_options": grpc_options,
     "output_to_workspace": output_to_workspace,
+    "output_to_dir": output_to_dir,
     "verbose": verbose,
     "with_grpc": with_grpc,
   }

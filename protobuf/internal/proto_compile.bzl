@@ -364,8 +364,11 @@ def _build_grpc_out(run, builder):
 def _get_outdir(ctx, lang, execdir):
   if ctx.attr.output_to_workspace:
     outdir = "."
+  elif ctx.attr.output_to_dir:
+    outdir = ctx.attr.output_to_dir
   else:
     outdir = ctx.var["GENDIR"]
+    
   path = _get_offset_path(execdir, outdir)
   if execdir != ".":
     path += "/" + execdir
@@ -440,7 +443,7 @@ def _compile(ctx, unit):
   if execdir != ".":
     cmds.insert(0, "cd %s" % execdir)
 
-  if unit.data.output_to_workspace:
+  if unit.data.output_to_workspace or unit.data.output_to_dir:
     print(
 """
 >**************************************************************************
@@ -551,6 +554,7 @@ def _proto_compile_impl(ctx):
     with_grpc = ctx.attr.with_grpc,
     transitive_units = transitive_units,
     output_to_workspace = ctx.attr.output_to_workspace,
+    output_to_dir = ctx.attr.output_to_dir,
   )
 
   #print("transitive_units: %s" % transitive_units)
@@ -593,7 +597,7 @@ def _proto_compile_impl(ctx):
   _build_descriptor_set(data, builder)
 
   for run in runs:
-    if run.lang.output_to_jar:
+    if run.lang.output_to_jar and not data.output_to_dir:
       _build_output_jar(run, builder)
     elif run.lang.output_to_library:
       _build_output_library(run, builder)
@@ -628,7 +632,7 @@ def _proto_compile_impl(ctx):
   _compile(ctx, unit)
 
   for run in runs:
-    if run.lang.output_to_jar:
+    if run.lang.output_to_jar and not data.output_to_dir:
       _build_output_srcjar(run, builder)
 
   files = depset(builder["outputs"])
@@ -677,6 +681,7 @@ proto_compile = rule(
     "pb_options": attr.string_list(),
     "grpc_options": attr.string_list(),
     "output_to_workspace": attr.bool(),
+    "output_to_dir": attr.string(),
     "verbose": attr.int(),
     "with_grpc": attr.bool(default = True),
   },
