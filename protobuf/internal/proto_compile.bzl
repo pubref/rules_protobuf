@@ -197,8 +197,7 @@ def _build_output_files(run, builder):
       builder["outputs"] += [pbfile]
 
     for pb_output in run.pb_outputs:
-      if "*" in pb_output:
-        pb_output = pb_output.replace("*", base)
+      pb_output = pb_output.format(basename = base)
 
       temppath = list(path)
       temppath.append(pb_output)
