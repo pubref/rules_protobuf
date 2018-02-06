@@ -18,6 +18,7 @@ def _proto_language_impl(ctx):
             pb_options = ctx.attr.pb_options,
             pb_imports = ctx.attr.pb_imports,
             pb_inputs = ctx.files.pb_inputs,
+            pb_outputs = ctx.attr.pb_outputs,
             pb_plugin_name = ctx.attr.pb_plugin_name,
             pb_plugin = ctx.executable.pb_plugin,
             pb_compile_deps = ctx.files.pb_compile_deps,
@@ -51,6 +52,7 @@ proto_language_attrs = {
     "pb_options": attr.string_list(),
     "pb_inputs": attr.label_list(),
     "pb_imports": attr.string_list(),
+    "pb_outputs": attr.string_list(),
     "pb_plugin_name": attr.string(),
     "pb_plugin": attr.label(
         executable = True,

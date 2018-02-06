@@ -182,16 +182,26 @@ def _build_output_files(run, builder):
       base = _pascal_case(base)
     if run.lang.output_file_style == 'capitalize':
       base = _capitalize(base)
+
+    path = _get_relative_dirname(run, ctx.label.package, file)
+
+    genpath = ctx.var["GENDIR"].split("/")
+    lastIndex = len(genpath) - 1
+    if genpath[lastIndex] in path:
+      path = []
+
     for ext in exts:
-      path = _get_relative_dirname(run, ctx.label.package, file)
+      temppath = list(path)
+      temppath.append(base + ext)
+      pbfile = ctx.new_file("/".join(temppath))
+      builder["outputs"] += [pbfile]
 
-      genpath = ctx.var["GENDIR"].split("/")
-      lastIndex = len(genpath) - 1
-      if genpath[lastIndex] in path:
-        path = []
+    for pb_output in run.pb_outputs:
+      pb_output = pb_output.format(basename = base)
 
-      path.append(base + ext)
-      pbfile = ctx.new_file("/".join(path))
+      temppath = list(path)
+      temppath.append(pb_output)
+      pbfile = ctx.new_file("/".join(temppath))
       builder["outputs"] += [pbfile]
 
 
@@ -576,12 +586,17 @@ def _proto_compile_impl(ctx):
     if lang.supports_grpc and data.with_grpc:
       exts += lang.grpc_file_extensions
 
+    pb_outputs = []
+    if lang.supports_pb:
+      pb_outputs += lang.pb_outputs
+
     runs.append(struct(
       ctx = ctx,
       outdir = _get_outdir(ctx, lang, execdir),
       lang = lang,
       data = data,
       exts = exts,
+      pb_outputs = pb_outputs,
       output_to_jar = lang.output_to_jar,
     ))
 
