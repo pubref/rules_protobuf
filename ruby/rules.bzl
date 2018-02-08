@@ -10,7 +10,7 @@ def ruby_proto_repositories(
     ], **kwargs):
 
   if not omit_cpp_repositories:
-    cpp_proto_repositories()
+    cpp_proto_repositories(**kwargs)
 
   proto_repositories(lang_deps = lang_deps,
                      lang_requires = lang_requires,

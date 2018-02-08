@@ -13,7 +13,7 @@ def csharp_proto_repositories(
     ], **kwargs):
 
   if not omit_cpp_repositories:
-    cpp_proto_repositories()
+    cpp_proto_repositories(**kwargs)
 
   rem = proto_repositories(lang_deps = lang_deps,
                            lang_requires = lang_requires,
