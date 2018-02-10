@@ -53,7 +53,7 @@ def _emit_params_file_action(ctx, path, mnemonic, cmds):
 def _get_relative_dirname(run, base, file):
   """Return a dirname in the form of path segments relative to base.
   If the file.short_path is not within base, return empty list.
-  Example: if base="foo/bar/baz.txt"
+  Example: if         base="foo/bar/baz.txt"
            and file.short_path="bar/baz.txt",
            return ["bar"].
   Args:
@@ -193,8 +193,22 @@ def _build_output_files(run, builder):
     for ext in exts:
       temppath = list(path)
       temppath.append(base + ext)
-      pbfile = ctx.new_file("/".join(temppath))
+      fullpath = "/".join(temppath)
+      pbfile = ctx.new_file(fullpath)
       builder["outputs"] += [pbfile]
+
+      # If, for example, we have a go_proto_library rule in a
+      # subdirectory of the workspace AND the protobuf has the
+      # go_package option set, we have a problem: protoc-gen-go will
+      # output the file starting at the execution root rather than in
+      # the package root.  We can't declare a file outside of our own
+      # package so we need a hack: add cp commands to be run at the
+      # end of the compilation to move the actual generated files to
+      # the expected location.  Other solutions to this problem in
+      # bazel include stripping the go_package option from the file
+      # prior to compiling it (rules_go).
+      if run.data.label.package and run.data.go_package:
+        builder["post_commands"].append("cp %s/%s/%s %s" % (ctx.var["GENDIR"], run.data.execdir, fullpath, pbfile.path))
 
     for pb_output in run.pb_outputs:
       pb_output = pb_output.format(basename = base)
@@ -446,10 +460,11 @@ def _compile(ctx, unit):
   inputs = list(unit.inputs | transitive_units) + [unit.compiler]
   outputs = list(unit.outputs)
 
-  cmds = [cmd for cmd in unit.commands] + [" ".join(protoc_cmd)]
+  cmds = unit.commands.to_list() + [" ".join(protoc_cmd)]
   if execdir != ".":
     cmds.insert(0, "cd %s" % execdir)
 
+  cmds += unit.post_commands.to_list()
   if unit.data.output_to_workspace:
     print(
 """
@@ -572,6 +587,7 @@ def _proto_compile_impl(ctx):
     "inputs": ctx.files.protos + ctx.files.inputs,
     "outputs": [],
     "commands": [], # optional miscellaneous pre-protoc commands
+    "post_commands": [], # optional miscellaneous post-protoc commands
   }
 
   # Build a list of structs that will be processed in this compiler
@@ -637,6 +653,7 @@ def _proto_compile_impl(ctx):
     inputs = depset(builder["inputs"]),
     outputs = depset(builder["outputs"] + [ctx.outputs.descriptor_set]),
     commands = depset(builder["commands"]),
+    post_commands = depset(builder["post_commands"]),
   )
 
   # Run protoc

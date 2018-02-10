@@ -1,0 +1,9 @@
+// A protobuf in a subdirectory of a workspace that has the go_package option set.
+
+syntax = "proto3";
+
+option go_package = "github.com/pubref/rules_protobuf/tests/go_package/subdir";
+
+message Dir {
+  string name = 1;
+}

@@ -59,7 +59,7 @@ build: external_proto_library_build
 	//tests/generated_proto_file:* \
 	//tests/custom_go_importpath:* \
 
-test: test_pip_dependent_targets test_gogo
+test: test_pip_dependent_targets test_gogo test_go_package
 	$(BAZEL_TEST) \
 	//examples/helloworld/cpp:test \
 	//examples/helloworld/java/org/pubref/rules_protobuf/examples/helloworld/client:netty_test \
@@ -71,6 +71,9 @@ test: test_pip_dependent_targets test_gogo
 
 external_proto_library_build:
 	cd tests/external_proto_library && $(BAZEL_BUILD) :cc_gapi :go_gapi :java_gapi
+
+test_go_package:
+	cd tests/go_package && $(BAZEL_TEST) //go:import_test
 
 fmt:
 	buildifier WORKSPACE
