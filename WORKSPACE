@@ -42,10 +42,10 @@ closure_repositories()
 
 github_archive(
     name = "io_bazel_rules_dotnet",
-    commit = "ebc7c1cb61d45bd57042c60b6bfabdfff4979466",
+    commit = "1a6ca96fe05bca83782464453ac4657fb8ed8379",
     org = "bazelbuild",
     repo = "rules_dotnet",
-    sha256 = "b50c4a1133dfa834fab5ff7596e67866f67e252f76649543adca5f0c3fdec140",
+    sha256 = "0f7d7f79bf543fdcce9ffebf422df2f858eae63367869b441d4d1005f279fa1f",
 )
 
 load("@io_bazel_rules_dotnet//dotnet:csharp.bzl", "csharp_repositories")
