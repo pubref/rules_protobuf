@@ -8,9 +8,9 @@ DEPS = {
     "npm_protobuf_stack": {
         "rule": "npm_repository",
         "deps": {
-            "async": "1.5.2",
-            "google-protobuf": "3.1.1",
-            "lodash": "4.6.1",
+            "async": "2.6.0",
+            "google-protobuf": "3.5.0",
+            "lodash": "4.17.5",
             "minimist": "1.2.0",
         },
         "sha256": "96242be14d18d9f1e81603502893545c7ca0fbcabcb9e656656cbcdda2b52bbb",
