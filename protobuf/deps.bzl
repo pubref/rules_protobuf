@@ -7,7 +7,7 @@ DEPS = {
         "rule": "http_archive",
         "url": "https://github.com/google/protobuf/archive/v3.5.1.zip",
         "strip_prefix": "protobuf-3.5.1",
-        "sha256": "42667f11248caa7eb4637a37cc45eab86c436e9c3abd353beba2c0ab4f7cd13b",
+        "sha256": "1f8b9b202e9a4e467ff0b0f25facb1642727cdf5e69092038f15b37c75b99e45",
     },
 
     # This binds the cc_binary "protoc" into
