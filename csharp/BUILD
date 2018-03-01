@@ -8,7 +8,7 @@ proto_language(
         "@nuget_grpc//:core",
     ],
     grpc_file_extensions = ["Grpc.cs"],
-    grpc_plugin = "@com_google_grpc//:grpc_csharp_plugin",
+    grpc_plugin = "@com_github_grpc_grpc//:grpc_csharp_plugin",
     grpc_plugin_name = "grpc_csharp",
     output_file_style = "pascal",
     output_to_libdir = True,
