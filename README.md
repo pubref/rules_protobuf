@@ -21,7 +21,7 @@ the main bazel repository.  This is a moving target.  The main goals
 of this project are to:
 
 1. Provide `protoc`, the protocol buffer compiler
-   ([v3.4.0](https://github.com/google/protobuf/commit/2807436cd828a526c5c38dd235c0d0d9cdc67b1f)).
+   ([v3.5.1](https://github.com/google/protobuf/releases/tag/v3.5.1)).
 
 2. Provide the language-specific plugins.
 
@@ -38,7 +38,7 @@ of this project are to:
 
 | Language                     | Compile <sup>1</sup>  | Build <sup>2</sup> | gRPC <sup>3</sup> |
 | ---------------------------: | -----------: | --------: | -------- |
-| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) [v3.4.0](https://github.com/grpc/grpc/releases/tag/v1.6.1) | [v1.6.1](https://github.com/grpc/grpc/releases/tag/v1.6.1) |
+| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) [v3.5.1](https://github.com/google/protobuf/releases/tag/v3.5.1) | [v1.9.1](https://github.com/grpc/grpc/releases/tag/v.1.9.1) |
 | [C#](csharp)                 | [csharp_proto_compile](csharp#csharp_proto_compile) | [csharp_proto_library](csharp#csharp_proto_library) | [1.0.0](https://www.nuget.org/packages/Grpc/) |
 | [Closure](closure)           | [closure_proto_compile](closure#closure_proto_compile) | [closure_proto_library](closure#closure_proto_library)          |  |
 | [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.6.0](https://github.com/grpc/grpc-go/releases/tag/v1.6.0) |
@@ -46,9 +46,9 @@ of this project are to:
 | [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | [v1.2.2+ (f2862b)](https://github.com/grpc-ecosystem/grpc-gateway/commit/f2862b476edcef83412c7af8687c9cd8e4097c0f) |
 | [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [v1.7.0](https://github.com/grpc/grpc-java/releases/tag/v1.7.0) |
 | [Node](node)                 | [node_proto_compile](node#node_proto_compile) | [node_proto_library](node#node_proto_library)          | [1.6.0](https://www.npmjs.com/package/grpc) |
-| [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>4</sup> | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
-| [Python](python)             | [py_proto_compile](python#py_proto_compile)         | [py_proto_library](python#py_proto_library)          | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
-| [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
+| [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>4</sup> | [v.1.9.1](https://github.com/grpc/grpc/releases/tag/v1.9.1) |
+| [Python](python)             | [py_proto_compile](python#py_proto_compile)         | [py_proto_library](python#py_proto_library)          | [v.1.9.1](https://github.com/grpc/grpc/releases/tag/v1.9.1) |
+| [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           | [v.1.9.1](https://github.com/grpc/grpc/releases/tag/v1.9.1) |
 | Custom [proto_language](protobuf#proto_language) | [proto_compile](protobuf#proto_compile) | |  |
 
 > Refer to [`DEPENDENCIES.md`](DEPENDENCIES.md) for a more detailed

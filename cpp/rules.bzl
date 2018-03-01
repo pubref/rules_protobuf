@@ -9,8 +9,6 @@ def cpp_proto_repositories(
       "com_github_grpc_grpc",
       "com_github_cares_cares",
       "com_google_googletest",
-      #"com_google_grpc_base",
-      #"com_google_grpc",
       "com_github_madler_zlib",
       "zlib",
       "nanopb",
