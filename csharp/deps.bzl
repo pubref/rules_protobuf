@@ -46,7 +46,7 @@ DEPS = {
 
     "protoc_gen_grpc_csharp": {
         "rule": "bind",
-        "actual": "@com_google_grpc//:grpc_csharp_plugin",
+        "actual": "@com_github_grpc_grpc//:grpc_csharp_plugin",
     },
 
 }

@@ -5,27 +5,26 @@ To update this list, `bazel build @org_pubref_rules_protobuf//:deps && cp bazel-
 
 | Rule | Workspace | Detail |
 | ---: | :--- | :--- |
-| [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@com_google_protobuf`** | [sha256:542703acadc3](https://github.com/google/protobuf/archive/v3.4.0.zip) |
+| [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@com_google_protobuf`** | [sha256:1f8b9b202e9a](https://github.com/google/protobuf/archive/v3.5.1.zip) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protoc`** | `//external:protoc` (`@com_google_protobuf//:protoc`) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protocol_compiler`** | `//external:protocol_compiler` (`@com_google_protobuf//:protoc`) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protobuf`** | `//external:protobuf` (`@com_google_protobuf//:protobuf`) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protobuf_clib`** | `//external:protobuf_clib` (`@com_google_protobuf//:protoc_lib`) |
+| [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protobuf_headers`** | `//external:protobuf_headers` (`@com_google_protobuf//:protobuf_headers`) |
 
 ## C++
 
 | Rule | Workspace | Detail |
 | ---: | :--- | :--- |
-| [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@com_google_grpc_base`** | [sha256:d3794ca4ff7b](https://github.com/grpc/grpc/archive/ca87867579580928ca4c9fdf97051fa25bf1d386.zip) |
-| grpc_repository | **`@com_google_grpc`** |  |
-| [new_http_archive](https://docs.bazel.build/versions/master/be/workspace.html#new_http_archive) | **`@com_github_c_ares_c_ares`** | [sha256:ddce8def076a](https://github.com/c-ares/c-ares/archive/7691f773af79bf75a62d1863fd0f13ebf9dc51b1.zip) |
-| grpc_repository | **`@com_github_grpc_grpc`** |  |
-| [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@boringssl`** | [(no hash provided)](https://boringssl.googlesource.com/boringssl/+archive/74ffd81aa7ec3d0aa3d3d820dbeda934958ca81a.tar.gz) |
+| grpc_archive | **`@com_github_grpc_grpc`** |  |
+| [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@boringssl`** | [(no hash provided)](https://boringssl.googlesource.com/boringssl/+archive/886e7d75368e3f4fab3f4d0d3584e4abfc557755.tar.gz) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@libssl`** | `//external:libssl` (`@boringssl//:ssl`) |
 | [new_http_archive](https://docs.bazel.build/versions/master/be/workspace.html#new_http_archive) | **`@com_github_madler_zlib`** | [sha256:1cce3828ec2b](https://github.com/madler/zlib/archive/cacf7f1d4e3d44d871b605da3b647f07d718623f.zip) |
-| [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@cares`** | `//external:cares` (`@com_google_grpc//third_party/cares:ares`) |
+| [new_http_archive](https://docs.bazel.build/versions/master/be/workspace.html#new_http_archive) | **`@com_github_cares_cares`** | [sha256:932bf7e593d4](https://github.com/c-ares/c-ares/archive/3be1924221e1326df520f8498d704a5c4c8d0cce.zip) |
+| [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@cares`** | `//external:cares` (`@com_github_cares_cares//:ares`) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@zlib`** | `//external:zlib` (`@com_github_madler_zlib//:zlib`) |
-| [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@nanopb`** | `//external:nanopb` (`@com_google_grpc//third_party/nanopb`) |
-| [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protoc_gen_grpc_cpp`** | `//external:protoc_gen_grpc_cpp` (`@com_google_grpc//:grpc_cpp_plugin`) |
+| [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@nanopb`** | `//external:nanopb` (`@com_github_grpc_grpc//third_party/nanopb`) |
+| [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protoc_gen_grpc_cpp`** | `//external:protoc_gen_grpc_cpp` (`@com_github_grpc_grpc//:grpc_cpp_plugin`) |
 | [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@com_google_googletest`** | [sha256:f87029f64727](https://github.com/google/googletest/archive/7c6353d29a147cad1c904bf2957fd4ca2befe135.zip) |
 
 ## Java
@@ -77,7 +76,7 @@ To update this list, `bazel build @org_pubref_rules_protobuf//:deps && cp bazel-
 | ---: | :--- | :--- |
 | [new_nuget_package](https://github.com/bazelbuild/rules_dotnet#new_nuget_package) | **`@nuget_google_protobuf`** | [Google.Protobuf@3.4.0](https://www.nuget.org/packages/Google.Protobuf) |
 | [new_nuget_package](https://github.com/bazelbuild/rules_dotnet#new_nuget_package) | **`@nuget_grpc`** | [Grpc@1.6.0](https://www.nuget.org/packages/Grpc) |
-| [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protoc_gen_grpc_csharp`** | `//external:protoc_gen_grpc_csharp` (`@com_google_grpc//:grpc_csharp_plugin`) |
+| [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protoc_gen_grpc_csharp`** | `//external:protoc_gen_grpc_csharp` (`@com_github_grpc_grpc//:grpc_csharp_plugin`) |
 
 ## Go
 
@@ -108,6 +107,6 @@ To update this list, `bazel build @org_pubref_rules_protobuf//:deps && cp bazel-
 
 | Rule | Workspace | Detail |
 | ---: | :--- | :--- |
-| [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protoc_gen_grpc_node`** | `//external:protoc_gen_grpc_node` (`@com_google_grpc//:grpc_node_plugin`) |
-| [npm_repository](https://github.com/pubref/rules_node#npm_repository) | **`@npm_protobuf_stack`** | [async@1.5.2](https://npmjs.org/package/async), [google-protobuf@3.1.1](https://npmjs.org/package/google-protobuf), [lodash@4.6.1](https://npmjs.org/package/lodash), [minimist@1.2.0](https://npmjs.org/package/minimist) |
+| [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protoc_gen_grpc_node`** | `//external:protoc_gen_grpc_node` (`@com_github_grpc_grpc//:grpc_node_plugin`) |
+| [npm_repository](https://github.com/pubref/rules_node#npm_repository) | **`@npm_protobuf_stack`** | [async@2.6.0](https://npmjs.org/package/async), [google-protobuf@3.5.0](https://npmjs.org/package/google-protobuf), [lodash@4.17.5](https://npmjs.org/package/lodash), [minimist@1.2.0](https://npmjs.org/package/minimist) |
 | [npm_repository](https://github.com/pubref/rules_node#npm_repository) | **`@npm_grpc`** | [grpc@1.0.0](https://npmjs.org/package/grpc) |

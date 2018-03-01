@@ -2,7 +2,7 @@ DEPS = {
 
     "protoc_gen_grpc_node": {
         "rule": "bind",
-        "actual": "@com_google_grpc//:grpc_node_plugin",
+        "actual": "@com_github_grpc_grpc//:grpc_node_plugin",
     },
 
     "npm_protobuf_stack": {

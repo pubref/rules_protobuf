@@ -5,7 +5,7 @@ load("//protobuf:rules.bzl", "proto_language")
 proto_language(
     name = "node",
     grpc_file_extensions = ["_grpc_pb.js"],
-    grpc_plugin = "@com_google_grpc//:grpc_node_plugin",
+    grpc_plugin = "@com_github_grpc_grpc//:grpc_node_plugin",
     grpc_plugin_name = "grpc_node",
     pb_file_extensions = ["_pb.js"],
     pb_options = [
