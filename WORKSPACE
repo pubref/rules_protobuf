@@ -26,15 +26,15 @@ go_register_toolchains()
 
 github_archive(
     name = "io_bazel_rules_closure",
-    commit = "4af89ef1db659eb41f110df189b67d4cf14073e1",
+    commit = "f4d0633f14570313b94822223039ebda0f398102",
     org = "bazelbuild",
     repo = "rules_closure",
-    sha256 = "f73b1b3974e7639183e1646737d446d73a966ff57f853a896e19bcccc40e9b7b",
+    sha256 = "8e615c1c282ba680e667549e242cfcc0643846ee7c0c8c816bee077b3edda567",
 )
 
 load("@io_bazel_rules_closure//closure:defs.bzl", "closure_repositories")
 
-closure_repositories()
+closure_repositories(omit_com_google_protobuf=True)
 
 # ================================================================
 # csharp_proto_library support requires rules_dotnet (forked)
