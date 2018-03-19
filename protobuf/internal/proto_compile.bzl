@@ -431,20 +431,46 @@ def _update_import_paths(ctx, builder):
 
 
 def _compile(ctx, unit):
-
-  execdir = unit.data.execdir
-
-  protoc = _get_offset_path(execdir, unit.compiler.path)
-  imports = ["--proto_path=" + i for i in unit.imports]
-  srcs = [_get_offset_path(execdir, p.path) for p in unit.data.protos]
-  protoc_cmd = [protoc] + list(unit.args) + imports + srcs
-  manifest = [f.short_path for f in unit.outputs]
-
   transitive_units = depset()
   for u in unit.data.transitive_units:
     transitive_units = transitive_units | u.inputs
   inputs = list(unit.inputs | transitive_units) + [unit.compiler]
   outputs = list(unit.outputs)
+
+  execdir = unit.data.execdir
+
+  protoc = _get_offset_path(execdir, unit.compiler.path)
+  imports = []
+  imports_has_dot = False
+  for current_import in unit.imports:
+    if current_import == ".":
+      imports_has_dot = True
+    else:
+      imports = [current_import]
+  # Modify import paths so that protoc will also work with generated .proto files
+  for input in inputs:
+    if not input.path.endswith('.proto'):
+      continue
+    input_path = input.path
+    input_short_path = input.short_path
+    if input_short_path.startswith('../'):
+      last_index = input_short_path.rfind('../')
+      input_short_path = input_short_path[:last_index] + 'external/' + input_short_path[last_index+3:]
+
+    if input_path != input_short_path:
+      if not input_path.endswith(input_short_path):
+        fail('short_path is not prefix path path={} short_path={}'.format(input_path, input_short_path))
+      extra_import = input_path[:-len(input_short_path)-1]
+      if extra_import not in imports:
+        imports += [extra_import]
+  if imports_has_dot:
+    imports += ["."]
+  imports = ["--proto_path=" + i for i in imports]
+
+  srcs = [_get_offset_path(execdir, p.path) for p in unit.data.protos]
+  protoc_cmd = [protoc] + list(unit.args) + imports + srcs
+  manifest = [f.short_path for f in unit.outputs]
+
 
   cmds = [cmd for cmd in unit.commands] + [" ".join(protoc_cmd)]
   if execdir != ".":
