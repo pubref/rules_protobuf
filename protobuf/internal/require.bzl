@@ -82,7 +82,7 @@ def require(keys,
         if not key in excludes:
             over = overrides.get(key)
             data = d + over if over else d
-            if _needs_install(key, data, verbose=verbose):
+            if _needs_install(key, data, verbose=verbose, strict=strict):
                 data["name"] = key
                 required.append(data)
 
