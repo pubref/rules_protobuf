@@ -68,11 +68,12 @@ def go_proto_library(
     verbose = 0,
     **kwargs):
 
+  resolved_go_proto_deps = [] + go_proto_deps
   if not go_proto_deps:
     if with_grpc:
-      go_proto_deps = GRPC_COMPILE_DEPS
+      resolved_go_proto_deps = GRPC_COMPILE_DEPS
     else:
-      go_proto_deps = PB_COMPILE_DEPS
+      resolved_go_proto_deps = PB_COMPILE_DEPS
 
   if importpath:
     go_prefix = None
@@ -107,6 +108,6 @@ def go_proto_library(
   go_library(
     name = name,
     srcs = srcs + [name + ".pb"],
-    deps = depset(deps + proto_deps + go_proto_deps).to_list(),
+    deps = depset(deps + proto_deps + resolved_go_proto_deps).to_list(),
     importpath = importpath,
     **kwargs)
