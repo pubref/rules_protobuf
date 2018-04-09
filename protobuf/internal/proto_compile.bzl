@@ -65,6 +65,11 @@ def _get_relative_dirname(run, base, file):
   """
   path = file.dirname
 
+  # dirname replaces an empty path with "." to match the behavior of
+  # Linux's dirname(1). For the computations, below the "." is not necessary.
+  if path == ".":
+    path = ""
+
   # golang specific: If 'option go_package' is defined in the proto
   # file, protoc will output to that directory name rather than the
   # one based on the file path.  Since we cannot read/parse the file
@@ -78,9 +83,21 @@ def _get_relative_dirname(run, base, file):
     return parts
 
   if not path.startswith(base):
+    #TODO is this a failing error?
     return []
 
-  parts = path.split("/")
+  # At this point, path must start with base, so remove base
+  relative_dir = path[len(base):]
+
+  # Strip any leading slash, if present
+  if relative_dir.startswith("/"):
+    relative_dir = relative_dir[1:]
+
+  # Check if relative_dir is empty, if so return empty list
+  if relative_dir == "":
+    return []
+
+  parts = relative_dir.split("/")
 
   if parts[0] == "external":
     # ignore the first two items since we'll be cd'ing into
@@ -92,9 +109,7 @@ def _get_relative_dirname(run, base, file):
       components += run.data.go_package.split("/")
     return components
 
-  base_parts = base.split("/")
-  components = parts[len(base_parts):]
-  return components
+  return parts
 
 
 def _get_offset_path(root, path):
