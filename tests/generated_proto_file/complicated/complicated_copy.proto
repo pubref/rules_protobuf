@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+import "tests/generated_proto_file/subdir/copy.proto";
+
+package complicated;
+
+message Test {
+    subdir.Test test = 1;
+}
