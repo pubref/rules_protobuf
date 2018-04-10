@@ -1,4 +1,4 @@
-def _needs_install(name, dep, hkeys=["sha256", "sha1", "tag"], verbose=0, strict=True):
+def _needs_install(name, dep, hkeys=["sha256", "sha1", "tag"], verbose=0, strict=False):
 
     # Does it already exist?
     existing_rule = native.existing_rule(name)
@@ -26,8 +26,8 @@ def _needs_install(name, dep, hkeys=["sha256", "sha1", "tag"], verbose=0, strict
             if actual and expected != actual and strict:
                 msg = """
 An existing {0} rule '{1}' was already loaded with a {2} value of '{3}'.  Refusing to overwrite this with the requested value ('{4}').
-Either remove the pre-existing rule from your WORKSPACE or exclude it from loading by rules_protobuf.
-""".format(existing_rule["kind"], name, hkey, actual, expected)
+Either remove the pre-existing rule from your WORKSPACE or exclude it from loading by rules_protobuf (strict={5}.
+""".format(existing_rule["kind"], name, hkey, actual, expected, strict)
 
                 fail(msg)
             else:
@@ -67,7 +67,7 @@ def require(keys,
             overrides = {},
             excludes = [],
             verbose = 0,
-            strict = True):
+            strict = False):
 
     #
     # Make a list of non-excluded required deps with merged data.
@@ -82,7 +82,7 @@ def require(keys,
         if not key in excludes:
             over = overrides.get(key)
             data = d + over if over else d
-            if _needs_install(key, data, verbose=verbose):
+            if _needs_install(key, data, verbose=verbose, strict=strict):
                 data["name"] = key
                 required.append(data)
 

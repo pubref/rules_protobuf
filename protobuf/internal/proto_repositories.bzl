@@ -12,7 +12,7 @@ def proto_repositories(excludes = [],
                          "protocol_compiler",
                        ],
                        overrides = {},
-                       strict = True,
+                       strict = False,
                        verbose = 0):
   return require(
     keys = protobuf_requires + lang_requires,
