@@ -181,6 +181,7 @@ def _build_output_srcjar(run, builder):
   if run.data.verbose > 2:
     print("Copied jar %s srcjar to %s" % (protojar.path, srcjar.path))
 
+
 def _build_output_files(run, builder):
   """Build a list of files we expect to be generated."""
 
@@ -198,12 +199,13 @@ def _build_output_files(run, builder):
     if run.lang.output_file_style == 'capitalize':
       base = _capitalize(base)
 
-    path = _get_relative_dirname(run, ctx.label.package, file)
+    # If the source is a generated file, prefix the build file path with GENDIR
+    generated_path = ctx.var["GENDIR"]
+    build_package_path = ctx.label.package
+    if file.path.startswith(generated_path):
+      build_package_path = generated_path + "/" + build_package_path
 
-    genpath = ctx.var["GENDIR"].split("/")
-    lastIndex = len(genpath) - 1
-    if genpath[lastIndex] in path:
-      path = []
+    path = _get_relative_dirname(run, build_package_path, file)
 
     for ext in exts:
       temppath = list(path)
@@ -363,7 +365,7 @@ def _build_protobuf_out(run, builder):
   name = lang.pb_plugin_name or lang.name
   options = builder.get(lang.name + "_pb_options", [])
 
-  if run.data.protos[0].path.startswith(run.ctx.var["GENDIR"]):
+  if run.data.sources_are_generated:
     outdir = "."
   else:
     outdir = builder.get(lang.name + "_outdir", run.outdir)
@@ -376,7 +378,7 @@ def _build_grpc_out(run, builder):
   lang = run.lang
   name = lang.grpc_plugin_name or "grpc-" + lang.name
 
-  if run.data.protos[0].path.startswith(run.ctx.var["GENDIR"]):
+  if run.data.sources_are_generated:
     outdir = "."
   else:
     outdir = builder.get(lang.name + "_outdir", run.outdir)
@@ -386,25 +388,38 @@ def _build_grpc_out(run, builder):
   _build_plugin_out(name, outdir, options, builder)
 
 
-def _get_outdir(ctx, lang, execdir):
+def _get_outdir(ctx, data):
+  execdir = data.execdir
+  if data.sources_are_generated and data.output_to_workspace:
+    fail("output_to_workspace is not supported for generated proto files")
   if ctx.attr.output_to_workspace:
     outdir = "."
   else:
     outdir = ctx.var["GENDIR"]
   path = _get_offset_path(execdir, outdir)
+
+  # If we are building generated files, the execdir and outdir are the same
+  if path == "":
+    return "."
+
   if execdir != ".":
     path += "/" + execdir
+
   return path
 
 
 def _get_external_root(ctx):
+  gendir = ctx.var["GENDIR"] + "/"
 
   # Complete set of "external workspace roots" that the proto
   # sourcefiles belong to.
   external_roots = []
   for file in ctx.files.protos:
-    path = file.path.split('/')
-    if path[0] == 'external':
+    path = file.path
+    if path.startswith(gendir):
+      path = path[len(gendir):]
+    path = path.split("/")
+    if path[0] == "external":
       external_roots += ["/".join(path[0:2])]
 
   # This set size must be 0 or 1. (all source files must exist in this
@@ -428,9 +443,9 @@ def _get_external_root(ctx):
     return "."
 
 
-def _update_import_paths(ctx, builder):
+def _update_import_paths(ctx, builder, data):
   """Updates import paths beginning with 'external' so that they point to external/."""
-  execdir = _get_external_root(ctx)
+  execdir = data.execdir
   final_imports = []
   for i in builder["imports"]:
     final_i = i
@@ -512,6 +527,29 @@ cd $(bazel info execution_root)%s && \
   )
 
 
+def _check_if_protos_are_generated(ctx):
+  generated_path = ctx.var["GENDIR"]
+  all_generated = True
+  all_source = True
+  for f in ctx.files.protos:
+    if not f.path.startswith(generated_path):
+      all_generated = False
+    if not f.is_source:
+      all_source = False
+  if all_source:
+    return False
+  if all_generated:
+    return True
+
+  fail(
+    """
+    You are attempting simultaneous compilation of protobuf source files and generated protobuf files.
+    Decompose your library rules into smaller units having filesets that are only source files or only
+    generated files.
+    """
+  )
+
+
 def _proto_compile_impl(ctx):
 
   if ctx.attr.verbose > 1:
@@ -521,6 +559,12 @@ def _proto_compile_impl(ctx):
   # we'll use for the protoc invocation.  Usually this is '.', but if
   # not, its 'external/WORKSPACE'
   execdir = _get_external_root(ctx)
+
+  # If we are building generated protos, run from gendir.
+  sources_are_generated = _check_if_protos_are_generated(ctx)
+  if sources_are_generated:
+    external = "" if execdir == "." else "/" + execdir
+    execdir = ctx.var["GENDIR"] + external
 
   # Propagate proto deps compilation units.
   transitive_units = []
@@ -576,9 +620,8 @@ def _proto_compile_impl(ctx):
     with_grpc = ctx.attr.with_grpc,
     transitive_units = transitive_units,
     output_to_workspace = ctx.attr.output_to_workspace,
+    sources_are_generated = sources_are_generated,
   )
-
-  #print("transitive_units: %s" % transitive_units)
 
   # Mutable global state to be populated by the classes.
   builder = {
@@ -607,7 +650,7 @@ def _proto_compile_impl(ctx):
 
     runs.append(struct(
       ctx = ctx,
-      outdir = _get_outdir(ctx, lang, execdir),
+      outdir = _get_outdir(ctx, data),
       lang = lang,
       data = data,
       exts = exts,
@@ -640,7 +683,7 @@ def _proto_compile_impl(ctx):
       _build_grpc_invocation(run, builder)
       _build_grpc_out(run, builder)
 
-  _update_import_paths(ctx, builder)
+  _update_import_paths(ctx, builder, data)
 
   # Build final immutable compilation unit for rule and transitive beyond
   unit = struct(
