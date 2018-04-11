@@ -5,7 +5,7 @@ To update this list, `bazel build @org_pubref_rules_protobuf//:deps && cp bazel-
 
 | Rule | Workspace | Detail |
 | ---: | :--- | :--- |
-| [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@com_google_protobuf`** | [sha256:542703acadc3](https://github.com/google/protobuf/archive/v3.4.0.zip) |
+| [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@com_google_protobuf`** | [sha256:1f8b9b202e9a](https://github.com/google/protobuf/archive/v3.5.1.zip) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protoc`** | `//external:protoc` (`@com_google_protobuf//:protoc`) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protocol_compiler`** | `//external:protocol_compiler` (`@com_google_protobuf//:protoc`) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protobuf`** | `//external:protobuf` (`@com_google_protobuf//:protobuf`) |
@@ -109,5 +109,5 @@ To update this list, `bazel build @org_pubref_rules_protobuf//:deps && cp bazel-
 | Rule | Workspace | Detail |
 | ---: | :--- | :--- |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protoc_gen_grpc_node`** | `//external:protoc_gen_grpc_node` (`@com_google_grpc//:grpc_node_plugin`) |
-| [npm_repository](https://github.com/pubref/rules_node#npm_repository) | **`@npm_protobuf_stack`** | [async@1.5.2](https://npmjs.org/package/async), [google-protobuf@3.1.1](https://npmjs.org/package/google-protobuf), [lodash@4.6.1](https://npmjs.org/package/lodash), [minimist@1.2.0](https://npmjs.org/package/minimist) |
+| [npm_repository](https://github.com/pubref/rules_node#npm_repository) | **`@npm_protobuf_stack`** | [async@2.6.0](https://npmjs.org/package/async), [google-protobuf@3.5.0](https://npmjs.org/package/google-protobuf), [lodash@4.17.5](https://npmjs.org/package/lodash), [minimist@1.2.0](https://npmjs.org/package/minimist) |
 | [npm_repository](https://github.com/pubref/rules_node#npm_repository) | **`@npm_grpc`** | [grpc@1.0.0](https://npmjs.org/package/grpc) |
