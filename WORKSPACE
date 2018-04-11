@@ -8,10 +8,10 @@ load("//protobuf:rules.bzl", "github_archive")
 
 github_archive(
     name = "io_bazel_rules_go",
-    commit = "6d900bc95ae678bec5c91031b8e987957d2a7f93",  # post-0.7.0 (includes important cross-compile fixes)
+    commit = "f676870c5caf8df559a51e7aa005d2ece148a03b",  # 0.10.3
     org = "bazelbuild",
     repo = "rules_go",
-    sha256 = "d36baba631b29151434726eb204fa93ce8793b5f8ef96da452f382d77bd95c93",
+    sha256 = "d1740b1a75d3c51f1c37e5a42ed032d113bdf1de35c393c609940af491ab6035",
 )
 
 load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains")
