@@ -24,12 +24,13 @@ go_register_toolchains()
 # closure js_proto_library support requires rules_closure
 # ================================================================
 
+
 github_archive(
     name = "io_bazel_rules_closure",
-    commit = "f4d0633f14570313b94822223039ebda0f398102",
+    commit = "21b757480a1e3a67f1a25a8f27a404fc751e1477", # 0.6.0
     org = "bazelbuild",
     repo = "rules_closure",
-    sha256 = "8e615c1c282ba680e667549e242cfcc0643846ee7c0c8c816bee077b3edda567",
+    sha256 = "84687d2bc01fe2a0b45ec906bee87c5d336767e00d8cc8d40236c8804d5d5ced",
 )
 
 load("@io_bazel_rules_closure//closure:defs.bzl", "closure_repositories")
