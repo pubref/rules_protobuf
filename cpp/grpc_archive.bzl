@@ -32,13 +32,13 @@ grpc_archive = repository_rule(
     implementation = _grpc_archive_impl,
     attrs = {
         "url": attr.string(
-            default = "https://github.com/grpc/grpc/archive/d45132a2e9246b11ddd0b70c07160076d5cbbb12.zip",
+            default = "https://github.com/grpc/grpc/archive/66b9770a8ad326c1ee0dbedc5a8f32a52a604567.zip", # 1.10.1
         ),
         "sha256": attr.string(
-            default = "5963e03382dfef143b1018148d3874453387df1b991720a9d41498957778a8c6",
+            default = "15445b36b4062b1db51eb14803976c05d5b2bd966ea5fb9771c0869d3dcea267",
         ),
         "strip_prefix": attr.string(
-            default = "grpc-d45132a2e9246b11ddd0b70c07160076d5cbbb12",
+            default = "grpc-66b9770a8ad326c1ee0dbedc5a8f32a52a604567",
         ),
         "type": attr.string(
             default = "zip",
