@@ -191,13 +191,18 @@ def _build_output_files(run, builder):
     fail("Empty proto input list.", "protos")
 
   exts = run.exts
-
+  
+  build_path = ctx.build_file_path[:-len("BUILD")]
   for file in protos:
     base = file.basename[:-len(".proto")]
     if run.lang.output_file_style == 'pascal':
       base = _pascal_case(base)
     if run.lang.output_file_style == 'capitalize':
       base = _capitalize(base)
+
+    # prepend offset between BUILD directory and file directory
+    if file.path.startswith(build_path):
+      base = file.path[len(build_path):-len(file.basename)] + base
 
     # If the source is a generated file, prefix the build file path with GENDIR
     generated_path = ctx.var["GENDIR"]
