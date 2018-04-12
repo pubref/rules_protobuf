@@ -2,7 +2,7 @@
     "name": "rules_protobuf",
     "version": "1.0.0",
     "dependencies": {
-        "google-protobuf": "3.4.0",
-        "grpc": "1.6.0"
+        "google-protobuf": "3.5.0",
+        "grpc": "1.10.1"
     }
 }

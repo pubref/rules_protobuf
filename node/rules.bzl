@@ -11,26 +11,15 @@ def node_proto_repositories(
     omit_cpp_repositories = False,
     lang_deps = DEPS,
     lang_requires = [
-      # "npm_protobuf_stack",
-      # "npm_grpc",
     ],
     **kwargs):
 
   if not omit_cpp_repositories:
     cpp_proto_repositories(**kwargs)
 
-  rem = proto_repositories(lang_deps = lang_deps,
-                           lang_requires = lang_requires,
-                           **kwargs)
-
-  # Load remaining (special) deps
-  for dep in rem:
-    rule = dep.pop("rule")
-    if "npm_repository" == rule:
-      fail("Unknown loading rule %s for %s" % (rule, dep))
-      #npm_repository(**dep)
-    else:
-      fail("Unknown loading rule %s for %s" % (rule, dep))
+  proto_repositories(lang_deps = lang_deps,
+                     lang_requires = lang_requires,
+                     **kwargs)
 
 
 def _get_js_variable_name(file):

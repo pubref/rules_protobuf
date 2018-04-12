@@ -1,6 +1,7 @@
 const grpc = require('grpc');
-const messages = require('examples/helloworld/node/api_proto_js').api_pb;
-const services = require('examples/helloworld/node/api_proto_js').api_grpc_pb;
+
+const messages = require('examples/helloworld/proto/node').helloworld_pb;
+const services = require('examples/helloworld/proto/node').helloworld_grpc_pb;
 
 /**
  * Implements the SayHello RPC method.
