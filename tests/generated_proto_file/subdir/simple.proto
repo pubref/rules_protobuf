@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package simple;
+package subdir;
 
 message Test {
     string value = 1;

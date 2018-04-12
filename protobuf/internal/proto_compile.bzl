@@ -549,6 +549,15 @@ def _check_if_protos_are_generated(ctx):
     """
   )
 
+def  _add_imports_for_transitive_units(ctx, data, builder):
+  proto_paths = [ data.execdir ]
+  for unit in data.transitive_units:
+    if len(unit.data.protos) == 0:
+      continue
+    if unit.data.execdir not in proto_paths:
+      builder["imports"].append(_get_offset_path(data.execdir, unit.data.execdir))
+      proto_paths.append(unit.data.execdir)
+
 
 def _proto_compile_impl(ctx):
 
@@ -631,6 +640,8 @@ def _proto_compile_impl(ctx):
     "outputs": [],
     "commands": [], # optional miscellaneous pre-protoc commands
   }
+
+  _add_imports_for_transitive_units(ctx, data, builder)
 
   # Build a list of structs that will be processed in this compiler
   # run.

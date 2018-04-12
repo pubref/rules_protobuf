@@ -55,3 +55,58 @@ cpp_proto_library(
    with_grpc = True,
    verbose = 0,
 )
+
+genrule(
+     name = "complicated_copy_proto",
+     srcs = ["complicated/complicated.proto"],
+     outs = ["complicated/comp_copy.proto"],
+     cmd = "cat $< > $@",
+     message = "copy",
+)
+
+genrule(
+     name = "complicated_copy_proto_copy",
+     srcs = ["complicated/complicated_copy.proto"],
+     outs = ["complicated/comp_copy2.proto"],
+     cmd = "cat $< > $@",
+     message = "copy",
+)
+
+cpp_proto_library(
+   name = "complicated_default_library",
+   protos = ["complicated/complicated.proto"],
+   verbose = 0,
+   proto_deps = [
+      ":subdir_default_library",
+   ],
+   inputs = [
+      "@com_google_protobuf//:well_known_protos",
+   ],
+)
+
+cpp_proto_library(
+   name = "complicated_default_library_on_gen",
+   protos = ["complicated/complicated_copy.proto"],
+   verbose = 0,
+   proto_deps = [
+      ":subdir_copy_library",
+   ],
+)
+
+cpp_proto_library(
+   name = "complicated_copy_library",
+   protos = [":complicated_copy_proto"],
+   verbose = 0,
+   proto_deps = [
+      ":subdir_default_library",
+   ],
+)
+
+cpp_proto_library(
+   name = "complicated_copy_library_on_gen",
+   protos = [":complicated_copy_proto_copy"],
+   verbose = 0,
+   proto_deps = [
+      ":subdir_copy_library",
+   ],
+)
