@@ -1,4 +1,4 @@
-BAZEL := "bzl"
+BAZEL := "bazel"
 
 STARTUP_FLAGS += --output_base="$HOME/.cache/bazel"
 STARTUP_FLAGS += --host_jvm_args=-Xmx500m

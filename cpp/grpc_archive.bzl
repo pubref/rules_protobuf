@@ -24,7 +24,7 @@ def _grpc_archive_impl(rtx):
     
     rtx.symlink(rtx.path(rtx.attr.generate_cc_bzl), "bazel/generate_cc.bzl")
     rtx.file("WORKSPACE", "workspace(name = 'com_google_grpc')")
-#
+
 # Http archive that patches the grpc repository so that the reflection++ targets compile
 # as an external workspace.
 #
