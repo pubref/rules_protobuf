@@ -23,7 +23,7 @@ def _grpc_archive_impl(rtx):
     _execute(rtx, ["rm", "bazel/generate_cc.bzl"])
     
     rtx.symlink(rtx.path(rtx.attr.generate_cc_bzl), "bazel/generate_cc.bzl")
-
+    rtx.file("WORKSPACE", "workspace(name = 'com_google_grpc')")
 #
 # Http archive that patches the grpc repository so that the reflection++ targets compile
 # as an external workspace.
@@ -31,18 +31,10 @@ def _grpc_archive_impl(rtx):
 grpc_archive = repository_rule(
     implementation = _grpc_archive_impl,
     attrs = {
-        "url": attr.string(
-            default = "https://github.com/grpc/grpc/archive/66b9770a8ad326c1ee0dbedc5a8f32a52a604567.zip", # 1.10.1
-        ),
-        "sha256": attr.string(
-            default = "15445b36b4062b1db51eb14803976c05d5b2bd966ea5fb9771c0869d3dcea267",
-        ),
-        "strip_prefix": attr.string(
-            default = "grpc-66b9770a8ad326c1ee0dbedc5a8f32a52a604567",
-        ),
-        "type": attr.string(
-            default = "zip",
-        ),
+        "url": attr.string(),
+        "sha256": attr.string(),
+        "strip_prefix": attr.string(),
+        "type": attr.string(),
         "generate_cc_bzl": attr.label(
             default = Label("@org_pubref_rules_protobuf//cpp:generate_cc.bzl", relative_to_caller_repository=True)
         ),

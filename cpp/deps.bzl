@@ -1,9 +1,12 @@
-CARES_VERSION = "3be1924221e1326df520f8498d704a5c4c8d0cce" # Jun 16, 2017
+CARES_VERSION = "3be1924221e1326df520f8498d704a5c4c8d0cce" # Jun 16, 2017 (1.13.0)
 
 DEPS = {
 
-    "com_github_grpc_grpc": {
+    "com_google_grpc": {
         "rule": "grpc_archive",
+        "url": "https://github.com/grpc/grpc/archive/66b9770a8ad326c1ee0dbedc5a8f32a52a604567.zip", # 1.10.1
+        "sha256": "15445b36b4062b1db51eb14803976c05d5b2bd966ea5fb9771c0869d3dcea267",
+        "strip_prefix": "grpc-66b9770a8ad326c1ee0dbedc5a8f32a52a604567",
     },
 
     "boringssl": {
@@ -52,7 +55,7 @@ DEPS = {
     # grpc++ expects //external:nanopb
     "nanopb": {
         "rule": "bind",
-        "actual": "@com_github_grpc_grpc//third_party/nanopb",
+        "actual": "@com_google_grpc//third_party/nanopb",
     },
 
     # Bind the executable cc_binary grpc plugin into
@@ -61,7 +64,7 @@ DEPS = {
     # bind it in external?
     "protoc_gen_grpc_cpp": {
         "rule": "bind",
-        "actual": "@com_github_grpc_grpc//:grpc_cpp_plugin",
+        "actual": "@com_google_grpc//:grpc_cpp_plugin",
     },
 
     # GTest is for our own internal cc tests.
