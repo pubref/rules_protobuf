@@ -195,7 +195,7 @@ def _build_output_files(run, builder):
     fail("Empty proto input list.", "protos")
 
   exts = run.exts
-  
+
   for file in protos:
     base = file.basename[:-len(".proto")]
     if run.lang.output_file_style == 'pascal':
