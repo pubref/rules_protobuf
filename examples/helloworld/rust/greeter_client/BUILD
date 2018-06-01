@@ -5,5 +5,5 @@ rust_binary(
     name = "greeter_client",
     srcs = ["greeter_client.rs"],
     deps = ["//examples/helloworld/rust:helloworld"] + GRPC_COMPILE_DEPS,
-    visibility = ["//tests:__subpackages__"],
+    visibility = ["//examples/helloworld/rust:__subpackages__"],
 )
