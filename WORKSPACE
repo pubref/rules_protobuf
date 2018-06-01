@@ -107,10 +107,10 @@ pip_grpcio_install()
 
 github_archive(
    name = "io_bazel_rules_rust",
-   commit = "67503c5bff487136d12fc530e3760ac7b31d330b",
+   commit = "af9821bf3378b525ec3db0af3b1ca388920a8fb0",
    org = "bazelbuild",
    repo = "rules_rust",
-   sha256 = "6725a05ab1aac5aecb8ab20d1d86af30818bf8e657ee80ea2eba57bf73f6d676",
+   sha256 = "3c53a5ead9db93460a03a85cd28ec5579f608a0bd044b7d767b1dfa85023ad78",
 )
 
 load("@io_bazel_rules_rust//rust:repositories.bzl", "rust_repositories")
