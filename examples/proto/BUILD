@@ -10,6 +10,7 @@ load("//objc:rules.bzl", "objc_proto_compile")
 load("//python:rules.bzl", "py_proto_library")
 load("//protobuf:rules.bzl", "proto_compile")
 load("//ruby:rules.bzl", "ruby_proto_compile")
+load("//rust:rules.bzl", "rust_proto_library")
 
 filegroup(
     name = "protos",
@@ -66,6 +67,12 @@ ruby_proto_compile(
     name = "ruby",
     protos = [":protos"],
     verbose = 0,
+    with_grpc = False,
+)
+
+rust_proto_library(
+    name = "rust",
+    protos = [":protos"],
     with_grpc = False,
 )
 

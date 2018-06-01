@@ -36,20 +36,21 @@ of this project are to:
 
 ### Rules
 
-| Language                     | Compile <sup>1</sup>  | Build <sup>2</sup> | gRPC <sup>3</sup> |
-| ---------------------------: | -----------: | --------: | -------- |
-| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) [v3.4.0](https://github.com/grpc/grpc/releases/tag/v1.6.1) | [v1.6.1](https://github.com/grpc/grpc/releases/tag/v1.6.1) |
-| [C#](csharp)                 | [csharp_proto_compile](csharp#csharp_proto_compile) | [csharp_proto_library](csharp#csharp_proto_library) | [1.0.0](https://www.nuget.org/packages/Grpc/) |
-| [Closure](closure)           | [closure_proto_compile](closure#closure_proto_compile) | [closure_proto_library](closure#closure_proto_library)          |  |
-| [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.6.0](https://github.com/grpc/grpc-go/releases/tag/v1.6.0) |
-| [Go (gogo)](gogo)            | [gogo_proto_compile](gogo#gogo_proto_compile) | [gogo_proto_library](gogo#gogo_proto_library) | [fb8a35](https://github.com/gogo/protobuf/commit/fb8a359905af6e2b6517cccda0ba25915322ee88) |
-| [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | [v1.2.2+ (f2862b)](https://github.com/grpc-ecosystem/grpc-gateway/commit/f2862b476edcef83412c7af8687c9cd8e4097c0f) |
-| [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [v1.7.0](https://github.com/grpc/grpc-java/releases/tag/v1.7.0) |
-| [Node](node)                 | [node_proto_compile](node#node_proto_compile) | [node_proto_library](node#node_proto_library)          | [1.6.0](https://www.npmjs.com/package/grpc) |
-| [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>4</sup> | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
-| [Python](python)             | [py_proto_compile](python#py_proto_compile)         | [py_proto_library](python#py_proto_library)          | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
-| [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
-| Custom [proto_language](protobuf#proto_language) | [proto_compile](protobuf#proto_compile) | |  |
+| Language                                         | Compile <sup>1</sup>                                                                                                                                | Build <sup>2</sup>                                                                                                                | gRPC <sup>3</sup>                                                                                                  |
+| -----------------------------------------------: | --------------------------------------------------------------------------------------------------------------------------------------------------: | --------------------------------------------------------------------------------------------------------------------------------: | ------------------------------------------------------------------------------------------------------------------ |
+| [C++](cpp)                                       | [cc_proto_compile](cpp#cc_proto_compile)                                                                                                            | [cc_proto_library](cpp#cc_proto_library) [v3.4.0](https://github.com/grpc/grpc/releases/tag/v1.6.1)                               | [v1.6.1](https://github.com/grpc/grpc/releases/tag/v1.6.1)                                                         |
+| [C#](csharp)                                     | [csharp_proto_compile](csharp#csharp_proto_compile)                                                                                                 | [csharp_proto_library](csharp#csharp_proto_library)                                                                               | [1.0.0](https://www.nuget.org/packages/Grpc/)                                                                      |
+| [Closure](closure)                               | [closure_proto_compile](closure#closure_proto_compile)                                                                                              | [closure_proto_library](closure#closure_proto_library)                                                                            |                                                                                                                    |
+| [Go](go)                                         | [go_proto_compile](go#go_proto_compile)                                                                                                             | [go_proto_library](go#go_proto_library)                                                                                           | [v1.6.0](https://github.com/grpc/grpc-go/releases/tag/v1.6.0)                                                      |
+| [Go (gogo)](gogo)                                | [gogo_proto_compile](gogo#gogo_proto_compile)                                                                                                       | [gogo_proto_library](gogo#gogo_proto_library)                                                                                     | [fb8a35](https://github.com/gogo/protobuf/commit/fb8a359905af6e2b6517cccda0ba25915322ee88)                         |
+| [gRPC gateway](grpc_gateway)                     | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile) | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | [v1.2.2+ (f2862b)](https://github.com/grpc-ecosystem/grpc-gateway/commit/f2862b476edcef83412c7af8687c9cd8e4097c0f) |
+| [Java](java)                                     | [java_proto_compile](java#java_proto_compile)                                                                                                       | [java_proto_library](java#java_proto_library)                                                                                     | [v1.7.0](https://github.com/grpc/grpc-java/releases/tag/v1.7.0)                                                    |
+| [Node](node)                                     | [node_proto_compile](node#node_proto_compile)                                                                                                       | [node_proto_library](node#node_proto_library)                                                                                     | [1.6.0](https://www.npmjs.com/package/grpc)                                                                        |
+| [Objective-C](objc)                              | [objc_proto_compile](objc#objc_proto_compile)                                                                                                       | [objc_proto_library](objc#objc_proto_library) <sup>4</sup>                                                                        | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a)                             |
+| [Python](python)                                 | [py_proto_compile](python#py_proto_compile)                                                                                                         | [py_proto_library](python#py_proto_library)                                                                                       | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a)                             |
+| [Ruby](ruby)                                     | [ruby_proto_compile](ruby#ruby_proto_compile)                                                                                                       |                                                                                                                                   | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a)                             |
+| [Rust](rust)                                     | [rust_proto_compile](rust#rust_proto_compile)                                                                                                       |                                                                                                                                   | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a)                             |
+| Custom [proto_language](protobuf#proto_language) | [proto_compile](protobuf#proto_compile)                                                                                                             |                                                                                                                                   |                                                                                                                    |
 
 > Refer to [`DEPENDENCIES.md`](DEPENDENCIES.md) for a more detailed
 > summary of workspace dependencies / versions.
@@ -101,15 +102,16 @@ go_proto_repositories()
 Several languages have other `rules_*` dependencies that you'll need
 to load before the `*_proto_repositories()` function is invoked:
 
-| Language | Requires |
-| ---:     | :---     |
-| closure_proto_repositories | [rules_closure](https://github.com/bazelbuild/rules_closure) |
-| csharp_proto_repositories | [rules_dotnet](https://github.com/bazelbuild/rules_dotnet) |
-| go_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
-| gogo_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
-| grpc_gateway_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
-| node_proto_repositories | [rules_node](https://github.com/pubref/rules_node) |
-| py_proto_repositories <sup>1</sup> | [rules_python](https://github.com/bazelbuild/rules_python) |
+| Language                           | Requires                                                     |
+| ---------------------------------: | :----------------------------------------------------------- |
+| closure_proto_repositories         | [rules_closure](https://github.com/bazelbuild/rules_closure) |
+| csharp_proto_repositories          | [rules_dotnet](https://github.com/bazelbuild/rules_dotnet)   |
+| go_proto_repositories              | [rules_go](https://github.com/bazelbuild/rules_go)           |
+| gogo_proto_repositories            | [rules_go](https://github.com/bazelbuild/rules_go)           |
+| grpc_gateway_proto_repositories    | [rules_go](https://github.com/bazelbuild/rules_go)           |
+| node_proto_repositories            | [rules_node](https://github.com/pubref/rules_node)           |
+| py_proto_repositories <sup>1</sup> | [rules_python](https://github.com/bazelbuild/rules_python)   |
+| rust_proto_repositories            | [rules_rust](https://github.com/bazelbuild/rules_rust)       |
 
 > <sup>1</sup> Only needed for python grpc support.
 

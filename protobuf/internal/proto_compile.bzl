@@ -210,6 +210,8 @@ def _build_output_files(run, builder):
       build_package_path = generated_path + "/" + build_package_path
 
     path = _get_relative_dirname(run, build_package_path, file)
+    if run.lang.output_to_libsubdir:
+      path.append(ctx.label.name)
 
     for ext in exts:
       temppath = list(path)
@@ -233,6 +235,15 @@ def _build_output_libdir(run, builder):
   execdir = run.data.execdir
   name = run.lang.name
   builder[name + "_outdir"] = _get_offset_path(execdir, run.data.descriptor_set.dirname)
+  _build_output_files(run, builder)
+
+
+def _build_output_libsubdir(run, builder):
+  # This is currently rust-specific, to output to a specific crate.
+  ctx = run.ctx
+  execdir = run.data.execdir
+  name = run.lang.name
+  builder[name + "_outdir"] = _get_offset_path(execdir, run.data.descriptor_set.dirname) + "/" + ctx.label.name
   _build_output_files(run, builder)
 
 
@@ -687,6 +698,8 @@ def _proto_compile_impl(ctx):
       _build_output_library(run, builder)
     elif run.lang.output_to_libdir:
       _build_output_libdir(run, builder)
+    elif run.lang.output_to_libsubdir:
+      _build_output_libsubdir(run, builder)
     else:
       _build_output_files(run, builder)
     if run.lang.go_prefix or ctx.attr.go_importpath: # golang-specific

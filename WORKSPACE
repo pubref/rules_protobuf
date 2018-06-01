@@ -88,19 +88,34 @@ github_archive(
     sha256 = "7d06126d0d10ea8e63cc7eaf774d9ecebcd9583094ee8e93b0035da659eab5c1",
 )
 
-load("@io_bazel_rules_python//python:pip.bzl", "pip_repositories", "pip_import")
+load("@io_bazel_rules_python//python:pip.bzl", "pip_import", "pip_repositories")
 
 pip_repositories()
 
 pip_import(
-   name = "pip_grpcio",
-   requirements = "//python:requirements.txt",
+    name = "pip_grpcio",
+    requirements = "//python:requirements.txt",
 )
 
 load("@pip_grpcio//:requirements.bzl", pip_grpcio_install = "pip_install")
 
 pip_grpcio_install()
 
+# ================================================================
+# rust_proto_library support requires rules_rust (HEAD)
+# ================================================================
+
+github_archive(
+   name = "io_bazel_rules_rust",
+   commit = "67503c5bff487136d12fc530e3760ac7b31d330b",
+   org = "bazelbuild",
+   repo = "rules_rust",
+   sha256 = "6725a05ab1aac5aecb8ab20d1d86af30818bf8e657ee80ea2eba57bf73f6d676",
+)
+
+load("@io_bazel_rules_rust//rust:repositories.bzl", "rust_repositories")
+
+rust_repositories()
 
 # ================================================================
 # Specific Languages Support
@@ -156,3 +171,7 @@ py_proto_repositories()
 load("//ruby:rules.bzl", "ruby_proto_repositories")
 
 ruby_proto_repositories()
+
+load("//rust:rules.bzl", "rust_proto_repositories")
+
+rust_proto_repositories()

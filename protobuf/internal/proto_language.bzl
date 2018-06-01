@@ -11,6 +11,7 @@ def _proto_language_impl(ctx):
             output_to_jar = ctx.attr.output_to_jar,
             output_to_library = ctx.attr.output_to_library,
             output_to_libdir = ctx.attr.output_to_libdir,
+            output_to_libsubdir = ctx.attr.output_to_libsubdir,
             output_file_style = ctx.attr.output_file_style,
             supports_pb = ctx.attr.supports_pb,
             pb_plugin_implements_grpc = ctx.attr.pb_plugin_implements_grpc,
@@ -45,6 +46,7 @@ proto_language_attrs = {
     "output_to_jar": attr.bool(),
     "output_to_library": attr.bool(),
     "output_to_libdir": attr.bool(),
+    "output_to_libsubdir": attr.bool(),
     "output_file_style": attr.string(),
 
     "supports_pb": attr.bool(default = True),
