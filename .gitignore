@@ -2,3 +2,5 @@
 # based on the name of the directory bazel is cloned into.
 /bazel-*
 /tests/build_in_workspace_root/bazel-*
+/rust/raze/target
+/rust/raze/Cargo.lock
