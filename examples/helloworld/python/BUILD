@@ -1,6 +1,7 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@pip_grpcio//:requirements.bzl", "requirement")
+load("@io_bazel_rules_python//python:python.bzl", "py_binary", "py_library")
 
 py_binary(
     name = "greeter_client",
@@ -10,6 +11,7 @@ py_binary(
     deps = [
         "//examples/helloworld/proto:py",
         requirement("grpcio"),
+        requirement("protobuf"),
     ],
 )
 
@@ -37,5 +39,6 @@ py_library(
     deps = [
         "//examples/helloworld/proto:py",
         requirement("grpcio"),
+        requirement("protobuf"),
     ],
 )
