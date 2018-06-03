@@ -1,30 +1,24 @@
 load("@io_bazel_rules_rust//rust:rust.bzl", "rust_library")
 load("//protobuf:rules.bzl", "proto_compile", "proto_language_deps", "proto_repositories")
-load("//rust:deps.bzl", "DEPS")
-load("//rust:crates.bzl", "raze_fetch_remote_crates")
+load("//rust/raze:crates.bzl", "raze_fetch_remote_crates")
 
 def rust_proto_repositories(
-    lang_deps = DEPS,
-    lang_requires = DEPS.keys(),
+    lang_deps = {},
+    lang_requires = [],
     **kwargs):
   raze_fetch_remote_crates()
-  proto_repositories(
-    lang_deps = lang_deps,
-    lang_requires = lang_requires,
-    **kwargs
-  )
 
 def rust_proto_compile(langs = [str(Label("//rust"))], **kwargs):
   proto_compile(langs = langs, **kwargs)
 
 PB_COMPILE_DEPS = [
-    "@com_github_stepancheg_rust_protobuf//:protobuf",
+    "@org_pubref_rules_protobuf//rust/raze:protobuf",
 ]
 
 GRPC_COMPILE_DEPS = PB_COMPILE_DEPS + [
-    "@com_github_stepancheg_grpc_rust//:grpc",
-    "@raze__tls_api__0_1_19//:tls_api",
-    "@raze__tls_api_stub__0_1_19//:tls_api_stub",
+    "@org_pubref_rules_protobuf//rust/raze:grpc",
+    "@org_pubref_rules_protobuf//rust/raze:tls_api",
+    "@org_pubref_rules_protobuf//rust/raze:tls_api_stub",
 ]
 
 def _basename(f):
