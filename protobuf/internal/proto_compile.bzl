@@ -409,6 +409,9 @@ def _get_outdir(ctx, data):
   if execdir != ".":
     path += "/" + execdir
 
+  if ctx.attr.root:
+    path += "/" + ctx.attr.root
+
   return path
 
 
