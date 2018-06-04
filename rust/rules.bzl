@@ -29,15 +29,17 @@ def _gen_lib_impl(ctx):
   if ctx.attr.grpc:
     content.append("extern crate grpc;")
     content.append("extern crate tls_api;")
-  for dep in ctx.attr.deps:
-    content.append("extern crate %s;" % dep.label.name)
-    content.append("use %s::*;" % dep.label.name)
-  for f in ctx.files.files:
-    content.append("pub mod %s;" % _basename(f))
-    content.append("pub use %s::*;" % _basename(f))
-    if ctx.attr.grpc:
-      content.append("pub mod %s_grpc;" % _basename(f))
-      content.append("pub use %s_grpc::*;" % _basename(f))
+  content.extend(
+    ["extern crate %s;" % dep.label.name for dep in ctx.attr.deps])
+  content.extend(["use %s::*;" % dep.label.name for dep in ctx.attr.deps])
+  content.extend(["pub mod %s;" % _basename(f) for f in ctx.files.files])
+  if ctx.attr.grpc:
+    content.extend(
+      ["pub mod %s_grpc;" % _basename(f) for f in ctx.files.files])
+  content.extend(["pub use %s::*;" % _basename(f) for f in ctx.files.files])
+  if ctx.attr.grpc:
+    content.extend(
+      ["pub use %s_grpc::*;" % _basename(f) for f in ctx.files.files])
   ctx.actions.write(
     ctx.outputs.out,
     "\n".join(content),
@@ -68,6 +70,7 @@ def rust_proto_library(
     pb_options = [],
     grpc_plugin = None,
     grpc_options = [],
+    compile_deps = None,
     proto_compile_args = {},
     with_grpc = False,
     srcs = [],
@@ -104,10 +107,11 @@ def rust_proto_library(
     grpc = with_grpc
   )
 
-  if with_grpc:
-    compile_deps = GRPC_COMPILE_DEPS
-  else:
-    compile_deps = PB_COMPILE_DEPS
+  if compile_deps == None:
+    if with_grpc:
+      compile_deps = GRPC_COMPILE_DEPS
+    else:
+      compile_deps = PB_COMPILE_DEPS
 
   rust_library(
     name = name,
