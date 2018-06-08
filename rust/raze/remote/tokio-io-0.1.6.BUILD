@@ -32,12 +32,13 @@ rust_library(
     deps = [
         "@raze__bytes__0_4_8//:bytes",
         "@raze__futures__0_1_21//:futures",
-        "@raze__log__0_4_1//:log",
+        "@raze__log__0_4_2//:log",
     ],
     rustc_flags = [
         "--cap-lints allow",
         "--target=x86_64-unknown-linux-gnu",
     ],
+    version = "0.1.6",
     crate_features = [
     ],
 )

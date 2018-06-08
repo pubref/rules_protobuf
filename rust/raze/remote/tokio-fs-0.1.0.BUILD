@@ -28,12 +28,13 @@ rust_library(
     deps = [
         "@raze__futures__0_1_21//:futures",
         "@raze__tokio_io__0_1_6//:tokio_io",
-        "@raze__tokio_threadpool__0_1_3//:tokio_threadpool",
+        "@raze__tokio_threadpool__0_1_4//:tokio_threadpool",
     ],
     rustc_flags = [
         "--cap-lints allow",
         "--target=x86_64-unknown-linux-gnu",
     ],
+    version = "0.1.0",
     crate_features = [
     ],
 )

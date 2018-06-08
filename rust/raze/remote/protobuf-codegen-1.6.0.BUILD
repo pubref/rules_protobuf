@@ -32,6 +32,7 @@ rust_binary(
         "--cap-lints allow",
         "--target=x86_64-unknown-linux-gnu",
     ],
+    version = "1.6.0",
     crate_features = [
     ],
 )
@@ -49,6 +50,7 @@ rust_library(
         "--cap-lints allow",
         "--target=x86_64-unknown-linux-gnu",
     ],
+    version = "1.6.0",
     crate_features = [
     ],
 )
@@ -68,6 +70,7 @@ rust_binary(
         "--cap-lints allow",
         "--target=x86_64-unknown-linux-gnu",
     ],
+    version = "1.6.0",
     crate_features = [
     ],
 )

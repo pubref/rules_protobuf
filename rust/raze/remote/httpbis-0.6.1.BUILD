@@ -30,7 +30,7 @@ rust_library(
         "@raze__bytes__0_4_8//:bytes",
         "@raze__futures__0_1_21//:futures",
         "@raze__futures_cpupool__0_1_8//:futures_cpupool",
-        "@raze__log__0_4_1//:log",
+        "@raze__log__0_4_2//:log",
         "@raze__net2__0_2_32//:net2",
         "@raze__tls_api__0_1_19//:tls_api",
         "@raze__tls_api_stub__0_1_19//:tls_api_stub",
@@ -46,6 +46,7 @@ rust_library(
         "--cap-lints allow",
         "--target=x86_64-unknown-linux-gnu",
     ],
+    version = "0.6.1",
     crate_features = [
     ],
 )

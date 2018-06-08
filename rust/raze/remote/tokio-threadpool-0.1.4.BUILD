@@ -35,7 +35,7 @@ rust_library(
     deps = [
         "@raze__crossbeam_deque__0_3_1//:crossbeam_deque",
         "@raze__futures__0_1_21//:futures",
-        "@raze__log__0_4_1//:log",
+        "@raze__log__0_4_2//:log",
         "@raze__num_cpus__1_8_0//:num_cpus",
         "@raze__rand__0_4_2//:rand",
         "@raze__tokio_executor__0_1_2//:tokio_executor",
@@ -44,6 +44,7 @@ rust_library(
         "--cap-lints allow",
         "--target=x86_64-unknown-linux-gnu",
     ],
+    version = "0.1.4",
     crate_features = [
     ],
 )

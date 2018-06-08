@@ -24,12 +24,13 @@ rust_library(
     crate_type = "lib",
     srcs = glob(["**/*.rs"]),
     deps = [
-        "@raze__log__0_4_1//:log",
+        "@raze__log__0_4_2//:log",
     ],
     rustc_flags = [
         "--cap-lints allow",
         "--target=x86_64-unknown-linux-gnu",
     ],
+    version = "0.3.9",
     crate_features = [
         "default",
         "log",

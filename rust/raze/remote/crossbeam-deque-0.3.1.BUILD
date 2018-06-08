@@ -31,6 +31,7 @@ rust_library(
         "--cap-lints allow",
         "--target=x86_64-unknown-linux-gnu",
     ],
+    version = "0.3.1",
     crate_features = [
     ],
 )

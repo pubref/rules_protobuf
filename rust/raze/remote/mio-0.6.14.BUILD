@@ -28,7 +28,7 @@ rust_library(
         "@raze__iovec__0_1_2//:iovec",
         "@raze__lazycell__0_6_0//:lazycell",
         "@raze__libc__0_2_42//:libc",
-        "@raze__log__0_4_1//:log",
+        "@raze__log__0_4_2//:log",
         "@raze__net2__0_2_32//:net2",
         "@raze__slab__0_4_0//:slab",
     ],
@@ -36,6 +36,7 @@ rust_library(
         "--cap-lints allow",
         "--target=x86_64-unknown-linux-gnu",
     ],
+    version = "0.6.14",
     crate_features = [
         "default",
         "with-deprecated",

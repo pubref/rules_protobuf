@@ -52,19 +52,20 @@ rust_library(
         "@raze__bytes__0_4_8//:bytes",
         "@raze__futures__0_1_21//:futures",
         "@raze__iovec__0_1_2//:iovec",
-        "@raze__log__0_4_1//:log",
+        "@raze__log__0_4_2//:log",
         "@raze__mio__0_6_14//:mio",
         "@raze__scoped_tls__0_1_2//:scoped_tls",
-        "@raze__tokio__0_1_6//:tokio",
+        "@raze__tokio__0_1_7//:tokio",
         "@raze__tokio_executor__0_1_2//:tokio_executor",
         "@raze__tokio_io__0_1_6//:tokio_io",
         "@raze__tokio_reactor__0_1_1//:tokio_reactor",
-        "@raze__tokio_timer__0_2_3//:tokio_timer",
+        "@raze__tokio_timer__0_2_4//:tokio_timer",
     ],
     rustc_flags = [
         "--cap-lints allow",
         "--target=x86_64-unknown-linux-gnu",
     ],
+    version = "0.1.17",
     crate_features = [
     ],
 )

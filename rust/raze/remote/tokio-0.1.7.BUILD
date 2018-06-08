@@ -20,6 +20,7 @@ load(
 # Unsupported target "buffered" with type "test" omitted
 # Unsupported target "chat" with type "example" omitted
 # Unsupported target "chat-combinator" with type "example" omitted
+# Unsupported target "clock" with type "test" omitted
 # Unsupported target "connect" with type "example" omitted
 # Unsupported target "current_thread" with type "test" omitted
 # Unsupported target "drop-core" with type "test" omitted
@@ -31,6 +32,7 @@ load(
 # Unsupported target "hello_world" with type "example" omitted
 # Unsupported target "latency" with type "bench" omitted
 # Unsupported target "line-frames" with type "test" omitted
+# Unsupported target "manual-runtime" with type "example" omitted
 # Unsupported target "mio-ops" with type "bench" omitted
 # Unsupported target "pipe-hup" with type "test" omitted
 # Unsupported target "print_each_packet" with type "example" omitted
@@ -55,14 +57,15 @@ rust_library(
         "@raze__tokio_io__0_1_6//:tokio_io",
         "@raze__tokio_reactor__0_1_1//:tokio_reactor",
         "@raze__tokio_tcp__0_1_0//:tokio_tcp",
-        "@raze__tokio_threadpool__0_1_3//:tokio_threadpool",
-        "@raze__tokio_timer__0_2_3//:tokio_timer",
+        "@raze__tokio_threadpool__0_1_4//:tokio_threadpool",
+        "@raze__tokio_timer__0_2_4//:tokio_timer",
         "@raze__tokio_udp__0_1_0//:tokio_udp",
     ],
     rustc_flags = [
         "--cap-lints allow",
         "--target=x86_64-unknown-linux-gnu",
     ],
+    version = "0.1.7",
     crate_features = [
     ],
 )

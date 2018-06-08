@@ -25,7 +25,7 @@ rust_library(
     srcs = glob(["**/*.rs"]),
     deps = [
         "@raze__futures__0_1_21//:futures",
-        "@raze__log__0_4_1//:log",
+        "@raze__log__0_4_2//:log",
         "@raze__mio__0_6_14//:mio",
         "@raze__slab__0_4_0//:slab",
         "@raze__tokio_executor__0_1_2//:tokio_executor",
@@ -35,6 +35,7 @@ rust_library(
         "--cap-lints allow",
         "--target=x86_64-unknown-linux-gnu",
     ],
+    version = "0.1.1",
     crate_features = [
         "default",
     ],

@@ -6,7 +6,7 @@ DO NOT EDIT! Replaced on runs of cargo-raze
 package(default_visibility = ["//visibility:public"])
 
 licenses([
-  "notice", # "MIT"
+  "notice", # "MIT,Apache-2.0"
 ])
 
 load(
@@ -17,25 +17,23 @@ load(
     "rust_bench_test",
 )
 
-# Unsupported target "deadline" with type "test" omitted
-# Unsupported target "delay" with type "test" omitted
-# Unsupported target "hammer" with type "test" omitted
-# Unsupported target "interval" with type "test" omitted
+# Unsupported target "filters" with type "test" omitted
 
 rust_library(
-    name = "tokio_timer",
+    name = "log",
     crate_root = "src/lib.rs",
     crate_type = "lib",
     srcs = glob(["**/*.rs"]),
     deps = [
-        "@raze__futures__0_1_21//:futures",
-        "@raze__tokio_executor__0_1_2//:tokio_executor",
+        "@raze__cfg_if__0_1_3//:cfg_if",
     ],
     rustc_flags = [
         "--cap-lints allow",
         "--target=x86_64-unknown-linux-gnu",
     ],
+    version = "0.4.2",
     crate_features = [
+        "std",
     ],
 )
 
