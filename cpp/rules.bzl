@@ -1,16 +1,15 @@
 load("//protobuf:rules.bzl", "proto_compile", "proto_repositories")
 load("//cpp:deps.bzl", "DEPS")
-load("//cpp:grpc_repository.bzl", "grpc_repository")
+load("//cpp:grpc_archive.bzl", "grpc_archive")
 
 def cpp_proto_repositories(
     lang_deps = DEPS,
     lang_requires = [
-      "cares",
-      "com_google_googletest",
-      "com_google_grpc_base",
       "com_google_grpc",
-      "com_github_c_ares_c_ares",
+      "com_github_cares_cares",
+      "com_google_googletest",
       "com_github_madler_zlib",
+      "cares",
       "zlib",
       "nanopb",
       "boringssl",
@@ -24,8 +23,8 @@ def cpp_proto_repositories(
 
   for dep in rem:
     rule = dep.pop("rule")
-    if "grpc_repository" == rule:
-      grpc_repository(**dep)
+    if "grpc_archive" == rule:
+      grpc_archive(**dep)
     else:
       fail("Unknown loading rule %s for %s" % (rule, dep))
 

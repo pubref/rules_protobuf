@@ -23,3 +23,4 @@ proto_language(
     ],
     supports_grpc = True,
 )
+

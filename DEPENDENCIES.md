@@ -10,19 +10,18 @@ To update this list, `bazel build @org_pubref_rules_protobuf//:deps && cp bazel-
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protocol_compiler`** | `//external:protocol_compiler` (`@com_google_protobuf//:protoc`) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protobuf`** | `//external:protobuf` (`@com_google_protobuf//:protobuf`) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protobuf_clib`** | `//external:protobuf_clib` (`@com_google_protobuf//:protoc_lib`) |
+| [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protobuf_headers`** | `//external:protobuf_headers` (`@com_google_protobuf//:protobuf_headers`) |
 
 ## C++
 
 | Rule | Workspace | Detail |
 | ---: | :--- | :--- |
-| [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@com_google_grpc_base`** | [sha256:d3794ca4ff7b](https://github.com/grpc/grpc/archive/ca87867579580928ca4c9fdf97051fa25bf1d386.zip) |
-| grpc_repository | **`@com_google_grpc`** |  |
-| [new_http_archive](https://docs.bazel.build/versions/master/be/workspace.html#new_http_archive) | **`@com_github_c_ares_c_ares`** | [sha256:ddce8def076a](https://github.com/c-ares/c-ares/archive/7691f773af79bf75a62d1863fd0f13ebf9dc51b1.zip) |
-| grpc_repository | **`@com_github_grpc_grpc`** |  |
-| [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@boringssl`** | [(no hash provided)](https://boringssl.googlesource.com/boringssl/+archive/74ffd81aa7ec3d0aa3d3d820dbeda934958ca81a.tar.gz) |
+| grpc_archive | **`@com_google_grpc`** |  |
+| [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@boringssl`** | [(no hash provided)](https://boringssl.googlesource.com/boringssl/+archive/886e7d75368e3f4fab3f4d0d3584e4abfc557755.tar.gz) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@libssl`** | `//external:libssl` (`@boringssl//:ssl`) |
 | [new_http_archive](https://docs.bazel.build/versions/master/be/workspace.html#new_http_archive) | **`@com_github_madler_zlib`** | [sha256:1cce3828ec2b](https://github.com/madler/zlib/archive/cacf7f1d4e3d44d871b605da3b647f07d718623f.zip) |
-| [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@cares`** | `//external:cares` (`@com_google_grpc//third_party/cares:ares`) |
+| [new_http_archive](https://docs.bazel.build/versions/master/be/workspace.html#new_http_archive) | **`@com_github_cares_cares`** | [sha256:932bf7e593d4](https://github.com/c-ares/c-ares/archive/3be1924221e1326df520f8498d704a5c4c8d0cce.zip) |
+| [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@cares`** | `//external:cares` (`@com_github_cares_cares//:ares`) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@zlib`** | `//external:zlib` (`@com_github_madler_zlib//:zlib`) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@nanopb`** | `//external:nanopb` (`@com_google_grpc//third_party/nanopb`) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protoc_gen_grpc_cpp`** | `//external:protoc_gen_grpc_cpp` (`@com_google_grpc//:grpc_cpp_plugin`) |
