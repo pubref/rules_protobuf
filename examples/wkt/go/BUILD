@@ -31,6 +31,7 @@ go_proto_library(
         "@com_github_golang_protobuf//ptypes/timestamp:go_default_library",
         "@com_github_golang_protobuf//ptypes/wrappers:go_default_library",
     ],
+    importpath = "github.com/pubref/rules_protobuf/examples/wkt/go",
 )
 
 go_test(
