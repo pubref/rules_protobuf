@@ -1,6 +1,4 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_prefix", "go_binary")
-
-go_prefix("github.com/pubref/rules_protobuf/tests/gogo")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary")
 
 load("@org_pubref_rules_protobuf//gogo:rules.bzl", "gogo_proto_library")
 
@@ -35,7 +33,7 @@ go_binary(
         ":api_proto_go",
         "@org_golang_google_grpc//:go_default_library",
         "@org_golang_x_net//context:go_default_library",
-  ],
+    ],
     importpath = "github.com/pubref/rules_protobuf/tests/gogo/server",
 )
 

@@ -44,6 +44,7 @@ go_proto_library(
     protos = [":protos"],
     verbose = 0,
     with_grpc = True,
+    importpath = "github.com/pubref/rules_protobuf/examples/helloworld/proto/go",
 )
 
 java_proto_library(

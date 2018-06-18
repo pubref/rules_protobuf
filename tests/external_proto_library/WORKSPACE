@@ -26,8 +26,7 @@ GOOGLEAPIS_BUILD_FILE = """
 package(default_visibility = ["//visibility:public"])
 exports_files(["google/api/label.proto"])
 
-load("@io_bazel_rules_go//go:def.bzl", "go_prefix")
-go_prefix("google.golang.org/genproto/googleapis")
+load("@io_bazel_rules_go//go:def.bzl")
 
 load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cc_proto_library")
 load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_library")
