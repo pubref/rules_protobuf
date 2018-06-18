@@ -2,7 +2,7 @@ package wkt_test
 
 import (
 	"testing"
-	wkt "github.com/pubref/rules_protobuf/examples/wkt/go/protolib"
+	wkt "github.com/pubref/rules_protobuf/examples/wkt/go"
 	fd "github.com/golang/protobuf/protoc-gen-go/descriptor"
 )
 

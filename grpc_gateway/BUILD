@@ -4,7 +4,6 @@ load("//protobuf:rules.bzl", "proto_language")
 
 proto_language(
     name = "grpc_gateway",
-    go_prefix = "//:go_prefix",
     grpc_file_extensions = [".pb.gw.go"],
     grpc_imports = [
         "external/com_google_protobuf/src/",
@@ -26,7 +25,6 @@ proto_language(
 
 proto_language(
     name = "pb_gateway",
-    go_prefix = "//:go_prefix",
     importmap = {
         "google/api/annotations.proto": "google.golang.org/genproto/googleapis/api/annotations",
     },
@@ -47,7 +45,6 @@ proto_language(
 
 proto_language(
     name = "swagger",
-    go_prefix = "//:go_prefix",
     importmap = {
         "google/api/annotations.proto": "google.golang.org/genproto/googleapis/api/annotations",
     },
