@@ -296,11 +296,6 @@ def _get_mappings(files, label, importpath):
       parts = src.split("/")
       src = "/".join(parts[2:])
     dst = [importpath]
-    name_parts = label.name.split(".")
-    # special case to elide last part if the name is
-    # 'go_default_library.pb'
-    if name_parts[0] != "go_default_library":
-      dst.append(name_parts[0])
     mappings[src] = "/".join(dst)
   return mappings
 
@@ -317,6 +312,7 @@ def _build_importmappings(run, builder, importpath):
   # Build the list of import mappings.  Start with any configured on
   # the rule by attributes.
   mappings = run.lang.importmap + run.data.importmap
+
   mappings += _get_mappings(run.data.protos, run.data.label, importpath)
 
   # Then add in the transitive set from dependent rules.
@@ -350,8 +346,8 @@ def _build_plugin_out(name, outdir, options, builder):
   # If the outdir is external, such as when building
   # :well_known_protos, the protoc command may fail as the directory
   # bazel-out/local-fastbuild/genfiles/external/com_google_protobuf
-  # won't necessarily exist.  Add this to the queue of
-  # pre-execution commands to create it.
+  # won't necessarily exist.  Add this to the queue of pre-execution
+  # commands to create it.
   if outdir.startswith("../..") and not outdir.endswith(".jar"):
     builder["commands"] += ["mkdir -p " + outdir]
 
