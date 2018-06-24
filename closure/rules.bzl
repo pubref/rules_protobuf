@@ -54,7 +54,7 @@ def closure_proto_library(
 
   closure_js_library(
     name = name,
-    internal_descriptors = [name + ".descriptor_set"],
+    internal_descriptors = [name + ".pb.descriptor_set"],
     srcs = srcs + [name + ".pb"],
     deps = depset(deps + proto_deps + [
       "@io_bazel_rules_closure//closure/protobuf:jspb",
