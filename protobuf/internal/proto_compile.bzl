@@ -86,7 +86,9 @@ def _get_relative_dirname(run, base, file):
     build_path = run.ctx.build_file_path[:-len("BUILD")]
     # prepend offset between BUILD directory and file directory
     if file.path.startswith(build_path):
-      return file.path[len(build_path):-len(file.basename)].split("/")
+      relative_path = file.path[len(build_path):-len(file.basename)]
+      if relative_path != "":
+        return relative_path.split("/")
     #TODO is this a failing error?
     return []
 
