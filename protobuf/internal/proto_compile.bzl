@@ -161,6 +161,8 @@ def _build_output_library(run, builder):
 
   parts = jslib.short_path.rpartition("/")
   filename = "/".join([parts[0], run.data.label.name])
+  if filename.startswith("../"):
+    filename = "external/" + filename[3:]
   library_path = _get_offset_path(run.data.execdir, filename)
   builder[name + "_pb_options"] += ["library=" + library_path]
 
@@ -519,6 +521,9 @@ cd $(bazel info execution_root)%s && \
     for i in range(len(outputs)):
       print(" > output%s: %s" % (i, outputs[i]))
 
+  if unit.data.verbose > 3:
+    cmds += ["find ../../"]
+  
   ctx.action(
     mnemonic = "ProtoCompile",
     command = " && ".join(cmds),
