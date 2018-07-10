@@ -742,7 +742,7 @@ proto_compile = rule(
       mandatory = False,
     ),
     "protos": attr.label_list(
-      allow_files = FileType([".proto"]),
+      allow_files = [".proto"],
     ),
     "includes": attr.string_list(),
     "excludes": attr.string_list(),
