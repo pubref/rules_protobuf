@@ -60,8 +60,8 @@ go_proto_library(
 
 new_http_archive(
     name = "com_github_googleapis_googleapis",
-    sha256 = "63555639d21dd0041a2e7e02d0af57b60da0b8dfccbf638fba8a930ceb555176",
-    url = "https://github.com/googleapis/googleapis/archive/6277786c1352a6d7be1e5a5d697394e1802f6608.zip",
-    strip_prefix = "googleapis-6277786c1352a6d7be1e5a5d697394e1802f6608",
+    sha256 = "ee8951afe2a9ab23f2de17e6a56a7eb85300520da72e2a458d935859b7258804",
+    url = "https://github.com/googleapis/googleapis/archive/fe2e48159095b7a7dead65a8657b6c236b6b7548.zip",
+    strip_prefix = "googleapis-fe2e48159095b7a7dead65a8657b6c236b6b7548",
     build_file_content = GOOGLEAPIS_BUILD_FILE,
 )
