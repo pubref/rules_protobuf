@@ -51,6 +51,7 @@ go_proto_library(
     protos = [
         "google/api/label.proto",
     ],
+    go_package = "google.golang.org/genproto/googleapis/api/label",
     importpath = "google.golang.org/genproto/googleapis/api/label",
     verbose = 0,
 )
