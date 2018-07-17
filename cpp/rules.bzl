@@ -63,6 +63,7 @@ def cpp_proto_library(
     srcs = [],
     deps = [],
     verbose = 0,
+    root = "",
     **kwargs):
 
   if with_grpc:
@@ -81,6 +82,7 @@ def cpp_proto_library(
     "grpc_options": grpc_options,
     "output_to_workspace": output_to_workspace,
     "verbose": verbose,
+    "root": root,
     "with_grpc": with_grpc,
   }
 
