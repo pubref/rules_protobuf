@@ -25,6 +25,7 @@ GRPC_GATEWAY_DEPS = [
   "@org_golang_google_grpc//status:go_default_library",
   "@org_golang_x_net//context:go_default_library",
   "@com_github_golang_glog//:go_default_library",
+  "@com_github_ghodss_yaml//:go_default_library",
 ]
 
 def grpc_gateway_proto_library(
