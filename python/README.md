@@ -97,8 +97,8 @@ pip_grpcio_install()
 ## Step 2: Include the grpcio package the py_binary rule for your gRPC client/server
 
 ```python
-# Load the 'packages' function from the 'pip_grpcio' workspace
-load("@pip_grpcio//:requirements.bzl", "packages")
+# Load the 'requirement' function from the 'pip_grpcio' workspace
+load("@pip_grpcio//:requirements.bzl", "requirement")
 
 # Define a py_binary rule and include the grpcio package as a dependency.
 py_binary(
@@ -108,7 +108,8 @@ py_binary(
     ],
     deps = [
         ":protolib", # a py_proto_library rule
-        packages("grpcio"), # grpcio pypi package
+        requirement("grpcio"), # grpcio pypi package
+        requirement("protobuf"),
     ],
 )
 ```
