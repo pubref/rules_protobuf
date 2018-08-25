@@ -1,8 +1,17 @@
-load("@bazel_tools//tools/build_defs/repo:utils.bzl", "patch")
+
+def _patch(ctx):
+    """Implementation of patching an already extracted repository"""
+    bash_exe = ctx.os.environ["BAZEL_SH"] if "BAZEL_SH" in ctx.os.environ else "bash"
+    for cmd in ctx.attr.patch_cmds:
+        st = ctx.execute([bash_exe, "-c", cmd])
+        if st.return_code:
+            fail("Error applying patch command %s:\n%s%s" %
+                 (cmd, st.stdout, st.stderr))
+
 
 def _proto_http_archive_impl(ctx):
     ctx.download_and_extract(ctx.attr.url, ctx.attr.output_dir, ctx.attr.sha256, ctx.attr.type, ctx.attr.strip_prefix)
-    patch(ctx)
+    _patch(ctx)
     if ctx.attr.build_file_content:
         ctx.file("BUILD.bazel", ctx.attr.build_file_content)
             
