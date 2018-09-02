@@ -9,10 +9,10 @@ load("//protobuf:rules.bzl", "github_archive")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
-git_repository(
+http_archive(
     name = "io_bazel_rules_go",
-    remote = "https://github.com/bazelbuild/rules_go.git",
-    commit = "d850f8bbd15d94ce11a078b3933e92ebbf09f715", # 0.12.0+
+    urls = ["https://github.com/bazelbuild/rules_go/releases/download/0.12.1/rules_go-0.12.1.tar.gz"],
+    sha256 = "8b68d0630d63d95dacc0016c3bb4b76154fe34fca93efd65d1c366de3fcb4294",
 )
 
 http_archive(
