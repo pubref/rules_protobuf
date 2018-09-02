@@ -9,6 +9,8 @@ def grpc_gateway_proto_repositories(
       "com_github_grpc_ecosystem_grpc_gateway",
       "com_github_grpc_ecosystem_grpc_gateway_googleapis",
       "org_golang_google_genproto",
+      "com_github_ghodss_yaml",
+      "in_gopkg_yaml_v2",
     ], **kwargs):
 
   go_proto_repositories(lang_deps = lang_deps,
