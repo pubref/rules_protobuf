@@ -10,6 +10,18 @@ filegroup(
 """
 
 DEPS = {
+    "com_github_ghodss_yaml": {
+        "rule": "go_repository",
+        "importpath": "github.com/ghodss/yaml",
+        "commit": "c7ce16629ff4cd059ed96ed06419dd3856fd3577",
+    },
+
+    "in_gopkg_yaml_v2": {
+        "rule": "go_repository",
+        "importpath": "gopkg.in/yaml.v2",
+        "commit": "5420a8b6744d3b0345ab293f6fcba19c978f1183",
+    },
+
     "com_github_grpc_ecosystem_grpc_gateway": {
         "rule": "go_repository",
         "importpath": "github.com/grpc-ecosystem/grpc-gateway",
