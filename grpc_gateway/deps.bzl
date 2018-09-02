@@ -37,7 +37,7 @@ DEPS = {
         "rule": "new_http_archive",
         "url": "https://github.com/grpc-ecosystem/grpc-gateway/archive/"+com_github_grpc_ecosystem_grpc_gateway_commit+".zip",
         "strip_prefix": "grpc-gateway-"+com_github_grpc_ecosystem_grpc_gateway_commit+"/third_party/googleapis",
-        # "sha256": "b8426c25492e76dec187099fb8e9f582173df3d445cb8913ca5ce78f423779a9",
+        "sha256": "ade55327a04b9a74ebb60e66030a6715da2198d0918f8e4a012073099b6b0622",
         "build_file_content": GOOGLEAPIS_BUILD_FILE,
     },
 
