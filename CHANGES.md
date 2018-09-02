@@ -7,14 +7,14 @@ changed that may break your build (for example, string references such
 as 'external/com_github_google_protobuf/src' should be migrated to
 'external/com_google_protobuf/src' in an 'imports' attribute).
 
-* Introduce cpp/grpc_repository.bzl to setup a custom @com_google_grpc
+* Introduce cpp/grpc_repository.bzl to setup a custom @com_github_grpc_grpc
   external workspace (no longer using git_repository#init_submodules).
-  This pulls down grpc/grpc from github as @com_google_grpc_base, sets
-  up a mirrored external workspace in @com_google_grpc that symlinks
-  to @com_google_grpc_base, then does a "git submodule the hard way" for
+  This pulls down grpc/grpc from github as @com_github_grpc_grpc_base, sets
+  up a mirrored external workspace in @com_github_grpc_grpc that symlinks
+  to @com_github_grpc_grpc_base, then does a "git submodule the hard way" for
   c-ares, and installs a patched version of generate_cc.bzl.
 * Rename repository @com_github_google_protobuf to @com_google_protobuf.
-* Rename repository @com_github_grpc_grpc to @com_google_grpc.
+* Rename repository @com_github_grpc_grpc to @com_github_grpc_grpc.
 * Rename repository @gtest to @com_google_googletest.
 * Updated grpc/grpc to 1.6.1.
 * Updated madler/zlib to 1.2.11.

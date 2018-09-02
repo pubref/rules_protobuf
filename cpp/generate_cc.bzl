@@ -4,7 +4,7 @@ This is an internal rule used by cc_grpc_library, and shouldn't be used
 directly.
 
 This file becomes symlinked to replace the original
-@com_google_grpc//bazel/generate_cc.bzl, which does not seem to work
+@com_github_grpc_grpc//bazel/generate_cc.bzl, which does not seem to work
 out of the box.  IF YOU UPDATE TO A NEWER VERSION OF GRPC/GRPC, THERE
 MAY BE CHANGES TO THAT FILE WHICH MIGHT EITHER BREAK THIS OR MAKE IT
 OBSOLETE.
@@ -23,7 +23,7 @@ two lengths.
 The second change is that we need protoc to evaluate within the
 context of the workspace_root rather than the execroot.  To do this,
 we shift into the external workspace with a 'cd
-external/com_google_grpc', and adjust dir_out, plugin_out,
+external/com_github_grpc_grpc', and adjust dir_out, plugin_out,
 cpp_out etc to be relative to the forward shifted position.
 
 Third change: Windows compatibility by not including : when unnecessary.
