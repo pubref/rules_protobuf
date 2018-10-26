@@ -1,3 +1,22 @@
+# NOTICE
+
+rules_protobuf was initially written when the bazel protobuf ecosystem was
+fairly immature.  Now 2 years later, this repository is showing its age.  Rather
+than retrofit this set of rules, it's been re-written from the ground-up to work
+correctly with the `native.proto_library` rule and is available at
+https://github.com/stackb/rules_proto.  Consequently, these rules are effectively
+no longer being maintained.
+
+Please upgrade to the newer rules when appropriate and file issues if there are
+feature gaps that need to be filled.
+
+Cheers, @pcj (Oct 25 2018)
+
+https://github.com/stackb/rules_proto
+
+---
+
+
 # `rules_protobuf` [![Build Status](https://travis-ci.org/pubref/rules_protobuf.svg?branch=master)](https://travis-ci.org/pubref/rules_protobuf)
 
 Bazel skylark rules for building [protocol buffers][protobuf-home]
