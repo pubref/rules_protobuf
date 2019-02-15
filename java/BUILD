@@ -1,6 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
-load("//protobuf:rules.bzl", "proto_language", "proto_language_deps")
+load("//protobuf:rules.bzl", "proto_language")
 load("//java:rules.bzl", "java_proto_language_import")
 
 proto_language(
