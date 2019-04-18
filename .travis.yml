@@ -9,9 +9,7 @@ os:
 
 env:
   - V=0.15.2
-  - V=0.14.1
-  - V=0.13.1
-  - V=0.12.0
+  - V=0.19.2
 
 before_install:
   - OS=linux
@@ -37,5 +35,7 @@ notifications:
   email: false
 
 matrix:
+  fast_finish: true
   allow_failures:
   - os: osx # currently fails on //examples/helloworld/cpp:test
+  - env: V=0.19.2
