@@ -70,7 +70,8 @@ def cpp_proto_library(
   else:
     compile_deps = PB_COMPILE_DEPS
 
-  proto_compile_args += {
+  proto_compile_args = dict(proto_compile_args)
+  proto_compile_args.update({
     "name": name + ".pb",
     "protos": protos,
     "deps": [dep + ".pb" for dep in proto_deps],
@@ -82,7 +83,7 @@ def cpp_proto_library(
     "output_to_workspace": output_to_workspace,
     "verbose": verbose,
     "with_grpc": with_grpc,
-  }
+  })
 
   if protoc:
     proto_compile_args["protoc"] = protoc
