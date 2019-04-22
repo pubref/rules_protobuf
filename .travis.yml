@@ -38,4 +38,3 @@ matrix:
   fast_finish: true
   allow_failures:
   - os: osx # currently fails on //examples/helloworld/cpp:test
-  - env: V=0.19.2
