@@ -12,12 +12,12 @@ BUILD_FLAGS += --local_resources=400,2,1.0
 BUILD_FLAGS += --worker_verbose
 BUILD_FLAGS += --strategy=Javac=worker
 BUILD_FLAGS += --strategy=Closure=worker
-BUILD_FLAGS += --copt -DGRPC_BAZEL_BUILD # workaorund for building on mac https://github.com/grpc/grpc/pull/13929
 #BUILD_FLAGS += --experimental_repository_cache="$HOME/.bazel_repository_cache"
 
 TESTFLAGS += $(BUILDFLAGS)
 TEST_FLAGS += --test_output=errors
 TEST_FLAGS += --test_strategy=standalone
+TEST_FLAGS += --copt -DGRPC_BAZEL_BUILD # workaorund for building on mac https://github.com/grpc/grpc/pull/13929
 
 BAZEL_BUILD := $(BAZEL) $(STARTFLAGS) $(BAZELFLAGS) build $(BUILDFLAGS)
 BAZEL_TEST := $(BAZEL) $(STARTFLAGS) $(BAZELFLAGS) test $(TEST_FLAGS)
