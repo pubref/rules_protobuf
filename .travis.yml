@@ -36,5 +36,3 @@ notifications:
 
 matrix:
   fast_finish: true
-  allow_failures:
-  - os: osx # currently fails on //examples/helloworld/cpp:test
