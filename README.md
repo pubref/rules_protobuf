@@ -17,7 +17,7 @@ https://github.com/stackb/rules_proto
 ---
 
 
-# `rules_protobuf` [![Build Status](https://travis-ci.org/pubref/rules_protobuf.svg?branch=master)](https://travis-ci.org/pubref/rules_protobuf)
+# `rules_protobuf` [![Build Status](https://travis-ci.org/vsco/rules_protobuf.svg?branch=master)](https://travis-ci.org/vsco/rules_protobuf)
 
 Bazel skylark rules for building [protocol buffers][protobuf-home]
 with +/- gRPC support on (osx, linux) :sparkles:.
@@ -92,7 +92,7 @@ of this project are to:
 If you have not already installed `bazel` on your workstation, follow
 the [bazel instructions][bazel-install].
 
-> NOTE: Bazel 0.8.0 or above is required for go support. 
+> NOTE: Bazel 0.8.0 or above is required for go support.
 
 ## 2. Add rules_protobuf your WORKSPACE
 
