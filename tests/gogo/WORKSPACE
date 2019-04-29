@@ -9,25 +9,29 @@ load("@org_pubref_rules_protobuf//protobuf:rules.bzl", "github_archive")
 # Go support requires rules_go
 # ================================================================
 
-github_archive(
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
     name = "io_bazel_rules_go",
-    commit = "6d900bc95ae678bec5c91031b8e987957d2a7f93",  # post-0.7.0 (includes important cross-compile fixes)
-    org = "bazelbuild",
-    repo = "rules_go",
-    sha256 = "d36baba631b29151434726eb204fa93ce8793b5f8ef96da452f382d77bd95c93",
+    url = "https://github.com/bazelbuild/rules_go/releases/download/0.13.2/rules_go-0.13.2.tar.gz",
+    sha256 = "6cbeb2e5fd7664073d96e91eef7d201b987817a2459702ac5f9a337285817597",
 )
 
-load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains")
+http_archive(
+    name = "bazel_gazelle",
+    urls = ["https://github.com/bazelbuild/bazel-gazelle/releases/download/0.15.0/bazel-gazelle-0.15.0.tar.gz"],
+    sha256 = "6e875ab4b6bf64a38c352887760f21203ab054676d9c1b274963907e0768740d",
+)
+
+load("@io_bazel_rules_go//go:def.bzl", "go_register_toolchains", "go_rules_dependencies")
 
 go_rules_dependencies()
 
 go_register_toolchains()
 
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 
-load("@io_bazel_rules_go//proto:def.bzl", "proto_register_toolchains")
-
-proto_register_toolchains()
-
+gazelle_dependencies()
 
 # ================================================================
 # Gogo Support

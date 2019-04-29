@@ -1,12 +1,26 @@
-git_repository(
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
     name = "io_bazel_rules_go",
-    remote = "https://github.com/bazelbuild/rules_go.git",
-    tag = "0.5.4",
+    url = "https://github.com/bazelbuild/rules_go/releases/download/0.13.2/rules_go-0.13.2.tar.gz",
+    sha256 = "6cbeb2e5fd7664073d96e91eef7d201b987817a2459702ac5f9a337285817597",
 )
 
-load("@io_bazel_rules_go//go:def.bzl", "go_repositories")
+http_archive(
+    name = "bazel_gazelle",
+    urls = ["https://github.com/bazelbuild/bazel-gazelle/releases/download/0.15.0/bazel-gazelle-0.15.0.tar.gz"],
+    sha256 = "6e875ab4b6bf64a38c352887760f21203ab054676d9c1b274963907e0768740d",
+)
 
-go_repositories()
+load("@io_bazel_rules_go//go:def.bzl", "go_register_toolchains", "go_rules_dependencies")
+
+go_rules_dependencies()
+
+go_register_toolchains()
+
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+
+gazelle_dependencies()
 
 local_repository(
     name = "org_pubref_rules_protobuf",
@@ -25,9 +39,6 @@ java_proto_repositories()
 GOOGLEAPIS_BUILD_FILE = """
 package(default_visibility = ["//visibility:public"])
 exports_files(["google/api/label.proto"])
-
-load("@io_bazel_rules_go//go:def.bzl", "go_prefix")
-go_prefix("google.golang.org/genproto/googleapis")
 
 load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cc_proto_library")
 load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_library")
@@ -55,14 +66,15 @@ go_proto_library(
         "google/api/label.proto",
     ],
     go_package = "google.golang.org/genproto/googleapis/api/label",
+    importpath = "google.golang.org/genproto/googleapis/api/label",
     verbose = 0,
 )
 """
 
 new_http_archive(
     name = "com_github_googleapis_googleapis",
-    sha256 = "63555639d21dd0041a2e7e02d0af57b60da0b8dfccbf638fba8a930ceb555176",
-    url = "https://github.com/googleapis/googleapis/archive/6277786c1352a6d7be1e5a5d697394e1802f6608.zip",
-    strip_prefix = "googleapis-6277786c1352a6d7be1e5a5d697394e1802f6608",
+    sha256 = "ee8951afe2a9ab23f2de17e6a56a7eb85300520da72e2a458d935859b7258804",
+    url = "https://github.com/googleapis/googleapis/archive/fe2e48159095b7a7dead65a8657b6c236b6b7548.zip",
+    strip_prefix = "googleapis-fe2e48159095b7a7dead65a8657b6c236b6b7548",
     build_file_content = GOOGLEAPIS_BUILD_FILE,
 )

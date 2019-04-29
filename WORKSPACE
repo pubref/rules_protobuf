@@ -6,19 +6,29 @@ load("//protobuf:rules.bzl", "github_archive")
 # Go support requires rules_go
 # ================================================================
 
-github_archive(
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
     name = "io_bazel_rules_go",
-    commit = "f676870c5caf8df559a51e7aa005d2ece148a03b",  # 0.10.3
-    org = "bazelbuild",
-    repo = "rules_go",
-    sha256 = "d1740b1a75d3c51f1c37e5a42ed032d113bdf1de35c393c609940af491ab6035",
+    url = "https://github.com/bazelbuild/rules_go/releases/download/0.13.2/rules_go-0.13.2.tar.gz",
+    sha256 = "6cbeb2e5fd7664073d96e91eef7d201b987817a2459702ac5f9a337285817597",
 )
 
-load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains")
+http_archive(
+    name = "bazel_gazelle",
+    urls = ["https://github.com/bazelbuild/bazel-gazelle/releases/download/0.15.0/bazel-gazelle-0.15.0.tar.gz"],
+    sha256 = "6e875ab4b6bf64a38c352887760f21203ab054676d9c1b274963907e0768740d",
+)
+
+load("@io_bazel_rules_go//go:def.bzl", "go_register_toolchains", "go_rules_dependencies")
 
 go_rules_dependencies()
 
 go_register_toolchains()
+
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+
+gazelle_dependencies()
 
 # ================================================================
 # closure js_proto_library support requires rules_closure

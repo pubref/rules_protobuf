@@ -1,11 +1,8 @@
 package(default_visibility = ["//visibility:public"])
 
-load("@io_bazel_rules_go//go:def.bzl", "go_prefix")
 load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cc_proto_library")
 load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_library")
 load("@org_pubref_rules_protobuf//go:rules.bzl", "go_proto_library")
-
-go_prefix("github.com/pubref/rules_protobuf/tests/external_proto_library")
 
 cc_proto_library(
     name = "cc_gapi",
@@ -40,5 +37,6 @@ go_proto_library(
         "@com_github_googleapis_googleapis//:go_label_proto",
     ],
     protos = ["message.proto"],
+    importpath = "github.com/pubref/rules_protobuf/tests/external_proto_library",
     verbose = 0,
 )

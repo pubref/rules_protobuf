@@ -161,6 +161,8 @@ def _build_output_library(run, builder):
 
   parts = jslib.short_path.rpartition("/")
   filename = "/".join([parts[0], run.data.label.name])
+  if filename.startswith("../"):
+    filename = "external/" + filename[3:]
   library_path = _get_offset_path(run.data.execdir, filename)
   builder[name + "_pb_options"] += ["library=" + library_path]
 
@@ -284,7 +286,7 @@ def _build_grpc_invocation(run, builder):
                            builder)
 
 
-def _get_mappings(files, label, go_prefix):
+def _get_mappings(files, label, importpath):
   """For a set of files that belong to the given context label, create a mapping to the given prefix."""
   mappings = {}
   for file in files:
@@ -295,14 +297,7 @@ def _get_mappings(files, label, go_prefix):
     if src.startswith("../"):
       parts = src.split("/")
       src = "/".join(parts[2:])
-    dst = [go_prefix]
-    if label.package:
-      dst.append(label.package)
-    name_parts = label.name.split(".")
-    # special case to elide last part if the name is
-    # 'go_default_library.pb'
-    if name_parts[0] != "go_default_library":
-      dst.append(name_parts[0])
+    dst = [importpath]
     mappings[src] = "/".join(dst)
   return mappings
 
@@ -311,16 +306,16 @@ def _build_base_namespace(run, builder):
   pass
 
 
-def _build_importmappings(run, builder):
+def _build_importmappings(run, builder, importpath):
   """Override behavior to add plugin options before building the --go_out option"""
   ctx = run.ctx
-  go_prefix = run.data.go_prefix or run.lang.go_prefix
   opts = []
 
   # Build the list of import mappings.  Start with any configured on
   # the rule by attributes.
   mappings = run.lang.importmap + run.data.importmap
-  mappings += _get_mappings(run.data.protos, run.data.label, go_prefix)
+
+  mappings += _get_mappings(run.data.protos, run.data.label, importpath)
 
   # Then add in the transitive set from dependent rules.
   for unit in run.data.transitive_units:
@@ -353,8 +348,8 @@ def _build_plugin_out(name, outdir, options, builder):
   # If the outdir is external, such as when building
   # :well_known_protos, the protoc command may fail as the directory
   # bazel-out/local-fastbuild/genfiles/external/com_google_protobuf
-  # won't necessarily exist.  Add this to the queue of
-  # pre-execution commands to create it.
+  # won't necessarily exist.  Add this to the queue of pre-execution
+  # commands to create it.
   if outdir.startswith("../..") and not outdir.endswith(".jar"):
     builder["commands"] += ["mkdir -p " + outdir]
 
@@ -526,6 +521,9 @@ cd $(bazel info execution_root)%s && \
     for i in range(len(outputs)):
       print(" > output%s: %s" % (i, outputs[i]))
 
+  if unit.data.verbose > 3:
+    cmds += ["find ../../"]
+  
   ctx.action(
     mnemonic = "ProtoCompile",
     command = " && ".join(cmds),
@@ -588,13 +586,6 @@ def _proto_compile_impl(ctx):
     for unit in dep.proto_compile_result.transitive_units:
         transitive_units.append(unit)
 
-  if ctx.attr.go_prefix:
-    go_prefix = ctx.attr.go_prefix.go_prefix
-  elif ctx.attr.go_importpath:
-    go_prefix = ctx.attr.go_importpath
-  else:
-    go_prefix = ""
-
 
   # Make the proto list.
   # First include any protos that match cts.attr.includes.
@@ -624,7 +615,6 @@ def _proto_compile_impl(ctx):
   data = struct(
     label = ctx.label,
     workspace_name = ctx.workspace_name,
-    go_prefix = go_prefix,
     go_package = ctx.attr.go_package,
     execdir = execdir,
     protos = protos,
@@ -692,8 +682,8 @@ def _proto_compile_impl(ctx):
       _build_output_libdir(run, builder)
     else:
       _build_output_files(run, builder)
-    if run.lang.go_prefix or ctx.attr.go_importpath: # golang-specific
-      _build_importmappings(run, builder)
+    if ctx.attr.go_importpath: # golang-specific
+      _build_importmappings(run, builder, ctx.attr.go_importpath)
     if run.lang.supports_pb:
       _build_protobuf_invocation(run, builder)
       _build_protobuf_out(run, builder)
@@ -753,9 +743,6 @@ proto_compile = rule(
       default = Label("//external:protocol_compiler"),
       cfg = "host",
       executable = True,
-    ),
-    "go_prefix": attr.label(
-      providers = ["go_prefix"],
     ),
     "go_importpath": attr.string(),
     "go_package": attr.string(),

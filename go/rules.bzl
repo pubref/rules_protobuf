@@ -1,4 +1,5 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_repository")
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@bazel_gazelle//:deps.bzl", "go_repository")
 load("//protobuf:rules.bzl", "proto_compile", "proto_repositories")
 load("//go:deps.bzl", "DEPS")
 
@@ -43,7 +44,6 @@ def go_proto_compile(langs = [str(Label("//go"))], **kwargs):
 def go_proto_library(
     name,
     langs = [str(Label("//go"))],
-    go_prefix = Label("//:go_prefix", relative_to_caller_repository=True),
     importpath = None,
     go_package = None,
     protos = [],
@@ -75,13 +75,9 @@ def go_proto_library(
     else:
       resolved_go_proto_deps = PB_COMPILE_DEPS
 
-  if importpath:
-    go_prefix = None
-
   proto_compile_args += {
     "name": name + ".pb",
     "protos": protos,
-    "go_prefix": go_prefix,
     "go_importpath": importpath,
     "go_package": go_package,
     "deps": [dep + ".pb" for dep in proto_deps],

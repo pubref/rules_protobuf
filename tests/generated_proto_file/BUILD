@@ -19,7 +19,7 @@ cpp_proto_library(
 
 cpp_proto_library(
    name = "copy_library",
-   protos = ["copy.proto"],   
+   protos = ["copy.proto"],
    with_grpc = True,
    verbose = 0,
 )
@@ -27,12 +27,14 @@ cpp_proto_library(
 go_proto_library(
    name = "go_default_library",
    protos = ["simple.proto"],
+   importpath = "github.com/pubref/rules_protobuf/tests/generated_proto_file/go_default_library",
 )
 
 go_proto_library(
    name = "go_copy_library",
    protos = ["copy.proto"],
    with_grpc = True,
+   importpath = "github.com/pubref/rules_protobuf/tests/generated_proto_file/go_copy_library",
 )
 
 cpp_proto_library(
