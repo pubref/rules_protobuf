@@ -20,19 +20,19 @@ DEPS = {
 
     "protoc_gen_grpc_java_linux_x86_64": {
         "rule": "http_file",
-        "url": "https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.9.0/protoc-gen-grpc-java-1.9.0-linux-x86_64.exe",
+        "urls": ["https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.9.0/protoc-gen-grpc-java-1.9.0-linux-x86_64.exe"],
         "sha256": "f20cc8c052eea904c5a979c140237696e3f187f35deac49cd70b16dc0635f463",
     },
 
     "protoc_gen_grpc_java_macosx": {
         "rule": "http_file",
-        "url": "http://central.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.9.0/protoc-gen-grpc-java-1.9.0-osx-x86_64.exe",
+        "urls": ["http://central.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.9.0/protoc-gen-grpc-java-1.9.0-osx-x86_64.exe"],
         "sha256": "593937361f99e8b145fe29c78c71cdd00e8327ae88de010729479eb2acdc1de9",
     },
 
     "protoc_gen_grpc_java_windows_x86_64": {
         "rule": "http_file",
-        "url": "https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.9.0/protoc-gen-grpc-java-1.9.0-windows-x86_64.exe",
+        "urls": ["https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.9.0/protoc-gen-grpc-java-1.9.0-windows-x86_64.exe"],
         "sha256": "28ee62f58f14fa1d33666e02c2c9dcca77ea98427446543c0ba00b7ea597d292",
     },
 

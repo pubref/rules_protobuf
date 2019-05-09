@@ -1,11 +1,13 @@
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
 # Note: This is a utility workspace (probably does not belong in
 # tests) to help compute the transitive deps of grpc-java.
 
 http_archive(
     name = "org_pubref_rules_maven",
-    url = "https://github.com/pubref/rules_maven/archive/43d56ae584ffdf1cd79307728bfd2436c475d35e.zip",
-    sha256 = "33053be697be119582ae294504d8857b76e6ffa6ebadffc76d644854a504af43",
-    strip_prefix = "rules_maven-43d56ae584ffdf1cd79307728bfd2436c475d35e",
+    url = "https://github.com/pubref/rules_maven/archive/25214e11ef391bd2dc08cad3a5637ceac93b0769.zip",
+    sha256 = "8bbb374af3971fa8be2a853c9d37d148cde76186ce1f19833f9bb3d5c201a581",
+    strip_prefix = "rules_maven-25214e11ef391bd2dc08cad3a5637ceac93b0769",
 )
 
 load("@org_pubref_rules_maven//maven:rules.bzl", "maven_repositories", "maven_repository")
