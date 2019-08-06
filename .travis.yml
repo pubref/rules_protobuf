@@ -9,6 +9,7 @@ os:
 
 env:
   - V=0.19.2
+  - V=0.20.0
 
 before_install:
   - OS=linux
