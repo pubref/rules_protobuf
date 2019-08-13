@@ -19,8 +19,8 @@ To update this list, `bazel build @org_pubref_rules_protobuf//:deps && cp bazel-
 | grpc_archive | **`@com_google_grpc`** |  |
 | [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@boringssl`** | [(no hash provided)](https://boringssl.googlesource.com/boringssl/+archive/886e7d75368e3f4fab3f4d0d3584e4abfc557755.tar.gz) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@libssl`** | `//external:libssl` (`@boringssl//:ssl`) |
-| [new_http_archive](https://docs.bazel.build/versions/master/be/workspace.html#new_http_archive) | **`@com_github_madler_zlib`** | [sha256:1cce3828ec2b](https://github.com/madler/zlib/archive/cacf7f1d4e3d44d871b605da3b647f07d718623f.zip) |
-| [new_http_archive](https://docs.bazel.build/versions/master/be/workspace.html#new_http_archive) | **`@com_github_cares_cares`** | [sha256:932bf7e593d4](https://github.com/c-ares/c-ares/archive/3be1924221e1326df520f8498d704a5c4c8d0cce.zip) |
+| [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@com_github_madler_zlib`** | [sha256:1cce3828ec2b](https://github.com/madler/zlib/archive/cacf7f1d4e3d44d871b605da3b647f07d718623f.zip) |
+| [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@com_github_cares_cares`** | [sha256:932bf7e593d4](https://github.com/c-ares/c-ares/archive/3be1924221e1326df520f8498d704a5c4c8d0cce.zip) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@cares`** | `//external:cares` (`@com_github_cares_cares//:ares`) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@zlib`** | `//external:zlib` (`@com_github_madler_zlib//:zlib`) |
 | [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@nanopb`** | `//external:nanopb` (`@com_google_grpc//third_party/nanopb`) |
@@ -100,7 +100,7 @@ To update this list, `bazel build @org_pubref_rules_protobuf//:deps && cp bazel-
 | Rule | Workspace | Detail |
 | ---: | :--- | :--- |
 | [go_repository](https://github.com/bazelbuild/rules_go#go_repository) | **`@com_github_grpc_ecosystem_grpc_gateway`** | [github.com/grpc-ecosystem/grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway/) |
-| [new_http_archive](https://docs.bazel.build/versions/master/be/workspace.html#new_http_archive) | **`@com_github_grpc_ecosystem_grpc_gateway_googleapis`** | [sha256:b8426c25492e](https://github.com/grpc-ecosystem/grpc-gateway/archive/f2862b476edcef83412c7af8687c9cd8e4097c0f.zip) |
+| [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@com_github_grpc_ecosystem_grpc_gateway_googleapis`** | [sha256:b8426c25492e](https://github.com/grpc-ecosystem/grpc-gateway/archive/f2862b476edcef83412c7af8687c9cd8e4097c0f.zip) |
 | [go_repository](https://github.com/bazelbuild/rules_go#go_repository) | **`@org_golang_google_genproto`** | [google.golang.org/genproto](https://google.golang.org/genproto/) |
 
 ## Node

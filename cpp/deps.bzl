@@ -24,7 +24,7 @@ DEPS = {
 
     # C-library for zlib
     "com_github_madler_zlib": {
-        "rule": "new_http_archive",
+        "rule": "http_archive",
         "url": "https://github.com/madler/zlib/archive/cacf7f1d4e3d44d871b605da3b647f07d718623f.zip", #v1.2.11
         "sha256": "1cce3828ec2ba80ff8a4cac0ab5aa03756026517154c4b450e617ede751d41bd",
         "strip_prefix": "zlib-cacf7f1d4e3d44d871b605da3b647f07d718623f",
@@ -32,7 +32,7 @@ DEPS = {
     },
 
     "com_github_cares_cares": {
-        "rule": "new_http_archive",
+        "rule": "http_archive",
         "url": "https://github.com/c-ares/c-ares/archive/%s.zip" % CARES_VERSION,
         "sha256": "932bf7e593d4683fce44fd26920f27d4f0c229113338e4f6d351e35d4d7c7a39",
         "strip_prefix": "c-ares-" + CARES_VERSION,

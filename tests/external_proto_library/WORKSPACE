@@ -74,7 +74,7 @@ go_proto_library(
 )
 """
 
-new_http_archive(
+http_archive(
     name = "com_github_googleapis_googleapis",
     sha256 = "ee8951afe2a9ab23f2de17e6a56a7eb85300520da72e2a458d935859b7258804",
     url = "https://github.com/googleapis/googleapis/archive/fe2e48159095b7a7dead65a8657b6c236b6b7548.zip",
