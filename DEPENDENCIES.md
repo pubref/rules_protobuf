@@ -70,14 +70,6 @@ To update this list, `bazel build @org_pubref_rules_protobuf//:deps && cp bazel-
 | [maven_jar](https://docs.bazel.build/versions/master/be/workspace.html#maven_jar) | **`@io_opencensus_opencensus_api`** | [io.opencensus:opencensus-api:0.10.0](http:repo1.maven.org/maven2/io/opencensus/opencensus-api/0.10.0) (46bcf0) |
 | [maven_jar](https://docs.bazel.build/versions/master/be/workspace.html#maven_jar) | **`@io_opencensus_opencensus_contrib_grpc_metrics`** | [io.opencensus:opencensus-contrib-grpc-metrics:0.10.0](http:repo1.maven.org/maven2/io/opencensus/opencensus-contrib-grpc-metrics/0.10.0) (e47f91) |
 
-## C#
-
-| Rule | Workspace | Detail |
-| ---: | :--- | :--- |
-| [new_nuget_package](https://github.com/bazelbuild/rules_dotnet#new_nuget_package) | **`@nuget_google_protobuf`** | [Google.Protobuf@3.4.0](https://www.nuget.org/packages/Google.Protobuf) |
-| [new_nuget_package](https://github.com/bazelbuild/rules_dotnet#new_nuget_package) | **`@nuget_grpc`** | [Grpc@1.6.0](https://www.nuget.org/packages/Grpc) |
-| [bind](https://docs.bazel.build/versions/master/be/workspace.html#bind) | **`@protoc_gen_grpc_csharp`** | `//external:protoc_gen_grpc_csharp` (`@com_google_grpc//:grpc_csharp_plugin`) |
-
 ## Go
 
 | Rule | Workspace | Detail |

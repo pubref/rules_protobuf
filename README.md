@@ -58,7 +58,6 @@ of this project are to:
 | Language                     | Compile <sup>1</sup>  | Build <sup>2</sup> | gRPC <sup>3</sup> |
 | ---------------------------: | -----------: | --------: | -------- |
 | [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) [v3.5.1](https://github.com/google/protobuf/releases/tag/v3.5.1) | [v1.10.1](https://github.com/grpc/grpc/releases/tag/v1.10.1) |
-| [C#](csharp)                 | [csharp_proto_compile](csharp#csharp_proto_compile) | [csharp_proto_library](csharp#csharp_proto_library) | [1.0.0](https://www.nuget.org/packages/Grpc/) |
 | [Closure](closure)           | [closure_proto_compile](closure#closure_proto_compile) | [closure_proto_library](closure#closure_proto_library)          |  |
 | [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.6.0](https://github.com/grpc/grpc-go/releases/tag/v1.6.0) |
 | [Go (gogo)](gogo)            | [gogo_proto_compile](gogo#gogo_proto_compile) | [gogo_proto_library](gogo#gogo_proto_library) | [Nov 2017](https://github.com/gogo/protobuf/commit/616a82ed12d78d24d4839363e8f3c5d3f20627cf) |
@@ -123,7 +122,6 @@ to load before the `*_proto_repositories()` function is invoked:
 | Language | Requires |
 | ---:     | :---     |
 | closure_proto_repositories | [rules_closure](https://github.com/bazelbuild/rules_closure) |
-| csharp_proto_repositories | [rules_dotnet](https://github.com/bazelbuild/rules_dotnet) |
 | go_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
 | gogo_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
 | grpc_gateway_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |

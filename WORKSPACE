@@ -50,22 +50,6 @@ load("@io_bazel_rules_closure//closure:defs.bzl", "closure_repositories")
 closure_repositories(omit_com_google_protobuf=True)
 
 # ================================================================
-# csharp_proto_library support requires rules_dotnet (forked)
-# ================================================================
-
-github_archive(
-    name = "io_bazel_rules_dotnet",
-    commit = "1a6ca96fe05bca83782464453ac4657fb8ed8379",
-    org = "bazelbuild",
-    repo = "rules_dotnet",
-    sha256 = "0f7d7f79bf543fdcce9ffebf422df2f858eae63367869b441d4d1005f279fa1f",
-)
-
-load("@io_bazel_rules_dotnet//dotnet:csharp.bzl", "csharp_repositories")
-
-csharp_repositories()
-
-# ================================================================
 # node_proto_library support requires rules_node
 # ================================================================
 
@@ -125,10 +109,6 @@ proto_repositories()
 load("//cpp:rules.bzl", "cpp_proto_repositories")
 
 cpp_proto_repositories()
-
-load("//csharp:rules.bzl", "csharp_proto_repositories")
-
-csharp_proto_repositories()
 
 load("//java:rules.bzl", "java_proto_repositories", "nano_proto_repositories")
 
