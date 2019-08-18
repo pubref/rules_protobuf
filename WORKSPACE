@@ -6,6 +6,7 @@ load("//protobuf:rules.bzl", "github_archive")
 # Go support requires rules_go
 # ================================================================
 
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
@@ -38,14 +39,10 @@ gazelle_dependencies()
 # ================================================================
 
 
-http_archive(
+git_repository(
     name = "io_bazel_rules_closure",
-    sha256 = "b29a8bc2cb10513c864cb1084d6f38613ef14a143797cea0af0f91cd385f5e8c",
-    strip_prefix = "rules_closure-0.8.0",
-    urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_closure/archive/0.8.0.tar.gz",
-        "https://github.com/bazelbuild/rules_closure/archive/0.8.0.tar.gz",
-    ],
+    remote = "https://github.com/bazelbuild/rules_closure",
+    commit = "87d24b1df8b62405de8dd059cb604fd9d4b1e395", # Feb 28, 2019
 )
 
 load("@io_bazel_rules_closure//closure:defs.bzl", "closure_repositories")
