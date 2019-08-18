@@ -4,8 +4,11 @@ load("//go:rules.bzl", "go_proto_repositories")
 load("//go:deps.bzl", GO_DEPS = "DEPS")
 load("//gogo:deps.bzl", GOGO_DEPS = "DEPS")
 
+default_deps = dict(GO_DEPS)
+default_deps.update(GOGO_DEPS)
+
 def gogo_proto_repositories(
-    lang_deps = GO_DEPS + GOGO_DEPS,
+    lang_deps = default_deps,
     lang_requires = [
       "com_github_golang_protobuf",
       "com_github_golang_glog",

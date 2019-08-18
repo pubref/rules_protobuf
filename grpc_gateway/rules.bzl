@@ -65,11 +65,12 @@ def grpc_gateway_proto_library(
     **kwargs):
 
   _go_proto_deps = [] + go_proto_deps
-  
+
   if not go_proto_deps:
     _go_proto_deps += GRPC_COMPILE_DEPS
 
-  pb_args += {
+  pb_args = dict(pb_args)
+  pb_args.update({
     "name": name + ".pb",
     "protos": protos,
     "deps": [dep + ".pb" for dep in proto_deps],
@@ -81,7 +82,7 @@ def grpc_gateway_proto_library(
     "grpc_options": grpc_options,
     "output_to_workspace": output_to_workspace,
     "verbose": verbose,
-  }
+  })
 
   if protoc:
     pb_args["protoc"] = protoc
@@ -110,7 +111,8 @@ def grpc_gateway_proto_library(
   if request_context:
     pbgw_opts += ["request_context=true"]
 
-  pbgw_args += {
+  pbgw_args = dict(pbgw_args)
+  pbgw_args.update({
     "name": name + ".gw",
     "protos": protos,
     "deps": [dep + ".pb" for dep in proto_deps],
@@ -122,7 +124,7 @@ def grpc_gateway_proto_library(
     "grpc_options": grpc_options + pbgw_opts,
     "output_to_workspace": output_to_workspace,
     "verbose": verbose,
-  }
+  })
 
   proto_compile(**pbgw_args)
 
