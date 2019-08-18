@@ -46,8 +46,7 @@ all: build test
 build: external_proto_library_build workspace_root_build
 	$(BAZEL_BUILD) \
 	//examples/extra_args:person_tar \
-	//examples/helloworld/node:client \
-	//examples/helloworld/node:server \
+	//examples/helloworld/proto:node \
 	//examples/helloworld/go/client \
 	//examples/helloworld/go/server \
 	//examples/helloworld/grpc_gateway:swagger \
