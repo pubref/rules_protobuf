@@ -149,14 +149,15 @@ def gogo_proto_library(
     **kwargs):
 
   gogo_proto_deps = [] + go_proto_deps
-  
+
   if not go_proto_deps:
     if with_grpc:
       gogo_proto_deps += GRPC_COMPILE_DEPS
     else:
       gogo_proto_deps += PB_COMPILE_DEPS
 
-  proto_compile_args += {
+  proto_compile_args = dict(proto_compile_args)
+  proto_compile_args.update({
     "name": name + ".pb",
     "protos": protos,
     "deps": [dep + ".pb" for dep in proto_deps],
@@ -170,7 +171,7 @@ def gogo_proto_library(
     "output_to_workspace": output_to_workspace,
     "verbose": verbose,
     "with_grpc": with_grpc,
-  }
+  })
 
   if protoc:
     proto_compile_args["protoc"] = protoc
