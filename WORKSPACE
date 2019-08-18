@@ -56,11 +56,10 @@ closure_repositories(omit_com_google_protobuf=True)
 
 github_archive(
     name = "org_pubref_rules_node",
-    # This commit is *not* on master but rather https://github.com/pubref/rules_node/pull/41.
-    commit = "f990afc34168f81b034e642aa0dcb56320ed3988",
+    commit = "945abf1682b874b1c8a78cc96770c84741e7f092", # May 5, 2019
     org = "pubref",
     repo = "rules_node",
-    sha256 = "a367add895f201595b618611dcf7bdd7723ffeed88c4dc327e30668d19c9d1e2",
+    sha256 = "abc4815e678ddf550e74810ddc037138a713b1a272bbebcbcc0f47a2f62c3cf0",
 )
 
 load("@org_pubref_rules_node//node:rules.bzl", "node_repositories", "yarn_modules")
