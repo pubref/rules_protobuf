@@ -1,7 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
 load("//cpp:rules.bzl", "cc_proto_library")
-load("//csharp:rules.bzl", "csharp_proto_library")
 load("//go:rules.bzl", "go_proto_library")
 load("//gogo:rules.bzl", "gogo_proto_library")
 load("//java:rules.bzl", "java_proto_library")
@@ -20,16 +19,6 @@ cc_proto_library(
     name = "cpp",
     proto_deps = [
         "//examples/proto:cpp",
-    ],
-    protos = [":protos"],
-    verbose = 0,
-    with_grpc = True,
-)
-
-csharp_proto_library(
-    name = "Helloworld",
-    proto_deps = [
-        "//examples/proto:csharp",
     ],
     protos = [":protos"],
     verbose = 0,

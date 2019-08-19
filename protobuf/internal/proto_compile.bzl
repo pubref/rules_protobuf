@@ -313,13 +313,13 @@ def _build_importmappings(run, builder, importpath):
 
   # Build the list of import mappings.  Start with any configured on
   # the rule by attributes.
-  mappings = run.lang.importmap + run.data.importmap
-
-  mappings += _get_mappings(run.data.protos, run.data.label, importpath)
+  mappings = dict(run.lang.importmap)
+  mappings.update(run.data.importmap)
+  mappings.update(_get_mappings(run.data.protos, run.data.label, importpath))
 
   # Then add in the transitive set from dependent rules.
   for unit in run.data.transitive_units:
-    mappings += unit.transitive_mappings
+    mappings.update(unit.transitive_mappings)
 
   if run.data.verbose > 1:
     print("go_importmap: %s" % mappings)
@@ -523,7 +523,7 @@ cd $(bazel info execution_root)%s && \
 
   if unit.data.verbose > 3:
     cmds += ["find ../../"]
-  
+
   ctx.action(
     mnemonic = "ProtoCompile",
     command = " && ".join(cmds),
@@ -732,7 +732,7 @@ proto_compile = rule(
       mandatory = False,
     ),
     "protos": attr.label_list(
-      allow_files = FileType([".proto"]),
+      allow_files = [".proto"],
     ),
     "includes": attr.string_list(),
     "excludes": attr.string_list(),

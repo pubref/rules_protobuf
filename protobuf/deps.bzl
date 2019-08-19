@@ -3,9 +3,9 @@ DEPS = {
 
     "com_google_protobuf": {
         "rule": "http_archive",
-        "url": "https://github.com/google/protobuf/archive/v3.5.1.zip",
-        "strip_prefix": "protobuf-3.5.1",
-        "sha256": "1f8b9b202e9a4e467ff0b0f25facb1642727cdf5e69092038f15b37c75b99e45",
+        "url": "https://github.com/protocolbuffers/protobuf/archive/v3.6.1.3.zip",
+        "strip_prefix": "protobuf-3.6.1.3",
+        "sha256": "9510dd2afc29e7245e9e884336f848c8a6600a14ae726adb6befdb4f786f0be2",
     },
 
 

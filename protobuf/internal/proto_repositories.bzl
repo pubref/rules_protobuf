@@ -15,9 +15,11 @@ def proto_repositories(excludes = [],
                        overrides = {},
                        strict = False,
                        verbose = 0):
+  deps = dict(protobuf_deps)
+  deps.update(lang_deps)
   return require(
     keys = protobuf_requires + lang_requires,
-    deps = protobuf_deps + lang_deps,
+    deps = deps,
     excludes = excludes,
     overrides = overrides,
     verbose = verbose,

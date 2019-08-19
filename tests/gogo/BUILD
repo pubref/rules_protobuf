@@ -39,6 +39,7 @@ go_binary(
 
 sh_test(
     name = "gogo_test",
+    flaky = True,
     srcs = [
         "gogo_test.sh",
     ],

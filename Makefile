@@ -28,11 +28,9 @@ test_not_working_targets:
 	$(BAZEL) test \
 	//examples/helloworld/node:client \
 	//examples/helloworld/node:server \
-	//examples/helloworld/csharp/GreeterClient:GreeterClientTest \
 
 test_not_working_in_travis_targets:
 	$(BAZEL) test \
-	//examples/helloworld/csharp/GreeterClient:GreeterClientTest \
 	//examples/helloworld/grpc_gateway:greeter_test \
 
 # Python targets are not working (pip grpcio only compatible with 3.1.x)
@@ -48,8 +46,7 @@ all: build test
 build: external_proto_library_build workspace_root_build
 	$(BAZEL_BUILD) \
 	//examples/extra_args:person_tar \
-	//examples/helloworld/node:client \
-	//examples/helloworld/node:server \
+	//examples/helloworld/proto:node \
 	//examples/helloworld/go/client \
 	//examples/helloworld/go/server \
 	//examples/helloworld/grpc_gateway:swagger \
@@ -80,7 +77,6 @@ fmt:
 	buildifier BUILD
 	find closure/ -name BUILD | xargs buildifier
 	find cpp/ -name BUILD | xargs buildifier
-	find csharp/ -name BUILD | xargs buildifier
 	find examples/ -name BUILD | xargs buildifier
 	find go/ -name BUILD | xargs buildifier
 	find gogo/ -name BUILD | xargs buildifier

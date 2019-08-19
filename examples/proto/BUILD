@@ -2,7 +2,6 @@ package(default_visibility = ["//visibility:public"])
 
 load("//closure:rules.bzl", "closure_proto_library")
 load("//cpp:rules.bzl", "cc_proto_library")
-load("//csharp:rules.bzl", "csharp_proto_compile", "csharp_proto_library")
 load("//go:rules.bzl", "go_proto_library")
 load("//java:rules.bzl", "java_proto_library")
 load("//node:rules.bzl", "node_proto_compile", "node_proto_library")
@@ -21,13 +20,6 @@ filegroup(
 cc_proto_library(
     name = "cpp",
     protos = [":protos"],
-)
-
-csharp_proto_library(
-    name = "csharp",
-    protos = [":protos"],
-    verbose = 0,
-    with_grpc = False,
 )
 
 go_proto_library(
@@ -84,7 +76,6 @@ ruby_proto_compile(
 #         "//cpp",
 #         "//objc",
 #         "//closure",
-#         "//csharp",
 #         "//go",
 #         "//node",
 #     ],

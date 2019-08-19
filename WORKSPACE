@@ -6,6 +6,7 @@ load("//protobuf:rules.bzl", "github_archive")
 # Go support requires rules_go
 # ================================================================
 
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
@@ -38,35 +39,15 @@ gazelle_dependencies()
 # ================================================================
 
 
-http_archive(
+git_repository(
     name = "io_bazel_rules_closure",
-    sha256 = "b29a8bc2cb10513c864cb1084d6f38613ef14a143797cea0af0f91cd385f5e8c",
-    strip_prefix = "rules_closure-0.8.0",
-    urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_closure/archive/0.8.0.tar.gz",
-        "https://github.com/bazelbuild/rules_closure/archive/0.8.0.tar.gz",
-    ],
+    remote = "https://github.com/bazelbuild/rules_closure",
+    commit = "87d24b1df8b62405de8dd059cb604fd9d4b1e395", # Feb 28, 2019
 )
 
 load("@io_bazel_rules_closure//closure:defs.bzl", "closure_repositories")
 
 closure_repositories(omit_com_google_protobuf=True)
-
-# ================================================================
-# csharp_proto_library support requires rules_dotnet (forked)
-# ================================================================
-
-github_archive(
-    name = "io_bazel_rules_dotnet",
-    commit = "1a6ca96fe05bca83782464453ac4657fb8ed8379",
-    org = "bazelbuild",
-    repo = "rules_dotnet",
-    sha256 = "0f7d7f79bf543fdcce9ffebf422df2f858eae63367869b441d4d1005f279fa1f",
-)
-
-load("@io_bazel_rules_dotnet//dotnet:csharp.bzl", "csharp_repositories")
-
-csharp_repositories()
 
 # ================================================================
 # node_proto_library support requires rules_node
@@ -75,11 +56,10 @@ csharp_repositories()
 
 github_archive(
     name = "org_pubref_rules_node",
-    # This commit is *not* on master but rather https://github.com/pubref/rules_node/pull/41.
-    commit = "f990afc34168f81b034e642aa0dcb56320ed3988",
+    commit = "945abf1682b874b1c8a78cc96770c84741e7f092", # May 5, 2019
     org = "pubref",
     repo = "rules_node",
-    sha256 = "a367add895f201595b618611dcf7bdd7723ffeed88c4dc327e30668d19c9d1e2",
+    sha256 = "abc4815e678ddf550e74810ddc037138a713b1a272bbebcbcc0f47a2f62c3cf0",
 )
 
 load("@org_pubref_rules_node//node:rules.bzl", "node_repositories", "yarn_modules")
@@ -128,10 +108,6 @@ proto_repositories()
 load("//cpp:rules.bzl", "cpp_proto_repositories")
 
 cpp_proto_repositories()
-
-load("//csharp:rules.bzl", "csharp_proto_repositories")
-
-csharp_proto_repositories()
 
 load("//java:rules.bzl", "java_proto_repositories", "nano_proto_repositories")
 

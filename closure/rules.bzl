@@ -31,7 +31,8 @@ def closure_proto_library(
     verbose = 0,
     **kwargs):
 
-  proto_compile_args += {
+  proto_compile_args = dict(proto_compile_args)
+  proto_compile_args.update({
     "name": name + ".pb",
     "protos": protos,
     "deps": [dep + ".pb" for dep in proto_deps],
@@ -43,7 +44,7 @@ def closure_proto_library(
     "pb_options": pb_options,
     "output_to_workspace": output_to_workspace,
     "verbose": verbose,
-  }
+  })
 
   if protoc:
     proto_compile_args["protoc"] = protoc
