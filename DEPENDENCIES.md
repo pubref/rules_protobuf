@@ -87,14 +87,6 @@ To update this list, `bazel build @org_pubref_rules_protobuf//:deps && cp bazel-
 | ---: | :--- | :--- |
 | [go_repository](https://github.com/bazelbuild/rules_go#go_repository) | **`@com_github_gogo_protobuf`** | [github.com/gogo/protobuf](https://github.com/gogo/protobuf/) |
 
-## Grpc Gateway
-
-| Rule | Workspace | Detail |
-| ---: | :--- | :--- |
-| [go_repository](https://github.com/bazelbuild/rules_go#go_repository) | **`@com_github_grpc_ecosystem_grpc_gateway`** | [github.com/grpc-ecosystem/grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway/) |
-| [http_archive](https://docs.bazel.build/versions/master/be/workspace.html#http_archive) | **`@com_github_grpc_ecosystem_grpc_gateway_googleapis`** | [sha256:b8426c25492e](https://github.com/grpc-ecosystem/grpc-gateway/archive/f2862b476edcef83412c7af8687c9cd8e4097c0f.zip) |
-| [go_repository](https://github.com/bazelbuild/rules_go#go_repository) | **`@org_golang_google_genproto`** | [google.golang.org/genproto](https://google.golang.org/genproto/) |
-
 ## Node
 
 | Rule | Workspace | Detail |

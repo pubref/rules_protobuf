@@ -61,7 +61,6 @@ of this project are to:
 | [Closure](closure)           | [closure_proto_compile](closure#closure_proto_compile) | [closure_proto_library](closure#closure_proto_library)          |  |
 | [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.6.0](https://github.com/grpc/grpc-go/releases/tag/v1.6.0) |
 | [Go (gogo)](gogo)            | [gogo_proto_compile](gogo#gogo_proto_compile) | [gogo_proto_library](gogo#gogo_proto_library) | [Nov 2017](https://github.com/gogo/protobuf/commit/616a82ed12d78d24d4839363e8f3c5d3f20627cf) |
-| [gRPC gateway](grpc_gateway) | [grpc_gateway_proto_compile](grpc_gateway#grpc_gateway_proto_compile)<br/>[grpc_gateway_swagger_compile](grpc_gateway#grpc_gateway_swagger_compile)   | [grpc_gateway_proto_library](grpc_gateway#grpc_gateway_proto_library)<br/>[grpc_gateway_binary](grpc_gateway#grpc_gateway_binary) | [v1.2.2+ (f2862b)](https://github.com/grpc-ecosystem/grpc-gateway/commit/f2862b476edcef83412c7af8687c9cd8e4097c0f) |
 | [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [v1.9.0](https://github.com/grpc/grpc-java/releases/tag/v1.9.0) |
 | [Node](node)                 | [node_proto_compile](node#node_proto_compile) | [node_proto_library](node#node_proto_library)          | [1.10.1](https://www.npmjs.com/package/grpc) |
 | [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>4</sup> | [v1.10.1](https://github.com/grpc/grpc/releases/v1.10.1) |
@@ -124,7 +123,6 @@ to load before the `*_proto_repositories()` function is invoked:
 | closure_proto_repositories | [rules_closure](https://github.com/bazelbuild/rules_closure) |
 | go_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
 | gogo_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
-| grpc_gateway_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
 | node_proto_repositories | [rules_node](https://github.com/pubref/rules_node) |
 | py_proto_repositories <sup>1</sup> | [rules_python](https://github.com/bazelbuild/rules_python) |
 

@@ -4,7 +4,6 @@ load("//java:deps.bzl", JAVA_DEPS = "DEPS")
 load("//node:deps.bzl", NODE_DEPS = "DEPS")
 load("//go:deps.bzl", GO_DEPS = "DEPS")
 load("//gogo:deps.bzl", GOGO_DEPS = "DEPS")
-load("//grpc_gateway:deps.bzl", GRPC_GATEWAY_DEPS = "DEPS")
 
 def _md_link(label, href):
     return "[%s](%s)" % (label, href)
@@ -134,7 +133,6 @@ def _md(ctx):
     lines += _md_section(ctx, "Java", JAVA_DEPS)
     lines += _md_section(ctx, "Go", GO_DEPS)
     lines += _md_section(ctx, "Gogo", GOGO_DEPS)
-    lines += _md_section(ctx, "Grpc Gateway", GRPC_GATEWAY_DEPS)
     lines += _md_section(ctx, "Node", NODE_DEPS)
     return "\n".join(lines)
 

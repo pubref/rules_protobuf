@@ -131,10 +131,6 @@ load("//gogo:rules.bzl", "gogo_proto_repositories")
 
 gogo_proto_repositories()
 
-load("//grpc_gateway:rules.bzl", "grpc_gateway_proto_repositories")
-
-grpc_gateway_proto_repositories()
-
 load("//node:rules.bzl", "node_proto_repositories")
 
 node_proto_repositories()
