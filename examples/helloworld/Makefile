@@ -24,9 +24,5 @@ cpp_server:
 cpp_client:
 	bazel run cpp/client
 
-gateway:
-	bazel build grpc_gateway:greeter
-	$(BAZEL_BIN)/examples/helloworld/grpc_gateway/greeter
-
 curl_post:
 	curl -X POST -k http://localhost:8080/v1/helloworld/sayhello -d '{"name": "gRPC-gateway!"}'

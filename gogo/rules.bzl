@@ -14,6 +14,7 @@ def gogo_proto_repositories(
       "com_github_golang_glog",
       "org_golang_google_grpc",
       "org_golang_x_net",
+      "org_golang_x_text",
       "com_github_gogo_protobuf",
     ], **kwargs):
 

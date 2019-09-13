@@ -10,7 +10,7 @@ DEPS = {
     "org_golang_google_grpc": {
         "rule": "go_repository",
         "importpath": "google.golang.org/grpc",
-        "tag": "v1.6.0",
+        "commit": "39e8a7b072a67ca2a75f57fa2e0d50995f5b22f6", # 1.23.1
     },
 
     "org_golang_google_genproto": {
@@ -40,7 +40,7 @@ DEPS = {
     "com_github_golang_protobuf": {
         "rule": "go_repository",
         "importpath": "github.com/golang/protobuf",
-        "commit": "17ce1425424ab154092bbb43af630bd647f3bb0d", # Sept 1, 2017
+        "commit": "6c65a5562fc06764971b7c5d05c76c75e84bdbf7", # v1.3.2
     },
 
 }

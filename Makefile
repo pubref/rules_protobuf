@@ -29,10 +29,6 @@ test_not_working_targets:
 	//examples/helloworld/node:client \
 	//examples/helloworld/node:server \
 
-test_not_working_in_travis_targets:
-	$(BAZEL) test \
-	//examples/helloworld/grpc_gateway:greeter_test \
-
 # Python targets are not working (pip grpcio only compatible with 3.1.x)
 test_pip_dependent_targets:
 	$(BAZEL_TEST) \
@@ -49,7 +45,6 @@ build: external_proto_library_build workspace_root_build
 	//examples/helloworld/proto:node \
 	//examples/helloworld/go/client \
 	//examples/helloworld/go/server \
-	//examples/helloworld/grpc_gateway:swagger \
 	//tests/proto_file_in_subdirectory:protolib \
 	//tests/with_grpc_false:protos \
 	//tests/with_grpc_false:cpp \
@@ -80,7 +75,6 @@ fmt:
 	find examples/ -name BUILD | xargs buildifier
 	find go/ -name BUILD | xargs buildifier
 	find gogo/ -name BUILD | xargs buildifier
-	find grpc_gateway/ -name BUILD | xargs buildifier
 	find node/ -name BUILD | xargs buildifier
 	find objc/ -name BUILD | xargs buildifier
 	find protobuf/ -name BUILD | xargs buildifier
