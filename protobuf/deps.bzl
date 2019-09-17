@@ -1,11 +1,35 @@
 
+BAZEL_SKYLIB_VERSION = "6741f733227dc68137512161a5ce6fcf283e3f58"  # 0.7.0
+
 DEPS = {
 
     "com_google_protobuf": {
         "rule": "http_archive",
-        "url": "https://github.com/protocolbuffers/protobuf/archive/v3.6.1.3.zip",
-        "strip_prefix": "protobuf-3.6.1.3",
-        "sha256": "9510dd2afc29e7245e9e884336f848c8a6600a14ae726adb6befdb4f786f0be2",
+        "url": "https://github.com/protocolbuffers/protobuf/archive/v3.7.1.zip",
+        "strip_prefix": "protobuf-3.7.1",
+        "sha256": "f976a4cd3f1699b6d20c1e944ca1de6754777918320c719742e1674fcf247b7e",
+    },
+
+    "bazel_skylib": {
+        "rule": "http_archive",
+        "strip_prefix": "bazel-skylib-%s" % BAZEL_SKYLIB_VERSION,
+        "url": "https://github.com/bazelbuild/bazel-skylib/archive/%s.tar.gz" % BAZEL_SKYLIB_VERSION,
+        "sha256": "c202e39b4125ca41d95ebe494ae6a7a3674772df0dc4b1a51e82cf0e55ba78ed",
+    },
+
+    # C-library for zlib
+    "com_github_madler_zlib": {
+        "rule": "http_archive",
+        "url": "https://github.com/madler/zlib/archive/cacf7f1d4e3d44d871b605da3b647f07d718623f.zip", #v1.2.11
+        "sha256": "1cce3828ec2ba80ff8a4cac0ab5aa03756026517154c4b450e617ede751d41bd",
+        "strip_prefix": "zlib-cacf7f1d4e3d44d871b605da3b647f07d718623f",
+        "build_file": str(Label("//protobuf:build_file/com_github_madler_zlib.BUILD")),
+    },
+
+    # grpc++ //external:zlib
+    "zlib": {
+        "rule": "bind",
+        "actual": "@com_github_madler_zlib//:zlib",
     },
 
 
@@ -39,5 +63,6 @@ DEPS = {
         "rule": "bind",
         "actual": "@com_google_protobuf//:protobuf_headers",
     },
+    
 
 }

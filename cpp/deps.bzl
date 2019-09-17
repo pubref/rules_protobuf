@@ -4,15 +4,15 @@ DEPS = {
 
     "com_github_grpc_grpc": {
         "rule": "grpc_archive",
-        "url": "https://github.com/grpc/grpc/archive/66b9770a8ad326c1ee0dbedc5a8f32a52a604567.tar.gz", # 1.10.1
-        "sha256": "14c1d63217f829f3c23bf039a76c186d0886c5b5c64e7eced44764f0fc564e6a",
-        "strip_prefix": "grpc-66b9770a8ad326c1ee0dbedc5a8f32a52a604567",
+        "url": "https://github.com/grpc/grpc/archive/befc7220cadb963755de86763a04ab6f9dc14200.tar.gz", # 1.13.1
+        "sha256": "24c9bc2bd60058154953de2eabc21791ad7de0dcb59c8216f1e1e76085eecfff",
+        "strip_prefix": "grpc-befc7220cadb963755de86763a04ab6f9dc14200",
     },
 
     "boringssl": {
         "rule": "http_archive",
-        # master-with-bazel Fri Sep 01 15:09:13 2017 +0000
-        "url": "https://boringssl.googlesource.com/boringssl/+archive/886e7d75368e3f4fab3f4d0d3584e4abfc557755.tar.gz",
+        # master-with-bazel Mon Sep 16 21:35:04 2019 +0000
+        "url": "https://boringssl.googlesource.com/boringssl/+archive/0131fdd1b2e5562109ec74515ee6f5531d881322.tar.gz",
         # don't attempt to checksum this as it does not appear to be stable
         # "sha256": "",
     },
@@ -22,15 +22,6 @@ DEPS = {
     "libssl": {
         "rule": "bind",
         "actual": "@boringssl//:ssl",
-    },
-
-    # C-library for zlib
-    "com_github_madler_zlib": {
-        "rule": "http_archive",
-        "url": "https://github.com/madler/zlib/archive/cacf7f1d4e3d44d871b605da3b647f07d718623f.zip", #v1.2.11
-        "sha256": "1cce3828ec2ba80ff8a4cac0ab5aa03756026517154c4b450e617ede751d41bd",
-        "strip_prefix": "zlib-cacf7f1d4e3d44d871b605da3b647f07d718623f",
-        "build_file": str(Label("//protobuf:build_file/com_github_madler_zlib.BUILD")),
     },
 
     "com_github_cares_cares": {
@@ -45,13 +36,6 @@ DEPS = {
     "cares": {
         "rule": "bind",
         "actual": "@com_github_cares_cares//:ares",
-    },
-
-
-    # grpc++ expects //external:zlib
-    "zlib": {
-        "rule": "bind",
-        "actual": "@com_github_madler_zlib//:zlib",
     },
 
     # grpc++ expects //external:nanopb
