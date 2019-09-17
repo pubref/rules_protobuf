@@ -13,6 +13,8 @@ DEPS = {
         "rule": "http_archive",
         # master-with-bazel Fri Sep 01 15:09:13 2017 +0000
         "url": "https://boringssl.googlesource.com/boringssl/+archive/886e7d75368e3f4fab3f4d0d3584e4abfc557755.tar.gz",
+        # don't attempt to checksum this as it does not appear to be stable
+        # "sha256": "",
     },
 
     # libssl is required for c++ grpc where it is expected in
