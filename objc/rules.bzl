@@ -21,7 +21,7 @@ PB_COMPILE_DEPS = [
 ]
 
 GRPC_COMPILE_DEPS = PB_COMPILE_DEPS + [
-    "@com_google_grpc//:grpc_objc",
+    "@com_github_grpc_grpc//:grpc_objc",
 ]
 
 def objc_proto_compile(langs = [str(Label("//objc"))], **kwargs):

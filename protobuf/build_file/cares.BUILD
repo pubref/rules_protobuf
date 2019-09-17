@@ -1,5 +1,5 @@
 # This is an exact copy of grpc/grpc/third_party/cares.BUILD
-# s/com_google_grpc/com_google_grpc/g.
+# s/com_github_grpc_grpc/com_github_grpc_grpc/g.
 # Why?  Here the github_grpc_grpc repo is built last
 # and would becomes a circular dependency.
 
@@ -41,7 +41,7 @@ config_setting(
 
 genrule(
     name = "ares_build_h",
-    srcs = ["@com_google_grpc//third_party/cares:ares_build.h"],
+    srcs = ["@com_github_grpc_grpc//third_party/cares:ares_build.h"],
     outs = ["ares_build.h"],
     cmd = "cat $< > $@",
 )
@@ -49,13 +49,13 @@ genrule(
 genrule(
     name = "ares_config_h",
     srcs = select({
-        ":ios_x86_64": ["@com_google_grpc//third_party/cares:config_darwin/ares_config.h"],
-        ":ios_armv7": ["@com_google_grpc//third_party/cares:config_darwin/ares_config.h"],
-        ":ios_armv7s": ["@com_google_grpc//third_party/cares:config_darwin/ares_config.h"],
-        ":ios_arm64": ["@com_google_grpc//third_party/cares:config_darwin/ares_config.h"],
-        ":darwin": ["@com_google_grpc//third_party/cares:config_darwin/ares_config.h"],
-        ":android": ["@com_google_grpc//third_party/cares:config_android/ares_config.h"],
-        "//conditions:default": ["@com_google_grpc//third_party/cares:config_linux/ares_config.h"],
+        ":ios_x86_64": ["@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h"],
+        ":ios_armv7": ["@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h"],
+        ":ios_armv7s": ["@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h"],
+        ":ios_arm64": ["@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h"],
+        ":darwin": ["@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h"],
+        ":android": ["@com_github_grpc_grpc//third_party/cares:config_android/ares_config.h"],
+        "//conditions:default": ["@com_github_grpc_grpc//third_party/cares:config_linux/ares_config.h"],
     }),
     outs = ["ares_config.h"],
     cmd = "cat $< > $@",
