@@ -1,4 +1,3 @@
-build --incompatible_disallow_legacy_py_provider=false
 build --incompatible_disable_legacy_crosstool_fields=false
 build --incompatible_no_transitive_loads=false
 build --incompatible_bzl_disallow_load_after_statement=false
