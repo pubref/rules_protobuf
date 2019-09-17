@@ -1,7 +1,6 @@
 build --incompatible_no_transitive_loads=false
 build --incompatible_bzl_disallow_load_after_statement=false
 build --incompatible_disallow_load_labels_to_cross_package_boundaries=false
-build --incompatible_disable_crosstool_file=false
 build --incompatible_disable_legacy_cc_provider=false
 build --incompatible_disable_genrule_cc_toolchain_dependency=false
 
