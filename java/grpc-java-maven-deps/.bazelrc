@@ -1,7 +1,6 @@
 build --incompatible_no_transitive_loads=false
 build --incompatible_bzl_disallow_load_after_statement=false
 build --incompatible_disallow_load_labels_to_cross_package_boundaries=false
-build --incompatible_disable_legacy_cc_provider=false
 
 query --noincompatible_no_transitive_loads
 query --noincompatible_bzl_disallow_load_after_statement
