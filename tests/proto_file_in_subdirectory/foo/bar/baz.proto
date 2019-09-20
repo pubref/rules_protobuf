@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-package foo.bar.baz;
-
-message Qux {
-  bool verbose = 1;
-}
-

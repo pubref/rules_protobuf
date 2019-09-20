@@ -96,13 +96,7 @@ load("@org_pubref_rules_protobuf//protobuf:rules.bzl", "proto_compile")
 proto_compile(
    name = "proto_all",
    langs = [
-     "@org_pubref_rules_protobuf//python",
-     "@org_pubref_rules_protobuf//java",
-     "@org_pubref_rules_protobuf//java:nano",
-     "@org_pubref_rules_protobuf//cpp",
-     "@org_pubref_rules_protobuf//objc",
      "@org_pubref_rules_protobuf//closure",
-     "@org_pubref_rules_protobuf//node",
      "@org_pubref_rules_protobuf//go",
    ],
    with_grpc = True,

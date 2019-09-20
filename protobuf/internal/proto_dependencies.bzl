@@ -1,7 +1,4 @@
 load("//protobuf:deps.bzl", PROTOBUF_DEPS = "DEPS")
-load("//cpp:deps.bzl", CPP_DEPS = "DEPS")
-load("//java:deps.bzl", JAVA_DEPS = "DEPS")
-load("//node:deps.bzl", NODE_DEPS = "DEPS")
 load("//go:deps.bzl", GO_DEPS = "DEPS")
 load("//gogo:deps.bzl", GOGO_DEPS = "DEPS")
 
@@ -48,19 +45,6 @@ def _md_rule_http_archive(rule, name, d):
 def _md_rule_http_file(rule, name, d):
     return _md_rule_http_archive(rule, name, d)
 
-def _md_rule_maven_jar(rule, name, d):
-    artifact = d["artifact"]
-    url = d.get("repository") or "http:repo1.maven.org/maven2/"
-    parts = artifact.split(":")
-    org = parts[0].replace(".", "/")
-    url += "/".join([org, parts[1], parts[2]])
-    sha1 = d.get("sha1") or "?"
-    return [
-        _workspace_rule_link(rule),
-        _md_workspace_label(name),
-        _md_link("%s" % (artifact), url) + " (%s)" % sha1[0:6],
-    ]
-
 def _md_rule_go_repository(rule, name, d):
     importpath = d["importpath"];
     url = "https://%s/" % (importpath)
@@ -69,21 +53,6 @@ def _md_rule_go_repository(rule, name, d):
         _md_link(rule, "https://github.com/bazelbuild/rules_go#go_repository"),
         _md_workspace_label(name),
         _md_link(importpath, url),
-    ]
-
-def _md_rule_nuget_package(rule, name, d):
-    return [
-        _md_link(rule, "https://github.com/bazelbuild/rules_dotnet#" + rule),
-        _md_workspace_label(name),
-        _nuget_link("%s@%s" % (d["package"], d["version"]), d["package"])
-    ]
-
-def _md_rule_npm_repository(rule, name, d):
-    deps = d["deps"]
-    return [
-        _md_link(rule, "https://github.com/pubref/rules_node#npm_repository"),
-        _md_workspace_label(name),
-        ", ".join([_npm_link(pkg + "@" + deps[pkg], pkg) for pkg in deps.keys()]),
     ]
 
 def _md_rule_generic(rule, name, d):
@@ -100,14 +69,8 @@ def _md_rule(rule, name, d):
         return _md_rule_http_archive(rule, name, d)
     elif rule == 'http_file':
         return _md_rule_http_file(rule, name, d)
-    elif rule == 'maven_jar':
-        return _md_rule_maven_jar(rule, name, d)
     elif rule == 'go_repository':
         return _md_rule_go_repository(rule, name, d)
-    elif rule == 'npm_repository':
-        return _md_rule_npm_repository(rule, name, d)
-    elif rule == 'nuget_package' or rule == 'new_nuget_package':
-        return _md_rule_nuget_package(rule, name, d)
     else:
         return _md_rule_generic(rule, name, d)
 
@@ -129,11 +92,8 @@ def _md(ctx):
     lines.append("To update this list, `bazel build @org_pubref_rules_protobuf//:deps && cp bazel-bin/DEPENDENCIES.md .`")
     lines.append("")
     lines += _md_section(ctx, "Protobuf", PROTOBUF_DEPS)
-    lines += _md_section(ctx, "C++", CPP_DEPS)
-    lines += _md_section(ctx, "Java", JAVA_DEPS)
     lines += _md_section(ctx, "Go", GO_DEPS)
     lines += _md_section(ctx, "Gogo", GOGO_DEPS)
-    lines += _md_section(ctx, "Node", NODE_DEPS)
     return "\n".join(lines)
 
 def _proto_dependencies_impl(ctx):

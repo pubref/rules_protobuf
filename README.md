@@ -57,15 +57,9 @@ of this project are to:
 
 | Language                     | Compile <sup>1</sup>  | Build <sup>2</sup> | gRPC <sup>3</sup> |
 | ---------------------------: | -----------: | --------: | -------- |
-| [C++](cpp)                   | [cc_proto_compile](cpp#cc_proto_compile) | [cc_proto_library](cpp#cc_proto_library) [v3.5.1](https://github.com/google/protobuf/releases/tag/v3.5.1) | [v1.10.1](https://github.com/grpc/grpc/releases/tag/v1.10.1) |
 | [Closure](closure)           | [closure_proto_compile](closure#closure_proto_compile) | [closure_proto_library](closure#closure_proto_library)          |  |
 | [Go](go)                     | [go_proto_compile](go#go_proto_compile) | [go_proto_library](go#go_proto_library) | [v1.6.0](https://github.com/grpc/grpc-go/releases/tag/v1.6.0) |
 | [Go (gogo)](gogo)            | [gogo_proto_compile](gogo#gogo_proto_compile) | [gogo_proto_library](gogo#gogo_proto_library) | [Nov 2017](https://github.com/gogo/protobuf/commit/616a82ed12d78d24d4839363e8f3c5d3f20627cf) |
-| [Java](java)                 | [java_proto_compile](java#java_proto_compile) | [java_proto_library](java#java_proto_library) | [v1.9.0](https://github.com/grpc/grpc-java/releases/tag/v1.9.0) |
-| [Node](node)                 | [node_proto_compile](node#node_proto_compile) | [node_proto_library](node#node_proto_library)          | [1.10.1](https://www.npmjs.com/package/grpc) |
-| [Objective-C](objc) | [objc_proto_compile](objc#objc_proto_compile) | [objc_proto_library](objc#objc_proto_library) <sup>4</sup> | [v1.10.1](https://github.com/grpc/grpc/releases/v1.10.1) |
-| [Python](python)             | [py_proto_compile](python#py_proto_compile)         | [py_proto_library](python#py_proto_library)          | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
-| [Ruby](ruby)                 | [ruby_proto_compile](ruby#ruby_proto_compile)          |           | [v1.6.1](https://github.com/grpc/grpc/commit/f5600e99be0fdcada4b3039c0f656a305264884a) |
 | Custom [proto_language](protobuf#proto_language) | [proto_compile](protobuf#proto_compile) | |  |
 
 > Refer to [`DEPENDENCIES.md`](DEPENDENCIES.md) for a more detailed
@@ -105,12 +99,6 @@ git_repository(
   #commit = "..." # alternatively, use latest commit on master
 )
 
-load("@org_pubref_rules_protobuf//java:rules.bzl", "java_proto_repositories")
-java_proto_repositories()
-
-load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cpp_proto_repositories")
-cpp_proto_repositories()
-
 load("@org_pubref_rules_protobuf//go:rules.bzl", "go_proto_repositories")
 go_proto_repositories()
 ```
@@ -123,8 +111,6 @@ to load before the `*_proto_repositories()` function is invoked:
 | closure_proto_repositories | [rules_closure](https://github.com/bazelbuild/rules_closure) |
 | go_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
 | gogo_proto_repositories | [rules_go](https://github.com/bazelbuild/rules_go) |
-| node_proto_repositories | [rules_node](https://github.com/pubref/rules_node) |
-| py_proto_repositories <sup>1</sup> | [rules_python](https://github.com/bazelbuild/rules_python) |
 
 > <sup>1</sup> Only needed for python grpc support.
 
