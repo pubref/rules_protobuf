@@ -1,2 +1,4 @@
+build --incompatible_depset_union=false
+
 build --incompatible_strict_action_env
 build --verbose_failures
