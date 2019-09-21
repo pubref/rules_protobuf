@@ -45,12 +45,12 @@ gazelle_dependencies()
 git_repository(
     name = "io_bazel_rules_closure",
     remote = "https://github.com/bazelbuild/rules_closure",
-    commit = "87d24b1df8b62405de8dd059cb604fd9d4b1e395", # Feb 28, 2019
+    commit = "b3d4ec3879620edcadd3422b161cebb37c59b6c5", # 0.9.0
 )
 
 load("@io_bazel_rules_closure//closure:defs.bzl", "closure_repositories")
 
-closure_repositories(omit_com_google_protobuf=True)
+closure_repositories(omit_com_google_protobuf=True, omit_zlib=True)
 
 # ================================================================
 # Specific Languages Support
