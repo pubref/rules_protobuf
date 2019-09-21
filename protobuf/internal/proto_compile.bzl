@@ -473,30 +473,9 @@ def _compile(ctx, unit):
   manifest = [f.short_path for f in unit.outputs]
 
   transitive_units = depset(transitive = [u.inputs for u in unit.data.transitive_units])
-  # for u in unit.data.transitive_units:
-  #   print("____")
-  #   print("before transitive_units: %s" % transitive_units)
-  #   print("before u.inputs: %s" % u.inputs)
-
-  #   transitive_units = transitive_units | u.inputs
-  #   # transitive_units = depset(items = transitive_units, transitive = u.inputs)
-
-  #   print("after transitive_units: %s" % transitive_units)
-
-  print("____")
-  print("unit.inputs: %s" % unit.inputs)
-  print("transitive_units: %s" % transitive_units)
-  print("unit.compiler: %s" % unit.compiler)
-
-  # inputs = list(unit.inputs | transitive_units) + [unit.compiler]
-
-
-  # inputs = depset(unit.inputs, transitive = [unit.compiler])
-
   compiler_dep = depset(direct = [unit.compiler])
-  inputs = depset(direct = list(unit.inputs | transitive_units), transitive = [compiler_dep])
-  print("inputs: %s" % inputs)
 
+  inputs = depset(direct = list(unit.inputs), transitive = [transitive_units, compiler_dep])
   outputs = list(unit.outputs)
 
   cmds = [cmd for cmd in unit.commands] + [" ".join(protoc_cmd)]
