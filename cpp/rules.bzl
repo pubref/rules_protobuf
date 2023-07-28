@@ -1,4 +1,5 @@
-load("//protobuf:rules.bzl", "proto_compile", "proto_repositories")
+load("//protobuf:rules.bzl", "proto_repositories")
+load("//protobuf:rules.bzl", "proto_compile")
 load("//cpp:deps.bzl", "DEPS")
 load("//cpp:grpc_archive.bzl", "grpc_archive")
 
